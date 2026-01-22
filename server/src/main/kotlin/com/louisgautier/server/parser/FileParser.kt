@@ -15,6 +15,7 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.toListOf
 import org.jetbrains.kotlinx.dataframe.io.readCsv
+import java.io.InputStream
 
 class FileParser(
     private val dictionaryRepository: DictionaryRepository,
@@ -23,7 +24,7 @@ class FileParser(
     companion object {
         private const val DICTIONARY_FILE: String = "dictionary.txt"
         private const val GRAPHIC_FILE: String = "graphics.txt"
-        private const val HANZI_FILE: String = "server/src/main/resources/hanzi.csv"
+        private const val HANZI_FILE: String = "hanzi.csv"
         private const val EMPTY_COUNT = 0L
     }
 
@@ -65,7 +66,8 @@ class FileParser(
 
     private fun parseHanzi(): List<Pair<Char, Int?>> {
         return try {
-            val df = DataFrame.readCsv(HANZI_FILE)
+            val csvStream = getResourceAsStream(HANZI_FILE)
+            val df = DataFrame.readCsv(csvStream)
             val hanzi: List<CsvRow> = df.toListOf()
             hanzi.filter { it.simplified != null }
                 .map { it.simplified!!.first() to it.rank_rsh }
@@ -142,14 +144,18 @@ class FileParser(
         path: String,
         json: Json = Json { ignoreUnknownKeys = false }
     ): List<T> {
-        val stream = object {}.javaClass.classLoader.getResourceAsStream(path)
-            ?: throw IllegalArgumentException("Resource not found: $path")
+        val stream = getResourceAsStream(path)
         val text = stream.bufferedReader(Charsets.UTF_8).use { it.readText() }
         return text.lineSequence()
             .map { it.trim() }
             .filter { it.isNotEmpty() }
             .map { json.decodeFromString<T>(it) }
             .toList()
+    }
+
+    private fun getResourceAsStream(fileName: String): InputStream {
+        return object {}.javaClass.classLoader.getResourceAsStream(fileName)
+            ?: throw IllegalStateException("Resource not found: $fileName")
     }
 }
 
