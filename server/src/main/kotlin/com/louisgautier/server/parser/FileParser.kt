@@ -3,7 +3,9 @@ package com.louisgautier.server.parser
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
 import com.louisgautier.apicontracts.dto.Decomposition
 import com.louisgautier.apicontracts.dto.Dictionary
+import com.louisgautier.apicontracts.dto.Etymology
 import com.louisgautier.apicontracts.dto.Graphic
+import com.louisgautier.apicontracts.dto.Stroke
 import com.louisgautier.server.database.entity.DictionaryDao
 import com.louisgautier.server.database.entity.GraphicDao
 import com.louisgautier.server.domain.DictionaryRepository
@@ -36,15 +38,22 @@ class FileParser(
                 val hanzi = parseHanzi()
                 val dict = parseDictionary().map {
                     val level = hanzi.find { h -> h.first == it.character }?.second
-                    it.copy(
+                    Dictionary(
+                        code = it.character.code,
+                        definition = it.definition,
+                        pinyin = it.pinyin,
+                        decomposition = it.decomposition,
                         decompositionList = decompose(it.decomposition),
-                        level = rankToLevel(level)
+                        level = rankToLevel(level),
+                        etymology = it.etymology,
+                        radical = it.radical,
+                        matches = it.matches,
                     )
                 }
                 dictionaryRepository.batchCreate(dict)
             }
             if (graphicCount == EMPTY_COUNT) {
-                val graph = parseGraphic()
+                val graph = parseGraphic().map { g -> Graphic(g.character.code, g.strokes, g.medians) }
                 graphicRepository.batchCreate(graph)
             }
         } catch (e: Exception) {
@@ -56,11 +65,11 @@ class FileParser(
         Pair(DictionaryDao.count(), GraphicDao.count())
     }
 
-    private fun parseDictionary(): List<Dictionary> {
+    private fun parseDictionary(): List<DictionaryParsed> {
         return parseNdjsonLines(path = DICTIONARY_FILE)
     }
 
-    private fun parseGraphic(): List<Graphic> {
+    private fun parseGraphic(): List<GraphicParser> {
         return parseNdjsonLines(path = GRAPHIC_FILE)
     }
 
@@ -182,4 +191,22 @@ data class CsvRow(
     @SerialName("index_gscc") val index_gscc: String? = null,
     @SerialName("learning_order_ccm") val learning_order_ccm: Int? = null,
     @SerialName("cc_cedict_definitions") val cc_cedict_definitions: String? = null
+)
+
+@Serializable
+data class DictionaryParsed(
+    val character: Char,
+    val definition: String = "",
+    val pinyin: List<String> = emptyList(),
+    val decomposition: String = "",
+    val etymology: Etymology? = null,
+    val radical: String? = null,
+    val matches: List<List<Int>?> = emptyList()
+)
+
+@Serializable
+data class GraphicParser(
+    val character: Char,
+    val strokes: List<String>,
+    val medians: List<Stroke>
 )
