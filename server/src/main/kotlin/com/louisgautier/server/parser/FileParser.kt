@@ -40,7 +40,7 @@ class FileParser(
                 val dict = parseDictionary().map {
                     val level = hanzi.find { h -> h.first == it.character }?.second
                     Dictionary(
-                        code = it.character.code,
+                        code = it.character.toString().codePointAt(0),
                         definition = it.definition,
                         pinyin = it.pinyin,
                         decomposition = it.decomposition,
@@ -56,7 +56,7 @@ class FileParser(
             if (graphicCount == EMPTY_COUNT) {
                 val graph = parseGraphic().map { g ->
                     Graphic(
-                        g.character.code,
+                        g.character.toString().codePointAt(0),
                         g.strokes,
                         g.medians.map { m -> Stroke(points = m.map { p -> Point(p[0], p[1]) }) }
                     )
