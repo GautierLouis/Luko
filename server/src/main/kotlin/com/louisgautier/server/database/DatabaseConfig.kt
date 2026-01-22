@@ -19,7 +19,7 @@ fun Application.configureDatabase() {
 
     val config = HikariDataSource().apply {
         driverClassName = "org.postgresql.Driver"
-        jdbcUrl = buildEnvironment.databaseUrl
+        jdbcUrl = "jdbc:${buildEnvironment.databaseUrl}"
         maximumPoolSize = 3
         isAutoCommit = false
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
