@@ -1,0 +1,30 @@
+name: Server PR Tests
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - "server/**"
+      - "gradle/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x gradlew
+
+      - name: Run server tests
+        run: ./gradlew :server:test
