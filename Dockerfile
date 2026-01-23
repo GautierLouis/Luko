@@ -22,6 +22,8 @@ WORKDIR /app
 # Copy the built fat jar produced by shadowJar.
 # The builder produced server/build/libs/*.jar — copy the first matching jar.
 COPY --from=builder /home/gradle/project/server/build/libs/*.jar /app/app.jar
+# IMPORTANT: Copy resources directory
+COPY --from=builder /home/gradle/project/server/src/main/resources /app/resources
 
 # Optional: default JVM options (override with env var JAVA_OPTS)
 ENV JAVA_OPTS=""

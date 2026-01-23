@@ -19,7 +19,7 @@ fun Application.configureDatabase() {
 
     val config = HikariDataSource().apply {
         driverClassName = "org.postgresql.Driver"
-        jdbcUrl = buildEnvironment.databaseUrl
+        jdbcUrl = "jdbc:postgresql://${buildEnvironment.databaseHost}:${buildEnvironment.databasePort}/${buildEnvironment.databaseName}"
         username = buildEnvironment.databaseUser
         password = buildEnvironment.databasePassword
         maximumPoolSize = 3
@@ -31,7 +31,7 @@ fun Application.configureDatabase() {
         validate()
     }
 
-    Database.connect(HikariDataSource(config))
+    Database.connect(config)
 
     transaction {
         addLogger(StdOutSqlLogger)

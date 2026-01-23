@@ -1,20 +1,43 @@
-# Gradle & build
-.gradle
-build
-**/build
+# Exclude client/composeApp from Docker build
+# This prevents keystore.properties errors
+client/composeApp/
+client/shared/
 
-# IDE
-.idea
-.vscode
-*.iml
+# Exclude build outputs (but keep them during build stage)
+# We only exclude from COPY, not from build process
+**/.gradle/
+**/.idea/
+**/.kotlin/
+**/out/
 
-# Node / other
-node_modules
-dist
+# Exclude local configs and sensitive files
+**/keystore.properties
+**/*.jks
+**/*.keystore
+**/.env
+**/.env.local
+**/.env.development
 
-# OS files
+# Keep production env if you use it
+!.env.prod
+
+# Exclude git
+.git/
+.gitignore
+.gitattributes
+
+# Exclude docs and misc
+*.md
+!README.md
 .DS_Store
-Thumbs.db
-
-# Local dev databases, logs
 *.log
+
+# Exclude CI/CD configs
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Exclude IDE configs
+.vscode/
+*.iml
+.fleet/

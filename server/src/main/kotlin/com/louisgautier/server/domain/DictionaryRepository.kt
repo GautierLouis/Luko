@@ -47,15 +47,24 @@ class DictionaryRepository {
 
     suspend fun getRandomCharacters(levels: List<CharacterFrequencyLevel>, limit: Int) =
         suspendTransaction {
-            DictionaryTable
-                .join(GraphicTable, JoinType.INNER, code, GraphicTable.code)
+            val total = DictionaryTable
+                .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
                 .selectAll()
                 .where { (level inList levels) and isValid() }
-                .orderBy(Random())
+                .count()
+
+            val offset = kotlin.random.Random.nextLong(0, maxOf(0, total - limit))
+
+            DictionaryTable
+                .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
+                .selectAll()
+                .where { (level inList levels) and isValid() }
                 .limit(limit)
+                .offset(offset)
                 .map {
                     it.toDictionaryWithGraphic()
                 }
+
         }
 
     suspend fun getAll(

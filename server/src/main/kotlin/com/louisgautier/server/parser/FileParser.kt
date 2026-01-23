@@ -3,7 +3,10 @@ package com.louisgautier.server.parser
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
 import com.louisgautier.apicontracts.dto.Decomposition
 import com.louisgautier.apicontracts.dto.Dictionary
+import com.louisgautier.apicontracts.dto.Etymology
 import com.louisgautier.apicontracts.dto.Graphic
+import com.louisgautier.apicontracts.dto.Point
+import com.louisgautier.apicontracts.dto.Stroke
 import com.louisgautier.server.database.entity.DictionaryDao
 import com.louisgautier.server.database.entity.GraphicDao
 import com.louisgautier.server.domain.DictionaryRepository
@@ -15,6 +18,7 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.toListOf
 import org.jetbrains.kotlinx.dataframe.io.readCsv
+import java.io.InputStream
 
 class FileParser(
     private val dictionaryRepository: DictionaryRepository,
@@ -23,7 +27,7 @@ class FileParser(
     companion object {
         private const val DICTIONARY_FILE: String = "dictionary.txt"
         private const val GRAPHIC_FILE: String = "graphics.txt"
-        private const val HANZI_FILE: String = "server/src/main/resources/hanzi.csv"
+        private const val HANZI_FILE: String = "hanzi.csv"
         private const val EMPTY_COUNT = 0L
     }
 
@@ -35,15 +39,28 @@ class FileParser(
                 val hanzi = parseHanzi()
                 val dict = parseDictionary().map {
                     val level = hanzi.find { h -> h.first == it.character }?.second
-                    it.copy(
+                    Dictionary(
+                        code = it.character.toString().codePointAt(0),
+                        definition = it.definition,
+                        pinyin = it.pinyin,
+                        decomposition = it.decomposition,
                         decompositionList = decompose(it.decomposition),
-                        level = rankToLevel(level)
+                        level = rankToLevel(level),
+                        etymology = it.etymology,
+                        radical = it.radical,
+                        matches = it.matches,
                     )
                 }
                 dictionaryRepository.batchCreate(dict)
             }
             if (graphicCount == EMPTY_COUNT) {
-                val graph = parseGraphic()
+                val graph = parseGraphic().map { g ->
+                    Graphic(
+                        g.character.toString().codePointAt(0),
+                        g.strokes,
+                        g.medians.map { m -> Stroke(points = m.map { p -> Point(p[0], p[1]) }) }
+                    )
+                }
                 graphicRepository.batchCreate(graph)
             }
         } catch (e: Exception) {
@@ -55,17 +72,18 @@ class FileParser(
         Pair(DictionaryDao.count(), GraphicDao.count())
     }
 
-    private fun parseDictionary(): List<Dictionary> {
+    private fun parseDictionary(): List<DictionaryParsed> {
         return parseNdjsonLines(path = DICTIONARY_FILE)
     }
 
-    private fun parseGraphic(): List<Graphic> {
+    private fun parseGraphic(): List<GraphicParser> {
         return parseNdjsonLines(path = GRAPHIC_FILE)
     }
 
     private fun parseHanzi(): List<Pair<Char, Int?>> {
         return try {
-            val df = DataFrame.readCsv(HANZI_FILE)
+            val csvStream = getResourceAsStream(HANZI_FILE)
+            val df = DataFrame.readCsv(csvStream)
             val hanzi: List<CsvRow> = df.toListOf()
             hanzi.filter { it.simplified != null }
                 .map { it.simplified!!.first() to it.rank_rsh }
@@ -132,7 +150,9 @@ class FileParser(
     private fun serializeOriginal(node: IdeographicNode): String {
         return when (node) {
             is IdeographicNode.Glyph -> node.code.toString()
-            is IdeographicNode.Operator -> node.op.symbol.toString() + node.children.joinToString(separator = "") {
+            is IdeographicNode.Operator -> node.op.symbol.toString() + node.children.joinToString(
+                separator = ""
+            ) {
                 serializeOriginal(it)
             }
         }
@@ -142,14 +162,18 @@ class FileParser(
         path: String,
         json: Json = Json { ignoreUnknownKeys = false }
     ): List<T> {
-        val stream = object {}.javaClass.classLoader.getResourceAsStream(path)
-            ?: throw IllegalArgumentException("Resource not found: $path")
+        val stream = getResourceAsStream(path)
         val text = stream.bufferedReader(Charsets.UTF_8).use { it.readText() }
         return text.lineSequence()
             .map { it.trim() }
             .filter { it.isNotEmpty() }
             .map { json.decodeFromString<T>(it) }
             .toList()
+    }
+
+    private fun getResourceAsStream(fileName: String): InputStream {
+        return object {}.javaClass.classLoader.getResourceAsStream(fileName)
+            ?: throw IllegalStateException("Resource not found: $fileName")
     }
 }
 
@@ -176,4 +200,22 @@ data class CsvRow(
     @SerialName("index_gscc") val index_gscc: String? = null,
     @SerialName("learning_order_ccm") val learning_order_ccm: Int? = null,
     @SerialName("cc_cedict_definitions") val cc_cedict_definitions: String? = null
+)
+
+@Serializable
+data class DictionaryParsed(
+    val character: Char,
+    val definition: String = "",
+    val pinyin: List<String> = emptyList(),
+    val decomposition: String = "",
+    val etymology: Etymology? = null,
+    val radical: String? = null,
+    val matches: List<List<Int>?> = emptyList()
+)
+
+@Serializable
+data class GraphicParser(
+    val character: Char,
+    val strokes: List<String>,
+    val medians: List<List<List<Float>>>
 )
