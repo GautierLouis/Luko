@@ -26,10 +26,9 @@ class DefaultCharacterService(
         level: List<CharacterFrequencyLevel>,
         limit: Int
     ): Result<List<DictionaryWithGraphic>> {
-        return getMockResponse()
-//        return call {
-//            client.get(EndPoint.GenerateSession(level = level, limit = limit))
-//        }
+        return call {
+            client.get(EndPoint.GenerateSession(level = level, limit = limit))
+        }
     }
 
     override suspend fun getByLevel(
