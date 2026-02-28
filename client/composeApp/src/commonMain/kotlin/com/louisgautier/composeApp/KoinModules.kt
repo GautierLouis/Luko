@@ -28,6 +28,7 @@ private fun appModule() = module {
     viewModelOf(::SessionViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SessionCongratulationViewModel)
+    viewModelOf(::AppViewModel)
     single { buildPlatformFlavor(get()) }
 }
 

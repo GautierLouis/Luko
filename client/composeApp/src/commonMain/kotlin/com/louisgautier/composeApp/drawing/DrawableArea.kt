@@ -32,6 +32,7 @@ fun DrawableArea(
     drawReference: Boolean,
     drawHint: Boolean,
     modifier: Modifier = Modifier,
+    onStartDrawing: () -> Unit = {},
     onComplete: (List<Stroke>, StrokeComparisonResult) -> Unit = { _, _ -> },
 ) {
     var canvasSize by remember { mutableStateOf(IntSize(0, 0)) }
@@ -46,6 +47,10 @@ fun DrawableArea(
     val points = medians.map { stroke ->
         val offset = stroke.points.map { point -> Offset(point.x, point.y) }
         TransformStroke.transformOffset(offset, canvasSize)
+    }
+
+    if (allDrawnStrokes.isNotEmpty()) {
+        onStartDrawing()
     }
 
     //Get current line to be shown as hint. null if all lines have been drawn
@@ -63,16 +68,19 @@ fun DrawableArea(
         onComplete(parsed, output)
     }
 
+    val drawingModifier = if (currentStroke == points.size) Modifier
+    else Modifier.drawingDetector(drawnStroke) {
+        allDrawnStrokes = allDrawnStrokes.apply { add(drawnStroke.toList()) }
+        drawnStroke.clear()
+        currentStroke += 1
+    }
+
     Canvas(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
-            .drawingDetector(drawnStroke) {
-                allDrawnStrokes = allDrawnStrokes.apply { add(drawnStroke.toList()) }
-                drawnStroke.clear()
-                currentStroke += 1
-            }
+            .then(drawingModifier)
     ) {
 
         if (drawReference) {

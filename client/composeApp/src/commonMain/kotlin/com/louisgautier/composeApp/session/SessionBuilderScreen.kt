@@ -35,7 +35,7 @@ fun SessionBuilderScreen() {
     val scope = rememberCoroutineScope()
 
     val selectedLevels = rememberSaveable { mutableStateSetOf(CharacterFrequencyLevel.COMMON) }
-    var selectedDifficulty by rememberSaveable { mutableStateOf(Difficulty.MEDIUM) }
+    var selectedDifficulty by rememberSaveable { mutableStateOf(Difficulty.EASY) }
     var questionCount by rememberSaveable { mutableStateOf(QuestionCount.FIVE) }
 
     val pager = rememberPagerState(initialPage = 0) { 2 }

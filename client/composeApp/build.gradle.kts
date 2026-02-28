@@ -33,13 +33,7 @@ kotlin {
 
             implementation(libs.androidx.paging.common)
             implementation(libs.androidx.paging.compose)
-
-           //api(projects.client.core.firebase)
         }
-
-//        jvmMain.dependencies {
-//            implementation(libs.kotlinx.coroutines.swing)
-//        }
 
         androidMain.dependencies {
             implementation(project.dependencies.platform(libs.firebase.bom))
@@ -121,15 +115,3 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
-
-//compose.desktop {
-//    application {
-//        mainClass = "com.louisgautier.composeApp.MainKt"
-//
-//        nativeDistributions {
-//            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-//            packageName = "com.louisgautier.composeApp"
-//            packageVersion = libs.versions.app.version.asProvider().get()
-//        }
-//    }
-//}

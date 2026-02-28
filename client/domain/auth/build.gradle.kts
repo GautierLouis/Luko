@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.client.data)
+                implementation(projects.client.core.firebase)
             }
         }
     }

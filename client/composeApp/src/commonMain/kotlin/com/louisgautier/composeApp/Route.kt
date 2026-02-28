@@ -17,14 +17,6 @@ sealed class Route {
     data object HomeRoute : Route()
 
     @Serializable
-    data object LoginRoute : Route()
-
-    @Serializable
-    data class SVG(
-        val code: Int
-    ) : Route()
-
-    @Serializable
     data object DictionaryListRoute : Route()
 
     @Serializable
@@ -35,14 +27,7 @@ sealed class Route {
         val levels: String,
         val difficulty: String,
         val limit: String,
-    ) : Route() {
-        companion object {
-            fun default() = SessionRoute(
-                listOf(CharacterFrequencyLevel.COMMON).joinToString(),
-                Difficulty.EASY.toString(), QuestionCount.FIVE.toString()
-            )
-        }
-    }
+    ) : Route()
 
     @Serializable
     data object SessionCongratulationScreenRoute : Route()

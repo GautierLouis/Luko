@@ -85,12 +85,12 @@ fun ModalCharacterDetails(
 
                 Spacer(Modifier.height(32.dp))
 
-                AppButton(
-                    onClick = onPractice,
-                    modifier = Modifier.height(56.dp)
-                ) {
-                    Text("Practice")
-                }
+//                AppButton(
+//                    onClick = onPractice,
+//                    modifier = Modifier.height(56.dp)
+//                ) {
+//                    Text("Practice")
+//                }
 
                 if (lastSeenSession.isNotEmpty()) {
 

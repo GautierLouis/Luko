@@ -28,7 +28,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.composeApp.AppNavigation
 import com.louisgautier.composeApp.design.atom.AppButton
 import com.louisgautier.composeApp.design.page.ErrorPage
-import com.louisgautier.composeApp.design.page.ErrorPageContent
 import com.louisgautier.composeApp.design.previewDictionaryWithGraphic
 import com.louisgautier.domain.model.Response
 import kotlinx.coroutines.launch
@@ -98,12 +97,12 @@ fun SessionScreenContent(
                 Spacer(Modifier.weight(1f))
                 HorizontalPager(
                     userScrollEnabled = false,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
                     state = state.pagerState
                 ) {
                     GraphicPager(
                         difficulty = state.difficulty,
-                        graphic = state.questions[0].graphics,
+                        graphic = state.questions[it].graphics,
                         modifier = Modifier.fillMaxWidth()
                     ) { response -> onComplete(response) }
                 }

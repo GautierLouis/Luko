@@ -26,9 +26,10 @@ class DefaultCharacterService(
         level: List<CharacterFrequencyLevel>,
         limit: Int
     ): Result<List<DictionaryWithGraphic>> {
-        return call {
-            client.get(EndPoint.GenerateSession(level = level, limit = limit))
-        }
+        return getMockResponse()
+//        return call {
+//            client.get(EndPoint.GenerateSession(level = level, limit = limit))
+//        }
     }
 
     override suspend fun getByLevel(
@@ -60,29 +61,13 @@ fun getMockResponse(): Result<List<DictionaryWithGraphic>> {
     val mockResponse = """[
   {
     "dictionary": {
-      "character": "超",
+      "code": 36229,
       "definition": "to jump over, to leap over; to overtake, to surpass",
       "pinyin": [
         "chāo"
       ],
-      "decomposition": "⿺走召",
-      "decompositionList": [
-        {
-          "symbol": "⿺",
-          "glyphs": [
-            "走",
-            "召"
-          ]
-        }
-      ],
-      "level": "COMMON",
-      "etymology": {
-        "type": "pictophonetic",
-        "phonetic": "召",
-        "semantic": "走",
-        "hint": "run"
-      },
-      "radical": "走",
+      "decomposition": "",
+      "level": "COMMON", 
       "matches": [
         [
           0
@@ -123,7 +108,7 @@ fun getMockResponse(): Result<List<DictionaryWithGraphic>> {
       ]
     },
     "graphics": {
-      "character": "超",
+      "code": 36229,
       "strokes": [
         "M 391 602 Q 491 626 495 629 Q 504 636 499 645 Q 492 655 464 663 Q 440 667 395 653 L 339 636 Q 330 635 324 632 Q 276 622 221 616 Q 185 610 211 594 Q 248 572 316 587 Q 326 590 340 590 L 391 602 Z",
         " M 382 506 Q 386 555 391 602 L 395 653 Q 396 714 415 778 Q 418 788 398 804 Q 362 823 338 827 Q 322 831 314 822 Q 307 815 315 800 Q 334 773 334 754 Q 338 699 339 636 L 340 590 Q 340 545 339 495 C 338 465 380 476 382 506 Z",

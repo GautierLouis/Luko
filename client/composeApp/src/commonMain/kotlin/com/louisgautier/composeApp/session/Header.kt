@@ -83,5 +83,5 @@ fun Header(
 @Preview(showBackground = true)
 @Composable
 fun HeaderPreview() {
-    Header(PagerState { 3 }, previewDictionary)
+    Header(PagerState(currentPage = 4) { 5 }, previewDictionary)
 }

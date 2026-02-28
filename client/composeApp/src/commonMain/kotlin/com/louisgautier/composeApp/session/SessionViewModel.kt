@@ -6,15 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
 import com.louisgautier.apicontracts.dto.DictionaryWithGraphic
+import com.louisgautier.composeApp.AppNavigation
+import com.louisgautier.composeApp.Route
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.domain.model.Response
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.repository.SessionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -75,6 +79,7 @@ class SessionViewModel(
                             isError = false,
                             questions = data,
                             pagerState = PagerState { data.size },
+                            difficulty = difficulty
                         )
                     }
                 }.onFailure {
@@ -106,6 +111,10 @@ class SessionViewModel(
                 ),
             )
             sessionRepository.save(session)
+
+            withContext(Dispatchers.Main) {
+                AppNavigation.navigate(Route.SessionCongratulationScreenRoute, true)
+            }
         }
     }
 }
