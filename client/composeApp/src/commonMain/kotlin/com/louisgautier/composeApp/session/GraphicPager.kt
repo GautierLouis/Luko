@@ -124,7 +124,7 @@ fun ResetButton(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier.size(48.dp),
+        modifier = modifier.size(38.dp),
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = Gray400,
             contentColor = Color.White
