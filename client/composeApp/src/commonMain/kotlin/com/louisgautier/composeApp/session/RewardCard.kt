@@ -1,5 +1,7 @@
 package com.louisgautier.composeApp.session
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +35,7 @@ import com.louisgautier.composeApp.home.SessionMetric
 import com.louisgautier.designsystem.theme.AnimatedCounter
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun RewardCard(
@@ -42,17 +45,24 @@ fun RewardCard(
     modifier: Modifier = Modifier,
 ) {
 
-    var enabled by remember { mutableStateOf(true) }
+    val animatedProgress = remember { Animatable(0f) }
+    val animatedScore = remember { Animatable(0f) }
 
-    val animatedProgress: Float by animateFloatAsState(
-        targetValue = if (enabled) 0f else 1f,
-        animationSpec = tween(durationMillis = 500),
-        label = "alpha_animation"
-    )
-
-    LaunchedEffect(enabled) {
+    LaunchedEffect(Unit) {
         delay(300)
-        enabled = true
+        animatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 1000)
+        )
+    }
+    LaunchedEffect(score) {
+        animatedScore.animateTo(
+            targetValue = score.toFloat(),
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = EaseOutCubic
+            )
+        )
     }
 
     Card(
@@ -80,19 +90,17 @@ fun RewardCard(
                     trackColor = Orange100,
                     color = Orange500,
                     strokeCap = StrokeCap.Round,
-                    progress = { animatedProgress }
+                    progress = { animatedProgress.value }
                 )
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AnimatedCounter(value = score) {
-                        Text(
-                            text = it.toString(),
-                            fontSize = 24.sp,
-                            color = Orange500,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
+                    Text(
+                        text = animatedScore.value.toInt().toString(),
+                        fontSize = 24.sp,
+                        color = Orange500,
+                        fontWeight = FontWeight.SemiBold
+                    )
 
                     Text(
                         text = "XP",
