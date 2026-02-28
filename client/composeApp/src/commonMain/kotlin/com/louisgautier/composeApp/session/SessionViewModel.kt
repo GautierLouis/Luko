@@ -1,13 +1,18 @@
 package com.louisgautier.composeApp.session
 
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
 import com.louisgautier.apicontracts.dto.DictionaryWithGraphic
+import com.louisgautier.apicontracts.dto.Graphic
+import com.louisgautier.apicontracts.dto.Point
+import com.louisgautier.apicontracts.dto.Stroke
 import com.louisgautier.composeApp.AppNavigation
 import com.louisgautier.composeApp.Route
+import com.louisgautier.composeApp.drawing.analyzeUserDrawing
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.domain.model.Response
 import com.louisgautier.domain.model.Session
@@ -29,21 +34,35 @@ class SessionViewModel(
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
+    // Related to current drawing
+    data class GraphicSketcherState(
+        val ongoingStrokeIndex: Int = 0,
+        val previousDrawnStrokes: List<List<Offset>> = emptyList(),
+        val drawnStroke: List<Offset> = emptyList(),
+    )
+
+    // Related to current Question
+    data class QuestionState(
+        val question: DictionaryWithGraphic,
+        val sketcherState: GraphicSketcherState = GraphicSketcherState(),
+        val isAnswered: Boolean = false,
+    )
+
+    // Related to current Session
     data class UIState(
         val isLoading: Boolean = false,
         val isError: Boolean = false,
-        val difficulty: Difficulty = Difficulty.EASY,
-
-        val questions: List<DictionaryWithGraphic> = emptyList(),
-        val responses: List<Response> = emptyList(),
+        val questionStates: List<QuestionState> = emptyList(),
         val pagerState: PagerState = PagerState { 0 },
+        val drawReference: Boolean = false,
+        val drawHint: Boolean = false
     ) {
-        val currentQuestion: DictionaryWithGraphic
-            get() = questions[pagerState.currentPage]
-        val isAnswered
-            get() = responses.any { it.code == currentQuestion.dictionary.code }
+        val currentQuestion: QuestionState
+            get() = questionStates[pagerState.currentPage]
         val isLastQuestion
             get() = pagerState.canScrollForward
+        val isAnswered
+            get() = currentQuestion.isAnswered
     }
 
     private val level: List<CharacterFrequencyLevel> = (savedStateHandle["levels"] as? String)
@@ -57,12 +76,13 @@ class SessionViewModel(
         ?.let { QuestionCount.valueOf(it) }
         ?: QuestionCount.FIVE
 
-    private var _state = MutableStateFlow<UIState>(UIState())
+    private val _state = MutableStateFlow(UIState())
     val state = _state.asStateFlow()
 
-    val startTime = Clock.System.now()
-
-    val scoreCalculator = CalculateScore()
+    // No need to pass this to the view: out of state
+    private val responses = mutableListOf<Response>()
+    private val startTime = Clock.System.now()
+    private val scoreCalculator = CalculateScore()
 
     init {
         loadQuestions()
@@ -77,9 +97,10 @@ class SessionViewModel(
                         it.copy(
                             isLoading = false,
                             isError = false,
-                            questions = data,
+                            questionStates = data.map { q -> QuestionState(q) },
+                            drawReference = difficulty != Difficulty.HARD,
+                            drawHint = difficulty == Difficulty.EASY,
                             pagerState = PagerState { data.size },
-                            difficulty = difficulty
                         )
                     }
                 }.onFailure {
@@ -88,11 +109,66 @@ class SessionViewModel(
         }
     }
 
-    fun onComplete(response: Response) {
-        _state.update {
-            it.copy(responses = it.responses.plus(response))
+    // --- Sketcher ---
+
+    fun onSketcherEvent(event: SessionEvent) {
+        when (event) {
+            SessionEvent.Finish -> endSession()
+            SessionEvent.Reset -> updateSketcherState { GraphicSketcherState() }
+            is SessionEvent.StrokeCompleted -> updateSketcherState { current ->
+                val newStrokes = current.previousDrawnStrokes + listOf(event.stroke)
+                val newIndex = current.ongoingStrokeIndex + 1
+
+                if (newIndex == _state.value.currentQuestion.question.graphics.medians.size) {
+                    analyzeAndReport(
+                        graphic = _state.value.currentQuestion.question.graphics,
+                        referenceStrokes = event.referenceStrokes,
+                        drawnStrokes = newStrokes
+                    )
+                }
+
+                current.copy(
+                    previousDrawnStrokes = newStrokes,
+                    ongoingStrokeIndex = newIndex,
+                    drawnStroke = emptyList()
+                )
+            }
         }
     }
+
+    private fun updateSketcherState(update: (GraphicSketcherState) -> GraphicSketcherState) {
+        _state.update { state ->
+            state.copy(questionStates = state.questionStates.mapIndexed { index, questionState ->
+                if (index == state.pagerState.currentPage) questionState.copy(
+                    sketcherState = update(
+                        questionState.sketcherState
+                    )
+                )
+                else questionState
+            })
+        }
+    }
+
+    private fun analyzeAndReport(
+        graphic: Graphic,
+        referenceStrokes: List<List<Offset>>,
+        drawnStrokes: List<List<Offset>>
+    ) {
+        viewModelScope.launch {
+            val output = analyzeUserDrawing(referenceStrokes, drawnStrokes)
+            val parsed = drawnStrokes.map { s -> Stroke(s.map { Point(it.x, it.y) }) }
+            val response = Response(graphic.code, output, parsed)
+            responses.add(response)
+            _state.update { state ->
+                state.copy(questionStates = state.questionStates.map {
+                    if (it.question.dictionary.code == response.code) it.copy(isAnswered = true)
+                    else it
+                })
+            }
+        }
+    }
+
+    // --- Session ---
 
     fun endSession() {
         val endTime = Clock.System.now()
@@ -103,9 +179,9 @@ class SessionViewModel(
                 date = endTime,
                 duration = timeElapsed,
                 difficulty = difficulty,
-                responses = state.value.responses,
+                responses = responses,
                 score = scoreCalculator.calculate(
-                    questions = state.value.questions.map { it.dictionary },
+                    questions = state.value.questionStates.map { it.question.dictionary },
                     difficulty = difficulty,
                     timeElapsed = timeElapsed.inWholeMilliseconds
                 ),
@@ -117,5 +193,15 @@ class SessionViewModel(
             }
         }
     }
+}
+
+sealed class SessionEvent() {
+    data class StrokeCompleted(
+        val stroke: List<Offset>,
+        val referenceStrokes: List<List<Offset>>
+    ) : SessionEvent()
+
+    data object Reset : SessionEvent()
+    data object Finish : SessionEvent()
 }
 

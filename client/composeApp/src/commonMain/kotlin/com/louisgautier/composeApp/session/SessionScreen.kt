@@ -29,7 +29,6 @@ import com.louisgautier.composeApp.AppNavigation
 import com.louisgautier.composeApp.design.atom.AppButton
 import com.louisgautier.composeApp.design.page.ErrorPage
 import com.louisgautier.composeApp.design.previewDictionaryWithGraphic
-import com.louisgautier.domain.model.Response
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -43,11 +42,10 @@ fun SessionScreen(
 
     if (state.isError) {
         ErrorPage(action = { viewModel.loadQuestions() })
-    } else if (state.questions.isNotEmpty()) {
+    } else {
         SessionScreenContent(
             state = state,
-            onComplete = { viewModel.onComplete(it) },
-            onFinish = { viewModel.endSession() }
+            event = { viewModel.onSketcherEvent(it) },
         )
     }
 }
@@ -56,8 +54,7 @@ fun SessionScreen(
 @Composable
 fun SessionScreenContent(
     state: SessionViewModel.UIState,
-    onComplete: (Response) -> Unit,
-    onFinish: () -> Unit,
+    event: (SessionEvent) -> Unit,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -84,7 +81,7 @@ fun SessionScreenContent(
         topBar = {
             Header(
                 pager = state.pagerState,
-                char = state.currentQuestion.dictionary,
+                char = state.currentQuestion.question.dictionary,
                 modifier = Modifier.padding(top = 32.dp)
             )
         },
@@ -99,14 +96,16 @@ fun SessionScreenContent(
                     userScrollEnabled = false,
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
                     state = state.pagerState
-                ) {
-                    GraphicPager(
-                        difficulty = state.difficulty,
-                        graphic = state.questions[it].graphics,
-                        modifier = Modifier.fillMaxWidth()
-                    ) { response -> onComplete(response) }
-                }
+                ) { page ->
 
+                    GraphicSketcher(
+                        questionState = state.currentQuestion,
+                        drawReference = state.drawReference,
+                        drawHint = state.drawHint,
+                        onEvent = { event(it) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 Spacer(Modifier.weight(3f))
 
                 Column(
@@ -114,7 +113,7 @@ fun SessionScreenContent(
                 ) {
                     AppButton(
                         onClick = {
-                            if (state.isLastQuestion) onNext() else onFinish()
+                            if (state.isLastQuestion) onNext() else event(SessionEvent.Finish)
                         },
                         enabled = state.isAnswered,
                     ) {
@@ -145,13 +144,15 @@ fun SessionScreenContent(
 fun SessionScreenContentPreview() {
     SessionScreenContent(
         state = SessionViewModel.UIState(
-            questions = listOf(
-                previewDictionaryWithGraphic,
+            questionStates = listOf(
+                SessionViewModel.QuestionState(
+                    question = previewDictionaryWithGraphic,
+                    sketcherState = SessionViewModel.GraphicSketcherState(),
+                )
             ),
-            pagerState = PagerState { 1 }
+            pagerState = PagerState { 1 },
         ),
-        onComplete = { },
-        onFinish = {}
+        event = {}
     )
 }
 

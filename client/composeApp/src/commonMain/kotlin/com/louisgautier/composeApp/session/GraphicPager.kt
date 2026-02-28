@@ -1,13 +1,9 @@
 package com.louisgautier.composeApp.session
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,9 +13,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,20 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.louisgautier.apicontracts.dto.Graphic
-import com.louisgautier.apicontracts.dto.Point
-import com.louisgautier.apicontracts.dto.Stroke
 import com.louisgautier.composeApp.design.ai.Gray400
 import com.louisgautier.composeApp.design.ai.Green700
 import com.louisgautier.composeApp.design.modifier.dashedBorder
-import com.louisgautier.composeApp.design.previewGraphic
+import com.louisgautier.composeApp.design.previewDictionaryWithGraphic
 import com.louisgautier.composeApp.drawing.DrawableArea
-import com.louisgautier.composeApp.drawing.analyzeUserDrawing
+import com.louisgautier.composeApp.drawing.TransformStroke
+import com.louisgautier.composeApp.drawing.drawingDetector
 import com.louisgautier.domain.model.Difficulty
-import com.louisgautier.domain.model.Response
-import kotlinx.coroutines.delay
 import learn_chinese.client.composeapp.generated.resources.Res
 import learn_chinese.client.composeapp.generated.resources.ic_reset
 import org.jetbrains.compose.resources.painterResource
@@ -52,13 +43,34 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Composable
-fun GraphicPager(
-    difficulty: Difficulty,
-    graphic: Graphic,
+fun GraphicSketcher(
+    questionState: SessionViewModel.QuestionState,
     modifier: Modifier = Modifier,
-    onComplete: (Response) -> Unit = {}
+    drawReference: Boolean = false,
+    drawHint: Boolean = false,
+    onEvent: (SessionEvent) -> Unit = {},
 ) {
-    var isDrawing by remember { mutableStateOf(false) }
+    val graphic = questionState.question.graphics
+    val sketcherState = questionState.sketcherState
+
+    var canvasSize by remember { mutableStateOf(IntSize(0, 0)) }
+    val drawnStroke = remember { mutableStateListOf<Offset>() }
+
+    val referenceStrokes = remember(graphic.code, canvasSize) {
+        graphic.medians.map { stroke ->
+            TransformStroke.transformOffset(stroke.points.map { Offset(it.x, it.y) }, canvasSize)
+        }
+    }
+
+    val referenceHint = referenceStrokes.getOrNull(sketcherState.ongoingStrokeIndex)
+
+    val isComplete = sketcherState.ongoingStrokeIndex == referenceStrokes.size
+
+    val drawingModifier = if (isComplete) Modifier
+    else Modifier.drawingDetector(drawnStroke) {
+        onEvent(SessionEvent.StrokeCompleted(drawnStroke.toList(), referenceStrokes))
+        drawnStroke.clear()
+    }
 
     Card(
         colors = CardDefaults.cardColors(
@@ -74,55 +86,36 @@ fun GraphicPager(
                 off = 10.dp,
             ),
     ) {
-        DrawableArea(
-            medians = graphic.medians,
-            drawReference = difficulty != Difficulty.HARD,
-            drawHint = difficulty == Difficulty.EASY,
-            onStartDrawing = { isDrawing = true },
-            onComplete = { strokes, result ->
-                onComplete(Response(graphic.code, result, strokes))
+        Box {
+            this@Card.AnimatedVisibility(
+                visible = sketcherState.previousDrawnStrokes.isNotEmpty(),
+                label = "Reset btn visibility",
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp),
+            ) {
+                ResetButton(onClick = { onEvent(SessionEvent.Reset) })
             }
-        )
-    }
-}
 
-@Composable
-fun RewardToast(
-    text: String,
-    visible: Boolean,
-    modifier: Modifier = Modifier,
-    durationMillis: Int = 200,
-    onFinished: () -> Unit = {}
-) {
-    LaunchedEffect(Unit) {
-        delay(durationMillis.toLong())
-        onFinished()
-    }
-
-    AnimatedVisibility(
-        visible = visible,
-        enter = slideInVertically(),
-        exit = slideOutVertically()
-    ) {
-        Box(
-            modifier = modifier
-                .background(
-                    color = Green700,
-                    shape = RoundedCornerShape(bottomEnd = 8.dp, bottomStart = 8.dp)
-                )
-                .padding(vertical = 4.dp)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = text,
-                color = Color.White,
-                fontSize = 16.sp
+            DrawableArea(
+                referenceStrokes = referenceStrokes
+                    .takeIf { drawReference }
+                    .orEmpty(),
+                referenceHint = referenceHint
+                    ?.takeIf { drawHint }
+                    .orEmpty(),
+                previousDrawnStrokes = sketcherState.previousDrawnStrokes,
+                ongoingStroke = drawnStroke,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
+                    .aspectRatio(1f)
+                    .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
+                    .then(drawingModifier)
             )
         }
     }
 }
-
 
 @Composable
 fun ResetButton(
@@ -131,7 +124,7 @@ fun ResetButton(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier.size(34.dp),
+        modifier = modifier.size(48.dp),
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = Gray400,
             contentColor = Color.White
@@ -158,5 +151,17 @@ class DifficultyPreviewParameter() : PreviewParameterProvider<Difficulty> {
 fun GraphicPagerPreview(
     @PreviewParameter(DifficultyPreviewParameter::class) difficulty: Difficulty
 ) {
-    GraphicPager(difficulty, previewGraphic)
+    GraphicSketcher(
+        drawReference = difficulty != Difficulty.HARD,
+        drawHint = difficulty == Difficulty.EASY,
+        questionState = SessionViewModel.QuestionState(
+            question = previewDictionaryWithGraphic,
+            sketcherState = SessionViewModel.GraphicSketcherState(
+                ongoingStrokeIndex = 0,
+                previousDrawnStrokes = emptyList(),
+                drawnStroke = emptyList()
+            ),
+        ),
+        onEvent = {},
+    )
 }
