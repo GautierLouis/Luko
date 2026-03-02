@@ -1,44 +1,44 @@
 package com.louisgautier.composeApp.home
 
 import androidx.compose.ui.graphics.Color
-import com.louisgautier.composeApp.design.ai.Orange100
-import com.louisgautier.composeApp.design.ai.Orange700
-import com.louisgautier.composeApp.design.ai.Purple100
-import com.louisgautier.composeApp.design.ai.Purple700
-import com.louisgautier.composeApp.design.ai.Teal100
-import com.louisgautier.composeApp.design.ai.Teal700
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.louisgautier.designsystem.ai.Orange100
+import com.louisgautier.designsystem.ai.Orange700
+import com.louisgautier.designsystem.ai.Purple100
+import com.louisgautier.designsystem.ai.Purple700
+import com.louisgautier.designsystem.ai.Teal100
+import com.louisgautier.designsystem.ai.Teal700
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.RoundedBolt
+import com.louisgautier.designsystem.icon.RoundedCalendarToday
+import com.louisgautier.designsystem.icon.RoundedStreak
 import com.louisgautier.utils.CoreKeepForR8
-import learn_chinese.client.composeapp.generated.resources.Res
-import learn_chinese.client.composeapp.generated.resources.ic_rounded_bolt
-import learn_chinese.client.composeapp.generated.resources.ic_rounded_calendar_today
-import learn_chinese.client.composeapp.generated.resources.ic_rounded_streak
-import org.jetbrains.compose.resources.DrawableResource
 
 @CoreKeepForR8
 enum class StatisticMetric(
     val title: String,
-    val icon: DrawableResource,
+    val icon: ImageVector,
     val containerColor: Color,
     val contentColor: Color,
 ) {
 
     Streak(
         title = "Day Streak",
-        icon = Res.drawable.ic_rounded_streak,
+        icon = AppIcon.RoundedStreak,
         containerColor = Orange100,
         contentColor = Orange700,
     ),
 
     Sessions(
         title = "Sessions",
-        icon = Res.drawable.ic_rounded_calendar_today,
+        icon = AppIcon.RoundedCalendarToday,
         containerColor = Teal100,
         contentColor = Teal700,
     ),
 
     TotalScore(
         title = "Total XP",
-        icon = Res.drawable.ic_rounded_bolt,
+        icon = AppIcon.RoundedBolt,
         containerColor = Purple100,
         contentColor = Purple700,
     ),

@@ -31,10 +31,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.louisgautier.designsystem.AppTheme
-import com.louisgautier.designsystem.theme.button.ElegantButton
-import com.louisgautier.designsystem.theme.button.ButtonType
-import com.louisgautier.designsystem.theme.button.ButtonVariant
+import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.designsystem.components.button.ElegantButton
+import com.louisgautier.designsystem.components.button.ButtonType
+import com.louisgautier.designsystem.components.button.ButtonVariant
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.viewmodel.koinViewModel
 

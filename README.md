@@ -11,103 +11,216 @@ The project is organized into several modules, each serving a distinct purpose. 
 
 ## Module Dependency Graph
 
+# Project Architecture
+
+## Module Graph
+
 ```mermaid
-flowchart-elk TD
+flowchart TD
     subgraph "Platform-Specific Apps"
-        A["/client (Client App)"]
-        S["/server (Server App)"]
+        S[":server"]
+        APP[":client:composeApp"]
     end
 
-    subgraph "Shared UI (Android, iOS, Desktop)"
-        UI["/client/composeApp"]
-    end
-    subgraph Feature Based Modules
-        FBM["/client/feature/biometric"]
-        FL["/client/feature/login"]
-    end
-    subgraph Domain
-        D["/client/domain"]
-    end
-    subgraph "Shared Core & Data Logic"
-        PR["/client/data/preferences"]
-        N["/client/data/network"]
-        P["/client/data/platform"]
-        DB["/client/data/database"]
-        AC["/api-contracts"]
+    subgraph "Feature Modules"
+        FL[":client:feature:login"]
+        FLR[":client:feature:learning"]
+        FD[":client:feature:dictionary"]
     end
 
-%% Application Dependencies
-    A --> UI
-    S --> AC
-%% UI Dependencies
-    UI --> FBM
-    UI --> FL
-%% Feature Dependencies
-    FL --> D
-%% Core Logic Dependencies
-    D --> PR
-    D --> DB
+    subgraph "Domain"
+        D[":client:domain"]
+        DA[":client:domain:auth"]
+    end
+
+    subgraph "Data"
+        N[":client:data:network"]
+        DB[":client:data:database"]
+        PR[":client:data:preferences"]
+    end
+
+    subgraph "Core"
+        LOG[":client:core:logger"]
+        UT[":client:core:utils"]
+        PRM[":client:core:permission"]
+        FB[":client:core:firebase"]
+    end
+
+    subgraph "Design System"
+        DS[":client:design-system"]
+    end
+
+    subgraph "Shared (Client + Server)"
+        AC[":api-contracts"]
+    end
+
+    APP --> FL
+    APP --> FLR
+    APP --> FD
+    APP --> DS
+
+    FL --> DA
+    FLR --> D
+    FD --> D
+
+    DA --> D
     D --> N
-    DB --> P
-    N --> P
+    D --> DB
+    D --> PR
+
     N --> AC
+    N --> LOG
+    DB --> LOG
+    PR --> LOG
+
+    D --> LOG
+    D --> UT
+
+    S --> AC
 ```
 
-### Core Modules (Multiplatform)
+---
 
-These modules contain shared logic and are compiled for multiple targets.
+## Modules
 
-* **`/app/platform`**
-    * **Description:** Manages core application functionalities such as AppLogger, Context wrapper
-      and platform-specific utilities.
-    * **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`.
-    * **Key Libraries:** Kermit.
+### Shared (Client + Server)
 
-*   **`/app/domain`**
-    * **Description:** Houses the core business logic, use cases, preferences, and domain models of
-      the application.
-    * **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (for platform-specific
-      Datastore).
-    *   **Key Libraries:** Kotlin Standard Library, Kotlinx Coroutines.
+#### `:api-contracts`
+Defines shared DTOs and API route definitions. Consumed by `:client:data:network` on the client side and `:server` on the backend, ensuring a type-safe contract between both ends.
 
-*   **`/app/network`**
-    *   **Description:** Implements the network client for making API requests to the backend server. It handles data fetching and communication.
-    *   **Targets:** `commonMain` (for shared client logic), `androidMain`, `iosMain`, `jvmMain` (for platform-specific Ktor engines).
-    *   **Key Libraries:** Ktor Client.
+- **Targets:** `commonMain`
+- **Key Libraries:** Kotlinx Serialization
 
-*   **`/app/database`**
-    *   **Description:** Manages local data persistence, allowing the app to store and retrieve data on the device.
-    *   **Targets:** `commonMain` (for database schemas, queries), platform-specific driver implementations (`androidMain`, `iosMain`, `jvmMain`).
-    *   **Key Libraries:** Ksp, Room.
+---
 
-*   **`/api-contracts`**
-    *   **Description:** Defines data models (Data Transfer Objects - DTOs) and API route definitions. This module is crucial for ensuring type-safe communication and sharing the contract between client modules (like `/app/network`) and the `/server`.
-    *   **Targets:** `commonMain`.
-    *   **Key Libraries:** Kotlinx Serialization.
+### Server
 
-### UI Module (Multiplatform)
+#### `:server`
+Ktor-based backend server. Consumes `:api-contracts` to expose type-safe endpoints matching what the client expects.
 
-*   **`/app/composeApp`**
-    *   **Description:** Contains the shared user interface layer built with Compose Multiplatform. This allows for a consistent look and feel across Android, iOS, and Desktop.
-    *   **Source Sets:**
-        *   `commonMain` ([./app/composeApp/src/commonMain/kotlin](./app/composeApp/src/commonMain/kotlin)): Code common for all targets.
-        *   Platform-specific (`androidMain`, `iosMain`, `jvmMain`): For platform-specific UI adaptations or API calls within the Compose UI. For example, `iosMain` ([./app/composeApp/src/iosMain/kotlin](./app/composeApp/src/iosMain/kotlin)) for iOS-specific Compose UI parts, or `jvmMain` ([./app/composeApp/src/jvmMain/kotlin](./app/composeApp/src/jvmMain/kotlin)) for Desktop.
-    *   **Key Libraries:** JetBrains Compose Multiplatform.
+- **Targets:** JVM
+- **Key Libraries:** Ktor Server
 
-### Platform-Specific Application Modules
+---
 
-*   **`/iosApp`** ([./iosApp/iosApp](./iosApp/iosApp))
-    *   **Description:** The iOS-specific application project. It serves as the entry point for the iOS platform and integrates the shared UI from `/app/composeApp`. This is also where you would add any native SwiftUI code if needed.
-    *   **Targets:** iOS.
-    *   **Key Libraries:** UIKit/SwiftUI, integration with shared KMP modules.
+### Feature Modules
 
-*   **`/server`** ([./server/src/main/kotlin](./server/src/main/kotlin))
-    *   **Description:** A backend server application built with Ktor. It provides the APIs consumed by the client applications.
-    *   **Targets:** JVM.
-    *   **Key Libraries:** Ktor Server.
+Feature modules contain UI and presentation logic for a specific user-facing area. They depend on domain modules for business logic and on the design system for UI components.
 
-*(Note: The Android application is primarily built from `/app/composeApp`\'s Android target, which produces an Android library consumed by a separate Android app module or uses a default application setup if `com.android.application` plugin is applied directly in `app/composeApp`.)*
+#### `:client:feature:login`
+Handles authentication flows — sign-in, sign-up, and session restore. Depends on `:client:domain:auth` for authentication-specific use cases.
 
+- **Targets:** `commonMain`
+
+#### `:client:feature:learning`
+Learning experience feature. Depends on `:client:domain` for shared use cases and domain models.
+
+- **Targets:** `commonMain`
+
+#### `:client:feature:dictionary`
+Dictionary and vocabulary feature. Depends on `:client:domain` for shared use cases and domain models.
+
+- **Targets:** `commonMain`
+
+---
+
+### Domain
+
+Domain modules contain business logic, use cases, and domain models (`DomainModel` — no suffix). They are free of any framework or platform dependency.
+
+#### `:client:domain`
+Houses shared business logic, use cases, and domain models used across multiple features. Sub-domains (e.g. `:domain:auth`) extend this layer for feature-specific business rules.
+
+- **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
+- **Key Libraries:** Kotlinx Coroutines
+- **Todo:** Split into sub-domains
+
+
+#### `:client:domain:auth`
+Authentication-specific use cases and domain models — login, session, and token management. Depends on `:client:domain` for shared domain primitives.
+
+- **Targets:** `commonMain`
+- **Key Libraries:** Kotlinx Coroutines
+
+---
+
+### Data
+
+Data modules handle all I/O concerns — network, local database, and preferences. They expose repositories consumed by the domain layer and work with `Dto` objects from `:api-contracts` at the network boundary.
+
+#### `:client:data:network`
+Implements the network client for API communication. Consumes `:api-contracts` DTOs for type-safe requests and responses, and maps them to domain models before exposing them upward.
+
+- **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (platform-specific Ktor engines)
+- **Key Libraries:** Ktor Client
+
+#### `:client:data:database`
+Manages local data persistence using a multiplatform database solution.
+
+- **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (platform-specific drivers)
+- **Key Libraries:** Room
+
+#### `:client:data:preferences`
+Handles lightweight key-value storage for user preferences and app settings.
+
+- **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
+- **Key Libraries:** DataStore
+
+---
+
+### Core
+
+Core modules provide low-level, domain-agnostic utilities. They have no knowledge of features, domain, or data layers and can be depended on by any module.
+
+#### `:client:core:logger`
+Provides a shared logging abstraction across all client modules.
+
+- **Targets:** `commonMain`
+- **Key Libraries:** Kermit
+
+#### `:client:core:utils`
+General-purpose utility functions and extensions shared across client modules.
+
+- **Targets:** `commonMain`
+- **Todo:** Split into sub-domains (e.g Navigation)
+
+#### `:client:core:permission`
+Abstracts platform-specific permission handling (camera, location, etc.).
+
+- **Targets:** `commonMain`, `androidMain`, `iosMain`
+
+#### `:client:core:firebase`
+Firebase integration — analytics, crash reporting, and other Firebase services — shared across client modules.
+
+- **Targets:** `commonMain`, `androidMain`, `iosMain`
+- **Key Libraries:** GitLive Firebase KMP SDK
+
+---
+
+### UI Modules
+
+#### `:client:design-system`
+Contains reusable, domain-agnostic UI components, theming, and typography shared across all features. Has no dependency on domain or data layers.
+
+- **Targets:** `commonMain`
+- **Key Libraries:** Compose Multiplatform
+
+#### `:client:composeApp`
+The top-level shared UI entry point. Wires together feature modules, applies the design system, and hosts navigation and app-level scaffolding.
+
+- **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
+- **Key Libraries:** Compose Multiplatform
+
+---
+
+## Naming Conventions
+
+| Layer | Suffix | Example |
+|---|---|---|
+| `:api-contracts` DTOs | `Dto` | `UserDto`, `LoginResponseDto` |
+| `:client:domain` models | none | `User`, `LoginResult` |
+
+DTOs represent the raw wire format exchanged with the server. Domain models are the canonical representation used throughout the app. Mapping between the two happens at the data layer boundary (e.g. `UserDto.toDomain(): User`).
 ## Gradle Build Logic with Convention Plugins
 
 This project leverages Gradle\'s `build-logic` module to centralize and manage build configurations

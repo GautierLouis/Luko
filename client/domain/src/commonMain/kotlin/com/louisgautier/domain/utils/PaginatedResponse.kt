@@ -2,8 +2,8 @@ package com.louisgautier.domain.utils
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
-import com.louisgautier.apicontracts.dto.SimpleDictionary
+import com.louisgautier.domain.model.CharacterFrequencyLevel
+import com.louisgautier.domain.model.SimpleDictionary
 import com.louisgautier.domain.repository.CharacterRepository
 
 class PaginatedResponse(

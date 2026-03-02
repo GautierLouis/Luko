@@ -9,19 +9,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.louisgautier.composeApp.design.ai.Gray200
-import com.louisgautier.composeApp.design.ai.Teal50
-import com.louisgautier.composeApp.design.ai.Teal600
-import com.louisgautier.composeApp.design.previewSession
+import com.louisgautier.designsystem.ai.Gray200
+import com.louisgautier.designsystem.ai.Teal50
+import com.louisgautier.designsystem.ai.Teal600
+import com.louisgautier.domain.previewSession
 import com.louisgautier.domain.model.Session
+import com.louisgautier.designsystem.SessionMetric
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.RoundedTrophy
 import com.louisgautier.domain.utils.toHHMMSS
 import com.louisgautier.domain.utils.toISODateString
 import learn_chinese.client.composeapp.generated.resources.Res
-import learn_chinese.client.composeapp.generated.resources.ic_rounded_trophy
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.ExperimentalTime
 
@@ -42,7 +43,7 @@ fun LastSessionCard(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             RoundIcon(
-                icon = Res.drawable.ic_rounded_trophy,
+                icon = AppIcon.RoundedTrophy,
                 containerColor = Teal50,
                 contentColor = Teal600,
                 size = 24.dp,
@@ -72,7 +73,7 @@ fun LastSessionCard(
             )
             LastSessionMetric(
                 metric = SessionMetric.Difficulty,
-                value = session.difficulty.name.lowercase().capitalize(locale),
+                value = session.difficulty.name.lowercase().replaceFirstChar { it.uppercaseChar() },
                 modifier = Modifier.weight(1f)
             )
         }

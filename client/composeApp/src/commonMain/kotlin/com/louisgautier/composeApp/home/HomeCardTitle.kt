@@ -8,17 +8,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.louisgautier.composeApp.design.ai.Teal50
-import com.louisgautier.composeApp.design.ai.Teal600
-import learn_chinese.client.composeapp.generated.resources.Res
-import learn_chinese.client.composeapp.generated.resources.ic_rounded_trophy
+import com.louisgautier.designsystem.ai.Teal50
+import com.louisgautier.designsystem.ai.Teal600
 import org.jetbrains.compose.resources.DrawableResource
 
 @Composable
 fun HomeCardTitle(
     title: String,
-    icon: DrawableResource,
+    icon: ImageVector,
     trailing: @Composable () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {

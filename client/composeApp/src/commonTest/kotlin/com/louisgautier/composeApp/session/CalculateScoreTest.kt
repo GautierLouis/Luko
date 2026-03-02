@@ -1,8 +1,11 @@
 package com.louisgautier.composeApp.session
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
-import com.louisgautier.apicontracts.dto.Dictionary
+import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
+import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.learning.CalculateScore
+import com.louisgautier.learning.builder.QuestionCount
+import com.louisgautier.learning.ScoreDefault
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -15,7 +18,7 @@ class CalculateScoreTest {
      *
      */
     private fun generateQuestion(
-        level: CharacterFrequencyLevel,
+        level: CharacterFrequencyLevelDto,
         count: QuestionCount
     ): List<Dictionary> {
         return List(count.value) {
@@ -29,7 +32,7 @@ class CalculateScoreTest {
     @Test
     fun `EASY difficulty base score calculation`() {
 
-        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -43,7 +46,7 @@ class CalculateScoreTest {
 
     @Test
     fun `MEDIUM difficulty base score calculation`() {
-        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -57,7 +60,7 @@ class CalculateScoreTest {
 
     @Test
     fun `HARD difficulty base score calculation`() {
-        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -71,7 +74,7 @@ class CalculateScoreTest {
 
     @Test
     fun `Calculate max points`() {
-        val questions = generateQuestion(CharacterFrequencyLevel.EXTENDED, QuestionCount.TWENTY)
+        val questions = generateQuestion(CharacterFrequencyLevelDto.EXTENDED, QuestionCount.TWENTY)
 
         val score = computer.calculate(
             questions = questions,
@@ -84,7 +87,7 @@ class CalculateScoreTest {
 
     @Test
     fun `Calculate min points`() {
-        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -97,7 +100,7 @@ class CalculateScoreTest {
 
     @Test
     fun `Calculate time bonus at lower`() {
-        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -113,7 +116,7 @@ class CalculateScoreTest {
 
     @Test
     fun `Calculate time bonus at max`() {
-        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,

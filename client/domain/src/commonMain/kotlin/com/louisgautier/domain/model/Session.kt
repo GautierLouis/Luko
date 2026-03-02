@@ -1,6 +1,5 @@
 package com.louisgautier.domain.model
 
-import com.louisgautier.apicontracts.dto.Stroke
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime

@@ -1,10 +1,10 @@
 package com.louisgautier.server.parser
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
+import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.Decomposition
 import com.louisgautier.apicontracts.dto.Dictionary
 import com.louisgautier.apicontracts.dto.Etymology
-import com.louisgautier.apicontracts.dto.Graphic
+import com.louisgautier.apicontracts.dto.GraphicDto
 import com.louisgautier.apicontracts.dto.Point
 import com.louisgautier.apicontracts.dto.Stroke
 import com.louisgautier.server.database.entity.DictionaryDao
@@ -55,7 +55,7 @@ class FileParser(
             }
             if (graphicCount == EMPTY_COUNT) {
                 val graph = parseGraphic().map { g ->
-                    Graphic(
+                    GraphicDto(
                         g.character.toString().codePointAt(0),
                         g.strokes,
                         g.medians.map { m -> Stroke(points = m.map { p -> Point(p[0], p[1]) }) }
@@ -94,14 +94,14 @@ class FileParser(
         }
     }
 
-    private fun rankToLevel(rank: Int?): CharacterFrequencyLevel = when {
-        rank == null -> CharacterFrequencyLevel.UNKNOWN
-        rank <= 500 -> CharacterFrequencyLevel.COMMON
-        rank <= 1500 -> CharacterFrequencyLevel.FREQUENT
-        rank <= 3500 -> CharacterFrequencyLevel.STANDARD
-        rank <= 7000 -> CharacterFrequencyLevel.EXTENDED
-        rank <= 9000 -> CharacterFrequencyLevel.RARE
-        else -> CharacterFrequencyLevel.OBSOLETE
+    private fun rankToLevel(rank: Int?): CharacterFrequencyLevelDto = when {
+        rank == null -> CharacterFrequencyLevelDto.UNKNOWN
+        rank <= 500 -> CharacterFrequencyLevelDto.COMMON
+        rank <= 1500 -> CharacterFrequencyLevelDto.FREQUENT
+        rank <= 3500 -> CharacterFrequencyLevelDto.STANDARD
+        rank <= 7000 -> CharacterFrequencyLevelDto.EXTENDED
+        rank <= 9000 -> CharacterFrequencyLevelDto.RARE
+        else -> CharacterFrequencyLevelDto.OBSOLETE
     }
 
     private fun decompose(original: String): List<Decomposition> {

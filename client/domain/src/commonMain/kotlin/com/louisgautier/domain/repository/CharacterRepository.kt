@@ -1,11 +1,13 @@
 package com.louisgautier.domain.repository
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
-import com.louisgautier.apicontracts.dto.DictionaryWithGraphic
-import com.louisgautier.apicontracts.dto.Graphic
-import com.louisgautier.apicontracts.dto.LevelCount
-import com.louisgautier.apicontracts.dto.ResponseList
-import com.louisgautier.apicontracts.dto.SimpleDictionary
+import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
+import com.louisgautier.apicontracts.dto.ResponseListDto
+import com.louisgautier.domain.mapper.LevelCount
+import com.louisgautier.domain.model.CharacterFrequencyLevel
+import com.louisgautier.domain.model.DictionaryWithGraphic
+import com.louisgautier.domain.model.Graphic
+import com.louisgautier.domain.model.ResponseList
+import com.louisgautier.domain.model.SimpleDictionary
 
 interface CharacterRepository {
     suspend fun getLevelCount(): Result<List<LevelCount>>

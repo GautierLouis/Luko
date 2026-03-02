@@ -1,7 +1,5 @@
 package com.louisgautier.domain.mapper
 
-import com.louisgautier.apicontracts.dto.Point
-import com.louisgautier.apicontracts.dto.Stroke
 import com.louisgautier.database.entity.EmbeddedComparisonDetails
 import com.louisgautier.database.entity.EmbeddedCoordinates
 import com.louisgautier.database.entity.EmbeddedResponse
@@ -10,8 +8,10 @@ import com.louisgautier.database.entity.EmbeddedStrokeComparisonResult
 import com.louisgautier.database.entity.SessionEntity
 import com.louisgautier.domain.model.ComparisonDetails
 import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.domain.model.Point
 import com.louisgautier.domain.model.Response
 import com.louisgautier.domain.model.Session
+import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.model.StrokeComparisonResult
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime

@@ -6,6 +6,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.messaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -14,6 +16,7 @@ import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.louisgautier.firebase.event.TrackingEvent
 import com.louisgautier.firebase.remoteconfig.FeatureFlagKey
 import com.louisgautier.logger.AppLogger
+import kotlinx.coroutines.tasks.await
 
 actual class FirebaseManager(
     private val context: Context,
@@ -23,11 +26,17 @@ actual class FirebaseManager(
     private lateinit var analytics: FirebaseAnalytics
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var messaging: FirebaseMessaging
+    private lateinit var auth: FirebaseAuth
+
 
     actual fun initialize() {
         FirebaseApp.initializeApp(context)
 
+        auth = Firebase.auth
         analytics = Firebase.analytics
+        messaging = Firebase.messaging
+
+        auth.signInAnonymously()
 
         remoteConfig = Firebase.remoteConfig.apply {
             val configSettings = remoteConfigSettings {
@@ -81,7 +90,10 @@ actual class FirebaseManager(
 
     actual fun fetchRemoteConfig() {
         remoteConfig.fetchAndActivate().addOnSuccessListener { success ->
-            AppLogger.d(tag = "FirebaseManager", message = "Remote config fetched and activated with success: $success")
+            AppLogger.d(
+                tag = "FirebaseManager",
+                message = "Remote config fetched and activated with success: $success"
+            )
 
             if (success) {
                 val flags = RemoteConfigFlags(

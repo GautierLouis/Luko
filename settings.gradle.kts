@@ -41,6 +41,8 @@ include(":api-contracts")
 include(":client:composeApp")
 //Feature
 include(":client:feature:login")
+include(":client:feature:learning")
+include(":client:feature:dictionary")
 //Domain
 include(":client:domain")
 include(":client:domain:auth")

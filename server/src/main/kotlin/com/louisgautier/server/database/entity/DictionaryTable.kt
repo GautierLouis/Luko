@@ -1,6 +1,6 @@
 package com.louisgautier.server.database.entity
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
+import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.EtymologyType
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -14,7 +14,7 @@ object DictionaryTable : IntIdTable("dictionary") {
     val pinyin = text("pinyin").nullable()
     val decomposition = varchar("original_decomposition", 110)
     val decompositionList = text("decomposition").nullable()
-    val level = enumerationByName("level", 50, CharacterFrequencyLevel::class)
+    val level = enumerationByName("level", 50, CharacterFrequencyLevelDto::class)
     val etymologyType = enumerationByName("etymology_type", 50, EtymologyType::class).nullable()
     val etymologyPhonetic = text("etymology_phonetic").nullable()
     val etymologySemantic = text("etymology_semantic").nullable()

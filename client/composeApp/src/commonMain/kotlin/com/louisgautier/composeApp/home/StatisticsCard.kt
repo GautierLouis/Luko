@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.louisgautier.composeApp.design.ai.Teal50
-import com.louisgautier.composeApp.design.ai.Teal600
-import com.louisgautier.composeApp.design.previewStatistics
-import learn_chinese.client.composeapp.generated.resources.Res
-import learn_chinese.client.composeapp.generated.resources.ic_rounded_bar_chart
+import com.louisgautier.designsystem.ai.Teal50
+import com.louisgautier.designsystem.ai.Teal600
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.RoundedBarChart
+import com.louisgautier.domain.previewStatistics
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -29,7 +29,7 @@ fun StatisticsCard(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             RoundIcon(
-                icon = Res.drawable.ic_rounded_bar_chart,
+                icon = AppIcon.RoundedBarChart,
                 containerColor = Teal50,
                 contentColor = Teal600,
                 size = 24.dp,

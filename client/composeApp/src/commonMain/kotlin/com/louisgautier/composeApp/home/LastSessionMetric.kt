@@ -17,8 +17,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.louisgautier.composeApp.design.ai.Gray100
-import com.louisgautier.composeApp.design.ai.Gray400
+import com.louisgautier.designsystem.ai.Gray100
+import com.louisgautier.designsystem.ai.Gray400
+import com.louisgautier.designsystem.SessionMetric
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -39,7 +40,7 @@ fun LastSessionMetric(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(metric.icon),
+                imageVector = metric.icon,
                 contentDescription = null,
                 modifier = Modifier.size(12.dp),
                 colorFilter = ColorFilter.tint(Gray400)

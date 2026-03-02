@@ -1,10 +1,10 @@
 package com.louisgautier.server.domain
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
+import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.Dictionary
-import com.louisgautier.apicontracts.dto.LevelCount
-import com.louisgautier.apicontracts.dto.ResponseList
-import com.louisgautier.apicontracts.dto.SimpleDictionary
+import com.louisgautier.apicontracts.dto.LevelCountDto
+import com.louisgautier.apicontracts.dto.ResponseListDto
+import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
 import com.louisgautier.server.database.entity.DictionaryTable
 import com.louisgautier.server.database.entity.DictionaryTable.code
 import com.louisgautier.server.database.entity.DictionaryTable.decomposition
@@ -21,31 +21,28 @@ import com.louisgautier.server.database.entity.DictionaryTable.radical
 import com.louisgautier.server.database.entity.GraphicTable
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.Random
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.replace
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.update
 
 class DictionaryRepository {
 
     private fun SqlExpressionBuilder.isValid() =
-        ((pinyin.isNotNull() or decompositionList.neq("[]")) and (level inList CharacterFrequencyLevel.validEntry))
+        ((pinyin.isNotNull() or decompositionList.neq("[]")) and (level inList CharacterFrequencyLevelDto.validEntry))
 
     suspend fun getLevelCount() = suspendTransaction {
         DictionaryTable
             .select(level, code.count())
             .groupBy(level)
             .map { row ->
-                LevelCount(row[level], row[code.count()].toInt())
+                LevelCountDto(row[level], row[code.count()].toInt())
             }
     }
 
-    suspend fun getRandomCharacters(levels: List<CharacterFrequencyLevel>, limit: Int) =
+    suspend fun getRandomCharacters(levels: List<CharacterFrequencyLevelDto>, limit: Int) =
         suspendTransaction {
             val total = DictionaryTable
                 .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
@@ -70,8 +67,8 @@ class DictionaryRepository {
     suspend fun getAll(
         page: Int,
         limit: Int,
-        levels: List<CharacterFrequencyLevel>
-    ): ResponseList<Dictionary> = suspendTransaction {
+        levels: List<CharacterFrequencyLevelDto>
+    ): ResponseListDto<Dictionary> = suspendTransaction {
         val result = DictionaryTable.selectAll()
             .where { (level inList levels) and isValid() }
             .limit(limit + 1)
@@ -80,7 +77,7 @@ class DictionaryRepository {
 
         val data = result.dropLast(1).map { it.toDictionary() }
         val hasNextPage = result.size > limit
-        ResponseList(hasNextPage, data)
+        ResponseListDto(hasNextPage, data)
     }
 
 //    suspend fun updateDef() = suspendTransaction {
@@ -100,8 +97,8 @@ class DictionaryRepository {
     suspend fun getByLevel(
         page: Int,
         limit: Int,
-        level: CharacterFrequencyLevel
-    ): ResponseList<SimpleDictionary> = suspendTransaction {
+        level: CharacterFrequencyLevelDto
+    ): ResponseListDto<SimpleDictionaryDto> = suspendTransaction {
         val result = DictionaryTable.selectAll()
             .where { (DictionaryTable.level eq level) and isValid() }
             .limit(limit + 1)
@@ -110,7 +107,7 @@ class DictionaryRepository {
 
         val data = result.dropLast(1).map { it.toSimpleDictionary() }
         val hasNextPage = result.size > limit
-        ResponseList(hasNextPage, data)
+        ResponseListDto(hasNextPage, data)
     }
 
     suspend fun get(code: Int): Dictionary? = suspendTransaction {

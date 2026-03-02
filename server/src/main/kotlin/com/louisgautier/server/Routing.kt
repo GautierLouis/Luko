@@ -1,8 +1,8 @@
 package com.louisgautier.server
 
 import com.louisgautier.apicontracts.dto.AuthUserJson
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevel
-import com.louisgautier.apicontracts.dto.DictionaryWithGraphic
+import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
+import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
 import com.louisgautier.apicontracts.dto.ResponseError
 import com.louisgautier.apicontracts.dto.UserRefreshTokenJson
 import com.louisgautier.apicontracts.routing.EndPoint
@@ -127,8 +127,8 @@ private fun Routing.configureCharacterRoute() {
 
     get<EndPoint.GenerateSession> {
         val levels = call.request.queryParameters["level"]?.split(",")
-            ?.map { CharacterFrequencyLevel.valueOf(it) }
-            ?: CharacterFrequencyLevel.entries
+            ?.map { CharacterFrequencyLevelDto.valueOf(it) }
+            ?: CharacterFrequencyLevelDto.entries
         val limit = call.request.queryParameters["limit"]?.toInt() ?: 100
 
         val result = dictionaryRepository.getRandomCharacters(levels, limit)
@@ -140,7 +140,7 @@ private fun Routing.configureCharacterRoute() {
         val page = call.request.queryParameters["page"]?.toInt() ?: 0
         val limit = call.request.queryParameters["limit"]?.toInt() ?: 100
         val level = call.request.queryParameters["level"]
-            ?.let { CharacterFrequencyLevel.valueOf(it) }
+            ?.let { CharacterFrequencyLevelDto.valueOf(it) }
 
         if (level == null) {
             call.respond(HttpStatusCode.BadRequest, ResponseError("Missing level parameter"))
@@ -164,7 +164,7 @@ private fun Routing.configureCharacterRoute() {
             )
         }
 
-        call.respond(HttpStatusCode.OK, DictionaryWithGraphic(dictionary!!, graphic!!))
+        call.respond(HttpStatusCode.OK, DictionaryWithGraphicDto(dictionary!!, graphic!!))
     }
 
     get<EndPoint.Characters.ByName.SVG> { resource ->

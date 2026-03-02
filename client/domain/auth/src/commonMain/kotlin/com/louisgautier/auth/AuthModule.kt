@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 val authModule = module {
     single { DefaultTokenAccessor(get()) } bind TokenAccessor::class
-    single { DefaultAuthRepository(get(), get()) } bind AuthRepository::class
+    single { DefaultAuthRepository(get(), get(), get()) } bind AuthRepository::class
 }
