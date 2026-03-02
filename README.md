@@ -133,11 +133,13 @@ Houses shared business logic, use cases, and domain models used across multiple 
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
 - **Key Libraries:** Kotlinx Coroutines
+- **Todo:** Split into sub-domains
+
 
 #### `:client:domain:auth`
 Authentication-specific use cases and domain models — login, session, and token management. Depends on `:client:domain` for shared domain primitives.
 
-- **Targets:** `commonMain`, `androidMain`, `iosMain`
+- **Targets:** `commonMain`
 - **Key Libraries:** Kotlinx Coroutines
 
 ---
@@ -156,7 +158,7 @@ Implements the network client for API communication. Consumes `:api-contracts` D
 Manages local data persistence using a multiplatform database solution.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (platform-specific drivers)
-- **Key Libraries:** Room / SQLDelight
+- **Key Libraries:** Room
 
 #### `:client:data:preferences`
 Handles lightweight key-value storage for user preferences and app settings.
@@ -173,13 +175,14 @@ Core modules provide low-level, domain-agnostic utilities. They have no knowledg
 #### `:client:core:logger`
 Provides a shared logging abstraction across all client modules.
 
-- **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
+- **Targets:** `commonMain`
 - **Key Libraries:** Kermit
 
 #### `:client:core:utils`
 General-purpose utility functions and extensions shared across client modules.
 
 - **Targets:** `commonMain`
+- **Todo:** Split into sub-domains (e.g Navigation)
 
 #### `:client:core:permission`
 Abstracts platform-specific permission handling (camera, location, etc.).
@@ -199,7 +202,7 @@ Firebase integration — analytics, crash reporting, and other Firebase services
 #### `:client:design-system`
 Contains reusable, domain-agnostic UI components, theming, and typography shared across all features. Has no dependency on domain or data layers.
 
-- **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
+- **Targets:** `commonMain`
 - **Key Libraries:** Compose Multiplatform
 
 #### `:client:composeApp`
