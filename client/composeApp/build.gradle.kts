@@ -25,11 +25,9 @@ kotlin {
 
         commonMain.dependencies {
             implementation(projects.client.core)
-            implementation(projects.client.feature.login)
-            implementation(projects.client.feature.learning)
-            implementation(projects.client.feature.dictionary)
+            implementation(projects.client.domain)
+            implementation(projects.client.feature)
             implementation(projects.client.designSystem)
-            implementation(projects.client.domain) // needed for Koin
         }
 
         androidMain.dependencies {

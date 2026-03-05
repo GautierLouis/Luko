@@ -8,7 +8,7 @@ import platform.UIKit.UIViewController
 fun MainViewController(): UIViewController =
     ComposeUIViewController {
         KoinApplication(application = {
-            modules(getAllModules())
+            modules(appModule)
         }) {
             App()
         }

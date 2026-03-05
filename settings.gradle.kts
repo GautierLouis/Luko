@@ -40,6 +40,7 @@ include(":api-contracts")
 //App
 include(":client:composeApp")
 //Feature
+include(":client:feature")
 include(":client:feature:login")
 include(":client:feature:learning")
 include(":client:feature:dictionary")

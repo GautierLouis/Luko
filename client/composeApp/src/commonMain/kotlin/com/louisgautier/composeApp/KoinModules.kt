@@ -2,28 +2,25 @@ package com.louisgautier.composeApp
 
 import com.louisgautier.composeApp.home.HomeViewModel
 import com.louisgautier.core.coreModule
-import com.louisgautier.dictionary.dictionaryModule
 import com.louisgautier.domain.domainModule
-import com.louisgautier.learning.learningModule
-import com.louisgautier.login.loginModule
+import com.louisgautier.feature.featureModule
 import com.louisgautier.utils.AppConfig
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-fun getAllModules(): List<Module> = domainModule + featuresModule() + coreModule + appModule()
+val appModule = module {
+    includes(
+        appPlatformModule,
+        featureModule,
+        domainModule,
+        coreModule,
+    )
 
-private fun featuresModule() = listOf(
-    loginModule,
-    learningModule,
-    dictionaryModule,
-)
-
-private fun appModule() = module {
     single<AppConfig> {
         get<AppConfigBuilder>()()
     }
-    includes(appPlatformModule)
+
     viewModelOf(::HomeViewModel)
     viewModelOf(::AppViewModel)
 }

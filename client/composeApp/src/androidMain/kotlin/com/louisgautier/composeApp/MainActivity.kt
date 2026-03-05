@@ -40,7 +40,7 @@ class MainActivity : FragmentActivity() {
         setContent {
             KoinMultiplatformApplication(
                 config = koinConfiguration {
-                    modules(getAllModules())
+                    modules(appModule)
                 }
             ) {
                 intentActivityResultObserver.setLauncher(activityResultLauncher)
