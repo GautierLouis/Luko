@@ -13,8 +13,8 @@ class AppFirebaseMessagingService : KoinComponent, FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        //TODO(Task): Send token to server (+preference?)
-        // Do in :auth
+        AppLogger.d(tag = "AppFirebaseMessagingService", message = "New token received: $token")
+        FcmTokenUpdateWorker.enqueue(applicationContext, token)
     }
 
     @SuppressLint("MissingPermission")

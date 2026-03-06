@@ -30,6 +30,7 @@ kotlin {
             implementation(libs.firebase.config)
             implementation(libs.firebase.messaging)
             implementation(libs.firebase.auth)
+            implementation(libs.androidx.work.runtime.ktx)
 
             implementation(libs.kotlinx.coroutines.play.services)
         }

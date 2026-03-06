@@ -20,5 +20,13 @@ internal class DefaultAuthRepository(
 
         return client.registerDevice(RegisterDeviceRequestDto(installationId, fcmToken))
     }
+
+    override suspend fun registerNewToken(token: String): Result<Unit> {
+        val installationId = firebaseManager.getInstallationId()
+
+        preferences.setFcmToken(token)
+
+        return client.updateFcm(RegisterDeviceRequestDto(installationId, token))
+    }
 }
 

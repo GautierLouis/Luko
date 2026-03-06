@@ -50,10 +50,10 @@ class UserRepository {
     }
 
     suspend fun updateFcm(
-        supabaseUserId: String,
+        installationId: String,
         fcmToken: String,
     ) = suspendTransaction {
-        UserTable.update({ UserTable.supabaseUserId eq supabaseUserId }) {
+        UserTable.update({ UserTable.installationId eq installationId }) {
             it[UserTable.fcmToken] = fcmToken
         }
     }

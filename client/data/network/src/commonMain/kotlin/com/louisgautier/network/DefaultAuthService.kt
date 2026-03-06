@@ -18,4 +18,12 @@ internal class DefaultAuthService(
             }
         }
     }
+
+    override suspend fun updateFcm(body: RegisterDeviceRequestDto): Result<Unit> {
+        return call {
+            client.post(EndPoint.UpdateFcm()) {
+                setBody(body)
+            }
+        }
+    }
 }

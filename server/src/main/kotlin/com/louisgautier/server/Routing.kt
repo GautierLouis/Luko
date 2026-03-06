@@ -74,6 +74,13 @@ private fun Routing.configureOpenRoutes() {
                 call.respond(HttpStatusCode.InternalServerError)
             }
     }
+
+    post<EndPoint.UpdateFcm> {
+        val creds = call.receive<RegisterDeviceRequestDto>()
+
+        authenticationRepository.updateFcm(creds)
+        call.respond(HttpStatusCode.OK, creds)
+    }
 }
 
 private fun Routing.configureAdminRoutes() {

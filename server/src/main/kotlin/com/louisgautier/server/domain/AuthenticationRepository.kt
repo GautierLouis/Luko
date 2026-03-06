@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 internal interface AuthenticationRepository {
     suspend fun registerAnonymously(device: RegisterDeviceRequestDto): Result<UserRegistrationResponseJson>
     suspend fun refreshSession(refreshToken: String): Result<UserRegistrationResponseJson>
+    suspend fun updateFcm(device: RegisterDeviceRequestDto)
 }

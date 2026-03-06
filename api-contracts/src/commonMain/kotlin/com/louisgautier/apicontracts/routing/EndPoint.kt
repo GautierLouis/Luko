@@ -31,6 +31,11 @@ class EndPoint {
         val parent: EndPoint = EndPoint(),
     )
 
+    @Resource("update_fcm")
+    class UpdateFcm(
+        val parent: EndPoint = EndPoint(),
+    )
+
     @Resource("/me")
     class Me(
         val parent: EndPoint = EndPoint(),

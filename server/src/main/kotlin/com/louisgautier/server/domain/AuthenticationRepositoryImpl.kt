@@ -40,10 +40,12 @@ internal class AuthenticationRepositoryImpl(
         val existingUser = userRepository.getUserByInstallationId(device.installationId)
 
         if (existingUser != null) {
-            val session = client.auth.refreshSession(existingUser.supabaseRefreshToken)
+
+            val session = client.auth.currentSessionOrNull()
+                ?: client.auth.refreshSession(existingUser.supabaseRefreshToken)
 
             userRepository.updateFcm(
-                supabaseUserId = existingUser.supabaseUserId,
+                installationId = existingUser.installationId,
                 fcmToken = device.fcmToken
             )
             userRepository.updateSession(
@@ -91,5 +93,13 @@ internal class AuthenticationRepositoryImpl(
                 )
             )
         }
+    }
+
+    override suspend fun updateFcm(device: RegisterDeviceRequestDto) {
+        userRepository.updateFcm(
+            installationId = device.installationId,
+            fcmToken = device.fcmToken
+        )
+
     }
 }
