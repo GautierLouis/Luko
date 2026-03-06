@@ -11,7 +11,7 @@ internal class DefaultAuthRepository(
     private val firebaseManager: FirebaseManager
 ) : AuthRepository {
 
-    override suspend fun registerDevice(): Result<Unit> {
+    override suspend fun registerAnonymously(): Result<Unit> {
         val installationId = firebaseManager.getInstallationId()
         val fcmToken = firebaseManager.getFCMToken()
 

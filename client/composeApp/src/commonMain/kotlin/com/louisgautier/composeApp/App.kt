@@ -39,12 +39,17 @@ import org.koin.mp.KoinPlatform
 
 class AppViewModel(
     private val firebaseManager: FirebaseManager,
+    private val authRepository: AuthRepository,
     private val remoteConfigManager: RemoteConfigManager,
 ) : ViewModel() {
 
     init {
 
         firebaseManager.initialize()
+
+        viewModelScope.launch {
+            authRepository.registerAnonymously()
+        }
 
         viewModelScope.launch {
             remoteConfigManager.events.collect {
