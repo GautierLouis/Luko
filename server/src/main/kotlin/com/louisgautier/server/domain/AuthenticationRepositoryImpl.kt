@@ -1,111 +1,95 @@
 package com.louisgautier.server.domain
 
+import com.louisgautier.apicontracts.dto.RegisterDeviceRequestDto
 import com.louisgautier.apicontracts.dto.UserAuthMethodProvider
 import com.louisgautier.apicontracts.dto.UserInfoJson
+import com.louisgautier.apicontracts.dto.UserMetadata
 import com.louisgautier.apicontracts.dto.UserRegistrationResponseJson
 import com.louisgautier.apicontracts.dto.UserTokenJson
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
-import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.auth.user.UserSession
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 
 internal class AuthenticationRepositoryImpl(
-    private val client: SupabaseClient
+    private val client: SupabaseClient,
+    private val userRepository: UserRepository,
 ) : AuthenticationRepository {
-
-    private fun observeUserRegistration(
-        state: Flow<SessionStatus>,
-        provider: UserAuthMethodProvider
-    ): Flow<Result<UserRegistrationResponseJson>> {
-        return state.filter { it != SessionStatus.Initializing }
-            .map {
-                when (it) {
-                    is SessionStatus.Authenticated -> Result.success(
-                        buildUserResponse(
-                            it.session,
-                            provider
-                        )
-                    )
-
-                    is SessionStatus.NotAuthenticated -> Result.failure(Throwable(""))
-                    else -> Result.failure(Throwable(""))
-                }
-            }
-    }
 
     private fun buildUserResponse(
         session: UserSession,
-        provider: UserAuthMethodProvider
+        device: RegisterDeviceRequestDto
     ): UserRegistrationResponseJson {
         return UserRegistrationResponseJson(
             user = UserInfoJson(
                 id = session.user!!.id,
-                provider = listOfNotNull(provider),
+                provider = listOfNotNull(UserAuthMethodProvider.ANONYMOUS),
             ),
             session = UserTokenJson(
                 accessToken = session.accessToken,
                 refreshToken = session.refreshToken,
                 expiresIn = session.expiresIn,
             ),
+            metadata = UserMetadata(
+                installationID = device.installationId,
+                fcmToken = device.fcmToken,
+            ),
         )
     }
 
-    override suspend fun registerAnonymously(): Flow<Result<UserRegistrationResponseJson>> {
-        client.auth.signInAnonymously()
-        return observeUserRegistration(client.auth.sessionStatus, UserAuthMethodProvider.ANONYMOUS)
-    }
+    override suspend fun registerAnonymously(device: RegisterDeviceRequestDto): Result<UserRegistrationResponseJson> {
+        val existingUser = userRepository.getUserByInstallationId(device.installationId)
 
-    override suspend fun registerWith(
-        email: String,
-        password: String
-    ): Flow<Result<UserRegistrationResponseJson>> {
-        client.auth.signUpWith(Email) {
-            this.email = email
-            this.password = password
+        if (existingUser != null) {
+            val session = client.auth.refreshSession(existingUser.supabaseRefreshToken)
+
+            userRepository.updateFcm(
+                supabaseUserId = existingUser.supabaseUserId,
+                fcmToken = device.fcmToken
+            )
+            userRepository.updateSession(
+                supabaseUserId = existingUser.supabaseUserId,
+                refreshToken = session.refreshToken
+            )
+
+            return Result.success(buildUserResponse(session, device))
         }
 
-        return observeUserRegistration(client.auth.sessionStatus, UserAuthMethodProvider.EMAIL)
-    }
 
-    override suspend fun reconciliation(
-        id: String,
-        email: String,
-        password: String
-    ): Flow<Result<UserRegistrationResponseJson>> {
-        TODO("Not yet implemented")
-    }
+        return runCatching {
+            client.auth.signInAnonymously()
+            val session = client.auth.currentSessionOrNull()
+                ?: throw IllegalStateException("No session after signInAnonymously")
 
-    override suspend fun loginInWith(
-        email: String,
-        password: String
-    ): Flow<Result<UserRegistrationResponseJson>> {
-        client.auth.signInWith(Email) {
-            this.email = email
-            this.password = password
+            userRepository.create(
+                installationId = device.installationId,
+                supabaseUserId = session.user!!.id,
+                supabaseUserRefreshToken = session.refreshToken,
+                fcmToken = device.fcmToken,
+            )
+
+            buildUserResponse(session, device)
         }
-
-        return observeUserRegistration(client.auth.sessionStatus, UserAuthMethodProvider.EMAIL)
     }
 
-    override suspend fun refreshSession(refreshToken: String): Flow<Result<UserRegistrationResponseJson>> {
-        client.auth.refreshSession(refreshToken = refreshToken)
-        return observeUserRegistration(client.auth.sessionStatus, UserAuthMethodProvider.EMAIL)
-    }
+    override suspend fun refreshSession(refreshToken: String): Result<UserRegistrationResponseJson> {
+        return runCatching {
+            val session = client.auth.refreshSession(refreshToken = refreshToken)
 
-    override suspend fun resetPassword(email: String): Flow<Result<Unit>> {
-        TODO("Not yet implemented")
-    }
+            val existingUser = userRepository.getUserBySupabaseId(session.user!!.id)
+                ?: throw IllegalStateException("No user found for supabaseUserId: ${session.user!!.id}")
 
-    override suspend fun updateUserPassword(password: String): Flow<Result<Unit>> {
-        TODO("Not yet implemented")
-    }
+            userRepository.updateSession(
+                supabaseUserId = existingUser.supabaseUserId,
+                refreshToken = session.refreshToken
+            )
 
-    override suspend fun logout(): Flow<Result<Unit>> {
-        TODO("Not yet implemented")
+            buildUserResponse(
+                session = session,
+                device = RegisterDeviceRequestDto(
+                    installationId = existingUser.installationId,
+                    fcmToken = existingUser.fcmToken
+                )
+            )
+        }
     }
-
 }

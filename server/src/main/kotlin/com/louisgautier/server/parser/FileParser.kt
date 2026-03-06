@@ -1,12 +1,10 @@
 package com.louisgautier.server.parser
 
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
-import com.louisgautier.apicontracts.dto.Decomposition
-import com.louisgautier.apicontracts.dto.Dictionary
-import com.louisgautier.apicontracts.dto.Etymology
+import com.louisgautier.apicontracts.dto.DecompositionDto
+import com.louisgautier.apicontracts.dto.DictionaryDto
+import com.louisgautier.apicontracts.dto.EtymologyDto
 import com.louisgautier.apicontracts.dto.GraphicDto
-import com.louisgautier.apicontracts.dto.Point
-import com.louisgautier.apicontracts.dto.Stroke
 import com.louisgautier.server.database.entity.DictionaryDao
 import com.louisgautier.server.database.entity.GraphicDao
 import com.louisgautier.server.domain.DictionaryRepository
@@ -39,7 +37,7 @@ class FileParser(
                 val hanzi = parseHanzi()
                 val dict = parseDictionary().map {
                     val level = hanzi.find { h -> h.first == it.character }?.second
-                    Dictionary(
+                    DictionaryDto(
                         code = it.character.toString().codePointAt(0),
                         definition = it.definition,
                         pinyin = it.pinyin,
@@ -58,7 +56,7 @@ class FileParser(
                     GraphicDto(
                         g.character.toString().codePointAt(0),
                         g.strokes,
-                        g.medians.map { m -> Stroke(points = m.map { p -> Point(p[0], p[1]) }) }
+                        g.medians
                     )
                 }
                 graphicRepository.batchCreate(graph)
@@ -104,7 +102,7 @@ class FileParser(
         else -> CharacterFrequencyLevelDto.OBSOLETE
     }
 
-    private fun decompose(original: String): List<Decomposition> {
+    private fun decompose(original: String): List<DecompositionDto> {
         return try {
             val parser = IdeographicParser(original)
             val tree = parser.parse()
@@ -116,7 +114,7 @@ class FileParser(
 
     private fun decompositionOrderedJsonFromIds(
         node: IdeographicNode,
-    ): List<Decomposition> {
+    ): List<DecompositionDto> {
         val decompositionMap = linkedMapOf<Int, MutableList<Int>>()
 
         fun walk(n: IdeographicNode) {
@@ -144,7 +142,7 @@ class FileParser(
 
         walk(node)
 
-        return decompositionMap.map { Decomposition(it.key, it.value) }
+        return decompositionMap.map { DecompositionDto(it.key, it.value) }
     }
 
     private fun serializeOriginal(node: IdeographicNode): String {
@@ -208,7 +206,7 @@ data class DictionaryParsed(
     val definition: String = "",
     val pinyin: List<String> = emptyList(),
     val decomposition: String = "",
-    val etymology: Etymology? = null,
+    val etymology: EtymologyDto? = null,
     val radical: String? = null,
     val matches: List<List<Int>?> = emptyList()
 )

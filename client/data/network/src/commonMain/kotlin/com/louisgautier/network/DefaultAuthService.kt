@@ -1,46 +1,21 @@
 package com.louisgautier.network
 
-import com.louisgautier.apicontracts.dto.AuthUserJson
-import com.louisgautier.apicontracts.dto.UpdateFcmTokenRequest
-import com.louisgautier.apicontracts.dto.UserJson
-import com.louisgautier.apicontracts.dto.UserRefreshTokenJson
-import com.louisgautier.apicontracts.dto.UserTokenJson
+import com.louisgautier.apicontracts.dto.RegisterDeviceRequestDto
 import com.louisgautier.apicontracts.routing.EndPoint
 import com.louisgautier.network.interfaces.AuthService
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.resources.get
 import io.ktor.client.plugins.resources.post
-import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
 internal class DefaultAuthService(
     private val client: HttpClient,
 ) : AuthService {
-//    override suspend fun registerAnon(body: UpdateFcmTokenRequest): Result<UserTokenJson> =
-//        call {
-//            client.post(EndPoint.RegisterAnonymously()) {
-//                setBody(body)
-//            }
-//        }
 
-//    override suspend fun register(user: UserJson): Result<UserTokenJson> =
-//        call {
-//            client.get(EndPoint.Register()) {
-//                setBody(user)
-//            }
-//        }
-//
-//    override suspend fun login(user: AuthUserJson): Result<UserTokenJson> =
-//        call {
-//            client.get(EndPoint.Login()) {
-//                setBody(user)
-//            }
-//        }
-//
-//    override suspend fun forceRefresh(token: UserRefreshTokenJson): Result<UserTokenJson> =
-//        call {
-//            client.get(EndPoint.RefreshToken()) {
-//                setBody(token)
-//            }
-//        }
+    override suspend fun registerDevice(body: RegisterDeviceRequestDto): Result<Unit> {
+        return call {
+            client.post(EndPoint.RegisterAnonymously) {
+                setBody(body)
+            }
+        }
+    }
 }

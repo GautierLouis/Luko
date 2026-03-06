@@ -8,6 +8,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.messaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -18,10 +19,10 @@ import com.louisgautier.firebase.remoteconfig.FeatureFlagKey
 import com.louisgautier.logger.AppLogger
 import kotlinx.coroutines.tasks.await
 
-actual class FirebaseManager(
+class AndroidFirebaseManager(
     private val context: Context,
     private val remoteConfigManager: RemoteConfigManager
-) {
+) : FirebaseManager {
 
     private lateinit var analytics: FirebaseAnalytics
     private lateinit var remoteConfig: FirebaseRemoteConfig
@@ -29,7 +30,7 @@ actual class FirebaseManager(
     private lateinit var auth: FirebaseAuth
 
 
-    actual fun initialize() {
+    override fun initialize() {
         FirebaseApp.initializeApp(context)
 
         auth = Firebase.auth
@@ -43,26 +44,22 @@ actual class FirebaseManager(
                 minimumFetchIntervalInSeconds = 0
             }
             setConfigSettingsAsync(configSettings)
-            // setDefaultsAsync(R.xml.remote_config_defaults)
         }
 
         messaging = Firebase.messaging
 
-        setupMessaging()
         fetchRemoteConfig()
     }
 
-    private fun setupMessaging() {
-        messaging.token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result
-                println("FCM Token: $token")
-                // Send token to your server
-            }
-        }
+    override suspend fun getFCMToken(): String {
+        return messaging.token.await()
     }
 
-    actual fun logEvent(
+    override suspend fun getInstallationId(): String {
+        return FirebaseInstallations.getInstance().id.await()
+    }
+
+    override fun logEvent(
         event: TrackingEvent
     ) {
         val bundle = Bundle().apply {
@@ -80,15 +77,15 @@ actual class FirebaseManager(
         analytics.logEvent(event.key, bundle)
     }
 
-    actual fun setUserId(userId: String) {
+    override fun setUserId(userId: String) {
         analytics.setUserId(userId)
     }
 
-    actual fun setUserProperty(name: String, value: String) {
+    override fun setUserProperty(name: String, value: String) {
         analytics.setUserProperty(name, value)
     }
 
-    actual fun fetchRemoteConfig() {
+    override fun fetchRemoteConfig() {
         remoteConfig.fetchAndActivate().addOnSuccessListener { success ->
             AppLogger.d(
                 tag = "FirebaseManager",

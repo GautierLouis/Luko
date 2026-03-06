@@ -8,5 +8,5 @@ import org.koin.dsl.module
 
 actual val firebasePlatformModule = module {
     singleOf(::AndroidPushNotificationManager) bind PushNotificationManager::class
-    singleOf(::FirebaseManager)
+    singleOf(::AndroidFirebaseManager) bind FirebaseManager::class
 }

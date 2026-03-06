@@ -37,4 +37,11 @@ enum class UserAuthMethodProvider {
 data class UserRegistrationResponseJson(
     val user: UserInfoJson,
     val session: UserTokenJson,
+    val metadata: UserMetadata,
+)
+
+@Serializable
+data class UserMetadata(
+    val installationID: String,
+    val fcmToken: String,
 )

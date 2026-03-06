@@ -6,17 +6,16 @@ package com.louisgautier.firebase
 //import cocoapods.FirebaseRemoteConfig.FIRRemoteConfig
 //import cocoapods.FirebaseRemoteConfig.FIRRemoteConfigSettings
 import com.louisgautier.firebase.event.TrackingEvent
-import com.louisgautier.logger.AppLogger
 //import kotlinx.cinterop.ExperimentalForeignApi
 //import platform.darwin.NSObject
 
 //@OptIn(ExperimentalForeignApi::class)
-actual class FirebaseManager() {
+class AppleFirebaseManager(): FirebaseManager {
 
 //    private val rc: FIRRemoteConfig
 //        get() = FIRRemoteConfig.remoteConfig()
 
-    actual fun initialize() {
+    override fun initialize() {
 //        FIRApp.configure()
 //
 //        val settings = FIRRemoteConfigSettings().apply {
@@ -31,19 +30,27 @@ actual class FirebaseManager() {
 //        }
     }
 
-    actual fun logEvent(event: TrackingEvent) {
+    override suspend fun getFCMToken(): String {
         TODO("Not yet implemented")
     }
 
-    actual fun setUserId(userId: String) {
+    override suspend fun getInstallationId(): String {
         TODO("Not yet implemented")
     }
 
-    actual fun setUserProperty(name: String, value: String) {
+    override fun logEvent(event: TrackingEvent) {
         TODO("Not yet implemented")
     }
 
-    actual fun fetchRemoteConfig() {
+    override fun setUserId(userId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setUserProperty(name: String, value: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun fetchRemoteConfig() {
 //        rc.fetchWithCompletionHandler { status, error ->
 //            if (error != null) {
 //                //cont.resume(false)

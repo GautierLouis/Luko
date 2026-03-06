@@ -1,9 +1,9 @@
 package com.louisgautier.server.domain
 
-import com.louisgautier.apicontracts.dto.Decomposition
-import com.louisgautier.apicontracts.dto.Dictionary
+import com.louisgautier.apicontracts.dto.DecompositionDto
+import com.louisgautier.apicontracts.dto.DictionaryDto
 import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
-import com.louisgautier.apicontracts.dto.Etymology
+import com.louisgautier.apicontracts.dto.EtymologyDto
 import com.louisgautier.apicontracts.dto.GraphicDto
 import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
 import com.louisgautier.server.database.entity.DictionaryTable
@@ -11,21 +11,20 @@ import com.louisgautier.server.database.entity.GraphicTable
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.ResultRow
 
-
 fun ResultRow.toGraphic() = GraphicDto(
     code = this[GraphicTable.code],
     strokes = this[GraphicTable.strokes].split(","),
     medians = Json.decodeFromString(this[GraphicTable.medians]),
 )
 
-fun ResultRow.toDictionary() = Dictionary(
+fun ResultRow.toDictionary() = DictionaryDto(
     code = this[DictionaryTable.code],
     definition = this[DictionaryTable.definition].orEmpty(),
     pinyin = this[DictionaryTable.pinyin].orEmpty().split(","),
     decomposition = this[DictionaryTable.decomposition],
-    decompositionList = Json.decodeFromString<List<Decomposition>>(this[DictionaryTable.decompositionList].orEmpty()),
+    decompositionList = Json.decodeFromString<List<DecompositionDto>>(this[DictionaryTable.decompositionList].orEmpty()),
     level = this[DictionaryTable.level],
-    etymology = Etymology(
+    etymology = EtymologyDto(
         type = this[DictionaryTable.etymologyType],
         phonetic = this[DictionaryTable.etymologyPhonetic],
         semantic = this[DictionaryTable.etymologySemantic],

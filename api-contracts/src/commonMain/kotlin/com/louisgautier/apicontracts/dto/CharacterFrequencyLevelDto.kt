@@ -13,5 +13,9 @@ enum class CharacterFrequencyLevelDto {
     EXTENDED,
     RARE,
     OBSOLETE;
+
+    companion object {
+        val validEntry = listOf(COMMON, FREQUENT, STANDARD)
+    }
 }
 

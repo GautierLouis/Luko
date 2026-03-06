@@ -8,6 +8,7 @@ import com.louisgautier.network.interfaces.UserService
 import com.louisgautier.utils.AppConfig
 import io.ktor.http.URLProtocol
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -36,13 +37,7 @@ val networkModule: Module = module {
         }
     }
 
-    single {
-        DefaultService(
-            tokenAccessor = get(),
-            env = get(),
-            appConfig = get()
-        )
-    }
+    singleOf(::DefaultService)
 
     single(named(UNAUTHED_CLIENT)) { get<DefaultService>().unauthedClient }
     single(named(AUTHED_CLIENT)) { get<DefaultService>().authedClient }

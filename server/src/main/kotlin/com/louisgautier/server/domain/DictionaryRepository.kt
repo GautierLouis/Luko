@@ -1,7 +1,7 @@
 package com.louisgautier.server.domain
 
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
-import com.louisgautier.apicontracts.dto.Dictionary
+import com.louisgautier.apicontracts.dto.DictionaryDto
 import com.louisgautier.apicontracts.dto.LevelCountDto
 import com.louisgautier.apicontracts.dto.ResponseListDto
 import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
@@ -68,7 +68,7 @@ class DictionaryRepository {
         page: Int,
         limit: Int,
         levels: List<CharacterFrequencyLevelDto>
-    ): ResponseListDto<Dictionary> = suspendTransaction {
+    ): ResponseListDto<DictionaryDto> = suspendTransaction {
         val result = DictionaryTable.selectAll()
             .where { (level inList levels) and isValid() }
             .limit(limit + 1)
@@ -110,12 +110,12 @@ class DictionaryRepository {
         ResponseListDto(hasNextPage, data)
     }
 
-    suspend fun get(code: Int): Dictionary? = suspendTransaction {
+    suspend fun get(code: Int): DictionaryDto? = suspendTransaction {
         DictionaryTable.selectAll().where { DictionaryTable.code eq code }.limit(1)
             .map { it.toDictionary() }.firstOrNull()
     }
 
-    suspend fun batchCreate(dictionary: List<Dictionary>) = suspendTransaction {
+    suspend fun batchCreate(dictionary: List<DictionaryDto>) = suspendTransaction {
         DictionaryTable.batchInsert(
             dictionary,
             ignore = true,

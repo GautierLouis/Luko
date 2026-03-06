@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.louisgautier.auth.AuthRepository
 import com.louisgautier.composeApp.home.HomeScreen
 import com.louisgautier.dictionary.DictionaryScreen
 import com.louisgautier.firebase.FirebaseManager

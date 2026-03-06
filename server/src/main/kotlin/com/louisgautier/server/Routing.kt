@@ -1,8 +1,8 @@
 package com.louisgautier.server
 
-import com.louisgautier.apicontracts.dto.AuthUserJson
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
+import com.louisgautier.apicontracts.dto.RegisterDeviceRequestDto
 import com.louisgautier.apicontracts.dto.ResponseError
 import com.louisgautier.apicontracts.dto.UserRefreshTokenJson
 import com.louisgautier.apicontracts.routing.EndPoint
@@ -34,10 +34,6 @@ fun Application.configureRouting() {
         configureOpenRoutes()
         configureAuthedRoutes()
         configureCharacterRoute()
-
-//        get("/") {
-//            call.respondText("Ktor")
-//        }
     }
 }
 
@@ -53,14 +49,13 @@ private fun Routing.configureAuthedRoutes() {
 
         post<EndPoint.RefreshToken> {
             val creds = call.receive<UserRefreshTokenJson>()
-            authenticationRepository.refreshSession(creds.refreshToken).collect {
-                it.onSuccess { data ->
+            authenticationRepository.refreshSession(creds.refreshToken)
+                .onSuccess { data ->
                     call.respond(HttpStatusCode.OK, data)
                 }
-                it.onFailure {
+                .onFailure {
                     call.respond(HttpStatusCode.InternalServerError)
                 }
-            }
         }
     }
 }
@@ -68,41 +63,16 @@ private fun Routing.configureAuthedRoutes() {
 private fun Routing.configureOpenRoutes() {
     val authenticationRepository: AuthenticationRepository by inject()
 
-    get<EndPoint.RegisterAnonymously> {
-        authenticationRepository.registerAnonymously().collect {
-            it.onSuccess { data ->
+    post<EndPoint.RegisterAnonymously> {
+        val creds = call.receive<RegisterDeviceRequestDto>()
+
+        authenticationRepository.registerAnonymously(creds)
+            .onSuccess { data ->
                 call.respond(HttpStatusCode.OK, data)
             }
-            it.onFailure {
+            .onFailure {
                 call.respond(HttpStatusCode.InternalServerError)
             }
-        }
-    }
-
-    post<EndPoint.Register> {
-        val creds = call.receive<AuthUserJson>()
-
-        authenticationRepository.registerWith(creds.email, creds.password).collect {
-            it.onSuccess {
-                call.respond(HttpStatusCode.OK, it)
-            }
-            it.onFailure {
-                call.respond(HttpStatusCode.InternalServerError)
-            }
-        }
-    }
-
-    post<EndPoint.Login> {
-        val creds = call.receive<AuthUserJson>()
-
-        authenticationRepository.loginInWith(creds.email, creds.password).collect {
-            it.onSuccess {
-                call.respond(HttpStatusCode.OK, it)
-            }
-            it.onFailure {
-                call.respond(HttpStatusCode.InternalServerError)
-            }
-        }
     }
 }
 

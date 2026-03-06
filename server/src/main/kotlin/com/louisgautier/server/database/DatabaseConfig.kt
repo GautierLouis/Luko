@@ -3,6 +3,7 @@ package com.louisgautier.server.database
 import com.louisgautier.server.BuildEnvironment
 import com.louisgautier.server.database.entity.DictionaryTable
 import com.louisgautier.server.database.entity.GraphicTable
+import com.louisgautier.server.database.entity.UserTable
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.Application
 import org.jetbrains.exposed.sql.Database
@@ -35,6 +36,6 @@ fun Application.configureDatabase() {
 
     transaction {
         addLogger(StdOutSqlLogger)
-        SchemaUtils.create(DictionaryTable, GraphicTable)
+        SchemaUtils.create(DictionaryTable, GraphicTable, UserTable)
     }
 }

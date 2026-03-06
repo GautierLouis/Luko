@@ -1,6 +1,7 @@
 package com.louisgautier.apicontracts.routing
 
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
+import com.louisgautier.apicontracts.dto.RegisterDeviceRequestDto
 import io.ktor.resources.Resource
 
 @Resource("/")
@@ -25,18 +26,8 @@ class EndPoint {
         )
     }
 
-    @Resource("register")
-    class Register(
-        val parent: EndPoint = EndPoint(),
-    )
-
     @Resource("register_anon")
     class RegisterAnonymously(
-        val parent: EndPoint = EndPoint(),
-    )
-
-    @Resource("login")
-    class Login(
         val parent: EndPoint = EndPoint(),
     )
 

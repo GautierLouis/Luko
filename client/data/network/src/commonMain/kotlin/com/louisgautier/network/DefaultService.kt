@@ -23,7 +23,6 @@ import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.header
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 
