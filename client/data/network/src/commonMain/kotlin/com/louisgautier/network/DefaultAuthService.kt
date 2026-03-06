@@ -13,7 +13,7 @@ internal class DefaultAuthService(
 
     override suspend fun registerDevice(body: RegisterDeviceRequestDto): Result<Unit> {
         return call {
-            client.post(EndPoint.RegisterAnonymously) {
+            client.post(EndPoint.RegisterAnonymously()) {
                 setBody(body)
             }
         }

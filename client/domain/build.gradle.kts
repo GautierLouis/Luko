@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.client.domain.auth)
+                api(projects.client.domain.auth)
                 implementation(projects.client.data)
 
                 implementation(libs.androidx.paging.common)

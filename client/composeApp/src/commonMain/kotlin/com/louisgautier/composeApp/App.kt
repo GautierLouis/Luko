@@ -11,82 +11,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.louisgautier.auth.AuthRepository
 import com.louisgautier.composeApp.home.HomeScreen
 import com.louisgautier.dictionary.DictionaryScreen
-import com.louisgautier.firebase.FirebaseManager
-import com.louisgautier.firebase.RemoteConfigManager
-import com.louisgautier.firebase.event.Tracker
 import com.louisgautier.learning.builder.SessionBuilderScreen
 import com.louisgautier.learning.congratulation.SessionCongratulationScreen
 import com.louisgautier.learning.session.SessionScreen
-import com.louisgautier.logger.AppLogger
 import com.louisgautier.utils.AppConfig
-import com.louisgautier.utils.AppNavigation
-import com.louisgautier.utils.NavigationCommand
 import com.louisgautier.utils.Route
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.mp.KoinPlatform
-
-class AppViewModel(
-    private val firebaseManager: FirebaseManager,
-    private val authRepository: AuthRepository,
-    private val remoteConfigManager: RemoteConfigManager,
-) : ViewModel() {
-
-    init {
-
-        firebaseManager.initialize()
-
-        viewModelScope.launch {
-            authRepository.registerAnonymously()
-        }
-
-        viewModelScope.launch {
-            remoteConfigManager.events.collect {
-
-            }
-        }
-
-        viewModelScope.launch {
-            Tracker.events.collect { event ->
-                AppLogger.d(tag = "Tracking event", message = event.toString())
-                firebaseManager.logEvent(event)
-            }
-        }
-    }
-
-    fun observeNavigation(navController: NavController) {
-        viewModelScope.launch {
-            AppNavigation.navigationEvents.collect { event ->
-                AppLogger.d(tag = "Navigation event", message = event.toString())
-                withContext(Dispatchers.Main) {
-                    when (event) {
-                        is NavigationCommand.Navigate -> navController.navigate(event.route) {
-                            if (event.clearBackStack) {
-                                popUpTo(Route.HomeRoute) { inclusive = false }
-                            }
-                        }
-
-                        is NavigationCommand.NavigateUp -> navController.navigateUp()
-                        is NavigationCommand.NavigateHome -> navController.navigate(Route.HomeRoute) {
-                            popUpTo(Route.HomeRoute) { inclusive = true }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun App(

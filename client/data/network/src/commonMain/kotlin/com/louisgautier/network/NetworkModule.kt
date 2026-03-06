@@ -37,8 +37,13 @@ val networkModule: Module = module {
         }
     }
 
-    singleOf(::DefaultService)
-
+    single {
+        DefaultService(
+            tokenAccessor = get(),
+            env = get(),
+            appConfig = get()
+        )
+    }
     single(named(UNAUTHED_CLIENT)) { get<DefaultService>().unauthedClient }
     single(named(AUTHED_CLIENT)) { get<DefaultService>().authedClient }
 
