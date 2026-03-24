@@ -12,9 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.token.dimens.AppSize
+import com.louisgautier.designsystem.StringsLocale
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.designsystem.theme.AppThemeWrapper
+import com.louisgautier.designsystem.token.dimens.AppSize
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 fun ElegantButton(
@@ -46,47 +51,14 @@ fun ElegantButton(
 }
 
 @Composable
-@Preview(
-    name = "Night mode buttons list",
-    widthDp = 500,
-    showBackground = true,
-    backgroundColor = 0xFF000000,
-)
-fun PreviewNight_Button() {
-
-    AppTheme(isDarkTheme = true) {
-        LazyColumn {
-            items(ButtonType.entries.size) {
-                val type = ButtonType.entries[it]
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ButtonVariant.entries.forEach { variant ->
-                        Box {
-                            Test_PreviewButton(type, variant, true)
-                        }
-                    }
-                }
-
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ButtonVariant.entries.forEach { variant ->
-                        Box {
-                            Test_PreviewButton(type, variant, false)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-@Preview(
-    name = "Day mode buttons list",
-    widthDp = 500,
-    showBackground = true
-)
-fun PreviewDay_Button() {
-
-    AppTheme(isDarkTheme = false) {
+@Preview(widthDp = 500)
+private fun PreviewButton(
+    @PreviewParameter(ThemeModeProvider::class) mode: ThemeMode
+) {
+    AppThemeWrapper(
+        themeMode = mode,
+        locale = StringsLocale.FR
+    ) {
         LazyColumn {
             items(ButtonType.entries.size) {
                 val type = ButtonType.entries[it]
@@ -112,7 +84,7 @@ fun PreviewDay_Button() {
 
 @Composable
 @Preview(showBackground = true)
-fun Test_PreviewButton(
+private fun Test_PreviewButton(
     type: ButtonType = ButtonType.PRIMARY,
     variant: ButtonVariant = ButtonVariant.SOLID,
     enabled: Boolean = true
@@ -123,6 +95,6 @@ fun Test_PreviewButton(
         enabled = enabled,
         onClick = { },
     ) {
-        Text(text = "Button")
+        Text(text = AppTheme.strings.greeting)
     }
 }
