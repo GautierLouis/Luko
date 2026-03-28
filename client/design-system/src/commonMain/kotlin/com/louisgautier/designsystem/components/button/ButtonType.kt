@@ -2,7 +2,7 @@ package com.louisgautier.designsystem.components.button
 
 import androidx.compose.runtime.Composable
 import com.louisgautier.utils.CoreKeepForR8
-import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.designsystem.theme.Theme
 
 @CoreKeepForR8
 enum class ButtonType {
@@ -14,10 +14,10 @@ enum class ButtonType {
 
     @Composable
     fun getColorFamily() = when (this) {
-        PRIMARY -> AppTheme.colors.grayFamily
-        SECONDARY -> AppTheme.colors.tealFamily
-        ERROR -> AppTheme.colors.redFamily
-        WARNING -> AppTheme.colors.orangeFamily
-        PREMIUM -> AppTheme.colors.yellowFamily
+        PRIMARY -> Theme.colors.grayFamily
+        SECONDARY -> Theme.colors.tealFamily
+        ERROR -> Theme.colors.redFamily
+        WARNING -> Theme.colors.orangeFamily
+        PREMIUM -> Theme.colors.yellowFamily
     }
 }

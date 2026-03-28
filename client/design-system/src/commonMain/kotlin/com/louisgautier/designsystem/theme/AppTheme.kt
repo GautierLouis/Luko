@@ -1,72 +1,40 @@
 package com.louisgautier.designsystem.theme
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.Modifier
-import com.louisgautier.designsystem.Strings
-import com.louisgautier.designsystem.StringsLocale
+import androidx.compose.ui.text.intl.Locale
+import com.louisgautier.designsystem.ai.lightScheme
 import com.louisgautier.designsystem.preview.ThemeMode
-import com.louisgautier.designsystem.stringsEN
-import com.louisgautier.designsystem.stringsFR
-import com.louisgautier.designsystem.token.color.AppColors
 import com.louisgautier.designsystem.token.color.provideDayColors
-import com.louisgautier.designsystem.token.color.provideNightColors
-
-@Composable
-fun AppThemeWrapper(
-    themeMode: ThemeMode,
-    locale: StringsLocale,
-    content: @Composable () -> Unit
-) {
-    AppTheme(themeMode, locale) {
-        Box(Modifier.background(AppTheme.colors.bg)) {
-            content()
-        }
-    }
-}
+import com.louisgautier.designsystem.token.string.StringsLocale
+import com.louisgautier.designsystem.token.string.provideStringsEN
+import com.louisgautier.designsystem.token.typo.AppTypography
 
 @Composable
 fun AppTheme(
     themeMode: ThemeMode = if (isSystemInDarkTheme()) ThemeMode.Night else ThemeMode.Day,
-    locale: StringsLocale = StringsLocale.EN,
+    forcedLocale: StringsLocale? = null,
     content: @Composable () -> Unit
 ) {
-    val currentColors = remember(themeMode) {
-        when (themeMode) {
-            ThemeMode.Night -> provideNightColors()
-            ThemeMode.Day -> provideDayColors()
-        }
-    }
-
-    val strings = remember(locale) {
-        when (locale) {
-            StringsLocale.FR -> stringsFR
-            else -> stringsEN
-        }
-    }
+    val locale = forcedLocale ?: Locale.current.toStringsLocale()
+    val strings = remember(locale) { locale.toStrings() }
+    val appColors = remember(themeMode) { themeMode.toColors() }
+    val materialColors = remember(themeMode) { themeMode.toMaterialColors() }
 
     CompositionLocalProvider(
-        LocalAppColors provides currentColors,
+        LocalAppColors provides appColors,
+        LocalMaterialColors provides materialColors,
         LocalAppStrings provides strings,
+        LocalTypography provides AppTypography
     ) {
         content()
     }
 }
 
-object AppTheme {
-    val colors: AppColors
-        @Composable
-        get() = LocalAppColors.current
-
-    val strings: Strings
-        @Composable
-        get() = LocalAppStrings.current
-}
-
 internal val LocalAppColors = staticCompositionLocalOf { provideDayColors() }
-internal val LocalAppStrings = staticCompositionLocalOf { stringsEN }
+internal val LocalMaterialColors = staticCompositionLocalOf { lightScheme }
+internal val LocalAppStrings = staticCompositionLocalOf { provideStringsEN() }
+internal val LocalTypography = staticCompositionLocalOf { AppTypography }

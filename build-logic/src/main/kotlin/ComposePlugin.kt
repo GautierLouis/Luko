@@ -45,6 +45,8 @@ class ComposePlugin : Plugin<Project> {
                 implementation(libs.compose.navigation.compose)
                 implementation(libs.compose.backhandler)
 
+                implementation(libs.kotlinx.collection.immutable)
+
                 implementation(libs.koin.compose)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.compose.viewmodel.navigation)

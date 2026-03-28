@@ -18,8 +18,8 @@ import com.louisgautier.domain.repository.SessionRepository
 import com.louisgautier.learning.CalculateScore
 import com.louisgautier.learning.builder.QuestionCount
 import com.louisgautier.learning.drawing.analyzeUserDrawing
-import com.louisgautier.utils.AppNavigation
-import com.louisgautier.utils.Route
+import com.louisgautier.navigation.AppNavigation
+import com.louisgautier.navigation.CongratulationKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -192,7 +192,7 @@ class SessionViewModel(
             sessionRepository.save(session)
 
             withContext(Dispatchers.Main) {
-                AppNavigation.navigate(Route.SessionCongratulationScreenRoute, true)
+                AppNavigation.navigate(CongratulationKey, true)
             }
         }
     }

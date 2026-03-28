@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.components.button.ElegantButton
 import com.louisgautier.designsystem.components.button.ButtonType
 import com.louisgautier.designsystem.components.button.ButtonVariant
@@ -90,8 +90,8 @@ fun LoginScreen(
             SnackbarHost(hostState = snackbarHostState) { data ->
                 Snackbar(
                     modifier = Modifier.testTag("snackbar"),
-                    containerColor = AppTheme.colors.redFamily.fg,
-                    contentColor = AppTheme.colors.redFamily.contrast,
+                    containerColor = Theme.colors.redFamily.fg,
+                    contentColor = Theme.colors.redFamily.contrast,
                     snackbarData = data
                 )
             }

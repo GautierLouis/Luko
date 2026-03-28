@@ -29,7 +29,7 @@ import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.page.ErrorPage
 import com.louisgautier.designsystem.components.page.LoadingPageContent
 import com.louisgautier.domain.previewDictionaryWithGraphic
-import com.louisgautier.utils.AppNavigation
+import com.louisgautier.navigation.AppNavigation
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel

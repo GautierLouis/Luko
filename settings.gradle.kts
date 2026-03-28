@@ -58,5 +58,6 @@ include(":client:core:logger")
 include(":client:core:utils")
 include(":client:core:permission")
 include(":client:core:firebase")
+include(":client:core:navigation")
 //Design-System
 include(":client:design-system")

@@ -21,8 +21,9 @@ val appModule = module {
         get<AppConfigBuilder>()()
     }
 
-    viewModelOf(::HomeViewModel)
     viewModelOf(::AppViewModel)
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::MainViewModel)
 }
 
 expect val appPlatformModule: Module

@@ -69,7 +69,7 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.postgresql)
     implementation(libs.hikaricp)
-    implementation(libs.flyaway)
+    implementation(libs.flyway)
     implementation(libs.ehcache)
     implementation(libs.firebase.admin)
 
@@ -78,9 +78,9 @@ dependencies {
 
     implementation(libs.dataframe)
 
-    implementation(libs.micrometer.registery.prometheus)
+    implementation(libs.micrometer.registry.prometheus)
     testImplementation(libs.ktor.server.test.host)
-    testImplementation(libs.kotlin.testJunit)
+    testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.koin.test)
     testImplementation("io.mockk:mockk:1.14.2")
     testImplementation("org.testcontainers:postgresql:1.19.0") // optional, integration

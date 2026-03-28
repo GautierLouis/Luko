@@ -36,7 +36,6 @@ data class AppColors(
     val fgSuccess: Color,
     val fgInfo: Color,
 
-
     val grayFamily: ColorFamily,
     val redFamily: ColorFamily,
     val pinkFamily: ColorFamily,
@@ -47,5 +46,4 @@ data class AppColors(
     val greenFamily: ColorFamily,
     val yellowFamily: ColorFamily,
     val orangeFamily: ColorFamily,
-
-    )
+)

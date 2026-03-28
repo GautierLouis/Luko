@@ -5,15 +5,19 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.color.ColorFamily
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppSlider(
     modifier: Modifier = Modifier,
-    colorFamily: ColorFamily = AppTheme.colors.grayFamily,
+    colorFamily: ColorFamily = Theme.colors.grayFamily,
     minValue: Int = 0,
     maxValue: Int = 30,
     value: Int,
@@ -39,8 +43,10 @@ fun AppSlider(
 
 @Composable
 @Preview(showBackground = true)
-fun Preview_Stepper() {
-    AppTheme {
+fun PreviewStepper(
+    @PreviewParameter(ThemeModeProvider ::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
         AppSlider(
             value = 5
         )

@@ -28,6 +28,8 @@ kotlin {
             implementation(projects.client.domain)
             implementation(projects.client.feature)
             implementation(projects.client.designSystem)
+
+            implementation(libs.compose.navigation3.compose)
         }
 
         androidMain.dependencies {

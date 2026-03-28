@@ -25,8 +25,8 @@ import com.louisgautier.designsystem.ai.Green50
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.utils.toHHMMSS
-import com.louisgautier.utils.AppNavigation
-import com.louisgautier.utils.Route
+import com.louisgautier.navigation.AppNavigation
+import com.louisgautier.navigation.BuilderKey
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -91,7 +91,7 @@ fun SessionCongratulationScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 AppButton(
-                    onClick = { AppNavigation.navigate(Route.SessionBuilderRoute, true) },
+                    onClick = { AppNavigation.navigate(BuilderKey, true) },
                     modifier = Modifier,
                 ) {
                     Text(

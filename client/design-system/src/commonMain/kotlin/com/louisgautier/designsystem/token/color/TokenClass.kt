@@ -3,7 +3,7 @@ package com.louisgautier.designsystem.token.color
 import androidx.compose.ui.graphics.Color
 
 // Color Token Class with all design system colors
-object TokenClass {
+internal object TokenClass {
     // Grays
     val gray50 = Color(0xFFFAFAFA)
     val gray100 = Color(0xFFF5F5F5)

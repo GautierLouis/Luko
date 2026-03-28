@@ -10,6 +10,7 @@ kotlin {
             api(projects.client.core.logger)
             api(projects.client.core.permission)
             api(projects.client.core.firebase)
+            api(projects.client.core.navigation)
         }
     }
 }

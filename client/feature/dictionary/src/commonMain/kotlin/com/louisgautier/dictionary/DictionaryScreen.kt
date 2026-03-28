@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -20,13 +19,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.louisgautier.designsystem.AppTitle
-import com.louisgautier.designsystem.ai.Green50
 import com.louisgautier.designsystem.preview.BooleanProvider
 import com.louisgautier.domain.previewDictionaryWithGraphic
 import com.louisgautier.domain.previewSimpleDataList
-import com.louisgautier.utils.AppNavigation
-import com.louisgautier.utils.Route
+import com.louisgautier.navigation.AppNavigation
+import com.louisgautier.navigation.PracticeCharacterKey
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -90,41 +87,33 @@ fun DictionaryScreen(
             character = state.selectedDictionary,
             modifier = Modifier,
             onDismiss = { onItemClick(null) },
-            onPractice = { AppNavigation.navigate(Route.PracticeCharacterRoute(state.selectedDictionary.code)) }
+            onPractice = { AppNavigation.navigate(PracticeCharacterKey(state.selectedDictionary.code)) }
         )
     }
 
-    Scaffold(
-        topBar = { AppTitle("Dictionary") },
-        containerColor = Green50
-    ) {
-        Box(
-            modifier = Modifier.padding(it),
-        ) {
-            HorizontalPager(
-                state = pagerState,
-                beyondViewportPageCount = 2,
+    Box {
+        HorizontalPager(
+            state = pagerState,
+            beyondViewportPageCount = 2,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 44.dp),
+        ) { page ->
+            val tab = DictionaryTab.entries[page]
+            DictionaryPage(
+                items = pagingItemsMap[tab]!!,
+                modifier = Modifier.fillMaxSize(),
+                onItemClick = onItemClick
+            )
+        }
+        if (globalError == null) {
+            CharacterFrequencyLevelPicker(
+                selectedTabIndex = state.selectedTabIndex,
+                onTabSelected = onTabSelected,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 44.dp),
-            ) { page ->
-                val tab = DictionaryTab.entries[page]
-                DictionaryPage(
-                    items = pagingItemsMap[tab]!!,
-                    modifier = Modifier.fillMaxSize(),
-                    onItemClick = onItemClick
-                )
-            }
-
-            if (globalError == null) {
-                CharacterFrequencyLevelPicker(
-                    selectedTabIndex = state.selectedTabIndex,
-                    onTabSelected = onTabSelected,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(horizontal = 16.dp)
-                )
-            }
+                    .align(Alignment.TopCenter)
+                    .padding(horizontal = 16.dp)
+            )
         }
     }
 }

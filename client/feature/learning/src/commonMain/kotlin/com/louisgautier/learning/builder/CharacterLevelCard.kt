@@ -23,7 +23,7 @@ import com.louisgautier.designsystem.icon.RoundedCrown
 import com.louisgautier.designsystem.icon.RoundedSettings
 import com.louisgautier.designsystem.icon.RoundedStar
 import com.louisgautier.designsystem.icon.RoundedTrophy
-import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.typo.FontWeight
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -41,7 +41,7 @@ fun CharacterLevelCard(
         CharacterFrequencyLevel.FREQUENT -> LightColors.frequentBorder
         CharacterFrequencyLevel.STANDARD -> LightColors.standardBorder
         CharacterFrequencyLevel.EXTENDED -> LightColors.extendedBorder
-        else -> AppTheme.colors.grayFamily.solid
+        else -> Theme.colors.grayFamily.solid
     }
 
     val backgroundColor = when (level) {
@@ -49,7 +49,7 @@ fun CharacterLevelCard(
         CharacterFrequencyLevel.FREQUENT -> LightColors.frequentBg
         CharacterFrequencyLevel.STANDARD -> LightColors.standardBg
         CharacterFrequencyLevel.EXTENDED -> LightColors.extendedBg
-        else -> AppTheme.colors.grayFamily.solid
+        else -> Theme.colors.grayFamily.solid
     }
 
     val desc = when (level) {

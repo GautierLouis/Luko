@@ -8,6 +8,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.client.core.logger)
             implementation(projects.client.core.utils)
+            implementation(projects.client.core.navigation)
             implementation(projects.client.designSystem)
             implementation(projects.client.domain)
         }

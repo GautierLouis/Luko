@@ -1,7 +1,7 @@
 package com.louisgautier.designsystem.token.color
 
 // Day Theme (Light Mode)
-fun provideDayColors(): AppColors = AppColors(
+internal fun provideDayColors(): AppColors = AppColors(
     bg = TokenClass.white,
     bgSubtle = TokenClass.gray50,
     bgMuted = TokenClass.gray100,

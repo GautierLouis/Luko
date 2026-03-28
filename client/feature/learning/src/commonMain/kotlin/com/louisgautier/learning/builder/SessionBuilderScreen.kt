@@ -25,8 +25,8 @@ import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.learning.DifficultyAndQuantityContent
-import com.louisgautier.utils.AppNavigation
-import com.louisgautier.utils.Route
+import com.louisgautier.navigation.AppNavigation
+import com.louisgautier.navigation.SessionKey
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -45,7 +45,7 @@ fun SessionBuilderScreen() {
             scope.launch { pager.animateScrollToPage(pager.currentPage + 1) }
         } else {
             AppNavigation.navigate(
-                Route.SessionRoute(
+                SessionKey(
                     levels = selectedLevels.joinToString(),
                     difficulty = selectedDifficulty.toString(),
                     limit = questionCount.toString()

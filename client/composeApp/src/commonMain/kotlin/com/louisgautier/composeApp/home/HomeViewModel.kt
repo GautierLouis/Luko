@@ -7,8 +7,14 @@ import com.louisgautier.domain.model.Statistics
 import com.louisgautier.domain.repository.SessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
+import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 class HomeViewModel(
     private val sessionRepository: SessionRepository
@@ -24,9 +30,10 @@ class HomeViewModel(
             currentDayStreak = 0,
             sessionCount = 0
         ),
+        val topbarTitle: GreetingMessage = GreetingMessage.GOOD_MORNING
     )
 
-    private var _state = MutableStateFlow(UIState())
+    private val _state = MutableStateFlow(UIState())
     val state = _state.asStateFlow()
 
     init {
@@ -34,14 +41,35 @@ class HomeViewModel(
             val result = sessionRepository.getLastSessions(1)
                 .firstOrNull()
             val stats = sessionRepository.getStatistics()
-            with(_state.value) {
-                _state.value = copy(
+            _state.update {
+                it.copy(
                     isLoading = false,
                     lastSession = result,
                     stats = stats,
+                    topbarTitle = getGreeting(result)
                 )
             }
         }
+    }
+
+    fun getGreeting(lastSession: Session?): GreetingMessage {
+        val hour = Clock.System.now()
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+            .hour
+
+        return if (lastSession?.date?.isToday() == true) {
+            GreetingMessage.WELCOME_BACK
+        } else when (hour) {
+            in 0..11 -> GreetingMessage.GOOD_MORNING
+            in 12..18 -> GreetingMessage.GOOD_AFTERNOON
+            else -> GreetingMessage.GOOD_EVENING
+        }
+    }
+
+    private fun Instant.isToday(): Boolean {
+        val other = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        return other == today
     }
 }
 

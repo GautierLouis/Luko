@@ -2,15 +2,16 @@ package com.louisgautier.composeApp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import com.louisgautier.auth.AuthRepository
 import com.louisgautier.firebase.FirebaseManager
 import com.louisgautier.firebase.RemoteConfigManager
 import com.louisgautier.firebase.event.Tracker
 import com.louisgautier.logger.AppLogger
-import com.louisgautier.utils.AppNavigation
-import com.louisgautier.utils.NavigationCommand
-import com.louisgautier.utils.Route
+import com.louisgautier.navigation.AppNavigation
+import com.louisgautier.navigation.MainKey
+import com.louisgautier.navigation.NavigationCommand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,25 +44,25 @@ class AppViewModel(
         }
     }
 
-    fun observeNavigation(navController: NavController) {
+    fun observeNavigation(stack: NavBackStack<NavKey>) {
         viewModelScope.launch {
             AppNavigation.navigationEvents.collect { event ->
                 AppLogger.d(tag = "Navigation event", message = event.toString())
                 withContext(Dispatchers.Main) {
                     when (event) {
-                        is NavigationCommand.Navigate -> navController.navigate(event.route) {
+                        is NavigationCommand.Navigate -> {
                             if (event.clearBackStack) {
-                                popUpTo(Route.HomeRoute) {
-                                    inclusive = false
-                                }
+                                stack.clear()
                             }
+                            stack += event.route
                         }
 
-                        is NavigationCommand.NavigateUp -> navController.navigateUp()
-                        is NavigationCommand.NavigateHome -> navController.navigate(Route.HomeRoute) {
-                            popUpTo(Route.HomeRoute) {
-                                inclusive = true
-                            }
+                        is NavigationCommand.NavigateUp -> {
+                            stack.removeLast()
+                        }
+                        is NavigationCommand.NavigateHome -> {
+                            stack.clear()
+                            stack += MainKey()
                         }
                     }
                 }

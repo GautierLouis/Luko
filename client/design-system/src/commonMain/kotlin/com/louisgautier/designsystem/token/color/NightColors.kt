@@ -1,7 +1,7 @@
 package com.louisgautier.designsystem.token.color
 
 // Night Theme (Dark Mode)
-fun provideNightColors(): AppColors = AppColors(
+internal fun provideNightColors(): AppColors = AppColors(
     bg = TokenClass.black,
     bgSubtle = TokenClass.gray950,
     bgMuted = TokenClass.gray900,

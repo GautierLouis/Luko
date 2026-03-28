@@ -1,15 +1,10 @@
-package com.louisgautier.utils
+package com.louisgautier.navigation
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
-
-sealed class NavigationCommand {
-    data object NavigateUp : NavigationCommand()
-    data class Navigate(val route: Route, val clearBackStack: Boolean) : NavigationCommand()
-    data object NavigateHome : NavigationCommand()
-}
 
 object AppNavigation {
     private val _navigationEvents = Channel<NavigationCommand>(

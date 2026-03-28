@@ -12,11 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.StringsLocale
+import com.louisgautier.designsystem.token.string.StringsLocale
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
-import com.louisgautier.designsystem.theme.AppTheme
-import com.louisgautier.designsystem.theme.AppThemeWrapper
+import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.token.dimens.AppSize
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -95,6 +95,6 @@ private fun Test_PreviewButton(
         enabled = enabled,
         onClick = { },
     ) {
-        Text(text = AppTheme.strings.greeting)
+        Text(text = Theme.strings.greeting)
     }
 }

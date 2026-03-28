@@ -19,8 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.designsystem.theme.Theme
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 
 @Composable
@@ -36,7 +41,7 @@ fun CountPicker(
     val minEnabled = count > 1
     val maxEnabled = count < maxValue
 
-    val colorFamily = AppTheme.colors.grayFamily
+    val colorFamily = Theme.colors.grayFamily
 
     val enabledBorder = BorderStroke(1.dp, colorFamily.solid)
     val disabledBorder = BorderStroke(1.dp, colorFamily.solid.copy(alpha = .1f))
@@ -102,8 +107,10 @@ fun CountPicker(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview_CountPicker() {
-    AppTheme {
+fun Preview_CountPicker(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
         Box {
             CountPicker()
         }
