@@ -12,6 +12,7 @@ interface CharacterService {
     suspend fun getLevelCount(): Result<List<LevelCountDto>>
     suspend fun generateSession(level: List<CharacterFrequencyLevelDto>, limit: Int): Result<List<DictionaryWithGraphicDto>>
     suspend fun getByLevel(level: CharacterFrequencyLevelDto, page: Int, limit: Int): Result<ResponseListDto<SimpleDictionaryDto>>
+    suspend fun search(levels: List<CharacterFrequencyLevelDto>, query: String, page: Int, limit: Int): Result<ResponseListDto<SimpleDictionaryDto>>
     suspend fun getByName(code: Int): Result<DictionaryWithGraphicDto>
     suspend fun getSVG(code: Int): Result<GraphicDto>
 

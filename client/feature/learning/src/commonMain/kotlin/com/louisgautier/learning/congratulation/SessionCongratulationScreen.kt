@@ -24,7 +24,7 @@ import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
 import com.louisgautier.designsystem.ai.Green50
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.domain.model.Session
-import com.louisgautier.domain.utils.toHHMMSS
+import com.louisgautier.utils.toHHMMSS
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.BuilderKey
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -81,7 +81,7 @@ fun SessionCongratulationScreen(
             RewardCard(
                 modifier = Modifier.padding(top = 32.dp),
                 score = state?.score ?: 0,
-                questionCount = (state?.responses?.size ?: 0).toString(),
+                questionCount = (state?.questionsCount ?: 0).toString(),
                 time = state?.duration?.toHHMMSS().orEmpty()
             )
 

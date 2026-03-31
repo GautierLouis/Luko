@@ -21,6 +21,7 @@ import com.louisgautier.designsystem.token.dimens.AppSize
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
+@Deprecated("Use V2 buttons instead")
 @Composable
 fun ElegantButton(
     modifier: Modifier = Modifier,

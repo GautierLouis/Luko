@@ -1,12 +1,9 @@
 package com.louisgautier.composeApp.home
 
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -18,28 +15,16 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 @Composable
 fun HomeTopbar(
     greetingMessage: GreetingMessage,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier,
-        title = {
-            Text(
-                text = when (greetingMessage) {
-                    GreetingMessage.GOOD_MORNING -> Theme.strings.goodMorning
-                    GreetingMessage.GOOD_AFTERNOON -> Theme.strings.goodAfternoon
-                    GreetingMessage.GOOD_EVENING -> Theme.strings.goodEvening
-                    GreetingMessage.WELCOME_BACK -> Theme.strings.welcomeBack
-                },
-                style = Theme.typography.titleLarge
-            )
+    AppTopbar(
+        title = when (greetingMessage) {
+            GreetingMessage.GOOD_MORNING -> Theme.strings.goodMorning
+            GreetingMessage.GOOD_AFTERNOON -> Theme.strings.goodAfternoon
+            GreetingMessage.GOOD_EVENING -> Theme.strings.goodEvening
+            GreetingMessage.WELCOME_BACK -> Theme.strings.welcomeBack
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Theme.materialColors.background,
-            scrolledContainerColor = Color.Companion.Unspecified,
-            navigationIconContentColor = Theme.materialColors.onBackground,
-            titleContentColor = Theme.materialColors.onBackground,
-            actionIconContentColor = Theme.materialColors.onBackground
-        )
+        modifier = modifier
     )
 }
 

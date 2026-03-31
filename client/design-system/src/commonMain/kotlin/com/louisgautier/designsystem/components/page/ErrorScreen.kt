@@ -1,0 +1,42 @@
+package com.louisgautier.designsystem.components.page
+
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+
+@Composable
+fun ErrorScreen(
+    modifier: Modifier = Modifier,
+    action: () -> Unit = {}
+) {
+    Scaffold(
+        modifier = modifier,
+        containerColor = Theme.materialColors.background,
+        contentColor = Theme.materialColors.onBackground,
+    ) { paddingValues ->
+        ErrorContent(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxHeight(),
+            action = action
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewErrorScreen(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        ErrorScreen()
+    }
+}

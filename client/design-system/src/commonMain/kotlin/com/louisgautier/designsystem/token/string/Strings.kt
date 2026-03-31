@@ -18,9 +18,26 @@ data class Strings(
     val dictionary: String,
     val profile: String,
 
+    //Statistic
+    val streak: String,
+    val sessions: String,
+    val totalScore: String,
+    val questionCount: String,
+    val time: String,
+    val score: String,
+    val difficulty: String,
+    val overallStatistics: String,
+
+    //Difficulty
+    val easy: String,
+    val medium: String,
+    val hard: String,
+
+
     //Content Description
     val actionSearch: String,
     val actionBack: String,
     val actionFilter: String,
+    val actionClear: String
 )
 

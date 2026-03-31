@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.unit.dp
 
 object Spacing {
+    val medium = Arrangement.spacedBy(8.dp)
     val large = Arrangement.spacedBy(16.dp)
     val extraLarge = Arrangement.spacedBy(24.dp)
     val extraExtraLarge = Arrangement.spacedBy(32.dp)
@@ -11,6 +12,8 @@ object Spacing {
 }
 
 object Padding {
+    val medium = 8.dp
     val large = 16.dp
     val extraLarge = 24.dp
+    val largest = 44.dp
 }

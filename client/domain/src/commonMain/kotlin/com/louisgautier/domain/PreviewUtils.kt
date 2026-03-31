@@ -20,7 +20,7 @@ val previewSession = Session(
     date = Clock.System.now(),
     duration = 15.seconds,
     difficulty = Difficulty.EASY,
-    responses = emptyList(),
+    questionsCount = 5,
     score = 250
 )
 

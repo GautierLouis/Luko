@@ -9,7 +9,7 @@ import com.louisgautier.database.entity.SessionEntity
 import com.louisgautier.domain.model.ComparisonDetails
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.domain.model.Point
-import com.louisgautier.domain.model.Response
+import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.model.StrokeComparisonResult
@@ -25,7 +25,7 @@ object SessionMapper {
             date = date.toString(),
             duration = duration.inWholeMilliseconds,
             difficulty = difficulty.name,
-            responses = responses.map { it.toEntity() },
+            questionsCount = questionsCount,
             score = score,
         )
     }
@@ -37,13 +37,13 @@ object SessionMapper {
             date = Instant.parse(date),
             duration = duration.milliseconds,
             difficulty = Difficulty.valueOf(difficulty),
-            responses = responses.map { it.toDto() },
+            questionsCount = questionsCount,
             score = score,
         )
     }
 
-    private fun EmbeddedResponse.toDto(): Response {
-        return Response(this.code, this.statistics.toDto(), this.strokes.map { it.toDto() })
+    private fun EmbeddedResponse.toDto(): SessionResponse {
+        return SessionResponse(this.code, this.statistics.toDto(), this.strokes.map { it.toDto() })
     }
 
     private fun EmbeddedStroke.toDto(): Stroke {
@@ -73,7 +73,7 @@ object SessionMapper {
         )
     }
 
-    private fun Response.toEntity(): EmbeddedResponse {
+    fun SessionResponse.toEntity(): EmbeddedResponse {
         return EmbeddedResponse(
             this.code,
             this.statistics.toEntity(),

@@ -1,6 +1,8 @@
 package com.louisgautier.composeApp
 
+import com.louisgautier.composeApp.app.AppViewModel
 import com.louisgautier.composeApp.home.HomeViewModel
+import com.louisgautier.composeApp.main.MainViewModel
 import com.louisgautier.core.coreModule
 import com.louisgautier.domain.domainModule
 import com.louisgautier.feature.featureModule

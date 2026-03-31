@@ -10,7 +10,7 @@ import com.louisgautier.domain.model.DictionaryWithGraphic
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.domain.model.Graphic
 import com.louisgautier.domain.model.Point
-import com.louisgautier.domain.model.Response
+import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.repository.CharacterRepository
@@ -83,7 +83,7 @@ class SessionViewModel(
     val state = _state.asStateFlow()
 
     // No need to pass this to the view: out of state
-    private val responses = mutableListOf<Response>()
+    private val responses = mutableListOf<SessionResponse>()
     private val startTime = Clock.System.now()
     private val scoreCalculator = CalculateScore()
 
@@ -160,11 +160,11 @@ class SessionViewModel(
         viewModelScope.launch {
             val output = analyzeUserDrawing(referenceStrokes, drawnStrokes)
             val parsed = drawnStrokes.map { s -> Stroke(s.map { Point(it.x, it.y) }) }
-            val response = Response(graphic.code, output, parsed)
-            responses.add(response)
+            val sessionResponse = SessionResponse(graphic.code, output, parsed)
+            responses.add(sessionResponse)
             _state.update { state ->
                 state.copy(questionStates = state.questionStates.map {
-                    if (it.question.dictionary.code == response.code) it.copy(isAnswered = true)
+                    if (it.question.dictionary.code == sessionResponse.code) it.copy(isAnswered = true)
                     else it
                 })
             }
@@ -182,14 +182,14 @@ class SessionViewModel(
                 date = endTime,
                 duration = timeElapsed,
                 difficulty = difficulty,
-                responses = responses,
+                questionsCount = responses.count(),
                 score = scoreCalculator.calculate(
                     questions = state.value.questionStates.map { it.question.dictionary },
                     difficulty = difficulty,
                     timeElapsed = timeElapsed.inWholeMilliseconds
                 ),
             )
-            sessionRepository.save(session)
+            sessionRepository.save(session, responses)
 
             withContext(Dispatchers.Main) {
                 AppNavigation.navigate(CongratulationKey, true)

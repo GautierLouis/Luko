@@ -68,6 +68,15 @@ class EndPoint {
             val page: Int? = null,
             val limit: Int? = null,
         )
+
+        @Resource("search")
+        class Search(
+            val parent: Characters = Characters(),
+            val levels: List<CharacterFrequencyLevelDto>,
+            val query: String = "",
+            val page: Int? = null,
+            val limit: Int? = null,
+        )
     }
 
     @Resource("level")

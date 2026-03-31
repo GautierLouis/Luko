@@ -1,6 +1,6 @@
 package com.louisgautier.domain.usecase
 
-import com.louisgautier.domain.utils.nowInUtc
+import com.louisgautier.utils.nowInUtc
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil

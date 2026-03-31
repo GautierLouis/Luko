@@ -6,11 +6,13 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
 import com.louisgautier.database.dao.SessionDao
+import com.louisgautier.database.entity.ResponseEntity
 import com.louisgautier.database.entity.SessionEntity
 
 @Database(
     entities = [
-        SessionEntity::class
+        SessionEntity::class,
+        ResponseEntity::class
     ],
     version = 1,
 )

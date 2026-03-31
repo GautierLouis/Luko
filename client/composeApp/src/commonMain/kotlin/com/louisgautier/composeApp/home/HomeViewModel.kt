@@ -46,18 +46,18 @@ class HomeViewModel(
                     isLoading = false,
                     lastSession = result,
                     stats = stats,
-                    topbarTitle = getGreeting(result)
+                    topbarTitle = getGreeting(result?.date)
                 )
             }
         }
     }
 
-    fun getGreeting(lastSession: Session?): GreetingMessage {
+    fun getGreeting(date: Instant?): GreetingMessage {
         val hour = Clock.System.now()
             .toLocalDateTime(TimeZone.currentSystemDefault())
             .hour
 
-        return if (lastSession?.date?.isToday() == true) {
+        return if (date?.isToday() == true) {
             GreetingMessage.WELCOME_BACK
         } else when (hour) {
             in 0..11 -> GreetingMessage.GOOD_MORNING

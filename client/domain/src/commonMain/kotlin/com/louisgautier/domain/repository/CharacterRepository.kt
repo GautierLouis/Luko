@@ -1,7 +1,5 @@
 package com.louisgautier.domain.repository
 
-import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
-import com.louisgautier.apicontracts.dto.ResponseListDto
 import com.louisgautier.domain.mapper.LevelCount
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.DictionaryWithGraphic
@@ -18,6 +16,13 @@ interface CharacterRepository {
 
     suspend fun getByLevel(
         level: CharacterFrequencyLevel,
+        page: Int,
+        limit: Int
+    ): Result<ResponseList<SimpleDictionary>>
+
+    suspend fun search(
+        levels: List<CharacterFrequencyLevel>,
+        query: String,
         page: Int,
         limit: Int
     ): Result<ResponseList<SimpleDictionary>>

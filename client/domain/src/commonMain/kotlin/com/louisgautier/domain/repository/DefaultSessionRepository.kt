@@ -3,11 +3,12 @@ package com.louisgautier.domain.repository
 import com.louisgautier.database.dao.SessionDao
 import com.louisgautier.domain.mapper.SessionMapper.toDto
 import com.louisgautier.domain.mapper.SessionMapper.toEntity
+import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.model.Statistics
 import com.louisgautier.domain.usecase.ComputeDayStreak
 import com.louisgautier.domain.usecase.ComputeDifficulty
-import com.louisgautier.domain.utils.toUTCDate
+import com.louisgautier.utils.toUTCDate
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -19,13 +20,10 @@ class DefaultSessionRepository(
     val difficultyComputer = ComputeDifficulty()
 
 
-    override suspend fun save(session: Session, replace: Boolean) {
-        val entity = session.toEntity().copy(id = if (replace) 0 else session.id)
-        if (replace) {
-            dao.replace(entity)
-        } else {
-            dao.insert(entity)
-        }
+    override suspend fun save(session: Session, responses: List<SessionResponse>) {
+        val sessionEntity = session.toEntity()
+        val responseEntity = responses.map { it.toEntity() }
+        dao.insertSessionWithResponses(sessionEntity, responseEntity)
     }
 
     override suspend fun getLastSessions(limit: Int): List<Session> {

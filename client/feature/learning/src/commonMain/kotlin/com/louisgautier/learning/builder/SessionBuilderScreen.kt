@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.louisgautier.designsystem.AppTitle
+import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.ai.Green50
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.domain.model.CharacterFrequencyLevel
@@ -56,7 +56,7 @@ fun SessionBuilderScreen() {
     }
 
     Scaffold(
-        topBar = { AppTitle("New Session") },
+        topBar = { AppTopbar("New Session") },
         containerColor = Green50
     ) { paddingValues ->
 

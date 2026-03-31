@@ -20,16 +20,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.louisgautier.designsystem.SessionMetric
 import com.louisgautier.designsystem.ai.Green100
 import com.louisgautier.designsystem.ai.Green700
-import org.jetbrains.compose.resources.painterResource
+import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
+import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
+import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic.Companion.icon
+import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic.Companion.label
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CurrentSessionMetric(
-    metric: SessionMetric,
-    value: String,
+    item: MetricItem.SessionMetric,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -45,16 +46,16 @@ fun CurrentSessionMetric(
             horizontalArrangement = Arrangement.Center
         ) {
             Image(
-                imageVector = metric.icon,
+                imageVector = item.metric.icon(),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 colorFilter = ColorFilter.tint(Green700)
             )
             Spacer(Modifier.width(4.dp))
-            Text(text = metric.title, color = Green700, fontSize = 14.sp)
+            Text(text = item.metric.label(), color = Green700, fontSize = 14.sp)
         }
         Text(
-            text = value,
+            text = item.value,
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.SemiBold,
@@ -66,5 +67,10 @@ fun CurrentSessionMetric(
 @Composable
 @Preview
 fun CurrentSessionMetricPreview() {
-    CurrentSessionMetric(SessionMetric.Difficulty, "Hard")
+    CurrentSessionMetric(
+        MetricItem.SessionMetric(
+            SessionStatistic.Difficulty,
+            "Hard"
+        )
+    )
 }

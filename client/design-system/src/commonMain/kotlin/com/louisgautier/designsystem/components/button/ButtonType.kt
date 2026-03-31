@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.louisgautier.utils.CoreKeepForR8
 import com.louisgautier.designsystem.theme.Theme
 
+@Deprecated("Use V2 buttons instead")
 @CoreKeepForR8
 enum class ButtonType {
     PRIMARY,

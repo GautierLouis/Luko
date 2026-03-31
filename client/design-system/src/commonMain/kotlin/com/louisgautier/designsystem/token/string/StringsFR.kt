@@ -13,7 +13,21 @@ internal fun provideStringsFR(): Strings = Strings(
     dictionary = "Dictionnaire",
     profile = "Profil",
 
+    streak = "Streak",
+    sessions = "Sessions",
+    totalScore = "Total XP",
+    questionCount = "Questions",
+    time = "Temps",
+    score = "Score",
+    difficulty = "Difficulté",
+    overallStatistics = "Statistiques globales",
+
+    easy = "Facile",
+    medium = "Moyen",
+    hard = "Difficile",
+
     actionSearch = "Rechercher",
     actionBack = "Retour",
     actionFilter = "Filtre",
+    actionClear = "Suppriner"
 )

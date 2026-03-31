@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.client.domain.auth)
+                implementation(projects.client.core.utils)
                 implementation(projects.client.data)
 
                 implementation(libs.androidx.paging.common)

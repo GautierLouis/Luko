@@ -39,6 +39,8 @@ val savedStateConfiguration = SavedStateConfiguration {
             subclass(BuilderKey::class, BuilderKey.serializer())
             subclass(SessionKey::class, SessionKey.serializer())
             subclass(CongratulationKey::class, CongratulationKey.serializer())
+
+            subclass(PracticeCharacterKey::class, PracticeCharacterKey.serializer())
         }
     }
 }

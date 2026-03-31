@@ -6,6 +6,7 @@ import com.louisgautier.utils.CoreKeepForR8
 import com.louisgautier.designsystem.token.color.ColorFamily
 
 
+@Deprecated("Use V2 buttons instead")
 @CoreKeepForR8
 enum class ButtonVariant {
     SOLID,

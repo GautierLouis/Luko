@@ -10,7 +10,7 @@ data class SessionEntity(
     val date: String, // Instant
     val duration: Long, // Duration
     val difficulty: String,
-    val responses: List<EmbeddedResponse>, // Will be converted to JSON
+    val questionsCount: Int,
     val score: Int,
 )
 

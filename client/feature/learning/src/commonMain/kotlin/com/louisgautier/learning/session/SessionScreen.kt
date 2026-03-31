@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.button.AppButton
-import com.louisgautier.designsystem.components.page.ErrorPage
-import com.louisgautier.designsystem.components.page.LoadingPageContent
+import com.louisgautier.designsystem.components.page.ErrorScreen
+import com.louisgautier.designsystem.components.page.LoadingContent
 import com.louisgautier.domain.previewDictionaryWithGraphic
 import com.louisgautier.navigation.AppNavigation
 import kotlinx.coroutines.launch
@@ -42,9 +42,9 @@ fun SessionScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     if (state.isError) {
-        ErrorPage(action = { viewModel.loadQuestions() })
+        ErrorScreen(action = { viewModel.loadQuestions() })
     } else if (state.isLoading) {
-        LoadingPageContent()
+        LoadingContent()
     } else {
         SessionScreenContent(
             state = state,

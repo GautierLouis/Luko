@@ -25,10 +25,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
-import com.louisgautier.designsystem.SessionMetric
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.designsystem.ai.Orange100
 import com.louisgautier.designsystem.ai.Orange500
+import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
+import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -110,13 +111,17 @@ fun RewardCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 CurrentSessionMetric(
-                    metric = SessionMetric.QuestionCount,
-                    value = questionCount,
+                    item = MetricItem.SessionMetric(
+                        metric = SessionStatistic.QuestionCount,
+                        value = questionCount
+                    ),
                     modifier = Modifier.weight(1f)
                 )
                 CurrentSessionMetric(
-                    metric = SessionMetric.Time,
-                    value = time,
+                    item = MetricItem.SessionMetric(
+                        metric = SessionStatistic.Time,
+                        value = time
+                    ),
                     modifier = Modifier.weight(1f)
                 )
             }

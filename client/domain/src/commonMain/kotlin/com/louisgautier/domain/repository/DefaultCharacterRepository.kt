@@ -27,6 +27,14 @@ class DefaultCharacterRepository(
         characterService.getByLevel(level.toDto(), page, limit)
             .map { response -> response.toDomain { it.toDomain() } }
 
+    override suspend fun search(
+        levels: List<CharacterFrequencyLevel>,
+        query: String,
+        page: Int,
+        limit: Int
+    ) = characterService.search(levels.map { it.toDto() }, query, page, limit)
+        .map { response -> response.toDomain { it.toDomain() } }
+
     override suspend fun getByName(code: Int): Result<DictionaryWithGraphic> =
         characterService.getByName(code).map { it.toDomain() }
 

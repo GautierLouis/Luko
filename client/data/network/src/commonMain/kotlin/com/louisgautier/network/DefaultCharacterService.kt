@@ -45,6 +45,24 @@ class DefaultCharacterService(
         return call { client.get(EndPoint.Characters.ByName(code = code)) }
     }
 
+    override suspend fun search(
+        levels: List<CharacterFrequencyLevelDto>,
+        query: String,
+        page: Int,
+        limit: Int
+    ): Result<ResponseListDto<SimpleDictionaryDto>> {
+        return call {
+            client.get(
+                EndPoint.Characters.Search(
+                    levels = levels,
+                    query = query,
+                    page = page,
+                    limit = limit
+                )
+            )
+        }
+    }
+
     override suspend fun getSVG(code: Int): Result<GraphicDto> {
         return call {
             client.get(
