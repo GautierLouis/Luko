@@ -18,14 +18,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.louisgautier.designsystem.ai.Gray100
+import com.louisgautier.designsystem.components.attrs.DifficultyLevel
 import com.louisgautier.domain.model.Difficulty
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun DifficultyPickerContent(
+internal fun DifficultyPickerContent(
     modifier: Modifier = Modifier,
-    selectedDifficulty: Difficulty = Difficulty.EASY,
-    onDifficultySelected: (Difficulty) -> Unit = {}
+    difficulty: DifficultyLevel = DifficultyLevel.EASY,
+    onDifficultySelected: (DifficultyLevel) -> Unit = {}
 ) {
 
     Card(
@@ -48,10 +49,10 @@ fun DifficultyPickerContent(
                 fontSize = 16.sp
             )
 
-            Difficulty.entries.forEach {
+            DifficultyLevel.entries.forEach {
                 DifficultyCard(
                     difficulty = it,
-                    selected = selectedDifficulty == it,
+                    selected = difficulty == it,
                     onClick = { onDifficultySelected(it) }
                 )
             }
@@ -61,7 +62,7 @@ fun DifficultyPickerContent(
 
 @Composable
 @Preview
-fun Preview_DifficultyPickerContent() {
+private fun PreviewDifficultyPickerContent() {
     MaterialTheme {
         DifficultyPickerContent()
     }

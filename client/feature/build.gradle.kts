@@ -8,8 +8,9 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.client.feature.login)
-                api(projects.client.feature.dictionary)
+                api(projects.client.feature.profile)
                 api(projects.client.feature.learning)
+                api(projects.client.feature.dictionary)
             }
         }
     }

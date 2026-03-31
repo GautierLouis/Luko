@@ -21,7 +21,7 @@ import com.louisgautier.designsystem.icon.RoundedStar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun AnimatedStar(
+internal fun AnimatedStar(
     modifier: Modifier = Modifier,
     initialOffset: Offset = Offset.Zero,
     delay: Int = 0,
@@ -53,6 +53,6 @@ fun AnimatedStar(
 
 @Composable
 @Preview
-fun AnimatedStarPreview() {
+private fun AnimatedStarPreview() {
     AnimatedStar()
 }

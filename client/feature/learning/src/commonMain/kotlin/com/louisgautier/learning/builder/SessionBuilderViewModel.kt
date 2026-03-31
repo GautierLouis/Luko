@@ -2,32 +2,87 @@ package com.louisgautier.learning.builder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.louisgautier.domain.mapper.LevelCount
-import com.louisgautier.domain.repository.CharacterRepository
+import com.louisgautier.designsystem.components.attrs.DifficultyLevel
+import com.louisgautier.designsystem.components.attrs.HSKLevel
+import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnNextPage
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
+import com.louisgautier.navigation.AppNavigation
+import com.louisgautier.navigation.SessionKey
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SessionBuilderViewModel(
-    private val repository: CharacterRepository,
-) : ViewModel() {
+internal class SessionBuilderViewModel : ViewModel() {
 
-    private var _levels = MutableStateFlow<List<LevelCount>>(emptyList())
-    val levels = _levels.asStateFlow()
-
-    init {
-//        getLevelCount()
+    companion object {
+        const val PAGE_COUNT = 2
     }
 
-    private fun getLevelCount() {
-        viewModelScope.launch {
-            repository.getLevelCount()
-                .onSuccess { data ->
-                    _levels.update { data }
-                }.onFailure {
+    internal data class UiState(
+        val levels: List<HSKLevel> = listOf(HSKLevel.COMMON),
+        val difficulty: DifficultyLevel = DifficultyLevel.EASY,
+        val questionCount: QuestionCount = QuestionCount.FIVE,
+        val currentPage: Int = 0
+    ) {
+        val isFinished = currentPage == PAGE_COUNT
+    }
 
+    private val _state = MutableStateFlow(UiState())
+    val state = _state.asStateFlow()
+
+    private val _pageEvent = MutableSharedFlow<Int>()
+    val pageAction: SharedFlow<Int> = _pageEvent.asSharedFlow()
+
+    fun onEventReceived(event: SessionBuilderScreenEvent) {
+        when (event) {
+            is OnDifficultySelected -> {
+                _state.update { it.copy(difficulty = event.difficulty) }
+            }
+
+            is OnLevelSelected -> {
+                _state.update {
+                    it.copy(
+                        levels = if (event.level in it.levels) {
+                            it.levels - event.level
+                        } else {
+                            it.levels + event.level
+                        }
+                    )
                 }
+            }
+
+            is OnQuestionCountSelected -> {
+                _state.update { it.copy(questionCount = event.questionCount) }
+            }
+
+            is OnNextPage -> {
+                viewModelScope.launch {
+                    if (event.currentPage < event.pageCount - 1) {
+                        _state.update { it.copy(currentPage = event.currentPage + 1) }
+                        _pageEvent.emit(event.currentPage + 1)
+                    } else {
+                        onFinish()
+                    }
+                }
+            }
         }
+    }
+
+    private fun onFinish() {
+        AppNavigation.navigate(
+            route = SessionKey(
+                levels = state.value.levels.joinToString(),
+                difficulty = state.value.difficulty.toString(),
+                limit = state.value.questionCount.toString()
+            ),
+            clearBackStack = true
+        )
     }
 }

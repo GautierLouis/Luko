@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.composeApp.main.MainScreenEvent.OnBottomItemClicked
 import com.louisgautier.composeApp.main.MainViewModel.UiState
-import com.louisgautier.composeApp.ProfileScreen
 import com.louisgautier.composeApp.home.HomeScreen
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
@@ -17,6 +16,7 @@ import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.dictionary.home.DictionaryScreen
 import com.louisgautier.dictionary.home.PreviewDictionaryScreen
+import com.louisgautier.profile.ProfileScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel

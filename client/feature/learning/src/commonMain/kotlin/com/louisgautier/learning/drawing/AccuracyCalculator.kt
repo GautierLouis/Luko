@@ -8,7 +8,7 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class AccuracyCalculator(
+internal class AccuracyCalculator(
     private val toleranceRadius: Float = 50f, // Acceptable deviation in pixels
     private val samplingPoints: Int = 20 // Number of points to sample for comparison
 ) {
@@ -292,7 +292,7 @@ class AccuracyCalculator(
     }
 }
 
-fun analyzeUserDrawing(
+internal fun analyzeUserDrawing(
     referenceStrokes: List<List<Offset>>,
     userStrokes: List<List<Offset>>
 ): StrokeComparisonResult {

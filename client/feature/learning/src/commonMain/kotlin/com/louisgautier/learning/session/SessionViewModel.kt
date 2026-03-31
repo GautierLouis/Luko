@@ -31,7 +31,7 @@ import kotlin.time.ExperimentalTime
 
 
 @OptIn(ExperimentalTime::class)
-class SessionViewModel(
+internal class SessionViewModel(
     savedStateHandle: SavedStateHandle,
     private val repository: CharacterRepository,
     private val sessionRepository: SessionRepository

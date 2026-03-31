@@ -23,7 +23,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.louisgautier.domain.model.SimpleDictionary
 
 @Composable
-fun DictionaryPageContent(
+internal fun DictionaryPageContent(
     items: LazyPagingItems<SimpleDictionary>,
     modifier: Modifier = Modifier,
     onItemClick: (Int) -> Unit

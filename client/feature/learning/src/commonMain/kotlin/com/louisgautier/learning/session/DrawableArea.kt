@@ -12,7 +12,7 @@ import com.louisgautier.learning.drawStroke
 import androidx.compose.ui.graphics.drawscope.Stroke as AndroidStroke
 
 @Composable
-fun DrawableArea(
+internal fun DrawableArea(
     referenceStrokes: List<List<Offset>> = emptyList(),
     referenceHint: List<Offset> = emptyList(),
     previousDrawnStrokes: List<List<Offset>> = emptyList(),

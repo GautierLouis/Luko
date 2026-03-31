@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun LeaveSessionDialog(
+internal fun LeaveSessionDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
     onConfirmation: () -> Unit = {},
@@ -45,7 +45,7 @@ fun LeaveSessionDialog(
 
 @Preview
 @Composable
-fun LeaveSessionDialogPreview() {
+private fun LeaveSessionDialogPreview() {
     LeaveSessionDialog()
 
 }

@@ -35,10 +35,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SessionScreen(
-    viewModel: SessionViewModel = koinViewModel(),
-) {
-
+fun SessionScreen() {
+    val viewModel = koinViewModel<SessionViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     if (state.isError) {
@@ -55,7 +53,7 @@ fun SessionScreen(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SessionScreenContent(
+internal fun SessionScreenContent(
     state: SessionViewModel.UIState,
     event: (SessionEvent) -> Unit,
 ) {
@@ -144,7 +142,7 @@ fun SessionScreenContent(
 
 @Preview
 @Composable
-fun SessionScreenContentPreview() {
+private fun SessionScreenContentPreview() {
     SessionScreenContent(
         state = SessionViewModel.UIState(
             questionStates = listOf(

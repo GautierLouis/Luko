@@ -121,7 +121,7 @@ fun DrawScope.drawNumberedStartPoint(
 /**
  * Helper function to draw the first point of the stroke.
  */
-fun DrawScope.drawFirstPoint(point: Offset) {
+internal fun DrawScope.drawFirstPoint(point: Offset) {
     drawPoints(
         listOf(point),
         color = Gray200,
@@ -131,7 +131,7 @@ fun DrawScope.drawFirstPoint(point: Offset) {
     )
 }
 
-fun DrawScope.drawStroke(
+internal fun DrawScope.drawStroke(
     stroke: List<Offset>,
     strokeColor: Color = DrawableAreaDefault.STROKE_REFERENCE_COLOR,
     strokeWidth: Float = DrawableAreaDefault.STROKE_WIDTH,

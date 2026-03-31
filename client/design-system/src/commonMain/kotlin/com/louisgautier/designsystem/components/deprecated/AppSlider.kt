@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.components
+package com.louisgautier.designsystem.components.deprecated
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider

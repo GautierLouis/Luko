@@ -3,7 +3,7 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 
-fun dtwSimilaritySymmetric(s: List<Offset>, t: List<Offset>): Double {
+internal fun dtwSimilaritySymmetric(s: List<Offset>, t: List<Offset>): Double {
     if (s.isEmpty() || t.isEmpty()) return 0.0
     val dtw = dtwDistance(s, t)
     if (dtw.isInfinite() || dtw.isNaN()) return 0.0

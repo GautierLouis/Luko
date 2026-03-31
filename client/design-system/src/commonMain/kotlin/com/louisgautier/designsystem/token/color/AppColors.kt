@@ -2,6 +2,7 @@ package com.louisgautier.designsystem.token.color
 
 import androidx.compose.ui.graphics.Color
 
+@Deprecated("Use AppLevelColors or ColorScheme instead")
 data class AppColors(
     // Background
     val bg: Color,

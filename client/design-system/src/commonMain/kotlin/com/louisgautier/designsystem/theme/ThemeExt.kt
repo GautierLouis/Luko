@@ -8,6 +8,9 @@ import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.token.color.AppColors
 import com.louisgautier.designsystem.token.color.provideDayColors
 import com.louisgautier.designsystem.token.color.provideNightColors
+import com.louisgautier.designsystem.token.color.v2.AppLevelColors
+import com.louisgautier.designsystem.token.color.v2.DayAppLevelColors
+import com.louisgautier.designsystem.token.color.v2.NightAppLevelColors
 import com.louisgautier.designsystem.token.string.Strings
 import com.louisgautier.designsystem.token.string.StringsLocale
 import com.louisgautier.designsystem.token.string.provideStringsEN
@@ -30,4 +33,8 @@ internal fun ThemeMode.toColors(): AppColors = when (this) {
 internal fun ThemeMode.toMaterialColors(): ColorScheme = when (this) {
     ThemeMode.Night -> darkScheme
     ThemeMode.Day -> lightScheme
+}
+internal fun ThemeMode.toLevelColors(): AppLevelColors = when (this) {
+    ThemeMode.Day -> DayAppLevelColors
+    ThemeMode.Night -> NightAppLevelColors
 }

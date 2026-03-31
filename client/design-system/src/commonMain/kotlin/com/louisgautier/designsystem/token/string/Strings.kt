@@ -32,6 +32,30 @@ data class Strings(
     val easy: String,
     val medium: String,
     val hard: String,
+    val easyTitle: String,
+    val easyCaption: String,
+    val mediumTitle: String,
+    val mediumCaption: String,
+    val hardTitle: String,
+    val hardCaption: String,
+
+    //HSK Level
+    val common: String,
+    val frequent: String,
+    val standard: String,
+
+    val commonCaption: String,
+    val frequentCaption: String,
+    val standardCaption: String,
+
+    //Learning
+    val newSession: String,
+    val next: String,
+    val start: String,
+
+    //Dictionary
+    val searchPlaceholder: String,
+    val filterHskGroup: String,
 
 
     //Content Description

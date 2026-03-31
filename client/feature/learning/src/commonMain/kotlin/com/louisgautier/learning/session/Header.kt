@@ -26,7 +26,7 @@ import com.louisgautier.domain.previewDictionary
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun Header(
+internal fun Header(
     pager: PagerState,
     char: Dictionary,
     modifier: Modifier = Modifier,
@@ -82,6 +82,6 @@ fun Header(
 
 @Preview(showBackground = true)
 @Composable
-fun HeaderPreview() {
+private fun PreviewHeader() {
     Header(PagerState(currentPage = 4) { 5 }, previewDictionary)
 }

@@ -34,7 +34,7 @@ import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun RewardCard(
+internal fun RewardCard(
     score: Int,
     questionCount: String,
     time: String,
@@ -131,6 +131,6 @@ fun RewardCard(
 
 @Composable
 @Preview
-fun RewardCardPreview() {
+private fun RewardCardPreview() {
     RewardCard(50, "5", "10:00")
 }

@@ -7,7 +7,7 @@ import com.louisgautier.domain.repository.SessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class SessionCongratulationViewModel(
+internal class SessionCongratulationViewModel(
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 

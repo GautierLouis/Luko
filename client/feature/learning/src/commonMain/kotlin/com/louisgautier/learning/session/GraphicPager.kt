@@ -42,7 +42,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Composable
-fun GraphicSketcher(
+internal fun GraphicSketcher(
     questionState: SessionViewModel.QuestionState,
     modifier: Modifier = Modifier,
     drawReference: Boolean = false,
@@ -117,7 +117,7 @@ fun GraphicSketcher(
 }
 
 @Composable
-fun ResetButton(
+internal fun ResetButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -147,7 +147,7 @@ class DifficultyPreviewParameter() : PreviewParameterProvider<Difficulty> {
 
 @Preview
 @Composable
-fun GraphicPagerPreview(
+private fun GraphicPagerPreview(
     @PreviewParameter(DifficultyPreviewParameter::class) difficulty: Difficulty
 ) {
     GraphicSketcher(

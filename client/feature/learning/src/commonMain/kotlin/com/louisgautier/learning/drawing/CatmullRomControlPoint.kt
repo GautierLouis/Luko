@@ -1,6 +1,6 @@
 package com.louisgautier.learning.drawing
 
-data class CatmullRomControlPoint(
+internal data class CatmullRomControlPoint(
     val x1: Float,
     val y1: Float,
     val x2: Float,

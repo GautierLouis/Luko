@@ -77,7 +77,7 @@ internal fun DictionarySearchBar(
             },
             placeholder = {
                 Text(
-                    text = "Search by pinyin or character",
+                    text = Theme.strings.searchPlaceholder,
                     style = Theme.typography.bodyMedium,
                     color = Theme.materialColors.outline
                 )

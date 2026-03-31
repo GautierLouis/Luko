@@ -10,15 +10,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.components.CharacterFrequency
-import com.louisgautier.designsystem.components.CharacterFrequency.Companion.colorFamily
-import com.louisgautier.designsystem.components.CharacterFrequency.Companion.label
+import com.louisgautier.designsystem.components.attrs.HSKLevel
+import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.colorFamily
+import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.label
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Spacing
-import com.louisgautier.dictionary.home.ActiveFilter
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -33,7 +32,7 @@ internal fun DictionaryFilter(
             .fillMaxWidth()
     ) {
         Text(
-            text = "Character Groups",
+            text = Theme.strings.filterHskGroup,
             style = Theme.typography.bodyMedium,
             color = Theme.materialColors.onPrimaryContainer,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -42,26 +41,24 @@ internal fun DictionaryFilter(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Spacing.large
         ) {
-            CharacterFrequency.entries.forEachIndexed { index, level ->
+            HSKLevel.entries.forEachIndexed { index, level ->
                 FilterChip(
                     selected = when (level) {
-                        CharacterFrequency.COMMON -> activeFilter.isCommonActivated
-                        CharacterFrequency.FREQUENT -> activeFilter.isFrequentActivated
-                        CharacterFrequency.STANDARD -> activeFilter.isStandardActivated
+                        HSKLevel.COMMON -> activeFilter.isCommonActivated
+                        HSKLevel.FREQUENT -> activeFilter.isFrequentActivated
+                        HSKLevel.STANDARD -> activeFilter.isStandardActivated
                     },
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor = Theme.materialColors.surfaceContainer,
-                        selectedContainerColor = level.colorFamily().focusRing,
-
-                        labelColor = level.colorFamily().fg,
-                        selectedLabelColor = Theme.materialColors.onPrimary,
-
-                        ),
+                        labelColor = Theme.materialColors.onSecondaryContainer,
+                        selectedContainerColor = level.colorFamily().primary,
+                        selectedLabelColor = level.colorFamily().onPrimary,
+                    ),
                     onClick = {
                         val newFilter = when (level) {
-                            CharacterFrequency.COMMON -> ActiveFilter(isCommonActivated = !activeFilter.isCommonActivated)
-                            CharacterFrequency.FREQUENT -> ActiveFilter(isFrequentActivated = !activeFilter.isFrequentActivated)
-                            CharacterFrequency.STANDARD -> ActiveFilter(isStandardActivated = !activeFilter.isStandardActivated)
+                            HSKLevel.COMMON -> ActiveFilter(isCommonActivated = !activeFilter.isCommonActivated)
+                            HSKLevel.FREQUENT -> ActiveFilter(isFrequentActivated = !activeFilter.isFrequentActivated)
+                            HSKLevel.STANDARD -> ActiveFilter(isStandardActivated = !activeFilter.isStandardActivated)
                         }
                         onEvent(DictionaryScreenEvent.OnFilterChange(newFilter))
                     },
@@ -83,8 +80,21 @@ private fun PreviewDictionaryFilter(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
     AppThemeWrapper(themeMode) {
-        DictionaryFilter(
-            activeFilter = ActiveFilter(),
-        )
+        Column {
+            DictionaryFilter(
+                activeFilter = ActiveFilter(
+                    isCommonActivated = false,
+                    isFrequentActivated = false,
+                    isStandardActivated = false,
+                ),
+            )
+            DictionaryFilter(
+                activeFilter = ActiveFilter(
+                    isCommonActivated = true,
+                    isFrequentActivated = true,
+                    isStandardActivated = true,
+                ),
+            )
+        }
     }
 }

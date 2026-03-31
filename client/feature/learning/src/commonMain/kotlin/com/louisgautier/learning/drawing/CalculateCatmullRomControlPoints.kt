@@ -2,7 +2,7 @@ package com.louisgautier.learning.drawing
 
 import androidx.compose.ui.geometry.Offset
 
-fun List<Offset>.toCatmullRomControlPoints(): List<CatmullRomControlPoint> {
+internal fun List<Offset>.toCatmullRomControlPoints(): List<CatmullRomControlPoint> {
 
     val controlPoints = mutableListOf<CatmullRomControlPoint>()
 

@@ -5,8 +5,10 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import com.louisgautier.designsystem.token.string.Strings
 import com.louisgautier.designsystem.token.color.AppColors
+import com.louisgautier.designsystem.token.color.v2.AppLevelColors
 
 object Theme {
+    @Deprecated("Use materialColors or appLevelColors instead")
     val colors: AppColors
         @Composable
         get() = LocalAppColors.current
@@ -14,6 +16,10 @@ object Theme {
     val materialColors: ColorScheme
         @Composable
         get() = LocalMaterialColors.current
+
+    val appLevelColors: AppLevelColors
+        @Composable
+        get() = LocalAppLevelColors.current
 
     val strings: Strings
         @Composable

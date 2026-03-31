@@ -22,7 +22,7 @@ import com.louisgautier.designsystem.icon.RoundedTrophy
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun AnimatedRewardIcon(
+internal fun AnimatedRewardIcon(
     modifier: Modifier = Modifier
 ) {
     val gradientBrush = Brush.linearGradient(
@@ -88,6 +88,6 @@ fun AnimatedRewardIcon(
 
 @Preview
 @Composable
-fun AnimatedRewardIconPreview() {
+private fun AnimatedRewardIconPreview() {
     AnimatedRewardIcon()
 }

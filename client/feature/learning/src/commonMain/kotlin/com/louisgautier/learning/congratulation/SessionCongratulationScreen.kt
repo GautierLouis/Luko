@@ -31,9 +31,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SessionCongratulationScreen(
-    viewModel: SessionCongratulationViewModel = koinViewModel(),
-) {
+fun SessionCongratulationScreen() {
+    val viewModel: SessionCongratulationViewModel = koinViewModel()
     val state by viewModel.session.collectAsStateWithLifecycle()
     SessionCongratulationScreen(state)
 }
@@ -41,7 +40,7 @@ fun SessionCongratulationScreen(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Preview
-fun SessionCongratulationScreen(
+private fun SessionCongratulationScreen(
     state: Session?,
 ) {
 

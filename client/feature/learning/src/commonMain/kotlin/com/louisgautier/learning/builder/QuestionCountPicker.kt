@@ -31,8 +31,7 @@ import com.louisgautier.designsystem.ai.Green50
 import com.louisgautier.designsystem.ai.Green700
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-//@CoreKeepForR8
-enum class QuestionCount(val value: Int) {
+internal enum class QuestionCount(val value: Int) {
     FIVE(5),
     TEN(10),
     FIFTEEN(15),
@@ -40,7 +39,7 @@ enum class QuestionCount(val value: Int) {
 }
 
 @Composable
-fun QuestionCountPicker(
+internal fun QuestionCountPicker(
     questionCount: QuestionCount,
     modifier: Modifier = Modifier,
     onQuestionCountSelected: (QuestionCount) -> Unit = {}
@@ -96,7 +95,7 @@ fun QuestionCountPicker(
 }
 
 @Composable
-fun QuestionCount(
+internal fun QuestionCount(
     count: QuestionCount,
     isSelected: Boolean = false,
     modifier: Modifier = Modifier,
@@ -130,7 +129,7 @@ fun QuestionCount(
 
 @Composable
 @Preview(showBackground = true)
-fun QuestionCountPreview() {
+private fun QuestionCountPreview() {
     Column {
         QuestionCount(QuestionCount.FIVE)
         QuestionCount(QuestionCount.TEN, isSelected = true)
@@ -140,7 +139,7 @@ fun QuestionCountPreview() {
 
 @Composable
 @Preview(showBackground = true)
-fun QuestionCountPickerPreview() {
+private fun QuestionCountPickerPreview() {
     QuestionCountPicker(
         questionCount = QuestionCount.FIVE,
         onQuestionCountSelected = {}

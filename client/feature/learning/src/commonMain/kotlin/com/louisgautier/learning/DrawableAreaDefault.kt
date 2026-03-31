@@ -3,7 +3,7 @@ package com.louisgautier.learning
 import androidx.compose.ui.graphics.Color
 import com.louisgautier.designsystem.ai.Gray200
 
-object DrawableAreaDefault {
+internal object DrawableAreaDefault {
     const val STROKE_WIDTH = 35f
     val STROKE_REFERENCE_COLOR = Gray200
     val STROKE_HINT_COLOR = Color.Red.copy(alpha = .6f)

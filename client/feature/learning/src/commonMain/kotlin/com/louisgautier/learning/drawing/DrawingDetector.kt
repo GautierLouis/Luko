@@ -7,7 +7,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 
-fun Modifier.drawingDetector(
+internal fun Modifier.drawingDetector(
     points: SnapshotStateList<Offset>,
     onEnd: () -> Unit = {}
 ): Modifier {

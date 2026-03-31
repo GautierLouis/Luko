@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.components
+package com.louisgautier.designsystem.components.deprecated
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.sp
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
-import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.color.ColorFamily
 import com.louisgautier.designsystem.token.typo.FontWeight

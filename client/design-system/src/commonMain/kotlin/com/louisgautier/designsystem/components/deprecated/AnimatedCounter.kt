@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.components
+package com.louisgautier.designsystem.components.deprecated
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi

@@ -29,7 +29,7 @@ import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic.C
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CurrentSessionMetric(
+internal fun CurrentSessionMetric(
     item: MetricItem.SessionMetric,
     modifier: Modifier = Modifier
 ) {
@@ -66,7 +66,7 @@ fun CurrentSessionMetric(
 
 @Composable
 @Preview
-fun CurrentSessionMetricPreview() {
+private fun CurrentSessionMetricPreview() {
     CurrentSessionMetric(
         MetricItem.SessionMetric(
             SessionStatistic.Difficulty,

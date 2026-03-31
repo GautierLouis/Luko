@@ -4,7 +4,7 @@ import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.Difficulty
 
-object ScoreDefault {
+internal object ScoreDefault {
     const val MULTIPLIER_EASY = 1f
     const val MULTIPLIER_MEDIUM = 1.5f
     const val MULTIPLIER_HARD = 2f
@@ -26,7 +26,7 @@ object ScoreDefault {
     const val TIME_MAX_POINT = 1000
 }
 
-class CalculateScore() {
+internal class CalculateScore() {
 
     private val basePointsPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
         when (it) {
