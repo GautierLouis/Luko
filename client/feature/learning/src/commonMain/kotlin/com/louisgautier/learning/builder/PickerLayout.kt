@@ -26,7 +26,8 @@ internal fun PickerLayout(
 ) {
 
     Box(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .background(
                 color = Theme.materialColors.surfaceContainer,
                 shape = ShapeDefaults.card()

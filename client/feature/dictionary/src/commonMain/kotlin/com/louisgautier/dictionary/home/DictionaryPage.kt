@@ -11,6 +11,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.dictionary.PagingDataPreviewParameter
 import com.louisgautier.domain.model.SimpleDictionary
 import com.louisgautier.domain.previewSimpleDataList
@@ -44,10 +46,22 @@ internal fun DictionaryPage(
 
 @Preview
 @Composable
-private fun DictionaryPagePreview(
+private fun PreviewDictionaryPageDay(
     @PreviewParameter(DictionaryPageProvider::class) pagingData: PagingData<SimpleDictionary>
 ) {
-    DictionaryPage(flowOf(pagingData).collectAsLazyPagingItems())
+    AppThemeWrapper(ThemeMode.Day) {
+        DictionaryPage(flowOf(pagingData).collectAsLazyPagingItems())
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDictionaryPageNight(
+    @PreviewParameter(DictionaryPageProvider::class) pagingData: PagingData<SimpleDictionary>
+) {
+    AppThemeWrapper(ThemeMode.Night) {
+        DictionaryPage(flowOf(pagingData).collectAsLazyPagingItems())
+    }
 }
 
 private class DictionaryPageProvider :

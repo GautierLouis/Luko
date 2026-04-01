@@ -13,6 +13,6 @@ val learningModule = module {
     viewModelOf(::SessionViewModel)
     viewModelOf(::SessionCongratulationViewModel)
 
-    factoryOf(::AccuracyCalculator)
+    factoryOf(::CalculateScore)
     factoryOf(::AccuracyCalculator)
 }

@@ -36,17 +36,20 @@ internal fun DictionaryTopBar(
     onEvent: (DictionaryScreenEvent) -> Unit = {}
 ) {
 
-    val backgroundColor = if (filterMenuExpended) Theme.materialColors.primaryContainer
-    else Theme.materialColors.background
+    val containerColor = if (filterMenuExpended) Theme.materialColors.surfaceContainer
+    else Theme.materialColors.surface
 
     Column(
         modifier = Modifier
-            .background(backgroundColor)
+            .background(containerColor)
     ) {
         CenterAlignedTopAppBar(
             modifier = modifier,
             title = {
-                Text(text = Theme.strings.dictionary, style = Theme.typography.titleLarge)
+                Text(
+                    text = Theme.strings.dictionary,
+                    style = Theme.typography.titleLarge
+                )
             },
             actions = {
                 ActionFilter(enabled = enabled) { onEvent(DictionaryScreenEvent.OnFilterToggle) }

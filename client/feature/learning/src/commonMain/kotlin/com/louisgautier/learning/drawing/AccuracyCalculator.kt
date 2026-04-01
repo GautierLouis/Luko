@@ -8,17 +8,19 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-internal class AccuracyCalculator(
-    private val toleranceRadius: Float = 50f, // Acceptable deviation in pixels
-    private val samplingPoints: Int = 20 // Number of points to sample for comparison
-) {
+internal class AccuracyCalculator {
+
+    private companion object {
+        private const val TOLERANCE_RADIUS: Float = 50f // Acceptable deviation in pixels
+        private const val SAMPLING_POINTS: Int = 20 // Number of points to sample for comparison
+    }
 
     fun calculate(
         reference: List<List<Offset>>,
         userStroke: List<List<Offset>>
     ): StrokeComparisonResult {
 
-// Check if stroke counts match
+        // Check if stroke counts match
         if (reference.isEmpty()) {
             return StrokeComparisonResult(
                 0f, emptyList(), 0f,
@@ -146,7 +148,7 @@ internal class AccuracyCalculator(
         )
 
         // Linear decay from 1.0 to 0.0 based on tolerance
-        return (1f - (distance / toleranceRadius).coerceIn(0f, 1f))
+        return (1f - (distance / TOLERANCE_RADIUS).coerceIn(0f, 1f))
     }
 
     /**
@@ -176,8 +178,8 @@ internal class AccuracyCalculator(
      */
     private fun comparePathShape(ref: List<Offset>, user: List<Offset>): Float {
         // Normalize both strokes to same number of points
-        val refSampled = resampleStroke(ref, samplingPoints)
-        val userSampled = resampleStroke(user, samplingPoints)
+        val refSampled = resampleStroke(ref, SAMPLING_POINTS)
+        val userSampled = resampleStroke(user, SAMPLING_POINTS)
 
         // Calculate average point-to-point distance
         var totalDistance = 0f
@@ -189,10 +191,10 @@ internal class AccuracyCalculator(
             totalDistance += distance
         }
 
-        val avgDistance = totalDistance / samplingPoints
+        val avgDistance = totalDistance / SAMPLING_POINTS
 
         // Convert to similarity score
-        return (1f - (avgDistance / (toleranceRadius * 2)).coerceIn(0f, 1f))
+        return (1f - (avgDistance / (TOLERANCE_RADIUS * 2)).coerceIn(0f, 1f))
     }
 
     /**
@@ -283,7 +285,7 @@ internal class AccuracyCalculator(
             val userStart = userStrokes[i].firstOrNull() ?: continue
 
             val dist = distance(refStart, userStart)
-            if (dist < toleranceRadius * 1.5f) {
+            if (dist < TOLERANCE_RADIUS * 1.5f) {
                 correctOrder++
             }
         }

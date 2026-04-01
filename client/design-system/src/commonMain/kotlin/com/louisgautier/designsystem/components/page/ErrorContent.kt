@@ -39,7 +39,8 @@ fun ErrorContent(
     ) {
         Text(
             text = Theme.strings.error,
-            style = Theme.typography.bodyMedium
+            style = Theme.typography.bodyMedium,
+            color = Theme.materialColors.onSurface
         )
         AppButtonV2(
             text = Theme.strings.retry,

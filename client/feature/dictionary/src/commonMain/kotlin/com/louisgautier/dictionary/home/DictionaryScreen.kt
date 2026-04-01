@@ -2,6 +2,7 @@ package com.louisgautier.dictionary.home
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,7 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -17,9 +17,10 @@ import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.dictionary.home.DictionaryScreenEvent.OnCharacterClicked
+import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.dictionary.details.ModalCharacterDetails
 import com.louisgautier.dictionary.details.ModalCharacterDetailsViewModel
+import com.louisgautier.dictionary.home.DictionaryScreenEvent.OnCharacterClicked
 import com.louisgautier.domain.previewSimpleDataList
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -48,7 +49,8 @@ private fun DictionaryScreen(
 
     val items = state.dictionaries.collectAsLazyPagingItems()
 
-    val contentTopCorner = if (state.filterMenuExpended) 16.dp else 0.dp
+    val contentTopCorner = if (state.filterMenuExpended) Padding.extraLarge
+    else Padding.none
 
     if (state.selectedCharacter != null) {
         val modalVm = koinViewModel<ModalCharacterDetailsViewModel>(
@@ -71,11 +73,14 @@ private fun DictionaryScreen(
                 activeFilter = state.activeFilter,
             ) { onEvent(it) }
         },
+        containerColor = Theme.materialColors.surfaceContainer
     ) { paddingValues ->
         DictionaryPage(
             items = items,
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                )
                 .background(
                     color = Theme.materialColors.background,
                     shape = RoundedCornerShape(

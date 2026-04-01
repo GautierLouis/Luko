@@ -51,6 +51,7 @@ data class Strings(
     //Learning
     val newSession: String,
     val next: String,
+    val previous: String,
     val start: String,
     val builderPickQuestionCount: String,
     val builderSelectDifficulty: String,
@@ -60,7 +61,7 @@ data class Strings(
 
     //Dictionary
     val searchPlaceholder: String,
-    val filterHskGroup: String,
+    val filterFrequencyGroup: String,
 
 
     //Error

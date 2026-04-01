@@ -41,6 +41,7 @@ internal fun provideStringsFR(): Strings = Strings(
 
     newSession = "Nouvelle session",
     next = "Suivant",
+    previous = "Précédent",
     start = "Commencer",
     builderPickQuestionCount = "Nombre de questions",
     builderSelectDifficulty = "Choisissez une difficulté",
@@ -49,7 +50,7 @@ internal fun provideStringsFR(): Strings = Strings(
     sessionQuit = "Quitter",
 
     searchPlaceholder = "Rechercher par pinyin ou caractère",
-    filterHskGroup = "Niveau HSK",
+    filterFrequencyGroup = "Usage",
 
     error = "Erreur de chargement",
     retry = "Réessayer",

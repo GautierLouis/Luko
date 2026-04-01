@@ -17,6 +17,7 @@ import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -28,14 +29,17 @@ internal fun DictionaryFilter(
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 18.dp, vertical = 8.dp)
+            .padding(
+                horizontal = Padding.large,
+                vertical = Padding.medium
+            )
             .fillMaxWidth()
     ) {
         Text(
-            text = Theme.strings.filterHskGroup,
+            text = Theme.strings.filterFrequencyGroup,
             style = Theme.typography.bodyMedium,
             color = Theme.materialColors.onPrimaryContainer,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = Padding.medium)
         )
         Row(
             modifier = Modifier.fillMaxWidth(),

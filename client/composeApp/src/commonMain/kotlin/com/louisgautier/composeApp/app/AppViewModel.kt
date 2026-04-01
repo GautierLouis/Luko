@@ -65,6 +65,7 @@ class AppViewModel(
                         is NavigationCommand.Navigate -> {
                             if (event.clearBackStack) {
                                 stack.clear()
+                                stack += MainKey()
                             }
                             stack += event.route
                         }

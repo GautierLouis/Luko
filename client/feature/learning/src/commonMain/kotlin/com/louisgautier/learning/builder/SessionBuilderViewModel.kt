@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.louisgautier.designsystem.components.attrs.DifficultyLevel
 import com.louisgautier.designsystem.components.attrs.HSKLevel
-import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
-import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
-import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnNextPage
-import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.*
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.SessionKey
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +27,7 @@ internal class SessionBuilderViewModel : ViewModel() {
         val questionCount: QuestionCount = QuestionCount.FIVE,
         val currentPage: Int = 0
     ) {
-        val isFinished = currentPage == PAGE_COUNT
+        val isFinished = currentPage + 1 == PAGE_COUNT
     }
 
     private val _state = MutableStateFlow(UiState())
@@ -69,6 +66,13 @@ internal class SessionBuilderViewModel : ViewModel() {
                     } else {
                         onFinish()
                     }
+                }
+            }
+
+            is OnPreviousPage -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(currentPage = event.currentPage - 1) }
+                    _pageEvent.emit(event.currentPage - 1)
                 }
             }
         }

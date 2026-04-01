@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.model.SimpleDictionary
 
 @Composable
@@ -31,9 +33,9 @@ internal fun DictionaryPageContent(
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp,),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(Padding.large),
+        verticalArrangement = Spacing.medium,
+        horizontalArrangement = Spacing.medium,
     ) {
         items(
             count = items.itemCount,

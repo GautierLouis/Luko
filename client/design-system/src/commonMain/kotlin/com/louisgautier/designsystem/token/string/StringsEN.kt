@@ -41,6 +41,7 @@ internal fun provideStringsEN(): Strings = Strings(
 
     newSession = "New Session",
     next = "Next",
+    previous = "Previous",
     start = "Start",
     builderPickQuestionCount = "Number of questions",
     builderSelectDifficulty = "Pick a difficulty",
@@ -50,7 +51,7 @@ internal fun provideStringsEN(): Strings = Strings(
 
 
     searchPlaceholder = "Search by pinyin or character",
-    filterHskGroup = "HSK Level",
+    filterFrequencyGroup = "Frequency Group",
 
     error = "Failed to load",
     retry = "Retry",
