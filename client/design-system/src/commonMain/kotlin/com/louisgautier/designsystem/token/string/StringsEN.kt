@@ -16,7 +16,7 @@ internal fun provideStringsEN(): Strings = Strings(
     streak = "Day Streak",
     sessions = "Sessions",
     totalScore = "Total XP",
-    questionCount = "Questions",
+    questions = "Questions",
     time = "Time",
     score = "Score",
     difficulty = "Difficulty",
@@ -42,13 +42,22 @@ internal fun provideStringsEN(): Strings = Strings(
     newSession = "New Session",
     next = "Next",
     start = "Start",
+    builderPickQuestionCount = "Number of questions",
+    builderSelectDifficulty = "Pick a difficulty",
+    sessionComplete = "Complete",
+    sessionFinish = "Finish",
+    sessionQuit = "Quit",
+
 
     searchPlaceholder = "Search by pinyin or character",
     filterHskGroup = "HSK Level",
 
+    error = "Failed to load",
+    retry = "Retry",
 
     actionSearch = "Search",
     actionBack = "Back",
     actionFilter = "Filter",
-    actionClear = "Clear"
+    actionClear = "Clear",
+    actionReset = "Reset"
 )

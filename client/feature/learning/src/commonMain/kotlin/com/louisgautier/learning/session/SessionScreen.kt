@@ -6,155 +6,212 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.button.AppButton
+import com.louisgautier.designsystem.components.button.v2.AppButtonV2
+import com.louisgautier.designsystem.components.button.v2.attrs.ButtonRole
+import com.louisgautier.designsystem.components.button.v2.attrs.ButtonShape
+import com.louisgautier.designsystem.components.button.v2.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.ErrorScreen
-import com.louisgautier.designsystem.components.page.LoadingContent
+import com.louisgautier.designsystem.components.page.LoadingScreen
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.LoadingMode
+import com.louisgautier.designsystem.preview.LoadingModeProvider
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.previewDictionaryWithGraphic
+import com.louisgautier.learning.session.SessionScreenEvent.Finish
+import com.louisgautier.learning.session.SessionScreenEvent.Next
+import com.louisgautier.learning.session.SessionScreenEvent.Reload
+import com.louisgautier.learning.session.SessionScreenEvent.ToggleLeaveDialog
 import com.louisgautier.navigation.AppNavigation
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.Clock
 
 @Composable
 fun SessionScreen() {
     val viewModel = koinViewModel<SessionViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    if (state.isError) {
-        ErrorScreen(action = { viewModel.loadQuestions() })
-    } else if (state.isLoading) {
-        LoadingContent()
-    } else {
-        SessionScreenContent(
-            state = state,
-            event = { viewModel.onSketcherEvent(it) },
-        )
+    SessionScreen(
+        state = state,
+        onEvent = viewModel::onEvent
+    )
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun SessionScreen(
+    state: SessionViewModel.SessionState,
+    onEvent: (SessionScreenEvent) -> Unit = {},
+) {
+    when (state) {
+        SessionViewModel.SessionState.Error -> {
+            ErrorScreen { onEvent(Reload) }
+        }
+
+        SessionViewModel.SessionState.Loading -> {
+            LoadingScreen()
+        }
+
+        is SessionViewModel.SessionState.Success -> {
+            SessionScreen(
+                state = state,
+                onEvent = onEvent,
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun SessionScreenContent(
-    state: SessionViewModel.UIState,
-    event: (SessionEvent) -> Unit,
+private fun SessionScreen(
+    state: SessionViewModel.SessionState.Success,
+    onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
 
-    val scope = rememberCoroutineScope()
-    var showDialog by remember { mutableStateOf(false) }
+    val pagerState = rememberPagerState(
+        initialPage = state.currentPage,
+        pageCount = { state.questionsState.size }
+    )
 
-    if (showDialog) {
+    if (state.showLeaveDialog) {
         LeaveSessionDialog(
-            onDismissRequest = { showDialog = false },
+            onDismissRequest = { onEvent(ToggleLeaveDialog) },
             onConfirmation = { AppNavigation.navigateHome() }
         )
     }
 
-    BackHandler(true) {
-        showDialog = true
-    }
-
-    fun onNext() {
-        scope.launch {
-            state.pagerState.animateScrollToPage(state.pagerState.currentPage + 1)
-        }
+    LaunchedEffect(state.currentPage) {
+        pagerState.animateScrollToPage(pagerState.currentPage + 1)
     }
 
     Scaffold(
         topBar = {
             Header(
-                pager = state.pagerState,
+                pager = pagerState,
                 char = state.currentQuestion.question.dictionary,
                 modifier = Modifier.padding(top = 32.dp)
             )
         },
+        containerColor = Theme.materialColors.background,
         content = { paddingValues ->
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Spacer(Modifier.weight(1f))
                 HorizontalPager(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Padding.large),
                     userScrollEnabled = false,
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    state = state.pagerState
-                ) { page ->
-
+                    state = pagerState
+                ) {
                     GraphicSketcher(
-                        questionState = state.currentQuestion,
+                        state = state.currentQuestion,
                         drawReference = state.drawReference,
                         drawHint = state.drawHint,
-                        onEvent = { event(it) },
-                        modifier = Modifier.fillMaxWidth()
+                        onEvent = onEvent,
+                        modifier = Modifier
+                            .fillMaxWidth()
                     )
                 }
+
                 Spacer(Modifier.weight(3f))
 
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(Padding.large),
+                    verticalArrangement = Spacing.medium
                 ) {
-                    AppButton(
+                    AppButtonV2(
+                        text = if (state.isLastQuestion) Theme.strings.sessionComplete else Theme.strings.sessionFinish,
+                        shape = ButtonShape.Filled,
+                        role = ButtonRole.Primary,
+                        enabled = state.currentQuestion.isAnswered,
+                        size = ButtonSize.Large,
                         onClick = {
-                            if (state.isLastQuestion) onNext() else event(SessionEvent.Finish)
+                            val event = if (state.isLastQuestion) Next else Finish
+                            onEvent(event)
                         },
-                        enabled = state.isAnswered,
-                    ) {
-                        Text(
-                            text = if (state.isLastQuestion) "Complete" else "Finish",
-                            fontSize = 16.sp,
-                        )
-                    }
-                    AppButton(
-                        onClick = { showDialog = true },
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Red,
-                        modifier = Modifier.wrapContentSize()
-                    ) {
-                        Text(
-                            text = "Quit",
-                            fontSize = 16.sp,
-                        )
-                    }
+                    )
+
+                    AppButtonV2(
+                        text = Theme.strings.sessionQuit,
+                        shape = ButtonShape.Ghost,
+                        role = ButtonRole.Error,
+                        size = ButtonSize.Large,
+                        onClick = { onEvent(ToggleLeaveDialog) },
+                    )
                 }
             }
         }
     )
 }
 
+private val previewSuccessState = SessionViewModel.SessionState.Success(
+    startTime = Clock.System.now(),
+    currentPage = 0,
+    questionsState = listOf(
+        SessionViewModel.QuestionState(
+            question = previewDictionaryWithGraphic,
+            previousDrawnStrokes = emptyList(),
+        )
+    ),
+    drawReference = false,
+    drawHint = false,
+    showLeaveDialog = false,
+)
+
 @Preview
 @Composable
-private fun SessionScreenContentPreview() {
-    SessionScreenContent(
-        state = SessionViewModel.UIState(
-            questionStates = listOf(
-                SessionViewModel.QuestionState(
-                    question = previewDictionaryWithGraphic,
-                    sketcherState = SessionViewModel.GraphicSketcherState(),
-                )
-            ),
-            pagerState = PagerState { 1 },
-        ),
-        event = {}
-    )
+private fun PreviewSessionScreenDay(
+    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
+) {
+    AppThemeWrapper(ThemeMode.Day) {
+        SessionScreen(
+            state = when (mode) {
+                LoadingMode.ERROR -> SessionViewModel.SessionState.Error
+                LoadingMode.SUCCESS -> previewSuccessState
+                LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSessionScreenNight(
+    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
+) {
+    AppThemeWrapper(ThemeMode.Night) {
+        SessionScreen(
+            state = when (mode) {
+                LoadingMode.ERROR -> SessionViewModel.SessionState.Error
+                LoadingMode.SUCCESS -> previewSuccessState
+                LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
+            }
+        )
+    }
 }
 
 

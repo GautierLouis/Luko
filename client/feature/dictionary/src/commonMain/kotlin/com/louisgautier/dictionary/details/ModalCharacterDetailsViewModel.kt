@@ -19,16 +19,16 @@ internal class ModalCharacterDetailsViewModel(
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
-    internal sealed class UiState {
+    sealed class UIState {
         data class Success(
             val selectedDictionary: DictionaryWithGraphic,
             val lastSession: List<Session> = emptyList(),
-        ): UiState()
-        data object Error: UiState()
-        data object Loading: UiState()
+        ): UIState()
+        data object Error: UIState()
+        data object Loading: UIState()
     }
 
-    private val _state: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
+    private val _state: MutableStateFlow<UIState> = MutableStateFlow(UIState.Loading)
     val state = _state.asStateFlow()
 
     init {
@@ -43,19 +43,19 @@ internal class ModalCharacterDetailsViewModel(
                 val sessions = sessionRepository.getLastSessionsFor(characterCode)
 
                 _state.update { current ->
-                    UiState.Success(
+                    UIState.Success(
                         selectedDictionary = dictionary,
                         lastSession = sessions
                     )
                 }
             }.onFailure {
-                _state.update { UiState.Error }
+                _state.update { UIState.Error }
             }
         }
     }
 
     fun retry() {
-        _state.update { UiState.Loading }
+        _state.update { UIState.Loading }
         loadCharacter()
     }
 

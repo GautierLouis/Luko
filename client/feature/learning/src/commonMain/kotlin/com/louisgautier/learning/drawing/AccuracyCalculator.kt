@@ -291,15 +291,3 @@ internal class AccuracyCalculator(
         return (correctOrder.toFloat() / referenceStrokes.size) * 100f
     }
 }
-
-internal fun analyzeUserDrawing(
-    referenceStrokes: List<List<Offset>>,
-    userStrokes: List<List<Offset>>
-): StrokeComparisonResult {
-    val analyzer = AccuracyCalculator(
-        toleranceRadius = 50f,
-        samplingPoints = 20
-    )
-
-    return analyzer.calculate(referenceStrokes, userStrokes)
-}

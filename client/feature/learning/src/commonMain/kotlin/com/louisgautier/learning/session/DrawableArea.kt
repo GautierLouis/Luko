@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import com.louisgautier.designsystem.pointsToPath
+import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.learning.DrawableAreaDefault
 import com.louisgautier.learning.drawDashedLineWithFilledArrow
 import com.louisgautier.learning.drawStroke
@@ -20,14 +21,22 @@ internal fun DrawableArea(
     modifier: Modifier = Modifier,
 ) {
 
+    val color = Theme.materialColors.inverseSurface
+    val referenceColor = Theme.materialColors.outlineVariant
+    val indicationColor = Theme.materialColors.primary
+
+
     Canvas(modifier = modifier) {
 
         // Grey-out result as reference
-        referenceStrokes.forEach { drawStroke(it) }
+        referenceStrokes.forEach { drawStroke(stroke = it, strokeColor = referenceColor) }
 
         // Current dashed-stroke to be drawn
         if (referenceHint.isNotEmpty()) {
-            drawDashedLineWithFilledArrow(referenceHint)
+            drawDashedLineWithFilledArrow(
+                points = referenceHint,
+                color = indicationColor
+            )
         }
 
         // Previous drawn strokes from user
@@ -35,7 +44,7 @@ internal fun DrawableArea(
             val path = it.pointsToPath()
             drawPath(
                 path = path,
-                color = DrawableAreaDefault.STROKE_USER_COLOR,
+                color = color,
                 style = AndroidStroke(
                     width = DrawableAreaDefault.STROKE_WIDTH,
                     cap = StrokeCap.Round
@@ -47,7 +56,7 @@ internal fun DrawableArea(
         val livePath = ongoingStroke.pointsToPath()
         drawPath(
             path = livePath,
-            color = DrawableAreaDefault.STROKE_USER_COLOR,
+            color = color,
             style = AndroidStroke(
                 width = DrawableAreaDefault.STROKE_WIDTH,
                 cap = StrokeCap.Round

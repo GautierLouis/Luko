@@ -28,7 +28,7 @@ import kotlin.math.sin
  */
 fun DrawScope.drawDashedLineWithFilledArrow(
     points: List<Offset>,
-    color: Color = DrawableAreaDefault.STROKE_HINT_COLOR,
+    color: Color,
     dashWidth: Float = DrawableAreaDefault.STROKE_HINT_DASH_WIDTH,
     dashGap: Float = DrawableAreaDefault.STROKE_HINT_DASH_GAP,
     strokeWidth: Float = DrawableAreaDefault.STROKE_HINT_WIDTH,
@@ -93,47 +93,9 @@ fun DrawScope.drawDashedLineWithFilledArrow(
     )
 }
 
-fun DrawScope.drawNumberedStartPoint(
-    index: Int,
-    textMeasurer: TextMeasurer,
-    stroke: List<Offset>
-) {
-    val text = index.inc().toString()
-    val style = TextStyle(
-        color = Color.White,
-        fontSize = 12.sp,
-        fontWeight = FontWeight.SemiBold
-    )
-    val textLayoutResult = textMeasurer.measure(text, style)
-    val textSize = textLayoutResult.size
-
-    drawText(
-        textMeasurer = textMeasurer,
-        text = text,
-        topLeft = Offset(
-            stroke[0].x - textSize.width / 2,
-            stroke[0].y - textSize.height / 2
-        ),
-        style = style
-    )
-}
-
-/**
- * Helper function to draw the first point of the stroke.
- */
-internal fun DrawScope.drawFirstPoint(point: Offset) {
-    drawPoints(
-        listOf(point),
-        color = Gray200,
-        strokeWidth = 50f,
-        cap = StrokeCap.Round,
-        pointMode = PointMode.Points,
-    )
-}
-
 internal fun DrawScope.drawStroke(
     stroke: List<Offset>,
-    strokeColor: Color = DrawableAreaDefault.STROKE_REFERENCE_COLOR,
+    strokeColor: Color,
     strokeWidth: Float = DrawableAreaDefault.STROKE_WIDTH,
 ) {
     val curvedStroke = stroke.toCatmullRomControlPoints()
@@ -156,31 +118,4 @@ internal fun DrawScope.drawStroke(
             cap = StrokeCap.Round
         )
     )
-}
-
-private fun DrawScope.drawArrowDirection(
-    stroke: List<Offset>,
-    arrowDirection: Painter
-) {
-    val iconSize = 80f
-    val half = -iconSize / 2
-    val iconDefaultRotation = 90f
-
-    val start = stroke[0]
-    val next = stroke[1]
-    val angle = atan2(next.y - start.y, next.x - start.x)
-    val degrees = (angle * (180.0 / PI)) - iconDefaultRotation
-
-    with(arrowDirection) {
-        withTransform(
-            transformBlock = {
-                rotate(degrees.toFloat(), start)
-                translate(left = start.x, top = start.y)
-                translate(left = half, top = half)
-            },
-            drawBlock = {
-                draw(size = Size(iconSize, iconSize))
-            }
-        )
-    }
 }

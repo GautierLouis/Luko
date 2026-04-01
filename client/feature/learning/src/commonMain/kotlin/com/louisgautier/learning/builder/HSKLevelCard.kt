@@ -25,12 +25,7 @@ internal fun HSKLevelCard(
     onClick: () -> Unit = {},
 ) {
     LevelCard(
-        title = {
-            LevelCardTitle(
-                label = level.label(),
-                color = Theme.materialColors.onSurface
-            )
-        },
+        title = level.label(),
         caption = level.caption(),
         icon = level.icon(),
         color = level.colorFamily(),

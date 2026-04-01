@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.louisgautier.designsystem.components.topbar.AppTopbar
+import com.louisgautier.designsystem.components.topbar.action.ActionNavigateUp
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -21,6 +23,14 @@ fun ErrorScreen(
         modifier = modifier,
         containerColor = Theme.materialColors.background,
         contentColor = Theme.materialColors.onBackground,
+        topBar = {
+            AppTopbar(
+                title = "",
+                leftIcons = {
+                    ActionNavigateUp()
+                }
+            )
+        }
     ) { paddingValues ->
         ErrorContent(
             modifier = Modifier

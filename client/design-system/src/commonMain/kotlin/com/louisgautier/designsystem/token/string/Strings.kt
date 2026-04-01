@@ -22,7 +22,7 @@ data class Strings(
     val streak: String,
     val sessions: String,
     val totalScore: String,
-    val questionCount: String,
+    val questions: String,
     val time: String,
     val score: String,
     val difficulty: String,
@@ -39,11 +39,11 @@ data class Strings(
     val hardTitle: String,
     val hardCaption: String,
 
+
     //HSK Level
     val common: String,
     val frequent: String,
     val standard: String,
-
     val commonCaption: String,
     val frequentCaption: String,
     val standardCaption: String,
@@ -52,16 +52,26 @@ data class Strings(
     val newSession: String,
     val next: String,
     val start: String,
+    val builderPickQuestionCount: String,
+    val builderSelectDifficulty: String,
+    val sessionComplete: String,
+    val sessionFinish: String,
+    val sessionQuit: String,
 
     //Dictionary
     val searchPlaceholder: String,
     val filterHskGroup: String,
 
 
+    //Error
+    val error: String,
+    val retry: String,
+
     //Content Description
     val actionSearch: String,
     val actionBack: String,
     val actionFilter: String,
-    val actionClear: String
+    val actionClear: String,
+    val actionReset: String,
 )
 

@@ -19,6 +19,8 @@ import com.louisgautier.designsystem.preview.LoadingModeProvider
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
+import com.louisgautier.dictionary.details.ModalCharacterDetailsEvent.*
+import com.louisgautier.dictionary.details.ModalCharacterDetailsViewModel.*
 import com.louisgautier.dictionary.home.DetailsContent
 import com.louisgautier.domain.previewDictionaryWithGraphic
 import com.louisgautier.domain.previewSession
@@ -37,8 +39,8 @@ internal fun ModalCharacterDetails(
         onDismiss = onDismiss,
         onEvent = { event ->
             when (event) {
-                ModalCharacterDetailsEvent.OnRetry -> viewModel.retry()
-                ModalCharacterDetailsEvent.OnPractice -> viewModel.practice()
+                OnRetry -> viewModel.retry()
+                OnPractice -> viewModel.practice()
             }
         }
     )
@@ -47,7 +49,7 @@ internal fun ModalCharacterDetails(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ModalCharacterDetails(
-    state: ModalCharacterDetailsViewModel.UiState,
+    state: UIState,
     onEvent: (ModalCharacterDetailsEvent) -> Unit = {},
     onDismiss: () -> Unit = {},
 ) {
@@ -59,10 +61,9 @@ internal fun ModalCharacterDetails(
     // Force partial on Loading/Error, allow full on Success
     LaunchedEffect(state) {
         when (state) {
-            is ModalCharacterDetailsViewModel.UiState.Loading,
-            is ModalCharacterDetailsViewModel.UiState.Error -> modalState.partialExpand()
-
-            is ModalCharacterDetailsViewModel.UiState.Success -> Unit
+            is UIState.Loading,
+            is UIState.Error -> modalState.partialExpand()
+            is UIState.Success -> Unit
         }
     }
     ModalBottomSheet(
@@ -83,24 +84,24 @@ internal fun ModalCharacterDetails(
                 contentColor = Theme.materialColors.onBackground
             ) { paddingValues ->
                 when (state) {
-                    is ModalCharacterDetailsViewModel.UiState.Error -> {
+                    is UIState.Error -> {
                         ErrorContent(
                             modifier = Modifier.fillMaxHeight(.5f),
-                            action = { onEvent(ModalCharacterDetailsEvent.OnRetry) }
+                            action = { onEvent(OnRetry) }
                         )
                     }
 
-                    is ModalCharacterDetailsViewModel.UiState.Loading -> {
+                    is UIState.Loading -> {
                         LoadingContent(
                             modifier = Modifier.fillMaxHeight(.5f)
                         )
                     }
 
-                    is ModalCharacterDetailsViewModel.UiState.Success -> DetailsContent(
+                    is UIState.Success -> DetailsContent(
                         dictionaryWithGraphic = state.selectedDictionary,
                         lastSession = state.lastSession,
                         onPractice = {
-                            onEvent(ModalCharacterDetailsEvent.OnPractice)
+                            onEvent(OnPractice)
                         }
                     )
                 }
@@ -117,10 +118,10 @@ private fun PreviewModalCharacterDetailsDay(
     AppThemeWrapper(ThemeMode.Day) {
         ModalCharacterDetails(
             state = when (mode) {
-                LoadingMode.LOADING -> ModalCharacterDetailsViewModel.UiState.Loading
-                LoadingMode.ERROR -> ModalCharacterDetailsViewModel.UiState.Error
+                LoadingMode.LOADING -> UIState.Loading
+                LoadingMode.ERROR -> UIState.Error
                 LoadingMode.SUCCESS -> {
-                    ModalCharacterDetailsViewModel.UiState.Success(
+                    UIState.Success(
                         selectedDictionary = previewDictionaryWithGraphic,
                         lastSession = listOf(previewSession, previewSession)
                     )
@@ -138,10 +139,10 @@ private fun PreviewModalCharacterDetailsNight(
     AppThemeWrapper(ThemeMode.Night) {
         ModalCharacterDetails(
             state = when (mode) {
-                LoadingMode.LOADING -> ModalCharacterDetailsViewModel.UiState.Loading
-                LoadingMode.ERROR -> ModalCharacterDetailsViewModel.UiState.Error
+                LoadingMode.LOADING -> UIState.Loading
+                LoadingMode.ERROR -> UIState.Error
                 LoadingMode.SUCCESS -> {
-                    ModalCharacterDetailsViewModel.UiState.Success(
+                    UIState.Success(
                         selectedDictionary = previewDictionaryWithGraphic,
                         lastSession = listOf(previewSession, previewSession)
                     )

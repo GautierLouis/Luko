@@ -1,6 +1,5 @@
 package com.louisgautier.learning.session
 
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,16 +9,18 @@ import com.louisgautier.domain.model.DictionaryWithGraphic
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.domain.model.Graphic
 import com.louisgautier.domain.model.Point
-import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Session
+import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.repository.SessionRepository
 import com.louisgautier.learning.CalculateScore
 import com.louisgautier.learning.builder.QuestionCount
-import com.louisgautier.learning.drawing.analyzeUserDrawing
+import com.louisgautier.learning.drawing.AccuracyCalculator
+import com.louisgautier.learning.session.SessionScreenEvent.*
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.CongratulationKey
+import com.louisgautier.navigation.SessionKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,129 +28,143 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
-
-@OptIn(ExperimentalTime::class)
 internal class SessionViewModel(
     savedStateHandle: SavedStateHandle,
     private val repository: CharacterRepository,
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
+    private val analyzeUserDrawing: AccuracyCalculator,
+    private val scoreCalculator: CalculateScore,
 ) : ViewModel() {
 
-    // Related to current drawing
-    data class GraphicSketcherState(
-        val ongoingStrokeIndex: Int = 0,
-        val previousDrawnStrokes: List<List<Offset>> = emptyList(),
-        val drawnStroke: List<Offset> = emptyList(),
-    )
+    private val descriptor = SessionKey.serializer().descriptor
 
-    // Related to current Question
-    data class QuestionState(
-        val question: DictionaryWithGraphic,
-        val sketcherState: GraphicSketcherState = GraphicSketcherState(),
-        val isAnswered: Boolean = false,
-    )
+    private val levels: List<CharacterFrequencyLevel> =
+        (savedStateHandle[descriptor.getElementName(0)] as? String)
+            ?.split(",")
+            ?.map { CharacterFrequencyLevel.valueOf(it.trim()) }
+            ?: CharacterFrequencyLevel.entries
 
-    // Related to current Session
-    data class UIState(
-        val isLoading: Boolean = false,
-        val isError: Boolean = false,
-        val questionStates: List<QuestionState> = emptyList(),
-        val pagerState: PagerState = PagerState { 0 },
-        val drawReference: Boolean = false,
-        val drawHint: Boolean = false
-    ) {
-        val currentQuestion: QuestionState
-            get() = questionStates[pagerState.currentPage]
-        val isLastQuestion
-            get() = pagerState.canScrollForward
-        val isAnswered
-            get() = currentQuestion.isAnswered
-    }
-
-    private val level: List<CharacterFrequencyLevel> = (savedStateHandle["levels"] as? String)
-        ?.split(",")
-        ?.map { CharacterFrequencyLevel.valueOf(it.trim()) }
-        ?: CharacterFrequencyLevel.entries
-    private val difficulty: Difficulty = (savedStateHandle["difficulty"] as? String)
+    private val difficulty: Difficulty = (savedStateHandle[descriptor.getElementName(1)] as? String)
         ?.let { Difficulty.valueOf(it) }
         ?: Difficulty.EASY
-    private val limit: QuestionCount = (savedStateHandle["limit"] as? String)
+
+    private val limit: QuestionCount = (savedStateHandle[descriptor.getElementName(2)] as? String)
         ?.let { QuestionCount.valueOf(it) }
         ?: QuestionCount.FIVE
 
-    private val _state = MutableStateFlow(UIState())
-    val state = _state.asStateFlow()
+    sealed class SessionState {
+        data object Error : SessionState()
+        data object Loading : SessionState()
+        data class Success(
+            val startTime: Instant,
+            val currentPage: Int = 0,
+            val questionsState: List<QuestionState> = emptyList(),
+            val drawReference: Boolean = false,
+            val drawHint: Boolean = false,
+            val showLeaveDialog: Boolean = false
+        ) : SessionState() {
+            val currentQuestion: QuestionState
+                get() = questionsState[currentPage]
+            val isLastQuestion: Boolean
+                get() = currentPage + 1 == questionsState.size
+        }
+    }
+
+    data class QuestionState(
+        val question: DictionaryWithGraphic,
+        val previousDrawnStrokes: List<List<Offset>> = emptyList(),
+    ) {
+        val nbStrokeToDraw
+            get() = question.graphics.medians.size
+
+        val isAnswered
+            get() = previousDrawnStrokes.size == nbStrokeToDraw
+
+    }
 
     // No need to pass this to the view: out of state
     private val responses = mutableListOf<SessionResponse>()
-    private val startTime = Clock.System.now()
-    private val scoreCalculator = CalculateScore()
+
+    private val _state: MutableStateFlow<SessionState> = MutableStateFlow(SessionState.Loading)
+    val state = _state.asStateFlow()
 
     init {
         loadQuestions()
     }
 
-    fun loadQuestions() {
+    fun onEvent(event: SessionScreenEvent) {
+        when (event) {
+            Next -> next()
+            Reload -> loadQuestions()
+            ToggleLeaveDialog -> toggleLeaveDialog()
+            Finish -> finishSession()
+            Reset -> resetDrawing()
+            is StrokeCompleted -> strokeCompleted(
+                stroke = event.stroke,
+                referenceStrokes = event.referenceStrokes
+            )
+        }
+    }
+
+    private fun next() {
+        _state.update {
+            if (it !is SessionState.Success) return
+            it.copy(currentPage = it.currentPage + 1)
+        }
+    }
+
+    private fun loadQuestions() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            repository.generateSession(level, limit.value)
+            repository.generateSession(levels, limit.value)
                 .onSuccess { data ->
                     _state.update {
-                        it.copy(
-                            isLoading = false,
-                            isError = false,
-                            questionStates = data.map { q -> QuestionState(q) },
+                        SessionState.Success(
+                            questionsState = data.map { q -> QuestionState(q) },
                             drawReference = difficulty != Difficulty.HARD,
                             drawHint = difficulty == Difficulty.EASY,
-                            pagerState = PagerState { data.size },
+                            startTime = Clock.System.now()
                         )
                     }
                 }.onFailure {
-                    _state.update { it.copy(isLoading = false, isError = true) }
+                    _state.update { SessionState.Error }
                 }
         }
     }
 
-    // --- Sketcher ---
-
-    fun onSketcherEvent(event: SessionEvent) {
-        when (event) {
-            SessionEvent.Finish -> endSession()
-            SessionEvent.Reset -> updateSketcherState { GraphicSketcherState() }
-            is SessionEvent.StrokeCompleted -> updateSketcherState { current ->
-                val newStrokes = current.previousDrawnStrokes + listOf(event.stroke)
-                val newIndex = current.ongoingStrokeIndex + 1
-
-                if (newIndex == _state.value.currentQuestion.question.graphics.medians.size) {
-                    analyzeAndReport(
-                        graphic = _state.value.currentQuestion.question.graphics,
-                        referenceStrokes = event.referenceStrokes,
-                        drawnStrokes = newStrokes
-                    )
-                }
-
-                current.copy(
-                    previousDrawnStrokes = newStrokes,
-                    ongoingStrokeIndex = newIndex,
-                    drawnStroke = emptyList()
-                )
-            }
+    private fun toggleLeaveDialog() {
+        _state.update {
+            if (it !is SessionState.Success) return
+            it.copy(showLeaveDialog = !it.showLeaveDialog)
         }
     }
 
-    private fun updateSketcherState(update: (GraphicSketcherState) -> GraphicSketcherState) {
-        _state.update { state ->
-            state.copy(questionStates = state.questionStates.mapIndexed { index, questionState ->
-                if (index == state.pagerState.currentPage) questionState.copy(
-                    sketcherState = update(
-                        questionState.sketcherState
-                    )
-                )
-                else questionState
-            })
+    private fun resetDrawing() {
+        updateDrawing(strokes = emptyList())
+    }
+
+    private fun strokeCompleted(
+        stroke: List<Offset>,
+        referenceStrokes: List<List<Offset>>
+    ) {
+        if (state.value !is SessionState.Success) return
+        val s = _state.value as SessionState.Success
+
+        val currentQuestion = s.currentQuestion
+        val previousDrawnStrokes = currentQuestion.previousDrawnStrokes
+
+        val newStrokes = previousDrawnStrokes + listOf(stroke)
+
+        if (newStrokes.size == currentQuestion.nbStrokeToDraw) {
+            analyzeAndReport(
+                graphic = currentQuestion.question.graphics,
+                referenceStrokes = referenceStrokes,
+                drawnStrokes = newStrokes
+            )
         }
+
+        updateDrawing(newStrokes)
     }
 
     private fun analyzeAndReport(
@@ -158,36 +173,51 @@ internal class SessionViewModel(
         drawnStrokes: List<List<Offset>>
     ) {
         viewModelScope.launch {
-            val output = analyzeUserDrawing(referenceStrokes, drawnStrokes)
+            val output = analyzeUserDrawing.calculate(referenceStrokes, drawnStrokes)
             val parsed = drawnStrokes.map { s -> Stroke(s.map { Point(it.x, it.y) }) }
             val sessionResponse = SessionResponse(graphic.code, output, parsed)
             responses.add(sessionResponse)
-            _state.update { state ->
-                state.copy(questionStates = state.questionStates.map {
-                    if (it.question.dictionary.code == sessionResponse.code) it.copy(isAnswered = true)
-                    else it
-                })
-            }
         }
     }
 
-    // --- Session ---
+    private fun updateDrawing(
+        strokes: List<List<Offset>>,
+    ) {
+        _state.update { state ->
+            if (state !is SessionState.Success) return
+            val s = state
+            s.copy(
+                questionsState = state.questionsState.mapIndexed { index, questionState ->
+                    if (index == state.currentPage) questionState.copy(
+                        previousDrawnStrokes = strokes,
+                    )
+                    else questionState
+                }
+            )
+        }
+    }
 
-    fun endSession() {
+    private fun finishSession() {
+        if (state.value !is SessionState.Success) return
+        val s = _state.value as SessionState.Success
+
         val endTime = Clock.System.now()
-        val timeElapsed = endTime - startTime
+        val timeElapsed = endTime - s.startTime
 
+        val dictionary = s.questionsState.map { it.question.dictionary }
+
+        val score = scoreCalculator.calculate(
+            questions = dictionary,
+            difficulty = difficulty,
+            timeElapsed = timeElapsed.inWholeMilliseconds
+        )
         viewModelScope.launch {
             val session = Session(
                 date = endTime,
                 duration = timeElapsed,
                 difficulty = difficulty,
                 questionsCount = responses.count(),
-                score = scoreCalculator.calculate(
-                    questions = state.value.questionStates.map { it.question.dictionary },
-                    difficulty = difficulty,
-                    timeElapsed = timeElapsed.inWholeMilliseconds
-                ),
+                score = score,
             )
             sessionRepository.save(session, responses)
 
@@ -197,4 +227,3 @@ internal class SessionViewModel(
         }
     }
 }
-

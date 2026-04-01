@@ -16,7 +16,7 @@ internal fun provideStringsFR(): Strings = Strings(
     streak = "Streak",
     sessions = "Sessions",
     totalScore = "Total XP",
-    questionCount = "Questions",
+    questions = "Questions",
     time = "Temps",
     score = "Score",
     difficulty = "Difficulté",
@@ -42,13 +42,21 @@ internal fun provideStringsFR(): Strings = Strings(
     newSession = "Nouvelle session",
     next = "Suivant",
     start = "Commencer",
+    builderPickQuestionCount = "Nombre de questions",
+    builderSelectDifficulty = "Choisissez une difficulté",
+    sessionComplete = "Terminé",
+    sessionFinish = "Terminer",
+    sessionQuit = "Quitter",
 
     searchPlaceholder = "Rechercher par pinyin ou caractère",
     filterHskGroup = "Niveau HSK",
 
+    error = "Erreur de chargement",
+    retry = "Réessayer",
 
     actionSearch = "Rechercher",
     actionBack = "Retour",
     actionFilter = "Filtre",
-    actionClear = "Suppriner"
+    actionClear = "Suppriner",
+    actionReset = "Recommencer"
 )

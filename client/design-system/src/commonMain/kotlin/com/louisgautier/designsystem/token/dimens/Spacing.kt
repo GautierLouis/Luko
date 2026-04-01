@@ -15,5 +15,6 @@ object Padding {
     val medium = 8.dp
     val large = 16.dp
     val extraLarge = 24.dp
+    val extraExtraLarge = 32.dp
     val largest = 44.dp
 }

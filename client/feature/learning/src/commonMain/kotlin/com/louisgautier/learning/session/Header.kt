@@ -1,14 +1,12 @@
 package com.louisgautier.learning.session
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
@@ -16,14 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.designsystem.token.dimens.ShapeDefaults
+import com.louisgautier.designsystem.token.dimens.Spacing
+import com.louisgautier.designsystem.token.typo.FontWeight
 import com.louisgautier.domain.model.Dictionary
-import com.louisgautier.designsystem.ai.Emerald700
-import com.louisgautier.designsystem.ai.Green700
 import com.louisgautier.domain.previewDictionary
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun Header(
@@ -34,45 +37,60 @@ internal fun Header(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = Padding.large),
+        verticalArrangement = Spacing.extraExtraLarge
     ) {
-        Text("Question ${pager.currentPage.inc()} of ${pager.pageCount}")
         LinearProgressIndicator(
             progress = { pager.currentPage.toFloat() / pager.pageCount.toFloat() },
-            modifier = Modifier.fillMaxWidth().height(8.dp),
+            color = Theme.materialColors.tertiary,
+            trackColor = Theme.materialColors.tertiaryContainer,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp),
             gapSize = (-10).dp,
             drawStopIndicator = {}
         )
-        Spacer(Modifier.height(8.dp))
 
         Card(
             modifier = Modifier.fillMaxWidth(),
-            border = BorderStroke(1.dp, Emerald700),
-            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(
+                width = 1.dp,
+                color = Theme.materialColors.primary
+            ),
+            shape = ShapeDefaults.button(),
             colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = Theme.materialColors.surfaceContainer
             )
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Padding.extraExtraLarge),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Spacing.large,
             ) {
-                Text("Draw Chinese character for:")
+                Text(
+                    text = "Draw Chinese character for:",
+                    color = Theme.materialColors.onSecondaryContainer,
+                    fontWeight = FontWeight.medium,
+                    style = Theme.typography.titleSmall
+                )
                 Card(
                     modifier = Modifier,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = ShapeDefaults.card(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Green700
+                        containerColor = Theme.materialColors.primary
                     )
                 ) {
                     Text(
                         text = char.pinyin.firstOrNull().orEmpty(),
-                        fontSize = 36.sp,
-                        color = Color.White,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        color = Theme.materialColors.onPrimary,
+                        style = Theme.typography.headlineLarge,
+                        modifier = Modifier.padding(
+                            horizontal = Padding.large,
+                            vertical = Padding.medium
+                        )
                     )
                 }
             }
@@ -80,8 +98,15 @@ internal fun Header(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun PreviewHeader() {
-    Header(PagerState(currentPage = 4) { 5 }, previewDictionary)
+private fun PreviewHeader(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        Header(
+            pager = PagerState(currentPage = 4) { 5 },
+            char = previewDictionary
+        )
+    }
 }

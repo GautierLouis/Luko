@@ -7,6 +7,7 @@ import com.louisgautier.designsystem.icon.RoundedStar
 import com.louisgautier.designsystem.icon.RoundedTrophy
 import com.louisgautier.designsystem.theme.Theme
 
+//TODO Rename : to CharacterFrequencyLevel or similar
 enum class HSKLevel {
     COMMON,
     FREQUENT,

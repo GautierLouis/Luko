@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.louisgautier.designsystem.components.attrs.DifficultyLevel
 import com.louisgautier.designsystem.components.attrs.HSKLevel
-import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnNextPage

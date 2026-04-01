@@ -22,7 +22,6 @@ import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
-import com.louisgautier.learning.DifficultyAndQuantityContent
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnNextPage
@@ -94,7 +93,7 @@ private fun SessionBuilderScreen(
                     }
 
                     1 -> {
-                        DifficultyAndQuantityContent(
+                        PickerContent(
                             difficulty = state.difficulty,
                             questionCount = state.questionCount,
                             onDifficultySelected = {
@@ -128,7 +127,7 @@ private fun PreviewSessionBuilderScreen(
     AppThemeWrapper(themeMode) {
         SessionBuilderScreen(
             state = SessionBuilderViewModel.UiState(),
-            pager = rememberPagerState(initialPage = 0) { 2 }
+            pager = rememberPagerState(initialPage = 1) { 2 }
         )
     }
 }

@@ -14,6 +14,7 @@ data class MainKey(
     val defaultSelectedItem: Int = 0
 ) : Route
 
+//TODO Split into feature Module ?
 @Serializable
 sealed interface LearningKey : Route
 @Serializable

@@ -26,17 +26,29 @@ internal fun resolveButtonStyle(
             contentColor = Theme.materialColors.onTertiary,
             borderColor = null,
         )
-    }
-    ButtonShape.Outlined -> when (role) {
-        ButtonRole.Primary -> ButtonColors(
-            containerColor = Theme.materialColors.background,
-            contentColor = Theme.materialColors.onBackground,
-            borderColor = Theme.materialColors.primary,
-        )
-        ButtonRole.Secondary -> ButtonColors(
-            containerColor = Theme.materialColors.background,
-            contentColor = Theme.materialColors.onBackground,
-            borderColor = Theme.materialColors.tertiary,
+
+        ButtonRole.Error -> ButtonColors(
+            containerColor = Theme.materialColors.errorContainer,
+            contentColor = Theme.materialColors.error,
+            borderColor = null,
         )
     }
+    ButtonShape.Outlined -> ButtonColors(
+        containerColor = Color.Transparent,
+        contentColor = role.resolve(),
+        borderColor = role.resolve(),
+    )
+
+    ButtonShape.Ghost -> ButtonColors(
+        containerColor = Color.Transparent,
+        contentColor = role.resolve(),
+        borderColor = null,
+    )
+}
+
+@Composable
+private fun ButtonRole.resolve() = when (this) {
+    ButtonRole.Primary -> Theme.materialColors.primary
+    ButtonRole.Secondary -> Theme.materialColors.tertiary
+    ButtonRole.Error -> Theme.materialColors.error
 }

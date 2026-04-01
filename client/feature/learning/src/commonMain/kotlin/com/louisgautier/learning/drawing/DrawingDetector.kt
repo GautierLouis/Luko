@@ -9,7 +9,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 
 internal fun Modifier.drawingDetector(
     points: SnapshotStateList<Offset>,
-    onEnd: () -> Unit = {}
+    onGestureComplete: () -> Unit = {}
 ): Modifier {
     return this.pointerInput(Unit) {
         detectDragGestures(
@@ -22,11 +22,11 @@ internal fun Modifier.drawingDetector(
                 change.consume()
             },
             onDragEnd = {
-                onEnd()
+                onGestureComplete()
                 points.clear()
             },
             onDragCancel = {
-                onEnd()
+                onGestureComplete()
                 points.clear()
             }
         )

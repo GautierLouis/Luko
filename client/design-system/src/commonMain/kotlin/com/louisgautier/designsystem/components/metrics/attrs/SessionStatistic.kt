@@ -17,7 +17,7 @@ enum class SessionStatistic {
 
         @Composable
         fun SessionStatistic.label() = when (this) {
-            QuestionCount -> Theme.strings.questionCount
+            QuestionCount -> Theme.strings.questions
             Time -> Theme.strings.totalScore
             Score -> Theme.strings.sessions
             Difficulty -> Theme.strings.difficulty

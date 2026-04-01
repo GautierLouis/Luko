@@ -23,6 +23,6 @@ internal fun RowScope.MetricHeader(
         style = Theme.typography.titleMedium,
         color = Theme.materialColors.onBackground
     )
-    Spacer(Modifier.Companion.weight(1f))
+    Spacer(Modifier.weight(1f))
     trailing()
 }

@@ -4,29 +4,29 @@ import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.Difficulty
 
-internal object ScoreDefault {
-    const val MULTIPLIER_EASY = 1f
-    const val MULTIPLIER_MEDIUM = 1.5f
-    const val MULTIPLIER_HARD = 2f
-
-    const val LEVEL_COMMON_BASE_POINT = 10
-    const val LEVEL_FREQUENT_BASE_POINT = 15
-    const val LEVEL_STANDARD_BASE_POINT = 20
-    const val LEVEL_EXTENDED_BASE_POINT = 25
-
-    const val MAX_TIME_FOR_COMMON = 5
-    const val MAX_TIME_FOR_FREQUENT = 8
-    const val MAX_TIME_FOR_STANDARD = 12
-    const val MAX_TIME_FOR_EXTENDED = 20
-
-    const val BASE_MIN_POINT = 50
-    const val BASE_MAX_POINT = 1000
-
-    const val TIME_MIN_POINT = 0
-    const val TIME_MAX_POINT = 1000
-}
-
 internal class CalculateScore() {
+
+    object ScoreDefault {
+        const val MULTIPLIER_EASY = 1f
+        const val MULTIPLIER_MEDIUM = 1.5f
+        const val MULTIPLIER_HARD = 2f
+
+        const val LEVEL_COMMON_BASE_POINT = 10
+        const val LEVEL_FREQUENT_BASE_POINT = 15
+        const val LEVEL_STANDARD_BASE_POINT = 20
+        const val LEVEL_EXTENDED_BASE_POINT = 25
+
+        const val MAX_TIME_FOR_COMMON = 5
+        const val MAX_TIME_FOR_FREQUENT = 8
+        const val MAX_TIME_FOR_STANDARD = 12
+        const val MAX_TIME_FOR_EXTENDED = 20
+
+        const val BASE_MIN_POINT = 50
+        const val BASE_MAX_POINT = 1000
+
+        const val TIME_MIN_POINT = 0
+        const val TIME_MAX_POINT = 1000
+    }
 
     private val basePointsPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
         when (it) {

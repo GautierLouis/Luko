@@ -5,13 +5,13 @@ import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.learning.CalculateScore
 import com.louisgautier.learning.builder.QuestionCount
-import com.louisgautier.learning.ScoreDefault
+import com.louisgautier.learning.CalculateScore.ScoreDefault
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class CalculateScoreTest {
 
-    val computer = CalculateScore()
+    private val computer = CalculateScore()
 
     /**
      * Utility method to generate fake questions for testing.

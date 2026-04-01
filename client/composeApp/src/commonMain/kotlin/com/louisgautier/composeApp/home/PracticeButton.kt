@@ -21,7 +21,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 fun PracticeButton(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     FloatingActionButton(
