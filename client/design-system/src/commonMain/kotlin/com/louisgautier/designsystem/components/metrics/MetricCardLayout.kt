@@ -12,14 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.item.AppMetricItem
 import com.louisgautier.designsystem.components.metrics.item.SessionMetricItem
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.RoundedBarChart
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.designsystem.token.dimens.Spacing
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun MetricCardLayout(
@@ -28,7 +37,8 @@ internal fun MetricCardLayout(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(Padding.medium),
+        modifier = modifier
+            .fillMaxWidth(),
         shape = ShapeDefaults.card(),
         elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = 16.dp
@@ -38,41 +48,77 @@ internal fun MetricCardLayout(
         )
     ) {
         Column(
-            modifier = Modifier.padding(Padding.large),
-            verticalArrangement = Spacing.medium
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Padding.large),
+            verticalArrangement = Spacing.large
         ) {
-            Row(
-                modifier = modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Spacing.medium
+            Column(
+                verticalArrangement = Spacing.medium
             ) {
-                header()
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Spacing.medium
+                ) {
+                    header()
+                }
             }
+            MetricRow(items)
         }
+    }
+}
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-
-            items.take(3).forEach { item ->
-                when (item) {
-                    is MetricItem.AppMetric -> {
-                        AppMetricItem(
-                            item = item,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-
-                    is MetricItem.SessionMetric -> {
-                        SessionMetricItem(
-                            item = item,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+@Composable
+private fun MetricRow(
+    items: ImmutableList<MetricItem>
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = Padding.large),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        items.take(3).forEach { item ->
+            when (item) {
+                is MetricItem.AppMetric -> {
+                    AppMetricItem(item = item)
                 }
 
+                is MetricItem.SessionMetric -> {
+                    SessionMetricItem(item = item)
+                }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMetricCardLayout(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        MetricCardLayout(
+            header = {
+                MetricHeader(
+                    title = "Header",
+                    icon = AppIcon.RoundedBarChart,
+                )
+            },
+            items = persistentListOf(
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Streak,
+                    value = "10"
+                ),
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Streak,
+                    value = "10"
+                ),
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Streak,
+                    value = "10"
+                )
+            ),
+        )
     }
 }

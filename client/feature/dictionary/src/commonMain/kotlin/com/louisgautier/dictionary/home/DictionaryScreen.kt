@@ -1,6 +1,5 @@
 package com.louisgautier.dictionary.home
 
-import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,7 +18,6 @@ import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
-import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.dictionary.PagingDataPreviewParameter
@@ -55,7 +53,6 @@ private fun DictionaryScreen(
 
     val items = state.dictionaries.collectAsLazyPagingItems()
 
-    //Global Error
     val isError = items.loadState.refresh is LoadState.Error
     val isLoading = items.loadState.refresh is LoadState.Loading
 
