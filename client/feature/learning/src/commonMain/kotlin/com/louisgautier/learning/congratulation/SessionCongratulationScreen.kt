@@ -1,6 +1,5 @@
 package com.louisgautier.learning.congratulation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,106 +11,119 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
-import com.louisgautier.designsystem.ai.Green50
-import com.louisgautier.designsystem.components.button.AppButton
-import com.louisgautier.domain.model.Session
-import com.louisgautier.utils.toHHMMSS
+import com.louisgautier.designsystem.components.button.v2.AppButtonV2
+import com.louisgautier.designsystem.components.button.v2.attrs.ButtonRole
+import com.louisgautier.designsystem.components.button.v2.attrs.ButtonShape
+import com.louisgautier.designsystem.components.button.v2.attrs.ButtonSize
+import com.louisgautier.designsystem.components.topbar.AppTopbar
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.designsystem.token.dimens.Spacing
+import com.louisgautier.domain.previewSession
+import com.louisgautier.learning.congratulation.SessionCongratulationViewModel.UIState
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.BuilderKey
+import com.louisgautier.utils.toHHMMSS
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SessionCongratulationScreen() {
     val viewModel: SessionCongratulationViewModel = koinViewModel()
-    val state by viewModel.session.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     SessionCongratulationScreen(state)
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-@Preview
 private fun SessionCongratulationScreen(
-    state: Session?,
+    state: UIState,
 ) {
 
+    val session = state.session!!
+
     Scaffold(
-        containerColor = Green50,
-        modifier = Modifier.fillMaxSize()
+        topBar = { AppTopbar("") },
+        containerColor = Theme.materialColors.background,
+        contentColor = Theme.materialColors.onBackground,
     ) { paddingValues ->
 
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(Padding.large)
         ) {
 
-            Spacer(Modifier.height(56.dp))
+            Spacer(Modifier.height(Padding.extraExtraLarge))
 
             AnimatedRewardIcon(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
-            Text(
-                text = "🎉Congratulation!",
-                fontWeight = FontWeight.Bold,
-                fontSize = 26.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Spacer(Modifier.height(Padding.medium))
 
-            Text(
-                text = "You completed the quiz!",
-                fontWeight = FontWeight.Normal,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Spacing.medium
+            ) {
+                Text(
+                    text = Theme.strings.congratulationTitle,
+                    style = Theme.typography.titleLarge,
+                )
+                Text(
+                    text = Theme.strings.congratulationMessage,
+                    style = Theme.typography.bodyLarge,
+                )
+            }
+
+            Spacer(Modifier.height(Padding.large))
 
             RewardCard(
-                modifier = Modifier.padding(top = 32.dp),
-                score = state?.score ?: 0,
-                questionCount = (state?.questionsCount ?: 0).toString(),
-                time = state?.duration?.toHHMMSS().orEmpty()
+                score = session.score,
+                questionCount = session.questionsCount.toString(),
+                time = session.duration.toHHMMSS()
             )
 
             Spacer(Modifier.weight(1f))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Spacing.large
             ) {
-                AppButton(
+                AppButtonV2(
+                    text = Theme.strings.congratulationButtonRestart,
+                    size = ButtonSize.Large,
                     onClick = { AppNavigation.navigate(BuilderKey, true) },
-                    modifier = Modifier,
-                ) {
-                    Text(
-                        text = "Start another session",
-                        fontSize = 16.sp
-                    )
-                }
+                )
 
-                AppButton(
+                AppButtonV2(
+                    text = Theme.strings.congratulationButtonHome,
+                    size = ButtonSize.Large,
+                    role = ButtonRole.Secondary,
+                    shape = ButtonShape.Ghost,
                     onClick = { AppNavigation.navigateHome() },
-                    containerColor = Color.White,
-                    contentColor = Color.Black,
-                    border = BorderStrokeDefaults.minimum(),
-                    modifier = Modifier
-                ) {
-                    Text(
-                        text = "Back to Home",
-                        fontSize = 16.sp
-                    )
-                }
+                )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSessionCongratulationScreen(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        SessionCongratulationScreen(
+            state = UIState(
+                session = previewSession
+            )
+        )
     }
 }

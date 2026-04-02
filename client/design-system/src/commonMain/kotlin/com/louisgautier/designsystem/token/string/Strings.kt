@@ -65,6 +65,12 @@ data class Strings(
     val leaveDialogConfirmation: String,
     val leaveDialogDismiss: String,
 
+    val congratulationTitle: String,
+    val congratulationMessage: String,
+    val congratulationButtonRestart: String,
+    val congratulationButtonHome: String,
+
+
 
     //Dictionary
     val searchPlaceholder: String,

@@ -30,8 +30,15 @@ import com.louisgautier.designsystem.ai.Orange100
 import com.louisgautier.designsystem.ai.Orange500
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.designsystem.token.dimens.Spacing
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun RewardCard(
@@ -65,16 +72,16 @@ internal fun RewardCard(
         shape = ShapeDefaults.card(),
         border = BorderStrokeDefaults.minimum(),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = Theme.materialColors.surfaceContainer
         ),
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(Padding.large),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Spacing.large
         ) {
 
             Box(
@@ -83,8 +90,8 @@ internal fun RewardCard(
                 CircularProgressIndicator(
                     modifier = Modifier.size(150.dp),
                     strokeWidth = 15.dp,
-                    trackColor = Orange100,
-                    color = Orange500,
+                    trackColor = Theme.materialColors.tertiaryContainer,
+                    color = Theme.materialColors.tertiary,
                     strokeCap = StrokeCap.Round,
                     progress = { animatedProgress.value }
                 )
@@ -93,22 +100,22 @@ internal fun RewardCard(
                 ) {
                     Text(
                         text = animatedScore.value.toInt().toString(),
-                        fontSize = 24.sp,
-                        color = Orange500,
-                        fontWeight = FontWeight.SemiBold
+                        color = Theme.materialColors.tertiary,
+                        style = Theme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = "XP",
-                        fontSize = 12.sp,
-                        color = Color.LightGray
+                        style = Theme.typography.bodyLarge,
+                        color = Theme.materialColors.tertiary
                     )
                 }
             }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Spacing.medium
             ) {
                 CurrentSessionMetric(
                     item = MetricItem.SessionMetric(
@@ -129,8 +136,12 @@ internal fun RewardCard(
     }
 }
 
-@Composable
 @Preview
-private fun RewardCardPreview() {
-    RewardCard(50, "5", "10:00")
+@Composable
+private fun PreviewRewardCard(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        RewardCard(50, "5", "10:00")
+    }
 }

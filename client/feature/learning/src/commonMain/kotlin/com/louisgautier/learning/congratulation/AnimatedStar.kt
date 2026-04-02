@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +19,11 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedStar
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun AnimatedStar(
@@ -51,8 +56,12 @@ internal fun AnimatedStar(
     )
 }
 
-@Composable
 @Preview
-private fun AnimatedStarPreview() {
-    AnimatedStar()
+@Composable
+private fun PreviewAnimatedStar(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        AnimatedStar()
+    }
 }

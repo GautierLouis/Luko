@@ -11,7 +11,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.louisgautier.composeApp.main.MainScreen
 import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.learning.builder.SessionBuilderScreen
-import com.louisgautier.learning.congratulation.CongratulationScreen
+import com.louisgautier.learning.congratulation.SessionCongratulationScreen
 import com.louisgautier.learning.session.SessionScreen
 import com.louisgautier.navigation.BuilderKey
 import com.louisgautier.navigation.CongratulationKey
@@ -57,7 +57,7 @@ fun App(
                         }
 
                         is CongratulationKey -> NavEntry(key) {
-                            CongratulationScreen()
+                            SessionCongratulationScreen()
                         }
 
                         else -> {

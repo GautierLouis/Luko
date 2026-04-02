@@ -53,6 +53,10 @@ internal fun provideStringsEN(): Strings = Strings(
     leaveDialogMessage = "If you quit, all XP wil be lost",
     leaveDialogConfirmation = "Yes, quit",
     leaveDialogDismiss = "No, stay",
+    congratulationTitle = "🎉 Congratulations!",
+    congratulationMessage = "You have completed the quiz!",
+    congratulationButtonRestart = "Start another session",
+    congratulationButtonHome = "Quit",
 
 
     searchPlaceholder = "Search by pinyin or character",

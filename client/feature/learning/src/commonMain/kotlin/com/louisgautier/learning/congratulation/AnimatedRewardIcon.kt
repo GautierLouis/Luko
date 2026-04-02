@@ -1,6 +1,5 @@
 package com.louisgautier.learning.congratulation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -9,17 +8,23 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedTrophy
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun AnimatedRewardIcon(
@@ -59,11 +64,11 @@ internal fun AnimatedRewardIcon(
         Card(
             shape = CircleShape,
             colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = Theme.materialColors.background
             ),
             modifier = Modifier
                 .wrapContentSize()
-                .padding(16.dp),
+                .padding(Padding.large),
             elevation = CardDefaults.elevatedCardElevation(
                 defaultElevation = 60.dp
             )
@@ -72,14 +77,13 @@ internal fun AnimatedRewardIcon(
                 modifier = Modifier.background(brush = gradientBrush),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
+                Icon(
                     imageVector = AppIcon.RoundedTrophy,
                     contentDescription = null,
-                    alignment = Alignment.Center,
-                    colorFilter = ColorFilter.tint(Color.White),
+                    tint = Theme.materialColors.background,
                     modifier = Modifier
                         .size(150.dp)
-                        .padding(16.dp)
+                        .padding(Padding.large)
                 )
             }
         }
@@ -88,6 +92,10 @@ internal fun AnimatedRewardIcon(
 
 @Preview
 @Composable
-private fun AnimatedRewardIconPreview() {
-    AnimatedRewardIcon()
+private fun PreviewAnimatedRewardIcon(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        AnimatedRewardIcon()
+    }
 }

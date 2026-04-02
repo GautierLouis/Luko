@@ -25,7 +25,9 @@ fun AppTopbar(
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
-        title = { Text(title, style = Theme.typography.titleLarge) },
+        title = {
+            Text(text = title, style = Theme.typography.titleLarge)
+        },
         navigationIcon = {
             ActionContainer { leftIcons() }
         },
