@@ -1,4 +1,4 @@
-package com.louisgautier.learning
+package com.louisgautier.learning.session.drawing
 
 internal object DrawableAreaDefault {
     const val STROKE_WIDTH = 35f

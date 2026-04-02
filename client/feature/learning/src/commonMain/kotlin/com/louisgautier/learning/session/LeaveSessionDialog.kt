@@ -7,7 +7,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.louisgautier.designsystem.preview.AppThemeWrapper
+import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun LeaveSessionDialog(
@@ -17,27 +22,44 @@ internal fun LeaveSessionDialog(
 ) {
     AlertDialog(
         modifier = modifier,
-        onDismissRequest = { onDismissRequest() },
-        title = { Text(text = "Are you sure?") },
-        text = { Text(text = "If you quit, all XP wil be lost") },
+        onDismissRequest = onDismissRequest,
+        containerColor = Theme.materialColors.surfaceContainer,
+        titleContentColor = Theme.materialColors.onSurface,
+        textContentColor = Theme.materialColors.onSurface,
+        title = {
+            Text(
+                text = Theme.strings.leaveDialogTitle,
+                style = Theme.typography.headlineSmall
+            )
+        },
+        text = {
+            Text(
+                text = Theme.strings.leaveDialogMessage,
+                style = Theme.typography.bodyMedium
+            )
+        },
         confirmButton = {
             TextButton(
-                onClick = {
-                    onConfirmation()
-                    onDismissRequest()
-                },
+                onClick = onConfirmation,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.error
                 )
             ) {
-                Text("Confirm")
+                Text(
+                    text = Theme.strings.leaveDialogConfirmation
+                )
             }
         },
         dismissButton = {
             TextButton(
-                onClick = { onDismissRequest() }
+                onClick = onDismissRequest,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
             ) {
-                Text("Dismiss")
+                Text(
+                    text = Theme.strings.leaveDialogDismiss
+                )
             }
         }
     )
@@ -45,7 +67,11 @@ internal fun LeaveSessionDialog(
 
 @Preview
 @Composable
-private fun LeaveSessionDialogPreview() {
-    LeaveSessionDialog()
+private fun PreviewLeaveSessionDialog(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppThemeWrapper(themeMode) {
+        LeaveSessionDialog()
+    }
 
 }

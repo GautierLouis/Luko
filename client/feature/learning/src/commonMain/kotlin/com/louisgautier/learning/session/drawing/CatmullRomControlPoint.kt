@@ -1,4 +1,4 @@
-package com.louisgautier.learning.drawing
+package com.louisgautier.learning.session.drawing
 
 internal data class CatmullRomControlPoint(
     val x1: Float,

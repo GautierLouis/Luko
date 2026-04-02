@@ -1,4 +1,4 @@
-package com.louisgautier.learning.drawing
+package com.louisgautier.learning.session.usecase
 
 import androidx.compose.ui.geometry.Offset
 import com.louisgautier.domain.model.ComparisonDetails

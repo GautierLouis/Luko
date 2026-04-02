@@ -1,4 +1,4 @@
-package com.louisgautier.learning
+package com.louisgautier.learning.session.usecase
 
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Dictionary
@@ -28,7 +28,7 @@ internal class CalculateScore() {
         const val TIME_MAX_POINT = 1000
     }
 
-    private val basePointsPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
+    private val basePointsPerLevel = CharacterFrequencyLevel.Companion.validEntry.associateWith {
         when (it) {
             CharacterFrequencyLevel.COMMON -> ScoreDefault.LEVEL_COMMON_BASE_POINT
             CharacterFrequencyLevel.FREQUENT -> ScoreDefault.LEVEL_FREQUENT_BASE_POINT
@@ -38,7 +38,7 @@ internal class CalculateScore() {
         }
     }
 
-    private val timePointPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
+    private val timePointPerLevel = CharacterFrequencyLevel.Companion.validEntry.associateWith {
         when (it) {
             CharacterFrequencyLevel.COMMON -> ScoreDefault.MAX_TIME_FOR_COMMON
             CharacterFrequencyLevel.FREQUENT -> ScoreDefault.MAX_TIME_FOR_FREQUENT

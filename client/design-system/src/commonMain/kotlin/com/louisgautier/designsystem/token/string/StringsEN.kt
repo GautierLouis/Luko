@@ -45,9 +45,14 @@ internal fun provideStringsEN(): Strings = Strings(
     start = "Start",
     builderPickQuestionCount = "Number of questions",
     builderSelectDifficulty = "Pick a difficulty",
+    sessionHeaderTitle = "Draw Chinese character for:",
     sessionComplete = "Complete",
     sessionFinish = "Finish",
     sessionQuit = "Quit",
+    leaveDialogTitle = "Are you sure?",
+    leaveDialogMessage = "If you quit, all XP wil be lost",
+    leaveDialogConfirmation = "Yes, quit",
+    leaveDialogDismiss = "No, stay",
 
 
     searchPlaceholder = "Search by pinyin or character",

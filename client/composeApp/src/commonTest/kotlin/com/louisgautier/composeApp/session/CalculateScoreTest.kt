@@ -3,9 +3,9 @@ package com.louisgautier.composeApp.session
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.Difficulty
-import com.louisgautier.learning.CalculateScore
+import com.louisgautier.learning.session.usecase.CalculateScore
 import com.louisgautier.learning.builder.QuestionCount
-import com.louisgautier.learning.CalculateScore.ScoreDefault
+import com.louisgautier.learning.session.usecase.CalculateScore.ScoreDefault
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

@@ -1,4 +1,4 @@
-package com.louisgautier.learning.drawing
+package com.louisgautier.learning.session.drawing
 
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.snapshots.SnapshotStateList

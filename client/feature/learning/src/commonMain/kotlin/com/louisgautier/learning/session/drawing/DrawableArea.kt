@@ -1,4 +1,4 @@
-package com.louisgautier.learning.session
+package com.louisgautier.learning.session.drawing
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
@@ -7,11 +7,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import com.louisgautier.designsystem.pointsToPath
 import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.learning.DrawableAreaDefault
-import com.louisgautier.learning.drawDashedLineWithFilledArrow
-import com.louisgautier.learning.drawStroke
 import androidx.compose.ui.graphics.drawscope.Stroke as AndroidStroke
 
+/**
+ * Preview in Parent
+ */
 @Composable
 internal fun DrawableArea(
     referenceStrokes: List<List<Offset>> = emptyList(),

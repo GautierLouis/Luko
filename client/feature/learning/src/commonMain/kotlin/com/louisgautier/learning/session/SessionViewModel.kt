@@ -14,9 +14,9 @@ import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.repository.SessionRepository
-import com.louisgautier.learning.CalculateScore
+import com.louisgautier.learning.session.usecase.CalculateScore
 import com.louisgautier.learning.builder.QuestionCount
-import com.louisgautier.learning.drawing.AccuracyCalculator
+import com.louisgautier.learning.session.usecase.AccuracyCalculator
 import com.louisgautier.learning.session.SessionScreenEvent.*
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.CongratulationKey

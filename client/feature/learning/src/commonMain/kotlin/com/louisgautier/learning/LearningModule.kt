@@ -2,7 +2,8 @@ package com.louisgautier.learning
 
 import com.louisgautier.learning.builder.SessionBuilderViewModel
 import com.louisgautier.learning.congratulation.SessionCongratulationViewModel
-import com.louisgautier.learning.drawing.AccuracyCalculator
+import com.louisgautier.learning.session.usecase.AccuracyCalculator
+import com.louisgautier.learning.session.usecase.CalculateScore
 import com.louisgautier.learning.session.SessionViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf

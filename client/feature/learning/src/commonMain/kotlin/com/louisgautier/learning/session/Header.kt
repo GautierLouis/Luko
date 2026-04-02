@@ -2,7 +2,6 @@ package com.louisgautier.learning.session
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -70,7 +69,7 @@ internal fun Header(
                 verticalArrangement = Spacing.large,
             ) {
                 Text(
-                    text = "Draw Chinese character for:",
+                    text = Theme.strings.sessionHeaderTitle,
                     color = Theme.materialColors.onSecondaryContainer,
                     fontWeight = FontWeight.medium,
                     style = Theme.typography.titleSmall

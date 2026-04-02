@@ -1,4 +1,4 @@
-package com.louisgautier.learning.drawing
+package com.louisgautier.learning.session.drawing
 
 import androidx.compose.ui.geometry.Offset
 

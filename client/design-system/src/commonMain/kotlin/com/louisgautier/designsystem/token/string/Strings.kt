@@ -55,9 +55,16 @@ data class Strings(
     val start: String,
     val builderPickQuestionCount: String,
     val builderSelectDifficulty: String,
+    val sessionHeaderTitle: String,
     val sessionComplete: String,
     val sessionFinish: String,
     val sessionQuit: String,
+
+    val leaveDialogTitle: String,
+    val leaveDialogMessage: String,
+    val leaveDialogConfirmation: String,
+    val leaveDialogDismiss: String,
+
 
     //Dictionary
     val searchPlaceholder: String,

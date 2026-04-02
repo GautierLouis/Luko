@@ -32,7 +32,8 @@ import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.domain.previewDictionaryWithGraphic
-import com.louisgautier.learning.drawing.drawingDetector
+import com.louisgautier.learning.session.drawing.DrawableArea
+import com.louisgautier.learning.session.drawing.drawingDetector
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
