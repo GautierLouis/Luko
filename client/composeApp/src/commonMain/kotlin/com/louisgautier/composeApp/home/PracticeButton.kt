@@ -1,6 +1,5 @@
 package com.louisgautier.composeApp.home
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
@@ -13,7 +12,6 @@ import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.designsystem.token.dimens.Padding
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -30,7 +28,6 @@ fun PracticeButton(
             pressedElevation = 6.dp,
         ),
         modifier = modifier
-            .padding(bottom = Padding.large)
             .size(144.dp),
         containerColor = Theme.materialColors.primary,
     ) {
