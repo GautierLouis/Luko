@@ -1,4 +1,4 @@
-package com.louisgautier.dictionary.home
+package com.louisgautier.dictionary.details
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +21,6 @@ import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
-import com.louisgautier.dictionary.details.AnimatedGraphic
 import com.louisgautier.domain.model.DictionaryWithGraphic
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.previewDictionaryWithGraphic

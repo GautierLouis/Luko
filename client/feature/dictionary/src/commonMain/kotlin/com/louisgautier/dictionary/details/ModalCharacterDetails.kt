@@ -21,7 +21,6 @@ import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.dictionary.details.ModalCharacterDetailsEvent.*
 import com.louisgautier.dictionary.details.ModalCharacterDetailsViewModel.*
-import com.louisgautier.dictionary.home.DetailsContent
 import com.louisgautier.domain.previewDictionaryWithGraphic
 import com.louisgautier.domain.previewSession
 import org.jetbrains.compose.ui.tooling.preview.Preview
