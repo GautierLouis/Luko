@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
+import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import com.louisgautier.designsystem.components.metrics.item.AppMetricItem
 import com.louisgautier.designsystem.components.metrics.item.SessionMetricItem
 import com.louisgautier.designsystem.icon.AppIcon
@@ -98,27 +99,51 @@ private fun PreviewMetricCardLayout(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
     AppThemeWrapper(themeMode) {
-        MetricCardLayout(
-            header = {
-                MetricHeader(
-                    title = "Header",
-                    icon = AppIcon.RoundedBarChart,
-                )
-            },
-            items = persistentListOf(
-                MetricItem.AppMetric(
-                    metric = AppStatistic.Streak,
-                    value = "10"
+        Column {
+            MetricCardLayout(
+                header = {
+                    MetricHeader(
+                        title = "Header",
+                        icon = AppIcon.RoundedBarChart,
+                    )
+                },
+                items = persistentListOf(
+                    MetricItem.AppMetric(
+                        metric = AppStatistic.Streak,
+                        value = "10"
+                    ),
+                    MetricItem.AppMetric(
+                        metric = AppStatistic.Streak,
+                        value = "10"
+                    ),
+                    MetricItem.AppMetric(
+                        metric = AppStatistic.Streak,
+                        value = "10"
+                    )
                 ),
-                MetricItem.AppMetric(
-                    metric = AppStatistic.Streak,
-                    value = "10"
-                ),
-                MetricItem.AppMetric(
-                    metric = AppStatistic.Streak,
-                    value = "10"
+            )
+            MetricCardLayout(
+                header = {
+                    MetricHeader(
+                        title = "Header",
+                        icon = AppIcon.RoundedBarChart,
+                    )
+                },
+                items = persistentListOf(
+                    MetricItem.SessionMetric(
+                        metric = SessionStatistic.QuestionCount,
+                        value = "10"
+                    ),
+                    MetricItem.SessionMetric(
+                        metric = SessionStatistic.QuestionCount,
+                        value = "10"
+                    ),
+                    MetricItem.SessionMetric(
+                        metric = SessionStatistic.QuestionCount,
+                        value = "10"
+                    ),
                 )
-            ),
-        )
+            )
+        }
     }
 }

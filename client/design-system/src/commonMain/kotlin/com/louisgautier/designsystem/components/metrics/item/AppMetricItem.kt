@@ -53,8 +53,8 @@ internal fun AppMetricItem(
 }
 
 
-@Composable
 @Preview(showBackground = true)
+@Composable
 private fun PreviewAppMetricItem(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

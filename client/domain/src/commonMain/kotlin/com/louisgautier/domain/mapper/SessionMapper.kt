@@ -9,17 +9,15 @@ import com.louisgautier.database.entity.SessionEntity
 import com.louisgautier.domain.model.ComparisonDetails
 import com.louisgautier.domain.model.Difficulty
 import com.louisgautier.domain.model.Point
-import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Session
+import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.model.StrokeComparisonResult
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 object SessionMapper {
 
-    @OptIn(ExperimentalTime::class)
     fun Session.toEntity(): SessionEntity {
         return SessionEntity(
             date = date.toString(),
@@ -30,7 +28,6 @@ object SessionMapper {
         )
     }
 
-    @OptIn(ExperimentalTime::class)
     fun SessionEntity.toDto(): Session {
         return Session(
             id = id,

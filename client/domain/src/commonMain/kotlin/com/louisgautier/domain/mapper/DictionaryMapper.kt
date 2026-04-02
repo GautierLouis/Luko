@@ -22,41 +22,41 @@ import com.louisgautier.domain.model.ResponseList
 import com.louisgautier.domain.model.SimpleDictionary
 import com.louisgautier.domain.model.Stroke
 
-fun LevelCountDto.toDomain() = LevelCount(
+internal fun LevelCountDto.toDomain() = LevelCount(
     level = level.toDomain(),
     count = count
 )
 
-fun LevelCount.toDto() = LevelCountDto(
+internal fun LevelCount.toDto() = LevelCountDto(
     level = level.toDto(),
     count = count
 )
 
-fun SimpleDictionaryDto.toDomain() = SimpleDictionary(
+internal fun SimpleDictionaryDto.toDomain() = SimpleDictionary(
     code = code,
     pinyin = pinyin,
     level = level.toDomain()
 )
 
-fun CharacterFrequencyLevelDto.toDomain() =
+internal fun CharacterFrequencyLevelDto.toDomain() =
     CharacterFrequencyLevel.valueOf(this.name)
 
-fun CharacterFrequencyLevel.toDto() =
+internal fun CharacterFrequencyLevel.toDto() =
     CharacterFrequencyLevelDto.valueOf(this.name)
 
-fun GraphicDto.toDomain() = Graphic(
+internal fun GraphicDto.toDomain() = Graphic(
     code = code,
     strokes = strokes,
     medians = medians.map { s -> Stroke(s.map { p -> Point(p[0], p[1]) }) }
 )
 
-fun <T, U> ResponseListDto<T>.toDomain(converter : (T) -> U) =
+internal fun <T, U> ResponseListDto<T>.toDomain(converter: (T) -> U) =
     ResponseList(hasNextPage, data.map { converter(it) })
 
-fun DecompositionDto.toDomain() =
+internal fun DecompositionDto.toDomain() =
     Decomposition(symbolCode, glyphsCode)
 
-fun EtymologyDto.toDomain() =
+internal fun EtymologyDto.toDomain() =
     Etymology(
         type = type?.toDomain(),
         phonetic = phonetic,
@@ -64,10 +64,10 @@ fun EtymologyDto.toDomain() =
         hint = hint
     )
 
-fun EtymologyTypeDto.toDomain() =
+internal fun EtymologyTypeDto.toDomain() =
     EtymologyType.valueOf(this.name)
 
-fun DictionaryDto.toDomain() =
+internal fun DictionaryDto.toDomain() =
     Dictionary(
         code = code,
         definition = definition,
@@ -80,6 +80,6 @@ fun DictionaryDto.toDomain() =
         matches = matches
     )
 
-fun DictionaryWithGraphicDto.toDomain() =
+internal fun DictionaryWithGraphicDto.toDomain() =
     DictionaryWithGraphic(dictionary.toDomain(), graphics.toDomain())
 

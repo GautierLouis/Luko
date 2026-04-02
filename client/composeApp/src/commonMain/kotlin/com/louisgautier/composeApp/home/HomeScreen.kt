@@ -1,12 +1,11 @@
 package com.louisgautier.composeApp.home
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
@@ -41,7 +40,15 @@ fun HomeScreen(
 ) {
     Scaffold(
         topBar = { HomeTopbar(state.topbarTitle) },
-        containerColor = Theme.materialColors.background
+        containerColor = Theme.materialColors.background,
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            PracticeButton(
+                onClick = {
+                    AppNavigation.navigate(BuilderKey)
+                }
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -72,21 +79,12 @@ fun HomeScreen(
                     )
                 }
             }
-
-            Spacer(Modifier.weight(1f))
-
-            PracticeButton(
-                Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    AppNavigation.navigate(BuilderKey)
-                }
-            )
         }
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewHomeScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

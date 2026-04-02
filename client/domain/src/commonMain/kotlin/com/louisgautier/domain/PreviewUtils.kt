@@ -12,9 +12,7 @@ import com.louisgautier.domain.model.Statistics
 import com.louisgautier.domain.model.Stroke
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 val previewSession = Session(
     id = 1,
     date = Clock.System.now(),

@@ -151,8 +151,8 @@ private fun SessionBuilderScreen(
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewSessionBuilderScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

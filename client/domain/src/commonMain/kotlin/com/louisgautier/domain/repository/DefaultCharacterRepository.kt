@@ -7,7 +7,7 @@ import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.DictionaryWithGraphic
 import com.louisgautier.network.interfaces.CharacterService
 
-class DefaultCharacterRepository(
+internal class DefaultCharacterRepository(
     private val characterService: CharacterService
 ) : CharacterRepository {
 

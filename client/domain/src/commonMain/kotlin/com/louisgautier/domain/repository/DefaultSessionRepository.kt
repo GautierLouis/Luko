@@ -3,8 +3,8 @@ package com.louisgautier.domain.repository
 import com.louisgautier.database.dao.SessionDao
 import com.louisgautier.domain.mapper.SessionMapper.toDto
 import com.louisgautier.domain.mapper.SessionMapper.toEntity
-import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Session
+import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Statistics
 import com.louisgautier.domain.usecase.ComputeDayStreak
 import com.louisgautier.domain.usecase.ComputeDifficulty
@@ -12,7 +12,7 @@ import com.louisgautier.utils.toUTCDate
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class DefaultSessionRepository(
+internal class DefaultSessionRepository(
     private val dao: SessionDao
 ) : SessionRepository {
 

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
@@ -32,26 +32,25 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DictionaryScreen() {
     val viewModel = koinViewModel<DictionaryListViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val items = viewModel.items.collectAsLazyPagingItems()
 
     DictionaryScreen(
         state = state,
+        items = items,
         onEvent = { event -> viewModel.onEventReceived(event) },
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DictionaryScreen(
     state: DictionaryListViewModel.UIState,
+    items: LazyPagingItems<SimpleDictionary>,
     onEvent: (DictionaryScreenEvent) -> Unit = {},
 ) {
-
-    val items = state.dictionaries.collectAsLazyPagingItems()
 
     val isError = items.loadState.refresh is LoadState.Error
     val isLoading = items.loadState.refresh is LoadState.Loading
@@ -133,10 +132,10 @@ private fun PreviewDictionaryScreenDay(
     AppThemeWrapper(ThemeMode.Day) {
         DictionaryScreen(
             state = DictionaryListViewModel.UIState(
-                dictionaries = flowOf(pagingData),
                 selectedCharacter = null,
                 filterMenuExpended = false
             ),
+            items = flowOf(pagingData).collectAsLazyPagingItems()
         )
     }
 }
@@ -149,10 +148,10 @@ private fun PreviewDictionaryScreenNight(
     AppThemeWrapper(ThemeMode.Night) {
         DictionaryScreen(
             state = DictionaryListViewModel.UIState(
-                dictionaries = flowOf(pagingData),
                 selectedCharacter = null,
                 filterMenuExpended = false
             ),
+            items = flowOf(pagingData).collectAsLazyPagingItems()
         )
     }
 }

@@ -4,10 +4,8 @@ import com.louisgautier.server.database.entity.UserTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 class UserRepository {
 
@@ -32,7 +30,6 @@ class UserRepository {
             .firstOrNull()?.toUserEntity()
     }
 
-    @OptIn(ExperimentalTime::class)
     suspend fun create(
         installationId: String,
         supabaseUserId: String,

@@ -3,7 +3,7 @@ package com.louisgautier.domain.usecase
 import com.louisgautier.domain.model.Difficulty
 
 
-class ComputeDifficulty {
+internal class ComputeDifficulty {
 
     fun average(difficulties: List<String>): Difficulty? {
         val average = difficulties

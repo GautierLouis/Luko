@@ -34,8 +34,8 @@ internal fun DifficultyCard(
     )
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewDifficultyCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

@@ -16,10 +16,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import kotlin.time.Clock
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-@OptIn(ExperimentalTime::class)
 @Composable
 fun SessionCard(
     date: Instant,
@@ -56,8 +54,8 @@ fun SessionCard(
     )
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewSessionCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

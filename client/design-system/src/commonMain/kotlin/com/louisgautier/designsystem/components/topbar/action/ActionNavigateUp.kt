@@ -25,8 +25,8 @@ fun ActionNavigateUp(
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewActionNavigateUp() {
     ActionNavigateUp()
 }

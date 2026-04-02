@@ -7,10 +7,8 @@ import kotlinx.datetime.todayIn
 import kotlin.math.abs
 import kotlin.time.Clock
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-@OptIn(ExperimentalTime::class)
 //TODO actual/expect
 fun Instant.toISODateString(): String {
     val localDateTime = this.toLocalDateTime(TimeZone.currentSystemDefault())
@@ -39,11 +37,5 @@ fun Duration.toHHMMSS(): String {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 fun String.toUTCDate() = Instant.parse(this).toLocalDateTime(TimeZone.UTC).date
-
-@OptIn(ExperimentalTime::class)
-fun String.toUTCDateTime() = Instant.parse(this).toLocalDateTime(TimeZone.UTC)
-
-@OptIn(ExperimentalTime::class)
 fun nowInUtc() = Clock.System.todayIn(TimeZone.UTC)

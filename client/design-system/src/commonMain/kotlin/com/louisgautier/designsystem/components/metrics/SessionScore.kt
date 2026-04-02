@@ -18,8 +18,6 @@ fun SessionScore(
     score: Int,
     modifier: Modifier = Modifier,
 ) {
-    val color = Theme.colors.orangeFamily.focusRing
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom
@@ -29,27 +27,27 @@ fun SessionScore(
         ) {
             Text(
                 text = "+",
-                color = color,
+                color = Theme.materialColors.tertiary,
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
                 text = score.toString(), // TODO(number) Format large number
-                color = color,
+                color = Theme.materialColors.tertiary,
                 fontWeight = FontWeight.SemiBold,
                 style = Theme.typography.titleLarge
             )
         }
         Text(
             text = " XP",
-            color = color,
+            color = Theme.materialColors.tertiary,
             style = Theme.typography.bodySmall,
             lineHeight = Theme.typography.bodyLarge.lineHeight
         )
     }
 }
 
-@Composable
 @Preview
+@Composable
 fun PreviewSessionScore(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

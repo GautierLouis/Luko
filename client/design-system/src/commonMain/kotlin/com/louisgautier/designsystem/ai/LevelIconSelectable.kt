@@ -45,8 +45,8 @@ fun LevelIconSelectable(
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewLevelIconSelectable(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

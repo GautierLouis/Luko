@@ -38,8 +38,8 @@ internal fun QuestionCountPicker(
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewQuestionCountPicker(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

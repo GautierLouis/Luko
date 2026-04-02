@@ -12,12 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.token.string.StringsLocale
+import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.token.dimens.AppSize
+import com.louisgautier.designsystem.token.string.StringsLocale
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -51,8 +51,8 @@ fun ElegantButton(
     }
 }
 
-@Composable
 @Preview(widthDp = 500)
+@Composable
 private fun PreviewButton(
     @PreviewParameter(ThemeModeProvider::class) mode: ThemeMode
 ) {
@@ -83,8 +83,8 @@ private fun PreviewButton(
     }
 }
 
-@Composable
 @Preview(showBackground = true)
+@Composable
 private fun Test_PreviewButton(
     type: ButtonType = ButtonType.PRIMARY,
     variant: ButtonVariant = ButtonVariant.SOLID,

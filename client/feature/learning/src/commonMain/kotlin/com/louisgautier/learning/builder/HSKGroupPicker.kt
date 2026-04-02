@@ -35,8 +35,8 @@ internal fun HSKGroupPicker(
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewHSKGroupPicker(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

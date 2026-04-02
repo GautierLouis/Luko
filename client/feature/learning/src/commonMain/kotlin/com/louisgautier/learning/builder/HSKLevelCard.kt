@@ -13,7 +13,6 @@ import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.label
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
-import com.louisgautier.designsystem.theme.Theme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -35,8 +34,8 @@ internal fun HSKLevelCard(
     )
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewHSKLevelCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

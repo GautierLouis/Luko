@@ -14,8 +14,6 @@ import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
-import com.louisgautier.domain.previewSession
-import com.louisgautier.domain.previewStatistics
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -44,8 +42,8 @@ fun PracticeButton(
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PreviewPracticeButton(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {

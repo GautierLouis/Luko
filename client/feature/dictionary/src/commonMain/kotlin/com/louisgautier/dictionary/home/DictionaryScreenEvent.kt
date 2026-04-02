@@ -1,7 +1,5 @@
 package com.louisgautier.dictionary.home
 
-import com.louisgautier.dictionary.home.ActiveFilter
-
 internal sealed class DictionaryScreenEvent {
     data class OnCharacterClicked(val code: Int) : DictionaryScreenEvent()
     data object OnSearch : DictionaryScreenEvent()
