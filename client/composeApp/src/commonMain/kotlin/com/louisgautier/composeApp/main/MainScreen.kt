@@ -1,21 +1,21 @@
 package com.louisgautier.composeApp.main
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.louisgautier.composeApp.home.HomeScreen
 import com.louisgautier.composeApp.main.MainScreenEvent.OnBottomItemClicked
 import com.louisgautier.composeApp.main.MainViewModel.UiState
-import com.louisgautier.composeApp.home.HomeScreen
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.dictionary.home.DictionaryScreen
-import com.louisgautier.dictionary.home.PreviewDictionaryScreen
 import com.louisgautier.profile.ProfileScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -65,7 +65,6 @@ private fun MainScreen(
     }
 }
 
-@Suppress("VisibleForTests")
 @Preview
 @Composable
 private fun PreviewMainScreen(
@@ -77,7 +76,7 @@ private fun PreviewMainScreen(
                 selectedItem = BottomNavItem.Dictionary
             ),
             screenContent = {
-                PreviewDictionaryScreen(themeMode)
+                Box(Modifier.fillMaxSize())
             }
         )
     }

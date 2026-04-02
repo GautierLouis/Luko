@@ -2,7 +2,8 @@ package com.louisgautier.dictionary.home
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,16 +12,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.louisgautier.designsystem.components.page.ErrorContent
+import com.louisgautier.designsystem.components.page.LoadingContent
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.dictionary.PagingDataPreviewParameter
 import com.louisgautier.dictionary.details.ModalCharacterDetails
 import com.louisgautier.dictionary.details.ModalCharacterDetailsViewModel
 import com.louisgautier.dictionary.home.DictionaryScreenEvent.OnCharacterClicked
+import com.louisgautier.domain.model.SimpleDictionary
 import com.louisgautier.domain.previewSimpleDataList
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -49,8 +55,9 @@ private fun DictionaryScreen(
 
     val items = state.dictionaries.collectAsLazyPagingItems()
 
-    val contentTopCorner = if (state.filterMenuExpended) Padding.extraLarge
-    else Padding.none
+    //Global Error
+    val isError = items.loadState.refresh is LoadState.Error
+    val isLoading = items.loadState.refresh is LoadState.Loading
 
     if (state.selectedCharacter != null) {
         val modalVm = koinViewModel<ModalCharacterDetailsViewModel>(
@@ -65,49 +72,90 @@ private fun DictionaryScreen(
         )
     }
 
+    val contentTopCorner = if (state.filterMenuExpended) Padding.extraLarge
+    else Padding.none
+
     Scaffold(
         topBar = {
             DictionaryTopBar(
                 textFieldState = state.textFieldState,
                 filterMenuExpended = state.filterMenuExpended,
                 activeFilter = state.activeFilter,
-            ) { onEvent(it) }
+                enabled = !isError && !isLoading,
+                onEvent = onEvent
+            )
         },
         containerColor = Theme.materialColors.surfaceContainer
     ) { paddingValues ->
-        DictionaryPage(
-            items = items,
+        Box(
             modifier = Modifier
-                .padding(
-                    top = paddingValues.calculateTopPadding(),
-                )
+                .padding(top = paddingValues.calculateTopPadding())
                 .background(
                     color = Theme.materialColors.background,
                     shape = RoundedCornerShape(
                         topStart = contentTopCorner,
                         topEnd = contentTopCorner
                     )
-                ),
-            onItemClick = {
-                onEvent(OnCharacterClicked(it))
+                )
+        ) {
+            when {
+                isLoading -> {
+                    LoadingContent(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    )
+                }
+
+                isError -> {
+                    ErrorContent(
+                        modifier = Modifier
+                            .fillMaxHeight(),
+                        action = { items.retry() }
+                    )
+                }
+
+                else -> DictionaryContent(
+                    items = items,
+                    onItemClick = {
+                        onEvent(OnCharacterClicked(it))
+                    }
+                )
             }
+        }
+    }
+}
+
+private class DictionaryScreenProvider :
+    PagingDataPreviewParameter<SimpleDictionary>(previewSimpleDataList)
+
+@Preview
+@Composable
+private fun PreviewDictionaryScreenDay(
+    @PreviewParameter(DictionaryScreenProvider::class) pagingData: PagingData<SimpleDictionary>
+) {
+    AppThemeWrapper(ThemeMode.Day) {
+        DictionaryScreen(
+            state = DictionaryListViewModel.UIState(
+                dictionaries = flowOf(pagingData),
+                selectedCharacter = null,
+                filterMenuExpended = false
+            ),
         )
     }
 }
 
-@VisibleForTesting
 @Preview
 @Composable
-fun PreviewDictionaryScreen(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+private fun PreviewDictionaryScreenNight(
+    @PreviewParameter(DictionaryScreenProvider::class) pagingData: PagingData<SimpleDictionary>
 ) {
-    AppThemeWrapper(themeMode) {
+    AppThemeWrapper(ThemeMode.Night) {
         DictionaryScreen(
             state = DictionaryListViewModel.UIState(
-                dictionaries = flowOf(PagingData.from(previewSimpleDataList)),
+                dictionaries = flowOf(pagingData),
                 selectedCharacter = null,
                 filterMenuExpended = false
-            )
+            ),
         )
     }
 }

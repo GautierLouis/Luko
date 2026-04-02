@@ -36,7 +36,6 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 @Composable
 internal fun DictionarySearchBar(
     textFieldState: TextFieldState,
-    enabled: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -46,7 +45,6 @@ internal fun DictionarySearchBar(
             state = textFieldState,
             lineLimits = TextFieldLineLimits.SingleLine,
             shape = ShapeDefaults.button(),
-            enabled = enabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 18.dp),
@@ -93,7 +91,7 @@ internal fun DictionarySearchBar(
                 focusedIndicatorColor = Theme.materialColors.primary,
                 focusedTrailingIconColor = Theme.materialColors.primary,
 
-            )
+                )
         )
     }
 }
@@ -104,15 +102,8 @@ private fun PreviewDictionarySearchBar(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
     AppThemeWrapper(themeMode) {
-        Column {
-            DictionarySearchBar(
-                textFieldState = rememberTextFieldState(),
-                enabled = true
-            )
-            DictionarySearchBar(
-                textFieldState = rememberTextFieldState(),
-                enabled = false
-            )
-        }
+        DictionarySearchBar(
+            textFieldState = rememberTextFieldState(),
+        )
     }
 }

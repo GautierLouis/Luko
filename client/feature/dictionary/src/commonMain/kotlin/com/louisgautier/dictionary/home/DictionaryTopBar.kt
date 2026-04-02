@@ -52,7 +52,9 @@ internal fun DictionaryTopBar(
                 )
             },
             actions = {
-                ActionFilter(enabled = enabled) { onEvent(DictionaryScreenEvent.OnFilterToggle) }
+                if (enabled) {
+                    ActionFilter { onEvent(DictionaryScreenEvent.OnFilterToggle) }
+                }
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
@@ -62,7 +64,9 @@ internal fun DictionaryTopBar(
         )
 
         Column {
-            DictionarySearchBar(textFieldState, enabled)
+            if (enabled) {
+                DictionarySearchBar(textFieldState)
+            }
 
             AnimatedVisibility(
                 visible = filterMenuExpended

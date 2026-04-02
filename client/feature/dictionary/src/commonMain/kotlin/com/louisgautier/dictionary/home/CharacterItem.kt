@@ -3,10 +3,8 @@ package com.louisgautier.dictionary.home
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
@@ -17,16 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.domain.previewSimpleDictionary
 import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
+import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.domain.model.SimpleDictionary
+import com.louisgautier.domain.previewSimpleDictionary
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
@@ -43,32 +42,32 @@ internal fun CharacterItem(
             .clickable(
                 role = Role.Button,
                 onClickLabel = dictionary.pinyin.first(),
-                onClick = { onClick() },
+                onClick = onClick,
             ),
         shape = ShapeDefaults.card(),
         colors = CardDefaults.cardColors(
-            containerColor = Theme.materialColors.surfaceContainer,
-            contentColor = Theme.materialColors.onSurface
+            containerColor = Theme.materialColors.background,
+            contentColor = Theme.materialColors.onBackground
         ),
         border = BorderStrokeDefaults.minimum()
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(1f)
-                .padding(12.dp)
-                .clip(ShapeDefaults.card()),
+                .aspectRatio(CharacterItemDefault.RATIO)
+                .padding(Padding.small),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically)
         ) {
             Text(
                 text = dictionary.character.toString(),
-                fontSize = 18.sp
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = Theme.typography.displayMedium
             )
-            Spacer(modifier = Modifier.height(4.dp))
+
             Text(
                 text = dictionary.pinyin.first(),
-                fontSize = 18.sp
+                style = Theme.typography.bodyLarge
             )
         }
     }
@@ -82,9 +81,7 @@ private fun PreviewCharacterItem(
     AppThemeWrapper(themeMode) {
         CharacterItem(
             previewSimpleDictionary,
-            modifier = Modifier
-                .width(100.dp)
-                .aspectRatio(1f)
+            modifier = Modifier.width(CharacterItemDefault.MINIMUM_WIDTH.dp)
         )
     }
 }

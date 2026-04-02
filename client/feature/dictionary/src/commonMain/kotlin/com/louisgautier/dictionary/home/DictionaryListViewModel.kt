@@ -8,11 +8,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.louisgautier.dictionary.home.ActiveFilter
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.SimpleDictionary
-import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.paging.PaginatedResponse
+import com.louisgautier.domain.repository.CharacterRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

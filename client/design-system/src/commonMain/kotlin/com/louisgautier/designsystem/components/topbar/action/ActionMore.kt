@@ -12,12 +12,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ActionFilter(
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
     onClick: () -> Unit = {}
 ) {
     IconButton(
         modifier = modifier,
-        enabled = enabled,
         onClick = onClick
     ) {
         Icon(
