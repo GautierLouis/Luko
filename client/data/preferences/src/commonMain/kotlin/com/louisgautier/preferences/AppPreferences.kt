@@ -10,6 +10,7 @@ interface AppPreferences {
 
     fun getUserTokenAsFlow(): Flow<String?>
     fun getUserRefreshTokenAsFlow(): Flow<String?>
+    fun observeTheme(): Flow<String?>
 
     suspend fun getUserToken(): String?
     suspend fun getUserRefreshToken(): String?
@@ -18,4 +19,9 @@ interface AppPreferences {
 
 
     suspend fun removeUserToken()
+
+    //
+    suspend fun getTheme(): String?
+    suspend fun setTheme(theme: String)
+
 }

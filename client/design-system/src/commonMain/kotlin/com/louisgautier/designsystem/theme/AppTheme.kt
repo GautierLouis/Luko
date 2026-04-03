@@ -1,6 +1,5 @@
 package com.louisgautier.designsystem.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -16,10 +15,11 @@ import com.louisgautier.designsystem.token.typo.AppTypography
 
 @Composable
 fun AppTheme(
-    themeMode: ThemeMode = if (isSystemInDarkTheme()) ThemeMode.Night else ThemeMode.Day,
+    themeMode: ThemeMode,
     forcedLocale: StringsLocale? = null,
     content: @Composable () -> Unit
 ) {
+
     val locale = forcedLocale ?: Locale.current.toStringsLocale()
     val strings = remember(locale) { locale.toStrings() }
     val appColors = remember(themeMode) { themeMode.toColors() }

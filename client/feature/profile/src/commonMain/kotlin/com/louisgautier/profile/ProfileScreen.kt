@@ -1,13 +1,21 @@
 package com.louisgautier.profile
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.domain.repository.SettingTheme
+import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
@@ -18,16 +26,48 @@ fun ProfileScreen() {
     val viewModel = koinViewModel<ProfileViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    ProfileScreen(state)
+    ProfileScreen(
+        state = state,
+        onEvent = viewModel::onEvent
+    )
 }
 
 @Composable
 private fun ProfileScreen(
-    state: ProfileViewModel.UiState
+    state: ProfileViewModel.UiState,
+    onEvent: (ProfileScreenEvent) -> Unit = {}
 ) {
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+            ProfileTopbar()
+        },
+        containerColor = Theme.materialColors.background
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues),
+            contentPadding = PaddingValues(
+                horizontal = Padding.large
+            )
+        ) {
 
+            item(key = ProfileSection.Theme) {
+                SettingPicker(
+                    selected = state.selectedTheme ?: SettingTheme.Default,
+                    section = SettingSection.Theme(
+                        items = SettingTheme.entries.toPersistentList(),
+                    ),
+                    onClick = {
+                        onEvent(ProfileScreenEvent.OnThemeChanged(it))
+                    }
+                )
+            }
+        }
     }
+}
+
+@Composable
+internal fun ProfileTopbar() {
+    AppTopbar(title = Theme.strings.profile)
 }
 
 @Preview

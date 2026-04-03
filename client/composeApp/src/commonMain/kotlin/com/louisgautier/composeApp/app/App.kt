@@ -1,5 +1,6 @@
 package com.louisgautier.composeApp.app
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +28,10 @@ fun App(
     val backStack = rememberNavBackStack(savedStateConfiguration, MainKey())
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    AppTheme {
+    val isSystemDark = isSystemInDarkTheme()
+    val themeMode = state.theme.toThemeMode(isSystemDark)
+
+    AppTheme(themeMode) {
         LaunchedEffect(backStack) {
             viewModel.observeNavigation(backStack)
         }

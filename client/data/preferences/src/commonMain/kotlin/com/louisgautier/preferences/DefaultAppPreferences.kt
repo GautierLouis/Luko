@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -16,6 +17,7 @@ internal class DefaultAppPreferences(
         private val USER_REFRESH_TOKEN = stringPreferencesKey("user_refresh_token")
         private val KEY_INSTALLATION_ID = stringPreferencesKey("installation_id")
         private val KEY_FCM_TOKEN = stringPreferencesKey("fcm_token")
+        private val KEY_USER_THEME = stringPreferencesKey("theme")
     }
 
     //region ================  SET  =======================
@@ -35,6 +37,10 @@ internal class DefaultAppPreferences(
     override suspend fun setFcmToken(token: String) {
         store.edit { it[KEY_FCM_TOKEN] = token }
     }
+
+    override suspend fun setTheme(theme: String) {
+        store.edit { it[KEY_USER_THEME] = theme }
+    }
     //endregion
 
     //region ================  GET  =======================
@@ -43,6 +49,9 @@ internal class DefaultAppPreferences(
 
     override fun getUserRefreshTokenAsFlow() =
         store.data.map { preferences -> preferences[USER_REFRESH_TOKEN] }
+
+    override fun observeTheme(): Flow<String?> =
+        store.data.map { preferences -> preferences[KEY_USER_THEME] }
 
     override suspend fun getUserToken() = getUserTokenAsFlow().firstOrNull()
 
@@ -54,6 +63,8 @@ internal class DefaultAppPreferences(
     override suspend fun getFcmToken(): String? =
         store.data.first()[KEY_FCM_TOKEN]
 
+    override suspend fun getTheme(): String? =
+        observeTheme().firstOrNull()
     //endregion
 
     //region ================  REMOVE  =======================
