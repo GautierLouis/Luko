@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.louisgautier.designsystem.components.metrics.RoundIcon
 import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic
-import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic.Companion.colorFamily
+import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic.Companion.colors
 import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic.Companion.icon
 import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic.Companion.label
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
@@ -26,7 +26,6 @@ internal fun AppMetricItem(
     item: MetricItem.AppMetric,
     modifier: Modifier = Modifier,
 ) {
-    val colorFamily = item.metric.colorFamily()
 
     Column(
         modifier = modifier,
@@ -35,7 +34,7 @@ internal fun AppMetricItem(
     ) {
         RoundIcon(
             icon = item.metric.icon(),
-            colorFamily = colorFamily,
+            colors = item.metric.colors(),
             size = RoundIconSize.Large
         )
         Text(

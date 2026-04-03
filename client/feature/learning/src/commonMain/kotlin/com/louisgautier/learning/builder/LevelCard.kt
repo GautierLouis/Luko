@@ -17,20 +17,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.ai.LevelIconSelectable
 import com.louisgautier.designsystem.components.LabelTag
 import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.designsystem.token.color.v2.LevelColors
+import com.louisgautier.designsystem.token.color.model.LevelColors
 import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.designsystem.token.typo.FontWeight
-
 
 @Composable
 internal fun LevelCard(

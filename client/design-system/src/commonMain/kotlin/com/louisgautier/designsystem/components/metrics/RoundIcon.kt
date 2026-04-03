@@ -19,14 +19,14 @@ import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.designsystem.token.color.ColorFamily
+import com.louisgautier.designsystem.token.color.model.LevelColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun RoundIcon(
     icon: ImageVector,
-    colorFamily: ColorFamily,
+    colors: LevelColors,
     size: RoundIconSize = RoundIconSize.Small,
     modifier: Modifier = Modifier,
 ) {
@@ -45,10 +45,10 @@ internal fun RoundIcon(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = colorFamily.subtle,
+            tint = colors.onSubtle,
             modifier = Modifier
                 .size(iconSize)
-                .background(colorFamily.fg, CircleShape)
+                .background(colors.subtle, CircleShape)
                 .padding(padding)
         )
     }
@@ -63,13 +63,13 @@ private fun PreviewRoundIcon(
         Row {
             RoundIcon(
                 icon = AppIcon.RoundedBarChart,
-                colorFamily = Theme.colors.tealFamily,
+                colors = Theme.appLevelColors.totalScore,
                 size = RoundIconSize.Large,
                 modifier = Modifier
             )
             RoundIcon(
                 icon = AppIcon.RoundedBarChart,
-                colorFamily = Theme.colors.tealFamily,
+                colors = Theme.appLevelColors.totalScore,
                 size = RoundIconSize.Small,
                 modifier = Modifier
             )

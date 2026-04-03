@@ -18,9 +18,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.louisgautier.designsystem.components.button.v2.AppButtonV2
-import com.louisgautier.designsystem.components.button.v2.attrs.ButtonRole
-import com.louisgautier.designsystem.components.button.v2.attrs.ButtonSize
+import com.louisgautier.designsystem.components.button.AppButton
+import com.louisgautier.designsystem.components.button.attrs.ButtonRole
+import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.components.topbar.action.ActionNavigateUp
 import com.louisgautier.designsystem.preview.AppThemeWrapper
@@ -127,7 +127,7 @@ private fun SessionBuilderScreen(
                     enter = slideInHorizontally(),
                     exit = slideOutHorizontally()
                 ) {
-                    AppButtonV2(
+                    AppButton(
                         text = Theme.strings.previous,
                         role = ButtonRole.Secondary,
                         size = ButtonSize.Large,
@@ -137,7 +137,7 @@ private fun SessionBuilderScreen(
                     )
                 }
 
-                AppButtonV2(
+                AppButton(
                     text = if (state.isFinished) Theme.strings.start else Theme.strings.next,
                     size = ButtonSize.Large,
                     modifier = Modifier

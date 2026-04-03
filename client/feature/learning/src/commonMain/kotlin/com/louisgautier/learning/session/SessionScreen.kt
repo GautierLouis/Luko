@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,13 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.button.AppButton
-import com.louisgautier.designsystem.components.button.v2.AppButtonV2
-import com.louisgautier.designsystem.components.button.v2.attrs.ButtonRole
-import com.louisgautier.designsystem.components.button.v2.attrs.ButtonShape
-import com.louisgautier.designsystem.components.button.v2.attrs.ButtonSize
+import com.louisgautier.designsystem.components.button.attrs.ButtonRole
+import com.louisgautier.designsystem.components.button.attrs.ButtonShape
+import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.ErrorScreen
 import com.louisgautier.designsystem.components.page.LoadingScreen
 import com.louisgautier.designsystem.preview.AppThemeWrapper
@@ -143,7 +140,7 @@ private fun SessionScreen(
                     modifier = Modifier.padding(Padding.large),
                     verticalArrangement = Spacing.medium
                 ) {
-                    AppButtonV2(
+                    AppButton(
                         text = if (state.isLastQuestion) Theme.strings.sessionComplete else Theme.strings.sessionFinish,
                         shape = ButtonShape.Filled,
                         role = ButtonRole.Primary,
@@ -155,7 +152,7 @@ private fun SessionScreen(
                         },
                     )
 
-                    AppButtonV2(
+                    AppButton(
                         text = Theme.strings.sessionQuit,
                         shape = ButtonShape.Ghost,
                         role = ButtonRole.Error,

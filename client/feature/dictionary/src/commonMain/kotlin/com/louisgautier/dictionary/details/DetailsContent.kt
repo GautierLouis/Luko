@@ -13,8 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.louisgautier.designsystem.components.button.v2.AppButtonV2
-import com.louisgautier.designsystem.components.button.v2.attrs.ButtonSize
+import com.louisgautier.designsystem.components.button.AppButton
+import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -55,7 +55,7 @@ internal fun DetailsContent(
 
         Spacer(Modifier.height(32.dp))
 
-        AppButtonV2(
+        AppButton(
             text = Theme.strings.practice,
             size = ButtonSize.Large,
             onClick = onPractice,

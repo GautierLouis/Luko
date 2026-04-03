@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.components.button.v2.attrs
+package com.louisgautier.designsystem.components.button.attrs
 
 enum class ButtonRole {
     Primary,

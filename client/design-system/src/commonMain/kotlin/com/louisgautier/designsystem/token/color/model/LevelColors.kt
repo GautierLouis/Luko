@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.token.color.v2
+package com.louisgautier.designsystem.token.color.model
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color

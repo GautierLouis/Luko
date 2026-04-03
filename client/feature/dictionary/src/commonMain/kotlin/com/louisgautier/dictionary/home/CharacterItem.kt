@@ -49,7 +49,7 @@ internal fun CharacterItem(
             containerColor = Theme.materialColors.background,
             contentColor = Theme.materialColors.onBackground
         ),
-        border = BorderStrokeDefaults.minimum()
+        border = BorderStrokeDefaults.minimum(Theme.materialColors.outline)
     ) {
         Column(
             modifier = Modifier

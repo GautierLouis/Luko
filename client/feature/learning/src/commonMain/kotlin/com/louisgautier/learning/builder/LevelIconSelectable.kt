@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.ai
+package com.louisgautier.learning.builder
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

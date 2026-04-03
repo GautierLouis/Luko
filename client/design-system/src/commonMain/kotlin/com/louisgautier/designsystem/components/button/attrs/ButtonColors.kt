@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.components.button.v2.attrs
+package com.louisgautier.designsystem.components.button.attrs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

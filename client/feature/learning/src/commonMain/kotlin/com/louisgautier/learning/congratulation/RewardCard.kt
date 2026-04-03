@@ -3,7 +3,6 @@ package com.louisgautier.learning.congratulation
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,22 +18,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
-import com.louisgautier.designsystem.token.dimens.ShapeDefaults
-import com.louisgautier.designsystem.ai.Orange100
-import com.louisgautier.designsystem.ai.Orange500
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
 import com.louisgautier.designsystem.token.dimens.Padding
+import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.designsystem.token.dimens.Spacing
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -70,7 +65,7 @@ internal fun RewardCard(
 
     Card(
         shape = ShapeDefaults.card(),
-        border = BorderStrokeDefaults.minimum(),
+        border = BorderStrokeDefaults.minimum(Theme.materialColors.outline),
         colors = CardDefaults.cardColors(
             containerColor = Theme.materialColors.surfaceContainer
         ),

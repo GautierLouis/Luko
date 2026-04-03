@@ -12,7 +12,7 @@ enum class AppStatistic {
     Sessions,
     TotalScore;
 
-    companion object Companion {
+    companion object {
 
         @Composable
         fun AppStatistic.label() = when (this) {
@@ -29,10 +29,10 @@ enum class AppStatistic {
         }
 
         @Composable
-        fun AppStatistic.colorFamily() = when (this) {
-            Streak -> Theme.colors.orangeFamily
-            Sessions -> Theme.colors.tealFamily
-            TotalScore -> Theme.colors.purpleFamily
+        fun AppStatistic.colors() = when (this) {
+            Streak -> Theme.appLevelColors.streak
+            Sessions -> Theme.appLevelColors.sessions
+            TotalScore -> Theme.appLevelColors.totalScore
         }
     }
 }

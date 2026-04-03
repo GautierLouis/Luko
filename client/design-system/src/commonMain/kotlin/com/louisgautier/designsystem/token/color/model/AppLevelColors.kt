@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.token.color.v2
+package com.louisgautier.designsystem.token.color.model
 
 import androidx.compose.runtime.Immutable
 
@@ -10,4 +10,8 @@ data class AppLevelColors(
     val easy: LevelColors,
     val medium: LevelColors,
     val hard: LevelColors,
+    val streak: LevelColors,
+    val sessions: LevelColors,
+    val totalScore: LevelColors,
+    val appMetrics: LevelColors,
 )

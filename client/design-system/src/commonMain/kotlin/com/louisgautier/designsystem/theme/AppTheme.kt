@@ -5,10 +5,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.intl.Locale
-import com.louisgautier.designsystem.ai.lightScheme
 import com.louisgautier.designsystem.preview.ThemeMode
-import com.louisgautier.designsystem.token.color.provideDayColors
-import com.louisgautier.designsystem.token.color.v2.DayAppLevelColors
+import com.louisgautier.designsystem.token.color.AppLevelColorsDay
+import com.louisgautier.designsystem.token.color.materialColorsDay
 import com.louisgautier.designsystem.token.string.StringsLocale
 import com.louisgautier.designsystem.token.string.provideStringsEN
 import com.louisgautier.designsystem.token.typo.AppTypography
@@ -22,12 +21,10 @@ fun AppTheme(
 
     val locale = forcedLocale ?: Locale.current.toStringsLocale()
     val strings = remember(locale) { locale.toStrings() }
-    val appColors = remember(themeMode) { themeMode.toColors() }
     val materialColors = remember(themeMode) { themeMode.toMaterialColors() }
     val appLevelColors = remember(themeMode) { themeMode.toLevelColors() }
 
     CompositionLocalProvider(
-        LocalAppColors provides appColors,
         LocalMaterialColors provides materialColors,
         LocalAppLevelColors provides appLevelColors,
         LocalAppStrings provides strings,
@@ -37,9 +34,7 @@ fun AppTheme(
     }
 }
 
-@Deprecated("Use LocalAppLevelColors")
-internal val LocalAppColors = staticCompositionLocalOf { provideDayColors() }
-internal val LocalMaterialColors = staticCompositionLocalOf { lightScheme }
-internal val LocalAppLevelColors = staticCompositionLocalOf { DayAppLevelColors }
+internal val LocalMaterialColors = staticCompositionLocalOf { materialColorsDay() }
+internal val LocalAppLevelColors = staticCompositionLocalOf { AppLevelColorsDay }
 internal val LocalAppStrings = staticCompositionLocalOf { provideStringsEN() }
 internal val LocalTypography = staticCompositionLocalOf { AppTypography }

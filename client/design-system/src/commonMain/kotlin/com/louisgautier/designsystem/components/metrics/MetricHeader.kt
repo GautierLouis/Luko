@@ -16,7 +16,7 @@ internal fun RowScope.MetricHeader(
 ) {
     RoundIcon(
         icon = icon,
-        colorFamily = Theme.colors.tealFamily
+        colors = Theme.appLevelColors.appMetrics
     )
     Text(
         text = title,

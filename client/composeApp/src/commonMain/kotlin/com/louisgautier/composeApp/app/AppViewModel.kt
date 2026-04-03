@@ -55,8 +55,8 @@ class AppViewModel(
 
         viewModelScope.launch {
             remoteConfigManager.completed.filter { it }.collect {
-                AppLogger.d(tag = "Remote config", message = it.toString())
-//                AppNavigation.navigateHome()
+                AppLogger.d(tag = "Remote config", message = "Remote config completed")
+                AppNavigation.navigateHome()
             }
         }
 

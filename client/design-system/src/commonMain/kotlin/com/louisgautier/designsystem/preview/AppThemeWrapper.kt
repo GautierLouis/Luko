@@ -15,7 +15,7 @@ fun AppThemeWrapper(
     content: @Composable () -> Unit
 ) {
     AppTheme(themeMode, locale) {
-        Box(Modifier.background(Theme.colors.bg)) {
+        Box(Modifier.background(Theme.materialColors.background)) {
             content()
         }
     }

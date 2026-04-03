@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,10 +30,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.designsystem.components.button.ElegantButton
-import com.louisgautier.designsystem.components.button.ButtonType
-import com.louisgautier.designsystem.components.button.ButtonVariant
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -52,8 +47,8 @@ fun LoginScreen(
     var pwd by rememberSaveable { mutableStateOf("test") }
 
     val isLoading = loginState is LoginViewModel.LoginState.Loading
-    val loginBtnLabel = if (isLoading) "Loading" else "Login"
-    val loginBtnEnabled = pwd.isNotBlank() && isMailValid && !isLoading
+    if (isLoading) "Loading" else "Login"
+    pwd.isNotBlank() && isMailValid && !isLoading
 
     //For Debug only (since email && pwd are pre-filled)
     LaunchedEffect(Unit) {
@@ -90,8 +85,7 @@ fun LoginScreen(
             SnackbarHost(hostState = snackbarHostState) { data ->
                 Snackbar(
                     modifier = Modifier.testTag("snackbar"),
-                    containerColor = Theme.colors.redFamily.fg,
-                    contentColor = Theme.colors.redFamily.contrast,
+
                     snackbarData = data
                 )
             }
@@ -127,7 +121,7 @@ fun LoginScreen(
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
                     )
 
-                    ElegantButton(
+                    /*ElegantButton(
                         modifier = Modifier.fillMaxWidth()
                             .fillMaxHeight()
                             .padding(top = 6.dp)
@@ -142,7 +136,7 @@ fun LoginScreen(
                         },
                     ) {
                         Text(text = loginBtnLabel)
-                    }
+                    }*/
                 }
             }
         }
