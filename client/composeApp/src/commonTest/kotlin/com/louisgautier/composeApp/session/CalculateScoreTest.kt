@@ -2,9 +2,9 @@ package com.louisgautier.composeApp.session
 
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.domain.model.Dictionary
-import com.louisgautier.domain.model.Difficulty
-import com.louisgautier.learning.session.usecase.CalculateScore
+import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.learning.builder.QuestionCount
+import com.louisgautier.learning.session.usecase.CalculateScore
 import com.louisgautier.learning.session.usecase.CalculateScore.ScoreDefault
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -36,7 +36,7 @@ class CalculateScoreTest {
 
         val score = computer.calculate(
             questions = questions,
-            difficulty = Difficulty.EASY,
+            difficulty = DifficultyLevel.EASY,
             timeElapsed = Long.MAX_VALUE
         )
 
@@ -50,7 +50,7 @@ class CalculateScoreTest {
 
         val score = computer.calculate(
             questions = questions,
-            difficulty = Difficulty.MEDIUM,
+            difficulty = DifficultyLevel.MEDIUM,
             timeElapsed = Long.MAX_VALUE
         )
 
@@ -64,7 +64,7 @@ class CalculateScoreTest {
 
         val score = computer.calculate(
             questions = questions,
-            difficulty = Difficulty.HARD,
+            difficulty = DifficultyLevel.HARD,
             timeElapsed = Long.MAX_VALUE
         )
 
@@ -78,7 +78,7 @@ class CalculateScoreTest {
 
         val score = computer.calculate(
             questions = questions,
-            difficulty = Difficulty.HARD,
+            difficulty = DifficultyLevel.HARD,
             timeElapsed = Long.MAX_VALUE
         )
 
@@ -91,7 +91,7 @@ class CalculateScoreTest {
 
         val score = computer.calculate(
             questions = questions,
-            difficulty = Difficulty.EASY,
+            difficulty = DifficultyLevel.EASY,
             timeElapsed = Long.MAX_VALUE
         )
 
@@ -104,7 +104,7 @@ class CalculateScoreTest {
 
         val score = computer.calculate(
             questions = questions,
-            difficulty = Difficulty.EASY,
+            difficulty = DifficultyLevel.EASY,
             timeElapsed = (10_000 * QuestionCount.FIVE.value).toLong()
         )
 
@@ -120,7 +120,7 @@ class CalculateScoreTest {
 
         val score = computer.calculate(
             questions = questions,
-            difficulty = Difficulty.EASY,
+            difficulty = DifficultyLevel.EASY,
             timeElapsed = (5_000 * QuestionCount.FIVE.value).toLong()
         )
 

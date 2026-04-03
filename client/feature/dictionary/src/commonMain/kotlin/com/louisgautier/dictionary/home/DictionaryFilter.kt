@@ -9,10 +9,12 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.components.attrs.HSKLevel
-import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.colorFamily
-import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.label
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.COMMON
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.colorFamily
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.label
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.FREQUENT
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.STANDARD
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -45,12 +47,12 @@ internal fun DictionaryFilter(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Spacing.large
         ) {
-            HSKLevel.entries.forEachIndexed { index, level ->
+            FrequencyLevel.entries.forEachIndexed { index, level ->
                 FilterChip(
                     selected = when (level) {
-                        HSKLevel.COMMON -> activeFilter.isCommonActivated
-                        HSKLevel.FREQUENT -> activeFilter.isFrequentActivated
-                        HSKLevel.STANDARD -> activeFilter.isStandardActivated
+                        COMMON -> activeFilter.isCommonActivated
+                        FREQUENT -> activeFilter.isFrequentActivated
+                        STANDARD -> activeFilter.isStandardActivated
                     },
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor = Theme.materialColors.surfaceContainer,
@@ -60,9 +62,9 @@ internal fun DictionaryFilter(
                     ),
                     onClick = {
                         val newFilter = when (level) {
-                            HSKLevel.COMMON -> ActiveFilter(isCommonActivated = !activeFilter.isCommonActivated)
-                            HSKLevel.FREQUENT -> ActiveFilter(isFrequentActivated = !activeFilter.isFrequentActivated)
-                            HSKLevel.STANDARD -> ActiveFilter(isStandardActivated = !activeFilter.isStandardActivated)
+                            COMMON -> ActiveFilter(isCommonActivated = !activeFilter.isCommonActivated)
+                            FREQUENT -> ActiveFilter(isFrequentActivated = !activeFilter.isFrequentActivated)
+                            STANDARD -> ActiveFilter(isStandardActivated = !activeFilter.isStandardActivated)
                         }
                         onEvent(DictionaryScreenEvent.OnFilterChange(newFilter))
                     },

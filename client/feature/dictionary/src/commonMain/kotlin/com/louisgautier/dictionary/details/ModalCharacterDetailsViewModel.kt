@@ -2,12 +2,12 @@ package com.louisgautier.dictionary.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.louisgautier.dictionary.PracticeRoute
 import com.louisgautier.domain.model.DictionaryWithGraphic
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.repository.SessionRepository
 import com.louisgautier.navigation.AppNavigation
-import com.louisgautier.navigation.PracticeCharacterKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -60,6 +60,6 @@ internal class ModalCharacterDetailsViewModel(
     }
 
     fun practice() {
-        AppNavigation.navigate(PracticeCharacterKey(characterCode), true)
+        AppNavigation.navigate(PracticeRoute(characterCode), true)
     }
 }

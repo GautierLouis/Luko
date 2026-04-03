@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.louisgautier.designsystem.components.attrs.HSKLevel
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -14,10 +14,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
-internal fun HSKGroupPicker(
+internal fun CharaFreqLevelGroupPicker(
     modifier: Modifier = Modifier,
-    selectedLevels: List<HSKLevel> = listOf(),
-    onClick: (HSKLevel) -> Unit = {}
+    selectedLevels: List<FrequencyLevel> = listOf(),
+    onClick: (FrequencyLevel) -> Unit = {}
 ) {
 
     Column(
@@ -25,8 +25,8 @@ internal fun HSKGroupPicker(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Spacing.large
     ) {
-        HSKLevel.entries.forEach {
-            HSKLevelCard(
+        FrequencyLevel.entries.forEach {
+            CharaFreqLevelCard(
                 level = it,
                 selected = it in selectedLevels,
                 onClick = { onClick(it) }
@@ -37,15 +37,15 @@ internal fun HSKGroupPicker(
 
 @Preview
 @Composable
-private fun PreviewHSKGroupPicker(
+private fun PreviewCharaFreqLevelGroupPicker(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
     AppThemeWrapper(themeMode) {
-        HSKGroupPicker(
+        CharaFreqLevelGroupPicker(
             selectedLevels = listOf(
-                HSKLevel.COMMON,
-                HSKLevel.FREQUENT,
-                HSKLevel.STANDARD
+                FrequencyLevel.COMMON,
+                FrequencyLevel.FREQUENT,
+                FrequencyLevel.STANDARD
             )
         )
     }

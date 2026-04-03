@@ -25,9 +25,9 @@ import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.previewSession
+import com.louisgautier.learning.StartSessionRoute
 import com.louisgautier.learning.congratulation.SessionCongratulationViewModel.UIState
 import com.louisgautier.navigation.AppNavigation
-import com.louisgautier.navigation.BuilderKey
 import com.louisgautier.utils.toHHMMSS
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -99,7 +99,7 @@ private fun SessionCongratulationScreen(
                 AppButtonV2(
                     text = Theme.strings.congratulationButtonRestart,
                     size = ButtonSize.Large,
-                    onClick = { AppNavigation.navigate(BuilderKey, true) },
+                    onClick = { AppNavigation.navigate(StartSessionRoute, true) },
                 )
 
                 AppButtonV2(

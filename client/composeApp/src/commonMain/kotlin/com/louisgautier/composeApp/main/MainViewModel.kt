@@ -2,7 +2,7 @@ package com.louisgautier.composeApp.main
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.louisgautier.navigation.MainKey
+import com.louisgautier.composeApp.app.MainRoute
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ class MainViewModel(
         val selectedItem: BottomNavItem
     )
 
-    private val descriptor = MainKey.serializer().descriptor
+    private val descriptor = MainRoute.serializer().descriptor
     val defaultSelectedItemIndex: Int = savedStateHandle[descriptor.getElementName(0)]
         ?: 0
 

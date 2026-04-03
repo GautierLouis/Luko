@@ -4,9 +4,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.DictionaryWithGraphic
-import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.domain.model.Graphic
 import com.louisgautier.domain.model.Point
 import com.louisgautier.domain.model.Session
@@ -14,13 +15,18 @@ import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.repository.SessionRepository
-import com.louisgautier.learning.session.usecase.CalculateScore
+import com.louisgautier.learning.CongratulationRoute
+import com.louisgautier.learning.SessionRoute
 import com.louisgautier.learning.builder.QuestionCount
+import com.louisgautier.learning.session.SessionScreenEvent.Finish
+import com.louisgautier.learning.session.SessionScreenEvent.Next
+import com.louisgautier.learning.session.SessionScreenEvent.Reload
+import com.louisgautier.learning.session.SessionScreenEvent.Reset
+import com.louisgautier.learning.session.SessionScreenEvent.StrokeCompleted
+import com.louisgautier.learning.session.SessionScreenEvent.ToggleLeaveDialog
 import com.louisgautier.learning.session.usecase.AccuracyCalculator
-import com.louisgautier.learning.session.SessionScreenEvent.*
+import com.louisgautier.learning.session.usecase.CalculateScore
 import com.louisgautier.navigation.AppNavigation
-import com.louisgautier.navigation.CongratulationKey
-import com.louisgautier.navigation.SessionKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,17 +44,18 @@ internal class SessionViewModel(
     private val scoreCalculator: CalculateScore,
 ) : ViewModel() {
 
-    private val descriptor = SessionKey.serializer().descriptor
+    private val descriptor = SessionRoute.serializer().descriptor
 
-    private val levels: List<CharacterFrequencyLevel> =
+    private val levels: List<FrequencyLevel> =
         (savedStateHandle[descriptor.getElementName(0)] as? String)
             ?.split(",")
-            ?.map { CharacterFrequencyLevel.valueOf(it.trim()) }
-            ?: CharacterFrequencyLevel.entries
+            ?.map { FrequencyLevel.valueOf(it.trim()) }
+            ?: FrequencyLevel.entries
 
-    private val difficulty: Difficulty = (savedStateHandle[descriptor.getElementName(1)] as? String)
-        ?.let { Difficulty.valueOf(it) }
-        ?: Difficulty.EASY
+    private val difficulty: DifficultyLevel =
+        (savedStateHandle[descriptor.getElementName(1)] as? String)
+            ?.let { DifficultyLevel.valueOf(it) }
+            ?: DifficultyLevel.EASY
 
     private val limit: QuestionCount = (savedStateHandle[descriptor.getElementName(2)] as? String)
         ?.let { QuestionCount.valueOf(it) }
@@ -117,13 +124,13 @@ internal class SessionViewModel(
 
     private fun loadQuestions() {
         viewModelScope.launch {
-            repository.generateSession(levels, limit.value)
+            repository.generateSession(levels.toDomain(), limit.value)
                 .onSuccess { data ->
                     _state.update {
                         SessionState.Success(
                             questionsState = data.map { q -> QuestionState(q) },
-                            drawReference = difficulty != Difficulty.HARD,
-                            drawHint = difficulty == Difficulty.EASY,
+                            drawReference = difficulty != DifficultyLevel.HARD,
+                            drawHint = difficulty == DifficultyLevel.EASY,
                             startTime = Clock.System.now()
                         )
                     }
@@ -222,8 +229,16 @@ internal class SessionViewModel(
             sessionRepository.save(session, responses)
 
             withContext(Dispatchers.Main) {
-                AppNavigation.navigate(CongratulationKey, true)
+                AppNavigation.navigate(CongratulationRoute, true)
             }
+        }
+    }
+
+    private fun List<FrequencyLevel>.toDomain(): List<CharacterFrequencyLevel> = map {
+        when (it) {
+            FrequencyLevel.COMMON -> CharacterFrequencyLevel.COMMON
+            FrequencyLevel.FREQUENT -> CharacterFrequencyLevel.FREQUENT
+            FrequencyLevel.STANDARD -> CharacterFrequencyLevel.STANDARD
         }
     }
 }

@@ -14,7 +14,7 @@ object AppNavigation {
     val navigationEvents: Flow<NavigationCommand> = _navigationEvents.receiveAsFlow()
 
 
-    fun navigate(route: Route, clearBackStack: Boolean = false) {
+    fun navigate(route: NavKey, clearBackStack: Boolean = false) {
         _navigationEvents.trySend(NavigationCommand.Navigate(route, clearBackStack))
     }
 

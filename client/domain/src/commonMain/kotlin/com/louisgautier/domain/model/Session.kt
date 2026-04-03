@@ -7,7 +7,7 @@ data class Session(
     val id: Int = 0,
     val date: Instant,
     val duration: Duration,
-    val difficulty: Difficulty,
+    val difficulty: DifficultyLevel,
     val questionsCount: Int,
     val score: Int,
 )

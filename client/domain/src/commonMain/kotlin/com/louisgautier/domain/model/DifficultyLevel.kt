@@ -1,6 +1,6 @@
 package com.louisgautier.domain.model
 
-enum class Difficulty {
+enum class DifficultyLevel {
     EASY,
     MEDIUM,
     HARD

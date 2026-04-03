@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.components.attrs.HSKLevel
-import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.caption
-import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.colorFamily
-import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.icon
-import com.louisgautier.designsystem.components.attrs.HSKLevel.Companion.label
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.caption
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.colorFamily
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.icon
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.label
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -17,8 +17,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
-internal fun HSKLevelCard(
-    level: HSKLevel,
+internal fun CharaFreqLevelCard(
+    level: FrequencyLevel,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     onClick: () -> Unit = {},
@@ -36,14 +36,14 @@ internal fun HSKLevelCard(
 
 @Preview
 @Composable
-private fun PreviewHSKLevelCard(
+private fun PreviewCharaFreqLevelCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
     AppThemeWrapper(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            HSKLevel.entries.forEach {
-                HSKLevelCard(level = it, selected = false)
-                HSKLevelCard(level = it, selected = true)
+            FrequencyLevel.entries.forEach {
+                CharaFreqLevelCard(level = it, selected = false)
+                CharaFreqLevelCard(level = it, selected = true)
             }
         }
     }

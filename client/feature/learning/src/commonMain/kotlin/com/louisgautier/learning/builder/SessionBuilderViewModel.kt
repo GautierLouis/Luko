@@ -2,11 +2,15 @@ package com.louisgautier.learning.builder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.louisgautier.designsystem.components.attrs.DifficultyLevel
-import com.louisgautier.designsystem.components.attrs.HSKLevel
-import com.louisgautier.learning.builder.SessionBuilderScreenEvent.*
+import com.louisgautier.designsystem.components.attrs.FrequencyLevel
+import com.louisgautier.domain.model.DifficultyLevel
+import com.louisgautier.learning.SessionRoute
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnNextPage
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
+import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
 import com.louisgautier.navigation.AppNavigation
-import com.louisgautier.navigation.SessionKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -22,7 +26,7 @@ internal class SessionBuilderViewModel : ViewModel() {
     }
 
     internal data class UiState(
-        val levels: List<HSKLevel> = listOf(HSKLevel.COMMON),
+        val levels: List<FrequencyLevel> = listOf(FrequencyLevel.COMMON),
         val difficulty: DifficultyLevel = DifficultyLevel.EASY,
         val questionCount: QuestionCount = QuestionCount.FIVE,
         val currentPage: Int = 0
@@ -80,10 +84,10 @@ internal class SessionBuilderViewModel : ViewModel() {
 
     private fun onFinish() {
         AppNavigation.navigate(
-            route = SessionKey(
-                levels = state.value.levels.joinToString(),
-                difficulty = state.value.difficulty.toString(),
-                limit = state.value.questionCount.toString()
+            route = SessionRoute(
+                levels = state.value.levels,
+                difficulty = state.value.difficulty,
+                limit = state.value.questionCount
             ),
             clearBackStack = true
         )

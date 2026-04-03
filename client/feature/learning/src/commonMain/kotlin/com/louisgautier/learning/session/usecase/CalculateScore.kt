@@ -2,7 +2,7 @@ package com.louisgautier.learning.session.usecase
 
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Dictionary
-import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.domain.model.DifficultyLevel
 
 internal class CalculateScore() {
 
@@ -28,7 +28,7 @@ internal class CalculateScore() {
         const val TIME_MAX_POINT = 1000
     }
 
-    private val basePointsPerLevel = CharacterFrequencyLevel.Companion.validEntry.associateWith {
+    private val basePointsPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
         when (it) {
             CharacterFrequencyLevel.COMMON -> ScoreDefault.LEVEL_COMMON_BASE_POINT
             CharacterFrequencyLevel.FREQUENT -> ScoreDefault.LEVEL_FREQUENT_BASE_POINT
@@ -38,7 +38,7 @@ internal class CalculateScore() {
         }
     }
 
-    private val timePointPerLevel = CharacterFrequencyLevel.Companion.validEntry.associateWith {
+    private val timePointPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
         when (it) {
             CharacterFrequencyLevel.COMMON -> ScoreDefault.MAX_TIME_FOR_COMMON
             CharacterFrequencyLevel.FREQUENT -> ScoreDefault.MAX_TIME_FOR_FREQUENT
@@ -50,14 +50,14 @@ internal class CalculateScore() {
 
     fun calculate(
         questions: List<Dictionary>,
-        difficulty: Difficulty,
+        difficulty: DifficultyLevel,
         timeElapsed: Long
     ): Int {
 
         val difficultyMultiplier = when (difficulty) {
-            Difficulty.EASY -> ScoreDefault.MULTIPLIER_EASY
-            Difficulty.MEDIUM -> ScoreDefault.MULTIPLIER_MEDIUM
-            Difficulty.HARD -> ScoreDefault.MULTIPLIER_HARD
+            DifficultyLevel.EASY -> ScoreDefault.MULTIPLIER_EASY
+            DifficultyLevel.MEDIUM -> ScoreDefault.MULTIPLIER_MEDIUM
+            DifficultyLevel.HARD -> ScoreDefault.MULTIPLIER_HARD
         }
 
         val baseSum = questions.sumOf {

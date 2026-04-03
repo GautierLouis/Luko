@@ -16,11 +16,11 @@ import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
-import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.domain.previewSession
 import com.louisgautier.domain.previewStatistics
+import com.louisgautier.learning.StartSessionRoute
 import com.louisgautier.navigation.AppNavigation
-import com.louisgautier.navigation.BuilderKey
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
@@ -45,7 +45,7 @@ fun HomeScreen(
         floatingActionButton = {
             PracticeButton(
                 onClick = {
-                    AppNavigation.navigate(BuilderKey)
+                    AppNavigation.navigate(StartSessionRoute)
                 }
             )
         }
@@ -71,9 +71,9 @@ fun HomeScreen(
                         duration = state.lastSession.duration,
                         questionsCount = state.lastSession.questionsCount.toString(),
                         difficulty = when (state.lastSession.difficulty) {
-                            Difficulty.EASY -> Theme.strings.easy
-                            Difficulty.MEDIUM -> Theme.strings.medium
-                            Difficulty.HARD -> Theme.strings.hard
+                            DifficultyLevel.EASY -> Theme.strings.easy
+                            DifficultyLevel.MEDIUM -> Theme.strings.medium
+                            DifficultyLevel.HARD -> Theme.strings.hard
                         },
                         score = state.lastSession.score
                     )

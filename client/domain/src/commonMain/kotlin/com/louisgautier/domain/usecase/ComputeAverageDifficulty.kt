@@ -1,26 +1,26 @@
 package com.louisgautier.domain.usecase
 
-import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.domain.model.DifficultyLevel
 
 
 internal class ComputeDifficulty {
 
-    fun average(difficulties: List<String>): Difficulty? {
+    fun average(difficulties: List<String>): DifficultyLevel? {
         val average = difficulties
             .takeIf { it.isNotEmpty() }
             ?.map {
-                when (Difficulty.valueOf(it)) {
-                    Difficulty.EASY -> 1
-                    Difficulty.MEDIUM -> 2
-                    Difficulty.HARD -> 3
+                when (DifficultyLevel.valueOf(it)) {
+                    DifficultyLevel.EASY -> 1
+                    DifficultyLevel.MEDIUM -> 2
+                    DifficultyLevel.HARD -> 3
                 }
             }?.average()
 
         return when {
             average == null -> null
-            average <= 1.5 -> Difficulty.EASY
-            average <= 2.5 -> Difficulty.MEDIUM
-            else -> Difficulty.HARD
+            average <= 1.5 -> DifficultyLevel.EASY
+            average <= 2.5 -> DifficultyLevel.MEDIUM
+            else -> DifficultyLevel.HARD
         }
     }
 }

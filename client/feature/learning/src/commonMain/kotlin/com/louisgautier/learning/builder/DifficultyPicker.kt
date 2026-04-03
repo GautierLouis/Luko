@@ -2,11 +2,11 @@ package com.louisgautier.learning.builder
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.louisgautier.designsystem.components.attrs.DifficultyLevel
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.domain.model.DifficultyLevel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 

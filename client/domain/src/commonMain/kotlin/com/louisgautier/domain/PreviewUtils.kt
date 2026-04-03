@@ -3,7 +3,7 @@ package com.louisgautier.domain
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.DictionaryWithGraphic
-import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.domain.model.Graphic
 import com.louisgautier.domain.model.Point
 import com.louisgautier.domain.model.Session
@@ -17,7 +17,7 @@ val previewSession = Session(
     id = 1,
     date = Clock.System.now(),
     duration = 15.seconds,
-    difficulty = Difficulty.EASY,
+    difficulty = DifficultyLevel.EASY,
     questionsCount = 5,
     score = 250
 )
@@ -25,7 +25,7 @@ val previewSession = Session(
 val previewStatistics = Statistics(
     totalScore = 3000,
     averageTime = 2.seconds,
-    averageDifficulty = Difficulty.EASY,
+    averageDifficulty = DifficultyLevel.EASY,
     currentDayStreak = 123,
     sessionCount = 10
 )

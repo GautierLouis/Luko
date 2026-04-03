@@ -92,7 +92,7 @@ private fun SessionBuilderScreen(
             ) { page ->
                 when (page) {
                     0 -> {
-                        HSKGroupPicker(
+                        CharaFreqLevelGroupPicker(
                             selectedLevels = state.levels,
                             onClick = { level ->
                                 onEvent(OnLevelSelected(level))

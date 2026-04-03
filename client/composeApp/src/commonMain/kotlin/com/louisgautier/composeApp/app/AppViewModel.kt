@@ -12,7 +12,6 @@ import com.louisgautier.firebase.RemoteConfigManager
 import com.louisgautier.firebase.event.Tracker
 import com.louisgautier.logger.AppLogger
 import com.louisgautier.navigation.AppNavigation
-import com.louisgautier.navigation.MainKey
 import com.louisgautier.navigation.NavigationCommand
 import com.louisgautier.utils.AppConfig
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +75,7 @@ class AppViewModel(
                         is NavigationCommand.Navigate -> {
                             if (event.clearBackStack) {
                                 stack.clear()
-                                stack += MainKey()
+                                stack += MainRoute()
                             }
                             stack += event.route
                         }
@@ -87,7 +86,7 @@ class AppViewModel(
 
                         is NavigationCommand.NavigateHome -> {
                             stack.clear()
-                            stack += MainKey()
+                            stack += MainRoute()
                         }
                     }
                 }

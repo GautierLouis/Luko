@@ -7,36 +7,35 @@ import com.louisgautier.designsystem.icon.RoundedStar
 import com.louisgautier.designsystem.icon.RoundedTrophy
 import com.louisgautier.designsystem.theme.Theme
 
-//TODO Rename : to CharacterFrequencyLevel or similar
-enum class HSKLevel {
+enum class FrequencyLevel {
     COMMON,
     FREQUENT,
     STANDARD;
 
-    companion object {
+    companion object Companion {
         @Composable
-        fun HSKLevel.label() = when (this) {
+        fun FrequencyLevel.label() = when (this) {
             COMMON -> Theme.strings.common
             FREQUENT -> Theme.strings.frequent
             STANDARD -> Theme.strings.standard
         }
 
         @Composable
-        fun HSKLevel.caption() = when (this) {
+        fun FrequencyLevel.caption() = when (this) {
             COMMON -> Theme.strings.commonCaption
             FREQUENT -> Theme.strings.frequentCaption
             STANDARD -> Theme.strings.standardCaption
         }
 
         @Composable
-        fun HSKLevel.icon() = when (this) {
+        fun FrequencyLevel.icon() = when (this) {
             COMMON -> AppIcon.RoundedStar
             FREQUENT -> AppIcon.RoundedBolt
             STANDARD -> AppIcon.RoundedTrophy
         }
 
         @Composable
-        fun HSKLevel.colorFamily() = when (this) {
+        fun FrequencyLevel.colorFamily() = when (this) {
             COMMON -> Theme.appLevelColors.common
             FREQUENT -> Theme.appLevelColors.frequent
             STANDARD -> Theme.appLevelColors.standard

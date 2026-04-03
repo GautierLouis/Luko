@@ -7,7 +7,7 @@ import com.louisgautier.database.entity.EmbeddedStroke
 import com.louisgautier.database.entity.EmbeddedStrokeComparisonResult
 import com.louisgautier.database.entity.SessionEntity
 import com.louisgautier.domain.model.ComparisonDetails
-import com.louisgautier.domain.model.Difficulty
+import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.domain.model.Point
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.model.SessionResponse
@@ -33,7 +33,7 @@ object SessionMapper {
             id = id,
             date = Instant.parse(date),
             duration = duration.milliseconds,
-            difficulty = Difficulty.valueOf(difficulty),
+            difficulty = DifficultyLevel.valueOf(difficulty),
             questionsCount = questionsCount,
             score = score,
         )

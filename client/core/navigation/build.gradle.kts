@@ -6,7 +6,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.compose.navigation3.compose)
+            api(libs.compose.navigation3.compose)
         }
     }
 }
