@@ -86,18 +86,31 @@ class AndroidFirebaseManager(
     }
 
     override fun fetchRemoteConfig() {
-        remoteConfig.fetchAndActivate().addOnSuccessListener { success ->
-            AppLogger.d(
-                tag = "FirebaseManager",
-                message = "Remote config fetched and activated with success: $success"
-            )
-
-            if (success) {
+        val default = mapOf(
+            FeatureFlagKey.ENABLE_DICTIONARY to false,
+            FeatureFlagKey.ENABLE_BOTTOM_NAV to false,
+        )
+        remoteConfig
+            .setDefaultsAsync(default)
+            .continueWithTask { remoteConfig.fetchAndActivate() }
+            .addOnSuccessListener {
+                AppLogger.d(
+                    tag = "FirebaseManager",
+                    message = "Remote config fetched"
+                )
+            }
+            .addOnFailureListener {
+                AppLogger.d(
+                    tag = "FirebaseManager",
+                    message = "Remote config fetch failed: ${it.message}"
+                )
+            }
+            .addOnCompleteListener {
                 val flags = RemoteConfigFlags(
-                    isDictionaryEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_DICTIONARY)
+                    isDictionaryEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_DICTIONARY),
+                    isBottomBarEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_BOTTOM_NAV)
                 )
                 remoteConfigManager.register(flags)
             }
-        }
     }
 }

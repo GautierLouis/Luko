@@ -16,6 +16,7 @@ import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.dictionary.home.DictionaryScreen
+import com.louisgautier.logger.AppLogger
 import com.louisgautier.profile.ProfileScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
@@ -48,11 +49,14 @@ private fun MainScreen(
     Scaffold(
         containerColor = Theme.materialColors.background,
         bottomBar = {
-            BottomBar(
-                items = state.bottomNavItem,
-                selectedItem = state.selectedItem,
-                onClick = { onEvent(OnBottomItemClicked(it)) }
-            )
+            AppLogger.d(tag = "MainScreen", message = "BottomBar loading")
+            if (state.enableBottomBar) {
+                BottomBar(
+                    items = state.bottomNavItem,
+                    selectedItem = state.selectedItem,
+                    onClick = { onEvent(OnBottomItemClicked(it)) }
+                )
+            }
         }
     ) { paddingValues ->
         Box(

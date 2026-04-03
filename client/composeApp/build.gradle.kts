@@ -35,6 +35,7 @@ kotlin {
         androidMain.dependencies {
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.analytics)
+            implementation(libs.androidx.core.splashscreen)
         }
 
         commonTest.dependencies {

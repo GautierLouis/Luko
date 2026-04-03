@@ -1,13 +1,24 @@
 package com.louisgautier.firebase
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 class RemoteConfigManager {
-    private val _events = MutableStateFlow(RemoteConfigFlags())
-    val events = _events.asSharedFlow() // Map<Key, Any> will be better
+    private val _flags = MutableStateFlow(RemoteConfigFlags())
+    val flags = _flags.asSharedFlow()
+    val synchronizedFlags: RemoteConfigFlags get() = _flags.value
+
+    private val _completed = MutableStateFlow(false)
+    val completed = _completed.asSharedFlow()
 
     fun register(flags: RemoteConfigFlags) {
-        _events.tryEmit(flags)
+        _flags.tryEmit(flags)
+        _completed.tryEmit(true)
     }
+
+    fun <T> observe(selector: (RemoteConfigFlags) -> T): Flow<T> =
+        _flags.map(selector).distinctUntilChanged()
 }

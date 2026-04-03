@@ -17,7 +17,8 @@ val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFFFDAD6)
 val onErrorContainerLight = Color(0xFF93000A)
-val backgroundLight = Color(0xFFF7FBF1)
+val backgroundLight =
+    Color(0xFFF7FBF1) // Referenced in :composeApp:androidMain/res/values/colors.xml
 val onBackgroundLight = Color(0xFF191D17)
 val surfaceLight = Color(0xFFF7FBF1)
 val onSurfaceLight = Color(0xFF191D17)
@@ -125,7 +126,8 @@ val errorDark = Color(0xFFFFB4AB)
 val onErrorDark = Color(0xFF690005)
 val errorContainerDark = Color(0xFF93000A)
 val onErrorContainerDark = Color(0xFFFFDAD6)
-val backgroundDark = Color(0xFF10140F)
+val backgroundDark =
+    Color(0xFF10140F)  // Referenced in :composeApp:androidMain/res/values-night/colors.xml
 val onBackgroundDark = Color(0xFFE0E4DA)
 val surfaceDark = Color(0xFF10140F)
 val onSurfaceDark = Color(0xFFE0E4DA)

@@ -25,3 +25,6 @@ sealed interface AppRoute : NavKey
 
 @Serializable
 data class MainRoute(val defaultSelectedItemIndex: Int = 0) : AppRoute
+
+@Serializable
+data object SplashRoute : AppRoute
