@@ -82,7 +82,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.client.composeApp)
+    implementation(projects.library.app)
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
