@@ -1,5 +1,4 @@
 plugins {
-    alias(libs.plugins.android.library)
     alias(libs.plugins.convention.plugin)
     alias(libs.plugins.compose.convention)
 }
@@ -12,8 +11,4 @@ kotlin {
             implementation(projects.client.designSystem)
         }
     }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
 }

@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AppViewModel(
+internal class AppViewModel(
     private val firebaseManager: FirebaseManager,
     private val authRepository: AuthRepository,
     private val remoteConfigManager: RemoteConfigManager,

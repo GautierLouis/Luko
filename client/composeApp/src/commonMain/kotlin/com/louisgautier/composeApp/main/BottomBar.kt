@@ -22,7 +22,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
-fun BottomBar(
+internal fun BottomBar(
     items: ImmutableList<BottomNavItem>,
     selectedItem: BottomNavItem,
     modifier: Modifier = Modifier,

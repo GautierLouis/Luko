@@ -11,9 +11,9 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-val appModule = module {
+val libraryModule = module {
     includes(
-        appPlatformModule,
+        libraryPlatformModule,
         featureModule,
         domainModule,
         coreModule,
@@ -28,4 +28,4 @@ val appModule = module {
     viewModelOf(::MainViewModel)
 }
 
-expect val appPlatformModule: Module
+internal expect val libraryPlatformModule: Module

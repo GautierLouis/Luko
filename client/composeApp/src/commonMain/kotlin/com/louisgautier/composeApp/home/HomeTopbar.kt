@@ -13,7 +13,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopbar(
+internal fun HomeTopbar(
     greetingMessage: GreetingMessage,
     modifier: Modifier = Modifier,
 ) {

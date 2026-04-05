@@ -1,10 +1,12 @@
 plugins {
-    alias(libs.plugins.android.library)
     alias(libs.plugins.convention.plugin)
     alias(libs.plugins.compose.convention)
 }
 kotlin {
     sourceSets {
+        androidMain.dependencies {
+            implementation(compose.uiTooling)
+        }
         commonMain.dependencies {
             implementation(projects.client.core.logger)
             implementation(projects.client.core.utils)
@@ -16,8 +18,4 @@ kotlin {
             implementation(libs.androidx.paging.compose)
         }
     }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
 }

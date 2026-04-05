@@ -1,10 +1,9 @@
 package com.louisgautier.composeApp
 
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
-actual val appPlatformModule: Module = module {
-    singleOf(::AndroidAppBuilder) bind AppConfigBuilder::class
+actual val libraryPlatformModule: Module = module {
+
+
 }

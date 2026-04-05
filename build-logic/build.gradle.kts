@@ -14,6 +14,7 @@ dependencies {
     compileOnly(files(gradle.serviceOf<DependenciesAccessors>().classes.asFiles))
     compileOnly(libs.android.gradle.get())
     compileOnly(libs.kotlin.gradle.get())
+    compileOnly(libs.android.kmp.gradle.get())
     implementation(libs.compose.gradle.get())
 }
 

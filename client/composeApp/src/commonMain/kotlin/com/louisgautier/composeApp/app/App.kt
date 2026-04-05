@@ -33,9 +33,14 @@ import com.louisgautier.learning.congratulation.SessionCongratulationScreen
 import com.louisgautier.learning.session.SessionScreen
 import org.koin.compose.viewmodel.koinViewModel
 
+@Composable
+fun App() {
+    val viewModel: AppViewModel = koinViewModel()
+    App(viewModel)
+}
 
 @Composable
-fun App(
+private fun App(
     viewModel: AppViewModel = koinViewModel()
 ) {
     val backStack = rememberNavBackStack(savedStateConfiguration, SplashRoute)
@@ -73,7 +78,7 @@ fun App(
 
 //TODO(release) Change Icon !!
 @Composable
-fun SplashScreen() {
+internal fun SplashScreen() {
     Scaffold(
         containerColor = Theme.materialColors.background
     ) {

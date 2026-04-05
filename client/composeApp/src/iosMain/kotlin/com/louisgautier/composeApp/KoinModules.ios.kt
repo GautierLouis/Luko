@@ -5,6 +5,6 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-actual val appPlatformModule: Module = module {
+actual val libraryPlatformModule: Module = module {
     singleOf(::IOSAppBuilder) bind AppConfigBuilder::class
 }

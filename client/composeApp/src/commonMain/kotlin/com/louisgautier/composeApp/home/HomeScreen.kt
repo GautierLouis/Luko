@@ -26,7 +26,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeScreen(
+internal fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
@@ -35,7 +35,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeScreen(
+private fun HomeScreen(
     state: HomeViewModel.UIState,
 ) {
     Scaffold(

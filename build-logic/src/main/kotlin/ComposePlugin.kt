@@ -1,6 +1,8 @@
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -9,6 +11,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 class ComposePlugin : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
+        val libs = extensions.getByType<LibrariesForLibs>()
+
         with(pluginManager) {
             apply(libs.plugins.compose.multiplatform.get().pluginId)
             apply(libs.plugins.compose.compiler.get().pluginId)
@@ -16,13 +20,11 @@ class ComposePlugin : Plugin<Project> {
         }
 
         extensions.configure<KotlinMultiplatformExtension> {
-            configureComposeMultiplatform(this)
+            configureComposeMultiplatform(libs)
         }
     }
 
-    private fun Project.configureComposeMultiplatform(
-        extension: KotlinMultiplatformExtension
-    ) = extension.apply {
+    private fun KotlinMultiplatformExtension.configureComposeMultiplatform(libs: LibrariesForLibs) {
 
         val composeExt = project.extensions.findByType(ComposeExtension::class.java)
             ?: error("Compose extension not found — make sure 'org.jetbrains.compose' plugin is applied before configuring.")
@@ -58,6 +60,7 @@ class ComposePlugin : Plugin<Project> {
             }
 
             androidMain.dependencies {
+                implementation(compose.uiTooling)
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
             }

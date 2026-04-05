@@ -1,6 +1,6 @@
 [versions]
 # Build
-kotlin = "2.3.0"
+kotlin = "2.3.20"
 agp = "8.13.1"
 ksp = "2.3.4"
 
@@ -206,6 +206,7 @@ supabase-auth-ui = { module = "io.github.jan-tennert.supabase:compose-auth-ui" }
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
+android-kmp-gradle = { module = "com.android.tools.build:gradle-api", version.ref = "agp" }
 
 # === Data / Cache ===
 dataframe = { module = "org.jetbrains.kotlinx:dataframe", version.ref = "dataframe" }
@@ -213,7 +214,6 @@ ehcache = { module = "org.ehcache:ehcache", version.ref = "ehcache" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-android-library = { id = "com.android.library", version.ref = "agp" }
 compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -227,6 +227,7 @@ android-lint = { id = "com.android.lint", version.ref = "agp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 # Convention Plugins
 compose-convention = { id = "com.louisgautier.compose.convention" }

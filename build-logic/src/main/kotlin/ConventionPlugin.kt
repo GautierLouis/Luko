@@ -1,42 +1,46 @@
-import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.LibraryExtension
-import org.gradle.api.JavaVersion
+import com.android.build.api.dsl.androidLibrary
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 @Suppress("unused")
 class ConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
+        val libs = extensions.getByType<LibrariesForLibs>()
+
         with(pluginManager) {
+            apply(libs.plugins.android.kotlin.multiplatform.library.get().pluginId)
             apply(libs.plugins.kotlin.multiplatform.get().pluginId)
             apply(libs.plugins.serialization.get().pluginId)
             apply(libs.plugins.mokkery.plugin.get().pluginId)
         }
 
-        val type = extensions.findByType<ApplicationExtension>()
-            ?: extensions.findByType<LibraryExtension>()
-            ?: error("At least one of Application or Library must be set")
-
-        type.applySharedAndroidSettings(this)
-
         extensions.configure<KotlinMultiplatformExtension> {
-            configureTargets(this)
-            configureBaseSourceSets(this)
-        }
+            androidLibrary {
+                namespace = "com.louisgautier.${target.name.replace(":", ".").trim('.')}"
+                compileSdk = libs.versions.android.target.sdk.get().toInt()
+                minSdk = libs.versions.android.min.sdk.get().toInt()
+                compilations.configureEach {
+                    compileTaskProvider.configure {
+                        compilerOptions {
+                            jvmTarget.set(JvmTarget.JVM_21)
+                        }
+                    }
+                }
+            }
 
+            configureTargets()
+            configureBaseSourceSets(libs)
+        }
     }
 
-    private fun configureTargets(
-        extension: KotlinMultiplatformExtension
-    ) = extension.apply {
-        jvmToolchain(17)
-
-        androidTarget()
+    private fun KotlinMultiplatformExtension.configureTargets() {
+        jvmToolchain(21)
 
         listOf(
             iosX64(),
@@ -48,21 +52,18 @@ class ConventionPlugin : Plugin<Project> {
         }
 
         jvm()
-        //macosX64()
-        //macosArm64()
 
         applyDefaultHierarchyTemplate()
     }
 
-    private fun Project.configureBaseSourceSets(
-        extension: KotlinMultiplatformExtension
-    ) = extension.apply {
+    private fun KotlinMultiplatformExtension.configureBaseSourceSets(libs: LibrariesForLibs) {
         sourceSets.apply {
             commonMain.dependencies {
                 implementation(libs.koin.core)
 
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.serialization.json)
             }
 
             commonTest.dependencies {
@@ -70,33 +71,6 @@ class ConventionPlugin : Plugin<Project> {
                 implementation(libs.koin.test)
                 implementation(libs.mokkery.coroutine)
                 implementation(libs.kotlinx.coroutines.test)
-            }
-
-            androidMain.dependencies {
-                implementation(libs.koin.android)
-            }
-        }
-    }
-
-    private fun CommonExtension<*, *, *, *, *, *>.applySharedAndroidSettings(project: Project) {
-        namespace = "com.louisgautier.${project.nameFormatted}"
-        compileSdk = project.libs.versions.android.compile.sdk.get().toInt()
-        defaultConfig {
-            minSdk = project.libs.versions.android.min.sdk.get().toInt()
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        }
-
-        buildFeatures {
-            buildConfig = true
-        }
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
-        }
-        packaging {
-            resources {
-                excludes += "/META-INF/{AL2.0,LGPL2.1}"
             }
         }
     }

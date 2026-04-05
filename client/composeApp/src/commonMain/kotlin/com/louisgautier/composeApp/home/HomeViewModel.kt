@@ -16,7 +16,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Instant
 
-class HomeViewModel(
+internal class HomeViewModel(
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 

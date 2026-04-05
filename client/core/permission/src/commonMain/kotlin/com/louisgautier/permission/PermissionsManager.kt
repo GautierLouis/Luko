@@ -1,8 +1,5 @@
 package com.louisgautier.permission
 
-import com.louisgautier.utils.CoreKeepForR8
-
-
 /**
  * Manages platform-specific permissions.
  *
@@ -17,13 +14,11 @@ interface PermissionCallback {
     fun onPermissionStatus(permissionType: PermissionType, status: PermissionResult)
 }
 
-@CoreKeepForR8
 enum class PermissionResult {
     GRANTED,
     DENIED,
 }
 
-@CoreKeepForR8
 enum class PermissionType {
     GALLERY,
     LOCALISATION,

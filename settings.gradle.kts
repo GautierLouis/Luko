@@ -38,6 +38,7 @@ include(":server")
 //Shared (client - server)
 include(":api-contracts")
 //App
+include(":androidApp")
 include(":client:composeApp")
 //Feature
 include(":client:feature")

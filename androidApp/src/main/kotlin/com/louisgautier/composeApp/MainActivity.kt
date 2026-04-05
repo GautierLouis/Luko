@@ -1,0 +1,61 @@
+package com.louisgautier.composeApp
+
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentActivity
+import com.louisgautier.composeApp.app.App
+import com.louisgautier.utils.IntentActivityResultObserver
+import com.louisgautier.utils.PermissionActivityResultObserver
+import org.koin.android.ext.android.inject
+import org.koin.compose.KoinMultiplatformApplication
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.dsl.koinConfiguration
+
+class MainActivity : FragmentActivity() {
+
+    private val intentActivityResultObserver: IntentActivityResultObserver by inject()
+    private val permissionActivityResultObserver: PermissionActivityResultObserver by inject()
+
+    @OptIn(KoinExperimentalAPI::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
+
+        val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            intentActivityResultObserver.onActivityResult(result)
+        }
+
+        val permissionLauncher: ActivityResultLauncher<Array<String>> = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { results ->
+            permissionActivityResultObserver.onActivityResult(results)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
+
+        installSplashScreen()
+
+        setContent {
+            KoinMultiplatformApplication(
+                config = koinConfiguration {
+                    modules(libraryModule, androidModules)
+                }
+            ) {
+                intentActivityResultObserver.setLauncher(activityResultLauncher)
+                permissionActivityResultObserver.setLauncher(permissionLauncher)
+                App()
+            }
+        }
+    }
+}

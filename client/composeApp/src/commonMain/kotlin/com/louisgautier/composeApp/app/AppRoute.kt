@@ -10,7 +10,7 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
 @OptIn(ExperimentalSerializationApi::class)
-val savedStateConfiguration = SavedStateConfiguration {
+internal val savedStateConfiguration = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(NavKey::class) {
             subclassesOfSealed<AppRoute>()
@@ -21,10 +21,10 @@ val savedStateConfiguration = SavedStateConfiguration {
 }
 
 @Serializable
-sealed interface AppRoute : NavKey
+internal sealed interface AppRoute : NavKey
 
 @Serializable
-data class MainRoute(val defaultSelectedItemIndex: Int = 0) : AppRoute
+internal data class MainRoute(val defaultSelectedItemIndex: Int = 0) : AppRoute
 
 @Serializable
-data object SplashRoute : AppRoute
+internal data object SplashRoute : AppRoute

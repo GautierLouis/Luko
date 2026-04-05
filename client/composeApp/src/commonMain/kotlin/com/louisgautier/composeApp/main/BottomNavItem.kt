@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.louisgautier.designsystem.theme.Theme
 
-enum class BottomNavItem(
+internal enum class BottomNavItem(
     val icon: ImageVector
 ) {
     Home(Icons.Default.Home),
@@ -17,7 +17,7 @@ enum class BottomNavItem(
 }
 
 @Composable
-fun BottomNavItem.title()  = when(this) {
+internal fun BottomNavItem.title() = when (this) {
     BottomNavItem.Home -> Theme.strings.home
     BottomNavItem.Dictionary -> Theme.strings.dictionary
     BottomNavItem.Profile -> Theme.strings.profile

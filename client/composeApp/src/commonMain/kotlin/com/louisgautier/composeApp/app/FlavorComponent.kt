@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun FlavorComponent(
+internal fun FlavorComponent(
     flavor: String,
 ) {
 

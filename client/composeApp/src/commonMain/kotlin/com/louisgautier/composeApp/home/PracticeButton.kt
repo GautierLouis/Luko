@@ -16,7 +16,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
-fun PracticeButton(
+internal fun PracticeButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
