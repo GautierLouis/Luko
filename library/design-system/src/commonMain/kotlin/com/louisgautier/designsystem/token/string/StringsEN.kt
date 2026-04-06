@@ -11,6 +11,7 @@ internal fun provideStringsEN(): Strings = Strings(
 
     home = "Home",
     dictionary = "Dictionary",
+    feed = "Feed",
     profile = "Profile",
 
     streak = "Day Streak",
@@ -62,6 +63,11 @@ internal fun provideStringsEN(): Strings = Strings(
     searchPlaceholder = "Search by pinyin or character",
     filterFrequencyGroup = "Frequency Group",
 
+    today = "Today",
+    yesterday = "Yesterday",
+    lastWeek = "Last week",
+    lastMonth = "Last month",
+
     error = "Failed to load",
     retry = "Retry",
 
@@ -69,5 +75,7 @@ internal fun provideStringsEN(): Strings = Strings(
     actionBack = "Back",
     actionFilter = "Filter",
     actionClear = "Clear",
-    actionReset = "Reset"
+    actionReset = "Reset",
+
+    datePattern = "MM-dd-yyyy"
 )

@@ -16,6 +16,7 @@ data class Strings(
     //BottomBar
     val home: String,
     val dictionary: String,
+    val feed: String,
     val profile: String,
 
     //Statistic
@@ -38,7 +39,6 @@ data class Strings(
     val mediumCaption: String,
     val hardTitle: String,
     val hardCaption: String,
-
 
     //HSK Level
     val common: String,
@@ -70,12 +70,15 @@ data class Strings(
     val congratulationButtonRestart: String,
     val congratulationButtonHome: String,
 
-
-
     //Dictionary
     val searchPlaceholder: String,
     val filterFrequencyGroup: String,
 
+    //Date
+    val today: String,
+    val yesterday: String,
+    val lastWeek: String,
+    val lastMonth: String,
 
     //Error
     val error: String,
@@ -87,5 +90,8 @@ data class Strings(
     val actionFilter: String,
     val actionClear: String,
     val actionReset: String,
+
+    //Formatter
+    val datePattern: String,
 )
 

@@ -1,5 +1,6 @@
 package com.louisgautier.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -41,6 +42,9 @@ interface SessionDao {
 
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT :limit")
     suspend fun getLast(limit: Int): List<SessionEntity>
+
+    @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
+    fun getAllPaged(): PagingSource<Int, SessionEntity>
 
     @Query("""
         SELECT 

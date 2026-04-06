@@ -10,6 +10,7 @@ kotlin {
             implementation(projects.library.core.logger)
             implementation(projects.library.core.utils)
             implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.paging)
             implementation(libs.androidx.sqlite.bundled)
             implementation(libs.kotlinx.serialization.json)
         }

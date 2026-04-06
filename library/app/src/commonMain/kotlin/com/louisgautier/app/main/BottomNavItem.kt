@@ -1,6 +1,7 @@
 package com.louisgautier.app.main
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Feed
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.Person
@@ -13,6 +14,7 @@ internal enum class BottomNavItem(
 ) {
     Home(Icons.Default.Home),
     Dictionary(Icons.Default.LocalLibrary),
+    Feed(Icons.AutoMirrored.Filled.Feed),
     Profile(Icons.Default.Person)
 }
 
@@ -20,5 +22,6 @@ internal enum class BottomNavItem(
 internal fun BottomNavItem.title() = when (this) {
     BottomNavItem.Home -> Theme.strings.home
     BottomNavItem.Dictionary -> Theme.strings.dictionary
+    BottomNavItem.Feed -> Theme.strings.feed
     BottomNavItem.Profile -> Theme.strings.profile
 }

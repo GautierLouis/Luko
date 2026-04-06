@@ -31,6 +31,7 @@ internal class MainViewModel(
         get() = when (defaultTab) {
             MainTab.Dictionary -> BottomNavItem.Dictionary
             MainTab.Profile -> BottomNavItem.Profile
+            MainTab.Feed -> BottomNavItem.Feed
             else -> BottomNavItem.Home
         }
 

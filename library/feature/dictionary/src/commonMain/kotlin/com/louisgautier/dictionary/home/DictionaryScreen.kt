@@ -14,13 +14,13 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.louisgautier.baseui.PagingDataPreviewParameter
 import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
-import com.louisgautier.dictionary.PagingDataPreviewParameter
 import com.louisgautier.dictionary.details.ModalCharacterDetails
 import com.louisgautier.dictionary.details.ModalCharacterDetailsViewModel
 import com.louisgautier.dictionary.home.DictionaryScreenEvent.OnCharacterClicked

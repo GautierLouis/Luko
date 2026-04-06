@@ -24,5 +24,6 @@ sealed interface AppRoute : NavKey {
 enum class MainTab {
     Home,
     Dictionary,
+    Feed,
     Profile
 }

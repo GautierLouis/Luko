@@ -1,11 +1,11 @@
-package com.louisgautier.dictionary
+package com.louisgautier.baseui
 
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
-internal abstract class PagingDataPreviewParameter<T : Any>(
+abstract class PagingDataPreviewParameter<T : Any>(
     private val data: List<T>
 ) : PreviewParameterProvider<PagingData<T>> {
 

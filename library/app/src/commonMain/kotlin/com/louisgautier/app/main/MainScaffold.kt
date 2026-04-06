@@ -15,6 +15,7 @@ import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.dictionary.home.DictionaryScreen
+import com.louisgautier.feed.FeedScreen
 import com.louisgautier.home.HomeScreen
 import com.louisgautier.profile.ProfileScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -32,6 +33,7 @@ internal fun MainScaffold(
             when (state.selectedItem) {
                 BottomNavItem.Home -> HomeScreen()
                 BottomNavItem.Dictionary -> DictionaryScreen()
+                BottomNavItem.Feed -> FeedScreen()
                 BottomNavItem.Profile -> ProfileScreen()
             }
         },

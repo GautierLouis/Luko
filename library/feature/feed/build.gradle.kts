@@ -11,6 +11,9 @@ kotlin {
             implementation(projects.library.core.navigation)
             implementation(projects.library.domain)
             implementation(projects.library.designSystem)
+
+            implementation(libs.androidx.paging.common)
+            implementation(libs.androidx.paging.compose)
         }
     }
 }

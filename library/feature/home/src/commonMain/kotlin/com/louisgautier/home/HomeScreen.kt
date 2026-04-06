@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.louisgautier.baseui.session.toUiModel
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
 import com.louisgautier.designsystem.components.metrics.SessionCard
 import com.louisgautier.designsystem.preview.AppThemeWrapper
@@ -16,7 +17,6 @@ import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
-import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.domain.previewSession
 import com.louisgautier.domain.previewStatistics
 import com.louisgautier.navigation.AppNavigation
@@ -65,15 +65,7 @@ private fun HomeScreen(
 
                 state.lastSession?.let {
                     SessionCard(
-                        date = state.lastSession.date,
-                        duration = state.lastSession.duration,
-                        questionsCount = state.lastSession.questionsCount.toString(),
-                        difficulty = when (state.lastSession.difficulty) {
-                            DifficultyLevel.EASY -> Theme.strings.easy
-                            DifficultyLevel.MEDIUM -> Theme.strings.medium
-                            DifficultyLevel.HARD -> Theme.strings.hard
-                        },
-                        score = state.lastSession.score
+                        model = state.lastSession.toUiModel()
                     )
                 }
             }

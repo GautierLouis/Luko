@@ -35,12 +35,12 @@ fun OverallStatisticsCard(
                 value = streak
             ),
             MetricItem.AppMetric(
-                AppStatistic.Sessions,
-                sessions
+                metric = AppStatistic.Sessions,
+                value = sessions
             ),
             MetricItem.AppMetric(
-                AppStatistic.TotalScore,
-                score
+                metric = AppStatistic.TotalScore,
+                value = score
             )
         ),
     )

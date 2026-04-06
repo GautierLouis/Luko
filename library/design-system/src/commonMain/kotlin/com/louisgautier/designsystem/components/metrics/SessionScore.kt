@@ -15,7 +15,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 fun SessionScore(
-    score: Int,
+    score: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -31,7 +31,7 @@ fun SessionScore(
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
-                text = score.toString(), // TODO(number) Format large number
+                text = score,
                 color = Theme.materialColors.tertiary,
                 fontWeight = FontWeight.SemiBold,
                 style = Theme.typography.titleLarge
@@ -54,7 +54,7 @@ fun PreviewSessionScore(
 
     AppThemeWrapper(themeMode) {
         SessionScore(
-            score = 2000
+            score = "2000"
         )
     }
 }
