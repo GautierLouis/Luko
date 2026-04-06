@@ -3,6 +3,9 @@ package com.louisgautier.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
+/**
+ * Define route across features
+ */
 @Serializable
 sealed interface AppRoute : NavKey {
     @Serializable

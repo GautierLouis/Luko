@@ -1,31 +1,17 @@
 package com.louisgautier.app.app
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.louisgautier.app.main.MainScaffold
-import com.louisgautier.designsystem.icon.AppIcon
-import com.louisgautier.designsystem.icon.Reset
 import com.louisgautier.designsystem.theme.AppTheme
-import com.louisgautier.designsystem.theme.Theme
-import com.louisgautier.learning.learningScreens
+import com.louisgautier.learning.routing.learningScreens
 import com.louisgautier.navigation.AppRoute
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -39,7 +25,7 @@ fun App() {
 private fun App(
     viewModel: AppViewModel = koinViewModel()
 ) {
-    val backStack = rememberNavBackStack(savedStateConfiguration, SplashRoute)
+    val backStack = rememberNavBackStack(navigationConfiguration, AppRoute.MainRoute())
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val isSystemDark = isSystemInDarkTheme()
@@ -61,36 +47,9 @@ private fun App(
                 backStack = backStack,
                 onBack = { backStack.removeLast() },
                 entryProvider = entryProvider {
-                    entry<SplashRoute> { SplashScreen() }
                     entry<AppRoute.MainRoute> { MainScaffold() }
                     learningScreens()
                 }
-            )
-        }
-    }
-}
-
-//TODO(release) Change Icon !!
-@Composable
-internal fun SplashScreen() {
-    Scaffold(
-        containerColor = Theme.materialColors.background
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                imageVector = AppIcon.Reset,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(240.dp)
-                    .background(
-                        color = Theme.materialColors.inverseSurface,
-                        shape = CircleShape
-                    )
-                    .padding(16.dp)
             )
         }
     }

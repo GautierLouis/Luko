@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel
 import com.louisgautier.domain.model.DifficultyLevel
-import com.louisgautier.learning.LearningRoute
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnNextPage
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
+import com.louisgautier.learning.routing.LearningInternalRoute
 import com.louisgautier.navigation.AppNavigation
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,7 +84,7 @@ internal class SessionBuilderViewModel : ViewModel() {
 
     private fun onFinish() {
         AppNavigation.navigate(
-            route = LearningRoute.SessionRoute(
+            route = LearningInternalRoute.SessionRoute(
                 levels = state.value.levels,
                 difficulty = state.value.difficulty,
                 limit = state.value.questionCount
