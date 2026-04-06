@@ -38,7 +38,7 @@ include(":server")
 //Shared (library - server)
 include(":api-contracts")
 //App
-include(":androidApp")
+include(":composeApp")
 include(":library:app")
 //Feature
 include(":library:feature")
