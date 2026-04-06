@@ -25,10 +25,11 @@ val flavors = listOf(
 )
 
 android {
+    namespace = "com.louisgautier.composeApp"
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
+
     defaultConfig {
-        applicationId = "com.louisgautier.composeApp"
-        namespace = "com.louisgautier.app" //TODO TO be changed
-        compileSdk = libs.versions.android.target.sdk.get().toInt()
+        applicationId = "com.louisgautier.composeApp" //TODO To be changed
         targetSdk = libs.versions.android.target.sdk.get().toInt()
         minSdk = libs.versions.android.min.sdk.get().toInt()
         versionCode = libs.versions.app.version.code.get().toInt()
