@@ -28,10 +28,6 @@ kotlin {
             implementation(libs.compose.navigation3.compose)
         }
 
-        androidMain.dependencies {
-            api(projects.library.core.utils)
-        }
-
         commonTest.dependencies {
             implementation(libs.junit)
         }

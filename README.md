@@ -19,35 +19,35 @@ The project is organized into several modules, each serving a distinct purpose. 
 flowchart TD
     subgraph "Platform-Specific Apps"
         S[":server"]
-        APP[":client:composeApp"]
+        APP[":library:app"]
     end
 
     subgraph "Feature Modules"
-        FL[":client:feature:login"]
-        FLR[":client:feature:learning"]
-        FD[":client:feature:dictionary"]
+        FL[":library:feature:login"]
+        FLR[":library:feature:learning"]
+        FD[":library:feature:dictionary"]
     end
 
     subgraph "Domain"
-        D[":client:domain"]
-        DA[":client:domain:auth"]
+        D[":library:domain"]
+        DA[":library:domain:auth"]
     end
 
     subgraph "Data"
-        N[":client:data:network"]
-        DB[":client:data:database"]
-        PR[":client:data:preferences"]
+        N[":library:data:network"]
+        DB[":library:data:database"]
+        PR[":library:data:preferences"]
     end
 
     subgraph "Core"
-        LOG[":client:core:logger"]
-        UT[":client:core:utils"]
-        PRM[":client:core:permission"]
-        FB[":client:core:firebase"]
+        LOG[":library:core:logger"]
+        UT[":library:core:utils"]
+        PRM[":library:core:permission"]
+        FB[":library:core:firebase"]
     end
 
     subgraph "Design System"
-        DS[":client:design-system"]
+        DS[":library:design-system"]
     end
 
     subgraph "Shared (Client + Server)"
@@ -86,7 +86,9 @@ flowchart TD
 ### Shared (Client + Server)
 
 #### `:api-contracts`
-Defines shared DTOs and API route definitions. Consumed by `:client:data:network` on the client side and `:server` on the backend, ensuring a type-safe contract between both ends.
+
+Defines shared DTOs and API route definitions. Consumed by `:library:data:network` on the client
+side and `:server` on the backend, ensuring a type-safe contract between both ends.
 
 - **Targets:** `commonMain`
 - **Key Libraries:** Kotlinx Serialization
@@ -107,18 +109,23 @@ Ktor-based backend server. Consumes `:api-contracts` to expose type-safe endpoin
 
 Feature modules contain UI and presentation logic for a specific user-facing area. They depend on domain modules for business logic and on the design system for UI components.
 
-#### `:client:feature:login`
-Handles authentication flows — sign-in, sign-up, and session restore. Depends on `:client:domain:auth` for authentication-specific use cases.
+#### `:library:feature:login`
+
+Handles authentication flows — sign-in, sign-up, and session restore. Depends on
+`:library:domain:auth` for authentication-specific use cases.
 
 - **Targets:** `commonMain`
 
-#### `:client:feature:learning`
-Learning experience feature. Depends on `:client:domain` for shared use cases and domain models.
+#### `:library:feature:learning`
+
+Learning experience feature. Depends on `:library:domain` for shared use cases and domain models.
 
 - **Targets:** `commonMain`
 
-#### `:client:feature:dictionary`
-Dictionary and vocabulary feature. Depends on `:client:domain` for shared use cases and domain models.
+#### `:library:feature:dictionary`
+
+Dictionary and vocabulary feature. Depends on `:library:domain` for shared use cases and domain
+models.
 
 - **Targets:** `commonMain`
 
@@ -128,16 +135,17 @@ Dictionary and vocabulary feature. Depends on `:client:domain` for shared use ca
 
 Domain modules contain business logic, use cases, and domain models (`DomainModel` — no suffix). They are free of any framework or platform dependency.
 
-#### `:client:domain`
+#### `:library:domain`
 Houses shared business logic, use cases, and domain models used across multiple features. Sub-domains (e.g. `:domain:auth`) extend this layer for feature-specific business rules.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
 - **Key Libraries:** Kotlinx Coroutines
 - **Todo:** Split into sub-domains
 
+#### `:library:domain:auth`
 
-#### `:client:domain:auth`
-Authentication-specific use cases and domain models — login, session, and token management. Depends on `:client:domain` for shared domain primitives.
+Authentication-specific use cases and domain models — login, session, and token management. Depends
+on `:library:domain` for shared domain primitives.
 
 - **Targets:** `commonMain`
 - **Key Libraries:** Kotlinx Coroutines
@@ -148,19 +156,19 @@ Authentication-specific use cases and domain models — login, session, and toke
 
 Data modules handle all I/O concerns — network, local database, and preferences. They expose repositories consumed by the domain layer and work with `Dto` objects from `:api-contracts` at the network boundary.
 
-#### `:client:data:network`
+#### `:library:data:network`
 Implements the network client for API communication. Consumes `:api-contracts` DTOs for type-safe requests and responses, and maps them to domain models before exposing them upward.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (platform-specific Ktor engines)
 - **Key Libraries:** Ktor Client
 
-#### `:client:data:database`
+#### `:library:data:database`
 Manages local data persistence using a multiplatform database solution.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (platform-specific drivers)
 - **Key Libraries:** Room
 
-#### `:client:data:preferences`
+#### `:library:data:preferences`
 Handles lightweight key-value storage for user preferences and app settings.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
@@ -172,24 +180,24 @@ Handles lightweight key-value storage for user preferences and app settings.
 
 Core modules provide low-level, domain-agnostic utilities. They have no knowledge of features, domain, or data layers and can be depended on by any module.
 
-#### `:client:core:logger`
+#### `:library:core:logger`
 Provides a shared logging abstraction across all client modules.
 
 - **Targets:** `commonMain`
 - **Key Libraries:** Kermit
 
-#### `:client:core:utils`
+#### `:library:core:utils`
 General-purpose utility functions and extensions shared across client modules.
 
 - **Targets:** `commonMain`
 - **Todo:** Split into sub-domains (e.g Navigation)
 
-#### `:client:core:permission`
+#### `:library:core:permission`
 Abstracts platform-specific permission handling (camera, location, etc.).
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`
 
-#### `:client:core:firebase`
+#### `:library:core:firebase`
 Firebase integration — analytics, crash reporting, and other Firebase services — shared across client modules.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`
@@ -199,13 +207,13 @@ Firebase integration — analytics, crash reporting, and other Firebase services
 
 ### UI Modules
 
-#### `:client:design-system`
+#### `:library:design-system`
 Contains reusable, domain-agnostic UI components, theming, and typography shared across all features. Has no dependency on domain or data layers.
 
 - **Targets:** `commonMain`
 - **Key Libraries:** Compose Multiplatform
 
-#### `:client:composeApp`
+#### `:library:app`
 The top-level shared UI entry point. Wires together feature modules, applies the design system, and hosts navigation and app-level scaffolding.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
@@ -215,10 +223,10 @@ The top-level shared UI entry point. Wires together feature modules, applies the
 
 ## Naming Conventions
 
-| Layer | Suffix | Example |
-|---|---|---|
-| `:api-contracts` DTOs | `Dto` | `UserDto`, `LoginResponseDto` |
-| `:client:domain` models | none | `User`, `LoginResult` |
+| Layer                    | Suffix | Example                       |
+|--------------------------|--------|-------------------------------|
+| `:api-contracts` DTOs    | `Dto`  | `UserDto`, `LoginResponseDto` |
+| `:library:domain` models | none   | `User`, `LoginResult`         |
 
 DTOs represent the raw wire format exchanged with the server. Domain models are the canonical representation used throughout the app. Mapping between the two happens at the data layer boundary (e.g. `UserDto.toDomain(): User`).
 ## Gradle Build Logic with Convention Plugins
@@ -265,11 +273,11 @@ For detailed build and run instructions for each platform, please refer to the f
 To build and run the development version of the Android app, use the run configuration from the run widget in your IDE’s toolbar or build it directly from the terminal:
 - on macOS/Linux
   ```shell
-  ./gradlew :app:composeApp:assembleDebug
+  ./gradlew :app:app:assembleDebug
   ```
 - on Windows
   ```shell
-  .\gradlew.bat :app:composeApp:assembleDebug
+  .\gradlew.bat :app:app:assembleDebug
   ```
 
 ### Build and Run Desktop (JVM) Application
@@ -277,11 +285,11 @@ To build and run the development version of the Android app, use the run configu
 To build and run the development version of the desktop app, use the run configuration from the run widget in your IDE’s toolbar or run it directly from the terminal:
 - on macOS/Linux
   ```shell
-  ./gradlew :app:composeApp:run
+  ./gradlew :app:app:run
   ```
 - on Windows
   ```shell
-  .\gradlew.bat :app:composeApp:run
+  .\gradlew.bat :app:app:run
   ```
 
 ### Build and Run Server

@@ -42,6 +42,7 @@ include(":androidApp")
 include(":library:app")
 //Feature
 include(":library:feature")
+include(":library:feature:home")
 include(":library:feature:login")
 include(":library:feature:profile")
 include(":library:feature:learning")

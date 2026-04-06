@@ -7,10 +7,27 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+object Flavors {
+    const val DEV = "dev"
+    const val STAGING = "staging"
+    const val PROD = "prod"
+}
+
+data class FlavorConfig(
+    val name: String,
+    val alias: String? = null,
+)
+
+val flavors = listOf(
+    FlavorConfig(Flavors.DEV, "Dev"),
+    FlavorConfig(Flavors.STAGING, "Staging"),
+    FlavorConfig(Flavors.PROD)
+)
+
 android {
     defaultConfig {
         applicationId = "com.louisgautier.composeApp"
-        namespace = "com.louisgautier.composeApp" //TODO TO be changed
+        namespace = "com.louisgautier.app" //TODO TO be changed
         compileSdk = libs.versions.android.target.sdk.get().toInt()
         targetSdk = libs.versions.android.target.sdk.get().toInt()
         minSdk = libs.versions.android.min.sdk.get().toInt()
@@ -20,24 +37,16 @@ android {
 
     flavorDimensions += "environment"
     productFlavors {
-        create("dev") {
-            dimension = "environment"
-            applicationIdSuffix = ".dev"
-            versionNameSuffix = "-dev"
-            resValue("string", "app_name", "(Dev) Learn Chinese")
-        }
-
-        create("staging") {
-            dimension = "environment"
-
-            applicationIdSuffix = ".staging"
-            versionNameSuffix = "-staging"
-            resValue("string", "app_name", "(Staging) Learn Chinese")
-        }
-
-        create("prod") {
-            dimension = "environment"
-            resValue("string", "app_name", "Learn Chinese")
+        flavors.forEach { flavor ->
+            create(flavor.name) {
+                dimension = "environment"
+                flavor.alias?.let {
+                    applicationIdSuffix = ".${flavor.name}"
+                    versionNameSuffix = "-${flavor.name}"
+                    resValue("string", "app_name", "(${flavor.alias}) Learn Chinese")
+                }
+                buildConfigField("String", "ENVIRONMENT", "\"${flavor.name}\"")
+            }
         }
     }
 

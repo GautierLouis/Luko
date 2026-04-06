@@ -42,7 +42,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
 
 @Composable
-fun SessionScreen() {
+internal fun SessionScreen() {
     val viewModel = koinViewModel<SessionViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 

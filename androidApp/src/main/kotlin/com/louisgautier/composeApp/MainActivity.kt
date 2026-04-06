@@ -10,9 +10,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
-import com.louisgautier.composeApp.app.App
-import com.louisgautier.utils.IntentActivityResultObserver
-import com.louisgautier.utils.PermissionActivityResultObserver
+import com.louisgautier.app.ActivityObserver
+import com.louisgautier.app.app.App
+import com.louisgautier.app.libraryModule
 import org.koin.android.ext.android.inject
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -20,8 +20,7 @@ import org.koin.dsl.koinConfiguration
 
 class MainActivity : FragmentActivity() {
 
-    private val intentActivityResultObserver: IntentActivityResultObserver by inject()
-    private val permissionActivityResultObserver: PermissionActivityResultObserver by inject()
+    private val activityObserver: ActivityObserver by inject()
 
     @OptIn(KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,13 +30,13 @@ class MainActivity : FragmentActivity() {
         val activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
-            intentActivityResultObserver.onActivityResult(result)
+            activityObserver.setIntentResult(result)
         }
 
         val permissionLauncher: ActivityResultLauncher<Array<String>> = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
-        ) { results ->
-            permissionActivityResultObserver.onActivityResult(results)
+        ) { result: Map<String, @JvmSuppressWildcards Boolean> ->
+            activityObserver.setPermissionResult(result)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -49,11 +48,11 @@ class MainActivity : FragmentActivity() {
         setContent {
             KoinMultiplatformApplication(
                 config = koinConfiguration {
-                    modules(libraryModule, androidModules)
+                    modules(libraryModule, createAndroidModule())
                 }
             ) {
-                intentActivityResultObserver.setLauncher(activityResultLauncher)
-                permissionActivityResultObserver.setLauncher(permissionLauncher)
+                activityObserver.setIntentLauncher(activityResultLauncher)
+                activityObserver.setPermissionLauncher(permissionLauncher)
                 App()
             }
         }

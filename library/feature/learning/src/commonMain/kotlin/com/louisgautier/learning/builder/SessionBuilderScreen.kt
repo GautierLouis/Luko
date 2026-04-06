@@ -40,7 +40,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SessionBuilderScreen() {
+internal fun SessionBuilderScreen() {
     val viewModel = koinViewModel<SessionBuilderViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val pager = rememberPagerState(initialPage = state.currentPage) { PAGE_COUNT }

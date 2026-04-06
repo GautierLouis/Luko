@@ -25,16 +25,16 @@ import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.previewSession
-import com.louisgautier.learning.StartSessionRoute
 import com.louisgautier.learning.congratulation.SessionCongratulationViewModel.UIState
 import com.louisgautier.navigation.AppNavigation
+import com.louisgautier.navigation.AppRoute
 import com.louisgautier.utils.toHHMMSS
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SessionCongratulationScreen() {
+internal fun SessionCongratulationScreen() {
     val viewModel: SessionCongratulationViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     SessionCongratulationScreen(state)
@@ -99,7 +99,12 @@ private fun SessionCongratulationScreen(
                 AppButton(
                     text = Theme.strings.congratulationButtonRestart,
                     size = ButtonSize.Large,
-                    onClick = { AppNavigation.navigate(StartSessionRoute, true) },
+                    onClick = {
+                        AppNavigation.navigate(
+                            AppRoute.LearningRoute.NewSessionRoute,
+                            true
+                        )
+                    },
                 )
 
                 AppButton(

@@ -15,8 +15,7 @@ import com.louisgautier.domain.model.SessionResponse
 import com.louisgautier.domain.model.Stroke
 import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.repository.SessionRepository
-import com.louisgautier.learning.CongratulationRoute
-import com.louisgautier.learning.SessionRoute
+import com.louisgautier.learning.LearningRoute
 import com.louisgautier.learning.builder.QuestionCount
 import com.louisgautier.learning.session.SessionScreenEvent.Finish
 import com.louisgautier.learning.session.SessionScreenEvent.Next
@@ -44,7 +43,7 @@ internal class SessionViewModel(
     private val scoreCalculator: CalculateScore,
 ) : ViewModel() {
 
-    private val descriptor = SessionRoute.serializer().descriptor
+    private val descriptor = LearningRoute.SessionRoute.serializer().descriptor
 
     private val levels: List<FrequencyLevel> =
         (savedStateHandle[descriptor.getElementName(0)] as? String)
@@ -229,7 +228,7 @@ internal class SessionViewModel(
             sessionRepository.save(session, responses)
 
             withContext(Dispatchers.Main) {
-                AppNavigation.navigate(CongratulationRoute, true)
+                AppNavigation.navigate(LearningRoute.CongratulationRoute, true)
             }
         }
     }
