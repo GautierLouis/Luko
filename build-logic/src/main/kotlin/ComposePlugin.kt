@@ -56,9 +56,10 @@ class ComposePlugin : Plugin<Project> {
                 implementation(libs.compose.ui)
             }
 
-//            androidMain.dependencies {
+            androidMain.dependencies {
+                implementation(libs.androidx.compose.ui.tooling)
 //                implementation(libs.androidx.activity.compose)
-//            }
+            }
 
             jvmMain.dependencies {
 //                implementation(libs.compose.desktop.current.os)
