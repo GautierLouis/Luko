@@ -8,6 +8,7 @@ kotlin {
             implementation(compose.uiTooling)
         }
         commonMain.dependencies {
+            implementation(projects.library.feature.baseUi)
             implementation(projects.library.core.logger)
             implementation(projects.library.core.utils)
             implementation(projects.library.core.navigation)
@@ -18,4 +19,7 @@ kotlin {
             implementation(libs.androidx.paging.compose)
         }
     }
+}
+dependencies {
+    androidRuntimeClasspath(libs.compose.ui.tooling.preview)
 }

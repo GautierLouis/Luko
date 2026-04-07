@@ -60,8 +60,6 @@ class ComposePlugin : Plugin<Project> {
             }
 
             androidMain.dependencies {
-                implementation(compose.uiTooling)
-                implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
             }
 

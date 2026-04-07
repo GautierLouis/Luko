@@ -1,7 +1,7 @@
 [versions]
 # Build
 kotlin = "2.3.20"
-agp = "8.13.1"
+agp = "9.1.0"
 ksp = "2.3.4"
 
 # Android SDK
@@ -30,7 +30,7 @@ splashscreen = "1.0.1"
 
 
 # Compose
-compose = "1.9.3"
+compose = "1.10.3"
 compose-hot-reload = "1.0.0"
 compose-material3 = "1.4.0"
 compose-lifecycle = "2.9.6"
@@ -102,6 +102,7 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 # === Room ===
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidx-sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
+androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "androidx-room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 
 # === Mockkery ===
@@ -185,6 +186,7 @@ compose-m3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adapt
 compose-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-lifecycle" }
 compose-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "compose-lifecycle" }
 compose-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose" }
+compose-ui-tooling-preview = { group = "org.jetbrains.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 
 # === Logging (Kermit) ===
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
@@ -206,7 +208,9 @@ supabase-auth-ui = { module = "io.github.jan-tennert.supabase:compose-auth-ui" }
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
-android-kmp-gradle = { module = "com.android.tools.build:gradle-api", version.ref = "agp" }
+#android-kmp-gradle = { module = "com.android.tools.build:gradle-api", version.ref = "agp" }
+kotlin-multiplatform-gradle-plugin = { module = "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin", version.ref = "kotlin" }
+
 
 # === Data / Cache ===
 dataframe = { module = "org.jetbrains.kotlinx:dataframe", version.ref = "dataframe" }

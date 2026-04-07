@@ -2,7 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+//    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.compose.compiler)
 }
@@ -44,7 +44,7 @@ android {
                 flavor.alias?.let {
                     applicationIdSuffix = ".${flavor.name}"
                     versionNameSuffix = "-${flavor.name}"
-                    resValue("string", "app_name", "(${flavor.alias}) Learn Chinese")
+                    buildConfigField("string", "app_name", "(${flavor.alias}) Learn Chinese")
                 }
                 buildConfigField("String", "ENVIRONMENT", "\"${flavor.name}\"")
             }
