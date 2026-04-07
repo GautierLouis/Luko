@@ -106,7 +106,7 @@ fun Modifier.dashedBorder(width: Dp, brush: Brush, shape: Shape, on: Dp, off: Dp
                                     }
                                 }) {
                                     if (isSimpleRoundRect) {
-                                        val rrect = (insetOutline as Outline.Rounded).roundRect
+                                        val rrect = insetOutline.roundRect
                                         drawRoundRect(
                                             brush = brush,
                                             topLeft = Offset(rrect.left, rrect.top),
