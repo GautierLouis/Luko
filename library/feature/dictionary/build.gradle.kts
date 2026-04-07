@@ -4,9 +4,6 @@ plugins {
 }
 kotlin {
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.uiTooling)
-        }
         commonMain.dependencies {
             implementation(projects.library.feature.baseUi)
             implementation(projects.library.core.logger)
@@ -19,7 +16,4 @@ kotlin {
             implementation(libs.androidx.paging.compose)
         }
     }
-}
-dependencies {
-    androidRuntimeClasspath(libs.compose.ui.tooling.preview)
 }

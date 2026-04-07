@@ -17,6 +17,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonRole
@@ -35,8 +37,6 @@ import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnNextPage
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
 import com.louisgautier.learning.builder.SessionBuilderViewModel.Companion.PAGE_COUNT
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.louisgautier.designsystem.components.button.AppButton
@@ -25,8 +27,6 @@ import com.louisgautier.domain.model.DictionaryWithGraphic
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.previewDictionaryWithGraphic
 import com.louisgautier.domain.previewSession
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun DetailsContent(

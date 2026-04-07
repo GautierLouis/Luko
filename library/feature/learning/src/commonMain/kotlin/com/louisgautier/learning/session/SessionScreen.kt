@@ -15,6 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.button.AppButton
@@ -36,8 +38,6 @@ import com.louisgautier.learning.session.SessionScreenEvent.Next
 import com.louisgautier.learning.session.SessionScreenEvent.Reload
 import com.louisgautier.learning.session.SessionScreenEvent.ToggleLeaveDialog
 import com.louisgautier.navigation.AppNavigation
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
 

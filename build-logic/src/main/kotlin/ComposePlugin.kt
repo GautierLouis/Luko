@@ -29,23 +29,21 @@ class ComposePlugin : Plugin<Project> {
         val composeExt = project.extensions.findByType(ComposeExtension::class.java)
             ?: error("Compose extension not found — make sure 'org.jetbrains.compose' plugin is applied before configuring.")
 
-        val compose = composeExt.dependencies
+        composeExt.dependencies
 
         sourceSets.apply {
             commonMain.dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
-                implementation(compose.materialIconsExtended)
-                implementation(compose.material3AdaptiveNavigationSuite)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.components.ui.tooling.preview)
 
-                implementation(libs.compose.lifecycle.viewmodel.compose)
-                implementation(libs.compose.lifecycle.runtime.compose)
-                implementation(libs.compose.navigation.compose)
-                implementation(libs.compose.backhandler)
+                implementation(libs.compose.lifecycle.viewmodel)
+                implementation(libs.compose.lifecycle.runtime)
+                implementation(libs.compose.navigation)
+                implementation(libs.compose.ui.backhandler)
 
                 implementation(libs.kotlinx.collection.immutable)
 
@@ -55,16 +53,15 @@ class ComposePlugin : Plugin<Project> {
             }
 
             commonTest.dependencies {
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.uiTest)
+                implementation(libs.compose.ui)
             }
 
-            androidMain.dependencies {
-                implementation(libs.androidx.activity.compose)
-            }
+//            androidMain.dependencies {
+//                implementation(libs.androidx.activity.compose)
+//            }
 
             jvmMain.dependencies {
-                implementation(compose.desktop.currentOs)
+//                implementation(libs.compose.desktop.current.os)
             }
         }
     }

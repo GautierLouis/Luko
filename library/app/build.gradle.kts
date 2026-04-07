@@ -24,8 +24,6 @@ kotlin {
             implementation(projects.library.domain)
             implementation(projects.library.feature)
             implementation(projects.library.designSystem)
-
-            implementation(libs.compose.navigation3.compose)
         }
 
         commonTest.dependencies {

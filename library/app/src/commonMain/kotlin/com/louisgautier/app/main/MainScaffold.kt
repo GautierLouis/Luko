@@ -7,6 +7,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.app.main.MainScaffoldEvent.OnBottomItemClicked
 import com.louisgautier.app.main.MainViewModel.UiState
@@ -18,8 +20,6 @@ import com.louisgautier.dictionary.home.DictionaryScreen
 import com.louisgautier.feed.FeedScreen
 import com.louisgautier.home.HomeScreen
 import com.louisgautier.profile.ProfileScreen
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

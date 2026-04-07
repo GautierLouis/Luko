@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
@@ -24,8 +26,6 @@ import com.louisgautier.dictionary.details.ModalCharacterDetailsEvent.OnRetry
 import com.louisgautier.dictionary.details.ModalCharacterDetailsViewModel.UIState
 import com.louisgautier.domain.previewDictionaryWithGraphic
 import com.louisgautier.domain.previewSession
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun ModalCharacterDetails(
@@ -63,6 +63,7 @@ internal fun ModalCharacterDetails(
         when (state) {
             is UIState.Loading,
             is UIState.Error -> modalState.partialExpand()
+
             is UIState.Success -> Unit
         }
     }

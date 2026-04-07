@@ -1,13 +1,13 @@
 package com.louisgautier.designsystem.components.topbar.action
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.Search
 import com.louisgautier.designsystem.theme.Theme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ActionSearch(
@@ -19,7 +19,7 @@ fun ActionSearch(
         onClick = onClick
     ) {
         Icon(
-            imageVector = Icons.Rounded.Search,
+            imageVector = AppIcon.Search,
             contentDescription = Theme.strings.actionSearch
         )
     }

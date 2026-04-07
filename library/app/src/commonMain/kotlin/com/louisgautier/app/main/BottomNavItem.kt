@@ -1,21 +1,22 @@
 package com.louisgautier.app.main
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Feed
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocalLibrary
-import androidx.compose.material.icons.filled.Person
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.Feed
+import com.louisgautier.designsystem.icon.Home
+import com.louisgautier.designsystem.icon.Library
+import com.louisgautier.designsystem.icon.Person
 import com.louisgautier.designsystem.theme.Theme
 
 internal enum class BottomNavItem(
     val icon: ImageVector
 ) {
-    Home(Icons.Default.Home),
-    Dictionary(Icons.Default.LocalLibrary),
-    Feed(Icons.AutoMirrored.Filled.Feed),
-    Profile(Icons.Default.Person)
+    Home(AppIcon.Home),
+    Dictionary(AppIcon.Library),
+    Feed(AppIcon.Feed),
+    Profile(AppIcon.Person)
 }
 
 @Composable

@@ -1,10 +1,10 @@
 package com.louisgautier.learning.builder
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.Lightbulb
+import com.louisgautier.designsystem.icon.Visibility
+import com.louisgautier.designsystem.icon.VisibilityOff
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.domain.model.DifficultyLevel.EASY
@@ -34,9 +34,9 @@ internal fun DifficultyLevel.caption() = when (this) {
 
 @Composable
 internal fun DifficultyLevel.icon() = when (this) {
-    EASY -> Icons.Filled.Lightbulb
-    MEDIUM -> Icons.Filled.Visibility
-    HARD -> Icons.Filled.VisibilityOff
+    EASY -> AppIcon.Lightbulb
+    MEDIUM -> AppIcon.Visibility
+    HARD -> AppIcon.VisibilityOff
 }
 
 @Composable

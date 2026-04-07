@@ -10,9 +10,6 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -24,14 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.louisgautier.designsystem.icon.AppIcon
+import com.louisgautier.designsystem.icon.Cancel
+import com.louisgautier.designsystem.icon.Search
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun DictionarySearchBar(
@@ -57,7 +57,7 @@ internal fun DictionarySearchBar(
             ),
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Rounded.Search,
+                    imageVector = AppIcon.Search,
                     contentDescription = null
                 )
             },
@@ -67,7 +67,7 @@ internal fun DictionarySearchBar(
                         onClick = { textFieldState.clearText() },
                     ) {
                         Icon(
-                            imageVector = Icons.Rounded.Clear,
+                            imageVector = AppIcon.Cancel,
                             contentDescription = Theme.strings.actionClear,
                         )
                     }

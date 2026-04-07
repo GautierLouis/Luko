@@ -4,9 +4,6 @@ plugins {
 }
 kotlin {
     sourceSets {
-        androidMain.dependencies {
-            implementation(compose.uiTooling)
-        }
         commonMain.dependencies {
             implementation(projects.library.core.logger)
             implementation(projects.library.core.utils)

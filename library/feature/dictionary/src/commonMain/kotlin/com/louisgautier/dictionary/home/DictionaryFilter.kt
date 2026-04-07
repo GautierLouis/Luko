@@ -9,6 +9,8 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.COMMON
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.colorFamily
@@ -21,8 +23,6 @@ import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun DictionaryFilter(

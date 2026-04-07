@@ -1,6 +1,7 @@
 package com.louisgautier.designsystem.preview
 
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
+
 
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.FUNCTION)
@@ -10,4 +11,4 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview(locale = "fr", name = "French", group = "MultiLocalePreview")
 @Preview(locale = "zh", name = "Chinese", group = "MultiLocalePreview")
 @Preview(locale = "ja", name = "Japanese", group = "MultiLocalePreview")
-annotation class MultiLocalePreview()
+annotation class MultiLocalePreview

@@ -1,9 +1,9 @@
 package com.louisgautier.baseui
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 abstract class PagingDataPreviewParameter<T : Any>(
     private val data: List<T>

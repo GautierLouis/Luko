@@ -11,6 +11,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
@@ -28,8 +30,6 @@ import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.designsystem.token.dimens.Spacing
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
 internal fun MetricCardLayout(

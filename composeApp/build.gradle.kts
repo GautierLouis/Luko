@@ -44,7 +44,7 @@ android {
                 flavor.alias?.let {
                     applicationIdSuffix = ".${flavor.name}"
                     versionNameSuffix = "-${flavor.name}"
-                    buildConfigField("string", "app_name", "(${flavor.alias}) Learn Chinese")
+                    buildConfigField("String", "app_name", "\"(${flavor.alias}) Learn Chinese\"")
                 }
                 buildConfigField("String", "ENVIRONMENT", "\"${flavor.name}\"")
             }
