@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 
 @Suppress("unused")
-class ComposePlugin : Plugin<Project> {
+class ComposeConvention : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
         val libs = extensions.getByType<LibrariesForLibs>()
@@ -58,11 +58,6 @@ class ComposePlugin : Plugin<Project> {
 
             androidMain.dependencies {
                 implementation(libs.androidx.compose.ui.tooling)
-//                implementation(libs.androidx.activity.compose)
-            }
-
-            jvmMain.dependencies {
-//                implementation(libs.compose.desktop.current.os)
             }
         }
     }

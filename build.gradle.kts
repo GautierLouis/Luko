@@ -13,6 +13,6 @@ plugins {
     alias(libs.plugins.android.lint) apply false
     alias(libs.plugins.google.services) apply false
 
-    alias(libs.plugins.convention.plugin) apply false
+    alias(libs.plugins.multiplatform.convention) apply false
     alias(libs.plugins.compose.convention) apply false
 }

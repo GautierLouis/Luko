@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.convention.plugin)
+    alias(libs.plugins.multiplatform.convention)
     alias(libs.plugins.compose.convention)
 }
 kotlin {

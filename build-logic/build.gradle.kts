@@ -22,12 +22,12 @@ gradlePlugin {
     plugins {
         register("kotlinMultiplatformCompose") {
             id = libs.plugins.compose.convention.get().pluginId
-            implementationClass = "ComposePlugin"
+            implementationClass = "ComposeConvention"
         }
 
         register("kotlinMultiplatformConvention") {
-            id = libs.plugins.convention.plugin.get().pluginId
-            implementationClass = "ConventionPlugin"
+            id = libs.plugins.multiplatform.convention.get().pluginId
+            implementationClass = "MultiplatformConvention"
         }
     }
 }

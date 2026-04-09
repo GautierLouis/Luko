@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 @Suppress("unused")
-class ConventionPlugin : Plugin<Project> {
+class MultiplatformConvention : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
         val libs = extensions.getByType<LibrariesForLibs>()
