@@ -4,7 +4,7 @@ import com.louisgautier.app.Environment
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-fun createAndroidModule() = module {
+val androidModule = module {
     single(named(Environment.FLAVOR)) {
         BuildConfig.FLAVOR.uppercase()
     }

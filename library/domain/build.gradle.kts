@@ -6,9 +6,10 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.library.domain.auth)
                 implementation(projects.library.core.utils)
-                implementation(projects.library.data)
+                implementation(projects.library.data.network)
+                implementation(projects.library.data.database)
+                implementation(projects.library.data.preferences)
 
                 implementation(libs.androidx.paging.common)
                 implementation(libs.androidx.paging.compose)

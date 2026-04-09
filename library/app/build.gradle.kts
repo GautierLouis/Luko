@@ -20,9 +20,22 @@ kotlin {
     sourceSets {
 
         commonMain.dependencies {
-            implementation(projects.library.core)
+            implementation(projects.library.core.utils)
+            implementation(projects.library.core.logger)
+            implementation(projects.library.core.firebase)
+            implementation(projects.library.core.permission)
+            implementation(projects.library.core.navigation)
+
             implementation(projects.library.domain)
-            implementation(projects.library.feature)
+            implementation(projects.library.domain.auth)
+
+            implementation(projects.library.feature.home)
+            implementation(projects.library.feature.feed)
+            implementation(projects.library.feature.login)
+            implementation(projects.library.feature.profile)
+            implementation(projects.library.feature.learning)
+            implementation(projects.library.feature.dictionary)
+
             implementation(projects.library.designSystem)
         }
 
