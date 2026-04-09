@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.louisgautier.firebase.RemoteConfigManager
 import com.louisgautier.navigation.AppRoute
 import com.louisgautier.navigation.MainTab
+import com.louisgautier.tracking.Tracker
+import com.louisgautier.tracking.TrackingEvent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,6 +50,7 @@ internal class MainViewModel(
     }
 
     private fun updateBottomItem(item: BottomNavItem) {
+        Tracker.track(TrackingEvent.NavigateTo(item.toString()))
         _state.update { it.copy(selectedItem = item) }
     }
 }

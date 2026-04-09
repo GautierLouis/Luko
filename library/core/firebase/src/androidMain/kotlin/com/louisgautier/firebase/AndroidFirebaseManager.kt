@@ -14,9 +14,9 @@ import com.google.firebase.messaging.messaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
-import com.louisgautier.firebase.event.TrackingEvent
 import com.louisgautier.firebase.remoteconfig.FeatureFlagKey
 import com.louisgautier.logger.AppLogger
+import com.louisgautier.tracking.TrackingEvent
 import kotlinx.coroutines.tasks.await
 
 class AndroidFirebaseManager(

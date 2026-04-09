@@ -19,10 +19,11 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.library.core.logger)
             implementation(projects.library.core.utils)
+            implementation(projects.library.core.tracking)
+            implementation(projects.library.core.permission)
         }
 
         androidMain.dependencies {
-            implementation(projects.library.core.permission)
 
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.analytics)

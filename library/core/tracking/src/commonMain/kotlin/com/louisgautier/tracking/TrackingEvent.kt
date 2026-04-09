@@ -1,4 +1,4 @@
-package com.louisgautier.firebase.event
+package com.louisgautier.tracking
 
 sealed class TrackingEvent(
     val key: String,
@@ -17,4 +17,6 @@ sealed class TrackingEvent(
             "character_levels" to characterLevels.joinToString(",")
         )
     )
+
+    data class NavigateTo(val name: String) : TrackingEvent(key = "nav_to_$name")
 }

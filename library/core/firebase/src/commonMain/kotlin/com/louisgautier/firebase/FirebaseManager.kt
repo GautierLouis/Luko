@@ -1,6 +1,7 @@
 package com.louisgautier.firebase
 
-import com.louisgautier.firebase.event.TrackingEvent
+import com.louisgautier.tracking.TrackingEvent
+
 
 interface FirebaseManager {
     fun initialize()

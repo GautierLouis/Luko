@@ -56,6 +56,8 @@ include(":library:data:network")
 include(":library:data:database")
 include(":library:data:preferences")
 //Core
+include(":library:core:ads")
+include(":library:core:tracking")
 include(":library:core:logger")
 include(":library:core:utils")
 include(":library:core:permission")
