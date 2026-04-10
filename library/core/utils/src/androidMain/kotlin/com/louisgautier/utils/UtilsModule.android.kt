@@ -6,5 +6,4 @@ import org.koin.dsl.module
 
 internal actual val utilsPlatformModule: Module = module {
     singleOf(::IntentActivityResultObserver)
-    singleOf(::PermissionActivityResultObserver)
 }

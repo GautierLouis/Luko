@@ -1,13 +1,12 @@
-package com.louisgautier.app.session
+package com.louisgautier.learning.session.usecase
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
+import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.DifficultyLevel
 import com.louisgautier.learning.builder.QuestionCount
-import com.louisgautier.learning.session.usecase.CalculateScore
-import com.louisgautier.learning.session.usecase.CalculateScore.ScoreDefault
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertEquals
+
 
 class CalculateScoreTest {
 
@@ -18,7 +17,7 @@ class CalculateScoreTest {
      *
      */
     private fun generateQuestion(
-        level: CharacterFrequencyLevelDto,
+        level: CharacterFrequencyLevel,
         count: QuestionCount
     ): List<Dictionary> {
         return List(count.value) {
@@ -32,7 +31,7 @@ class CalculateScoreTest {
     @Test
     fun `EASY difficulty base score calculation`() {
 
-        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -40,13 +39,13 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertTrue(score == ScoreDefault.BASE_MIN_POINT)
+        assertEquals(score, CalculateScore.ScoreDefault.BASE_MIN_POINT)
 
     }
 
     @Test
     fun `MEDIUM difficulty base score calculation`() {
-        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -54,13 +53,13 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertTrue(score == 75)
+        assertEquals(score, 75)
 
     }
 
     @Test
     fun `HARD difficulty base score calculation`() {
-        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -68,13 +67,13 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertTrue(score == 100)
+        assertEquals(score, 100)
 
     }
 
     @Test
     fun `Calculate max points`() {
-        val questions = generateQuestion(CharacterFrequencyLevelDto.EXTENDED, QuestionCount.TWENTY)
+        val questions = generateQuestion(CharacterFrequencyLevel.EXTENDED, QuestionCount.TWENTY)
 
         val score = computer.calculate(
             questions = questions,
@@ -82,12 +81,12 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertTrue(score == ScoreDefault.BASE_MAX_POINT)
+        assertEquals(score, CalculateScore.ScoreDefault.BASE_MAX_POINT)
     }
 
     @Test
     fun `Calculate min points`() {
-        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -95,12 +94,12 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertTrue(score == ScoreDefault.BASE_MIN_POINT)
+        assertEquals(score, CalculateScore.ScoreDefault.BASE_MIN_POINT)
     }
 
     @Test
     fun `Calculate time bonus at lower`() {
-        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -109,14 +108,14 @@ class CalculateScoreTest {
         )
 
         //check only bonus
-        val bonus = score - ScoreDefault.BASE_MIN_POINT
+        val bonus = score - CalculateScore.ScoreDefault.BASE_MIN_POINT
 
-        assertTrue(bonus == ScoreDefault.TIME_MIN_POINT)
+        assertEquals(bonus, CalculateScore.ScoreDefault.TIME_MIN_POINT)
     }
 
     @Test
     fun `Calculate time bonus at max`() {
-        val questions = generateQuestion(CharacterFrequencyLevelDto.COMMON, QuestionCount.FIVE)
+        val questions = generateQuestion(CharacterFrequencyLevel.COMMON, QuestionCount.FIVE)
 
         val score = computer.calculate(
             questions = questions,
@@ -125,8 +124,8 @@ class CalculateScoreTest {
         )
 
         //check only bonus
-        val bonus = score - ScoreDefault.BASE_MIN_POINT
+        val bonus = score - CalculateScore.ScoreDefault.BASE_MIN_POINT
 
-        assertTrue(bonus == ScoreDefault.TIME_MAX_POINT)
+        assertEquals(bonus, CalculateScore.ScoreDefault.TIME_MAX_POINT)
     }
 }

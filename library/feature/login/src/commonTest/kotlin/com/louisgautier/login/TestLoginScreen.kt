@@ -19,7 +19,6 @@ import dev.mokkery.annotations.DelicateMokkeryApi
 import dev.mokkery.coroutines.answering.Awaitable.Companion.delayed
 import dev.mokkery.coroutines.answering.awaits
 import dev.mokkery.everySuspend
-import dev.mokkery.matcher.any
 import dev.mokkery.mock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlin.test.AfterTest
@@ -63,7 +62,7 @@ class TestLoginScreen {
         val viewModel = LoginViewModel(mockAuthRepository)
 
         everySuspend {
-            mockAuthRepository.login(any(), any())
+            mockAuthRepository.registerAnonymously()
         } awaits delayed { Result.success(Unit) }
 
         setContent {
@@ -103,7 +102,7 @@ class TestLoginScreen {
         val viewModel = LoginViewModel(mockAuthRepository)
 
         everySuspend {
-            mockAuthRepository.login(any(), any())
+            mockAuthRepository.registerAnonymously()
         } awaits delayed { Result.failure(Exception()) }
 
         setContent {

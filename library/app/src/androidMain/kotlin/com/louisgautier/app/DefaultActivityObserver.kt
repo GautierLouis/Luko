@@ -3,8 +3,8 @@ package com.louisgautier.app
 import android.content.Intent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
+import com.louisgautier.permission.PermissionActivityResultObserver
 import com.louisgautier.utils.IntentActivityResultObserver
-import com.louisgautier.utils.PermissionActivityResultObserver
 
 internal class DefaultActivityObserver(
     private val intentObserver: IntentActivityResultObserver,

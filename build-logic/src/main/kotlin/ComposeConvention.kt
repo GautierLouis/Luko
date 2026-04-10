@@ -45,7 +45,7 @@ class ComposeConvention : Plugin<Project> {
                 }
 
                 commonTest.dependencies {
-                    implementation(libs.compose.ui)
+                    implementation(libs.compose.ui.test)
                 }
 
                 androidMain.dependencies {

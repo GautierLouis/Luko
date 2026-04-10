@@ -4,6 +4,7 @@ import com.louisgautier.apicontracts.dto.UserRefreshTokenJson
 import com.louisgautier.apicontracts.dto.UserTokenJson
 import com.louisgautier.network.interfaces.TokenAccessor
 import com.louisgautier.utils.AppConfig
+import com.louisgautier.utils.Flavor
 import dev.mokkery.MockMode
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
@@ -25,9 +26,15 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ApiClientTest {
+class BaseHttpClientTest {
     private val mockTokenAccessor = mock<TokenAccessor>(MockMode.autofill)
-    private val mockAppConfig = AppConfig("mock", "mock", true, "mock", "mock")
+    private val mockAppConfig = AppConfig(
+        platform = "mock",
+        flavor = Flavor.DEV,
+        isProduction = true,
+        versionName = "mock",
+        versionCode = "mock"
+    )
     private val mockEnvironment = NetworkEnvironment.Dev
 
     @Test

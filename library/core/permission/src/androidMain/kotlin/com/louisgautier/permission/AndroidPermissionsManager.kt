@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import com.louisgautier.logger.AppLogger
-import com.louisgautier.utils.PermissionActivityResultObserver
 
 class AndroidPermissionsManager(
     private val context: Context,
