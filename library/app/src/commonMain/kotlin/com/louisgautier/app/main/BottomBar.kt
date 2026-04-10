@@ -36,18 +36,23 @@ internal fun BottomBar(
             NavigationBarItem(
                 selected = selectedItem == item,
                 onClick = { onClick(item) },
-                icon = { Icon(item.icon, contentDescription = null) },
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = null,
+                    )
+                },
                 label = {
                     Text(
                         text = item.title(),
-                        style = Theme.typography.labelMedium
+                        style = Theme.typography.labelMedium,
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Theme.materialColors.primaryContainer,
-                    selectedTextColor = Theme.materialColors.onSurface,
+                    indicatorColor = Theme.materialColors.surfaceContainer,
+                    selectedTextColor = Theme.materialColors.primary,
                     unselectedTextColor = Theme.materialColors.onSurface,
-                    selectedIconColor = Theme.materialColors.onSurface,
+                    selectedIconColor = Theme.materialColors.primary,
                     unselectedIconColor = Theme.materialColors.onSurface,
                 )
             )

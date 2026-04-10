@@ -16,7 +16,7 @@ sealed interface AppRoute : NavKey {
         @Serializable
         data object NewSessionRoute : LearningRoute
         @Serializable
-        data class PracticeCharacterRoute(val characterCode: Int? = null) : LearningRoute
+        data class PracticeCharacterRoute(val characterCode: Int) : LearningRoute
     }
 }
 
