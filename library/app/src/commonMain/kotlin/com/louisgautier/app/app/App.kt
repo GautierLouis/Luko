@@ -18,31 +18,23 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun App() {
     val viewModel: AppViewModel = koinViewModel()
-    App(viewModel)
-}
-
-@Composable
-private fun App(
-    viewModel: AppViewModel = koinViewModel()
-) {
     val backStack = rememberNavBackStack(navigationConfiguration, AppRoute.MainRoute())
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(backStack) {
+        viewModel.observeNavigation(backStack)
+    }
     val isSystemDark = isSystemInDarkTheme()
     val themeMode = state.theme.toThemeMode(isSystemDark)
 
     AppTheme(themeMode) {
-        LaunchedEffect(backStack) {
-            viewModel.observeNavigation(backStack)
-        }
-
         Scaffold(
             topBar = {
                 if (!state.isProduction) {
                     FlavorComponent(state.flavor)
                 }
             }
-        ) { paddingValues ->
+        ) { _ ->
             NavDisplay(
                 backStack = backStack,
                 onBack = { backStack.removeLast() },
