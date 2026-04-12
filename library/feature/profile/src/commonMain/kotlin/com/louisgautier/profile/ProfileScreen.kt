@@ -3,13 +3,13 @@ package com.louisgautier.profile
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
@@ -37,11 +37,10 @@ private fun ProfileScreen(
     state: ProfileViewModel.UiState,
     onEvent: (ProfileScreenEvent) -> Unit = {}
 ) {
-    Scaffold(
+    BaseScaffold(
         topBar = {
             ProfileTopbar()
         },
-        containerColor = Theme.materialColors.background
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.padding(paddingValues),

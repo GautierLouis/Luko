@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonRole
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
+import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.components.topbar.action.ActionNavigateUp
 import com.louisgautier.designsystem.preview.AppThemeWrapper
@@ -66,14 +66,13 @@ private fun SessionBuilderScreen(
     onEvent: (SessionBuilderScreenEvent) -> Unit = {}
 ) {
 
-    Scaffold(
+    BaseScaffold(
         topBar = {
             AppTopbar(
                 title = Theme.strings.newSession,
                 leftIcons = { ActionNavigateUp() }
             )
         },
-        containerColor = Theme.materialColors.background
     ) { paddingValues ->
 
         Column(

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.louisgautier.baseui.PagingDataPreviewParameter
+import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
 import com.louisgautier.designsystem.preview.AppThemeWrapper
@@ -71,7 +71,7 @@ private fun DictionaryScreen(
     val contentTopCorner = if (state.filterMenuExpended) Padding.extraLarge
     else Padding.none
 
-    Scaffold(
+    BaseScaffold(
         topBar = {
             DictionaryTopBar(
                 textFieldState = state.textFieldState,
@@ -81,7 +81,6 @@ private fun DictionaryScreen(
                 onEvent = onEvent
             )
         },
-        containerColor = Theme.materialColors.surfaceContainer
     ) { paddingValues ->
         Box(
             modifier = Modifier

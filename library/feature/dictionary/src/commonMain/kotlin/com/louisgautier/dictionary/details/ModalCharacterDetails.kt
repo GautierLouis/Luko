@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
 import com.louisgautier.designsystem.preview.AppThemeWrapper
@@ -80,10 +80,7 @@ internal fun ModalCharacterDetails(
         },
         onDismissRequest = onDismiss,
         content = {
-            Scaffold(
-                containerColor = Theme.materialColors.background,
-                contentColor = Theme.materialColors.onBackground
-            ) { paddingValues ->
+            BaseScaffold { _ ->
                 when (state) {
                     is UIState.Error -> {
                         ErrorContent(

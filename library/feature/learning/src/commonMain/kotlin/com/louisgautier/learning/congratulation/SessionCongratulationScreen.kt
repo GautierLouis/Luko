@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +18,7 @@ import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonRole
 import com.louisgautier.designsystem.components.button.attrs.ButtonShape
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
+import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
@@ -47,10 +47,8 @@ private fun SessionCongratulationScreen(
 
     val session = state.session!!
 
-    Scaffold(
+    BaseScaffold(
         topBar = { AppTopbar("") },
-        containerColor = Theme.materialColors.background,
-        contentColor = Theme.materialColors.onBackground,
     ) { paddingValues ->
 
         Column(

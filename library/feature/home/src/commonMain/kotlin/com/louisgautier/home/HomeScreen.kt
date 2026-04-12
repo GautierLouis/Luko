@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,10 +12,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.baseui.session.toUiModel
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
 import com.louisgautier.designsystem.components.metrics.SessionCard
+import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
-import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.previewSession
@@ -36,9 +35,8 @@ fun HomeScreen() {
 private fun HomeScreen(
     state: HomeViewModel.UIState,
 ) {
-    Scaffold(
+    BaseScaffold(
         topBar = { HomeTopbar(state.topbarTitle) },
-        containerColor = Theme.materialColors.background,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             PracticeButton(

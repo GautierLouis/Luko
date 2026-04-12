@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,6 +22,7 @@ import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonRole
 import com.louisgautier.designsystem.components.button.attrs.ButtonShape
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
+import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.page.ErrorScreen
 import com.louisgautier.designsystem.components.page.LoadingScreen
 import com.louisgautier.designsystem.preview.AppThemeWrapper
@@ -99,7 +99,7 @@ private fun SessionScreen(
         pagerState.animateScrollToPage(pagerState.currentPage + 1)
     }
 
-    Scaffold(
+    BaseScaffold(
         topBar = {
             Header(
                 pager = pagerState,
@@ -107,7 +107,6 @@ private fun SessionScreen(
                 modifier = Modifier.padding(top = 32.dp)
             )
         },
-        containerColor = Theme.materialColors.background,
         content = { paddingValues ->
             Column(
                 modifier = Modifier
