@@ -25,10 +25,10 @@ import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.page.ErrorScreen
 import com.louisgautier.designsystem.components.page.LoadingScreen
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.LoadingMode
 import com.louisgautier.designsystem.preview.LoadingModeProvider
 import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
@@ -183,7 +183,7 @@ private val previewSuccessState = SessionViewModel.SessionState.Success(
 private fun PreviewSessionScreenDay(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
 ) {
-    AppThemeWrapper(ThemeMode.Day) {
+    AppTheme(ThemeMode.Day) {
         SessionScreen(
             state = when (mode) {
                 LoadingMode.ERROR -> SessionViewModel.SessionState.Error
@@ -199,7 +199,7 @@ private fun PreviewSessionScreenDay(
 private fun PreviewSessionScreenNight(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
 ) {
-    AppThemeWrapper(ThemeMode.Night) {
+    AppTheme(ThemeMode.Night) {
         SessionScreen(
             state = when (mode) {
                 LoadingMode.ERROR -> SessionViewModel.SessionState.Error

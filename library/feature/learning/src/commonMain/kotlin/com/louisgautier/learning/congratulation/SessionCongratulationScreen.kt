@@ -20,9 +20,9 @@ import com.louisgautier.designsystem.components.button.attrs.ButtonShape
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.topbar.AppTopbar
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
@@ -122,7 +122,7 @@ private fun SessionCongratulationScreen(
 private fun PreviewSessionCongratulationScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         SessionCongratulationScreen(
             state = UIState(
                 session = previewSession

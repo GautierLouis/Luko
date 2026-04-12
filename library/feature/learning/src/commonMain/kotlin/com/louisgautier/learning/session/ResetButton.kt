@@ -13,9 +13,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.Reset
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
@@ -49,7 +49,7 @@ internal fun ResetButton(
 private fun PreviewResetButton(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         ResetButton()
     }
 }

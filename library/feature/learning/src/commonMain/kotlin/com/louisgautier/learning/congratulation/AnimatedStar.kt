@@ -20,9 +20,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedStar
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 
 @Composable
 internal fun AnimatedStar(
@@ -60,7 +60,7 @@ internal fun AnimatedStar(
 private fun PreviewAnimatedStar(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         AnimatedStar()
     }
 }

@@ -13,8 +13,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.louisgautier.baseui.PagingDataPreviewParameter
 import com.louisgautier.baseui.session.toUiModel
 import com.louisgautier.designsystem.components.metrics.SessionCard
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.previewSession
 import kotlinx.coroutines.flow.flowOf
@@ -57,7 +57,7 @@ private class FeedScreenProvider :
 private fun PreviewFeedScreenDay(
     @PreviewParameter(FeedScreenProvider::class) pagingData: PagingData<Session>
 ) {
-    AppThemeWrapper(ThemeMode.Day) {
+    AppTheme(ThemeMode.Day) {
         FeedScreen(
             state = FeedViewModel.UIState(),
             sessions = flowOf(pagingData).collectAsLazyPagingItems()
@@ -70,7 +70,7 @@ private fun PreviewFeedScreenDay(
 private fun PreviewFeedScreenNight(
     @PreviewParameter(FeedScreenProvider::class) pagingData: PagingData<Session>
 ) {
-    AppThemeWrapper(ThemeMode.Night) {
+    AppTheme(ThemeMode.Night) {
         FeedScreen(
             state = FeedViewModel.UIState(),
             sessions = flowOf(pagingData).collectAsLazyPagingItems()

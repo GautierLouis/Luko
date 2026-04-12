@@ -8,9 +8,9 @@ import com.louisgautier.designsystem.components.metrics.attrs.AppStatistic
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedBarChart
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import kotlinx.collections.immutable.persistentListOf
 
@@ -51,7 +51,7 @@ fun OverallStatisticsCard(
 private fun PreviewOverallStatisticsCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         OverallStatisticsCard(
             streak = "10",
             sessions = "3",

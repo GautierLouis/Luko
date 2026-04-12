@@ -8,9 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.token.dimens.Spacing
 
 @Composable
@@ -40,7 +40,7 @@ internal fun CharaFreqLevelGroupPicker(
 private fun PreviewCharaFreqLevelGroupPicker(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         CharaFreqLevelGroupPicker(
             selectedLevels = listOf(
                 FrequencyLevel.COMMON,

@@ -28,9 +28,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.TransformStroke
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.domain.model.Graphic
 import com.louisgautier.domain.previewGraphic
@@ -126,7 +126,7 @@ internal fun AnimatedGraphic(
 private fun PreviewAnimatedGraphic(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         AnimatedGraphic(
             graphic = previewGraphic,
         )

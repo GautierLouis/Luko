@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.components.metrics.attrs.RoundIconSize
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedBarChart
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.color.model.LevelColors
 
@@ -59,7 +59,7 @@ internal fun RoundIcon(
 private fun PreviewRoundIcon(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         Row {
             RoundIcon(
                 icon = AppIcon.RoundedBarChart,

@@ -17,9 +17,9 @@ import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic.Companion.icon
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic.Companion.label
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Spacing
 
@@ -66,7 +66,7 @@ fun SessionMetricItem(
 private fun PreviewSessionValue(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         SessionMetricItem(
             item = MetricItem.SessionMetric(
                 metric = SessionStatistic.Difficulty,

@@ -19,9 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
 import com.louisgautier.designsystem.token.dimens.Padding
@@ -78,7 +78,7 @@ internal fun CharacterItem(
 private fun PreviewCharacterItem(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         CharacterItem(
             previewSimpleDictionary,
             modifier = Modifier.width(CharacterItemDefault.MINIMUM_WIDTH.dp)

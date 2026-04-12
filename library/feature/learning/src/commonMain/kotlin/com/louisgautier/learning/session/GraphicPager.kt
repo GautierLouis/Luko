@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.TransformStroke
 import com.louisgautier.designsystem.modifier.dashedBorder
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
@@ -126,7 +126,7 @@ private fun PreviewGraphicPager(
         previousDrawnStrokes = listOf(listOf(Offset(1f, 1f))),
     )
 
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         Column {
             GraphicSketcher(
                 drawReference = true,

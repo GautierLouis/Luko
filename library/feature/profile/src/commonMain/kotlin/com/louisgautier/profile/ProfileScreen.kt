@@ -11,15 +11,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.topbar.AppTopbar
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.domain.repository.SettingTheme
 import kotlinx.collections.immutable.toPersistentList
 import org.koin.compose.viewmodel.koinViewModel
-
 
 @Composable
 fun ProfileScreen() {
@@ -74,7 +73,7 @@ internal fun ProfileTopbar() {
 private fun PreviewProfileScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         ProfileScreen(
             state = ProfileViewModel.UiState()
         )

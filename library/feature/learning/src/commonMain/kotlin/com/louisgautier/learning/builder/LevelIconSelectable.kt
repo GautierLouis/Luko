@@ -18,9 +18,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedBolt
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 
 @Composable
 fun LevelIconSelectable(
@@ -50,7 +50,7 @@ fun LevelIconSelectable(
 private fun PreviewLevelIconSelectable(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             LevelIconSelectable(
                 icon = AppIcon.RoundedBolt

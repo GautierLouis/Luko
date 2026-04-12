@@ -17,9 +17,9 @@ import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.c
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.label
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.FREQUENT
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.STANDARD
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
@@ -47,7 +47,7 @@ internal fun DictionaryFilter(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Spacing.large
         ) {
-            FrequencyLevel.entries.forEachIndexed { index, level ->
+            FrequencyLevel.entries.forEach { level ->
                 FilterChip(
                     selected = when (level) {
                         COMMON -> activeFilter.isCommonActivated
@@ -85,7 +85,7 @@ internal fun DictionaryFilter(
 private fun PreviewDictionaryFilter(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         Column {
             DictionaryFilter(
                 activeFilter = ActiveFilter(

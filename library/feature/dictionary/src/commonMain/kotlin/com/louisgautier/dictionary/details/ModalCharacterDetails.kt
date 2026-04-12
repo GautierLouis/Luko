@@ -15,10 +15,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.page.ErrorContent
 import com.louisgautier.designsystem.components.page.LoadingContent
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.LoadingMode
 import com.louisgautier.designsystem.preview.LoadingModeProvider
 import com.louisgautier.designsystem.preview.ThemeMode
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.dictionary.details.ModalCharacterDetailsEvent.OnPractice
@@ -113,7 +113,7 @@ internal fun ModalCharacterDetails(
 private fun PreviewModalCharacterDetailsDay(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
 ) {
-    AppThemeWrapper(ThemeMode.Day) {
+    AppTheme(ThemeMode.Day) {
         ModalCharacterDetails(
             state = when (mode) {
                 LoadingMode.LOADING -> UIState.Loading
@@ -134,7 +134,7 @@ private fun PreviewModalCharacterDetailsDay(
 private fun PreviewModalCharacterDetailsNight(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
 ) {
-    AppThemeWrapper(ThemeMode.Night) {
+    AppTheme(ThemeMode.Night) {
         ModalCharacterDetails(
             state = when (mode) {
                 LoadingMode.LOADING -> UIState.Loading

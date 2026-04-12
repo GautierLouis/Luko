@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
@@ -86,7 +86,7 @@ internal fun DetailsContent(
 private fun PreviewDetailsContent(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         DetailsContent(
             dictionaryWithGraphic = previewDictionaryWithGraphic,
             lastSession = listOf(previewSession, previewSession)

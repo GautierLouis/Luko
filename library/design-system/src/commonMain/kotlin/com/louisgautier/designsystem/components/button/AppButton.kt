@@ -21,9 +21,9 @@ import com.louisgautier.designsystem.components.button.attrs.ButtonRole
 import com.louisgautier.designsystem.components.button.attrs.ButtonShape
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.button.attrs.resolveButtonStyle
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
@@ -105,7 +105,7 @@ fun AppButton(
 private fun PreviewAppButton(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             AppButton(
                 text = "Filled Primary",

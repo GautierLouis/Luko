@@ -12,9 +12,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.app.main.MainScaffoldEvent.OnBottomItemClicked
 import com.louisgautier.app.main.MainViewModel.UiState
 import com.louisgautier.designsystem.components.page.BaseScaffold
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.dictionary.home.DictionaryScreen
 import com.louisgautier.feed.FeedScreen
 import com.louisgautier.home.HomeScreen
@@ -70,7 +70,7 @@ private fun MainScaffold(
 private fun PreviewMainScaffold(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         MainScaffold(
             state = UiState(
                 selectedItem = BottomNavItem.Dictionary

@@ -13,9 +13,9 @@ import com.louisgautier.baseui.session.toUiModel
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
 import com.louisgautier.designsystem.components.metrics.SessionCard
 import com.louisgautier.designsystem.components.page.BaseScaffold
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.previewSession
@@ -76,7 +76,7 @@ private fun HomeScreen(
 private fun PreviewHomeScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         HomeScreen(
             state = HomeViewModel.UIState(
                 isLoading = false,

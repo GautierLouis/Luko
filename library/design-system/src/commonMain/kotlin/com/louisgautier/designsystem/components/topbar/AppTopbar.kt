@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.louisgautier.designsystem.components.topbar.action.ActionContainer
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +48,7 @@ fun AppTopbar(
 private fun PreviewAppTopbar(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         AppTopbar("Title")
     }
 }

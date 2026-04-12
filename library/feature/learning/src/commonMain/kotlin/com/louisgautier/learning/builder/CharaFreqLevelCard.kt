@@ -12,9 +12,9 @@ import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.c
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.colorFamily
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.icon
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel.Companion.label
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 
 @Composable
 internal fun CharaFreqLevelCard(
@@ -39,7 +39,7 @@ internal fun CharaFreqLevelCard(
 private fun PreviewCharaFreqLevelCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             FrequencyLevel.entries.forEach {
                 CharaFreqLevelCard(level = it, selected = false)

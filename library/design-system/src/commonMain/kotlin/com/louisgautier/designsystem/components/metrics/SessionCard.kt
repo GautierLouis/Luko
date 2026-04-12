@@ -9,9 +9,9 @@ import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedTrophy
-import com.louisgautier.designsystem.preview.AppThemeWrapper
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
+import com.louisgautier.designsystem.theme.AppTheme
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
@@ -59,7 +59,7 @@ fun SessionCard(
 private fun PreviewSessionCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
-    AppThemeWrapper(themeMode) {
+    AppTheme(themeMode) {
         SessionCard(
             model = SessionUiModel(
                 date = "2026-31-01",
