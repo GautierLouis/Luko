@@ -1,4 +1,4 @@
-package com.louisgautier.server.domain
+package com.louisgautier.server.domain.repo.implem
 
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.DictionaryDto
@@ -19,6 +19,11 @@ import com.louisgautier.server.database.entity.DictionaryTable.matches
 import com.louisgautier.server.database.entity.DictionaryTable.pinyin
 import com.louisgautier.server.database.entity.DictionaryTable.radical
 import com.louisgautier.server.database.entity.GraphicTable
+import com.louisgautier.server.domain.mapper.toDictionary
+import com.louisgautier.server.domain.mapper.toDictionaryWithGraphic
+import com.louisgautier.server.domain.mapper.toSimpleDictionary
+import com.louisgautier.server.domain.repo.DictionaryRepository
+import com.louisgautier.server.domain.suspendTransaction
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
@@ -27,13 +32,14 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
+import kotlin.random.Random
 
-class DictionaryRepository {
+class DefaultDictionaryRepository : DictionaryRepository {
 
     private fun SqlExpressionBuilder.isValid() =
         ((pinyin.isNotNull() or decompositionList.neq("[]")) and (level inList CharacterFrequencyLevelDto.validEntry))
 
-    suspend fun getLevelCount() = suspendTransaction {
+    override suspend fun getLevelCount() = suspendTransaction {
         DictionaryTable
             .select(level, code.count())
             .groupBy(level)
@@ -42,18 +48,18 @@ class DictionaryRepository {
             }
     }
 
-    suspend fun getRandomCharacters(levels: List<CharacterFrequencyLevelDto>, limit: Int) =
+    override suspend fun getRandomCharacters(levels: List<CharacterFrequencyLevelDto>, limit: Int) =
         suspendTransaction {
             val total = DictionaryTable
-                .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
+                .join(GraphicTable, JoinType.INNER, code, GraphicTable.code)
                 .selectAll()
                 .where { (level inList levels) and isValid() }
                 .count()
 
-            val offset = kotlin.random.Random.nextLong(0, maxOf(0, total - limit))
+            val offset = Random.nextLong(0, maxOf(0, total - limit))
 
             DictionaryTable
-                .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
+                .join(GraphicTable, JoinType.INNER, code, GraphicTable.code)
                 .selectAll()
                 .where { (level inList levels) and isValid() }
                 .limit(limit)
@@ -64,7 +70,7 @@ class DictionaryRepository {
 
         }
 
-    suspend fun getAll(
+    override suspend fun getAll(
         page: Int,
         limit: Int,
         levels: List<CharacterFrequencyLevelDto>
@@ -80,21 +86,7 @@ class DictionaryRepository {
         ResponseListDto(hasNextPage, data)
     }
 
-//    suspend fun updateDef() = suspendTransaction {
-//        DictionaryTable.select(code, decompositionList)
-//            .where { decompositionList.neq("[]") and code.neq(21241) }
-//            .toList()
-//            .map { row ->
-//                val json = row[decompositionList].orEmpty()
-//                val list = Json.decodeFromString<List<DecompositionOld>>(json)
-//                val new = list.map { old -> Decomposition(old.symbol.code, old.glyphs.map { it.code }) }
-//                DictionaryTable.update( { code eq row[code] }) {
-//                    it[decompositionList] = Json.encodeToString(new)
-//                }
-//            }
-//    }
-
-    suspend fun getByLevel(
+    override suspend fun getByLevel(
         page: Int,
         limit: Int,
         level: CharacterFrequencyLevelDto
@@ -110,14 +102,14 @@ class DictionaryRepository {
         ResponseListDto(hasNextPage, data)
     }
 
-    suspend fun get(code: Int): DictionaryDto? = suspendTransaction {
+    override suspend fun get(code: Int): DictionaryDto? = suspendTransaction {
         DictionaryTable.selectAll().where { DictionaryTable.code eq code }.limit(1)
             .map { it.toDictionary() }.firstOrNull()
     }
 
-    suspend fun batchCreate(dictionary: List<DictionaryDto>) = suspendTransaction {
+    override suspend fun batchCreate(dictionary: List<DictionaryDto>) = suspendTransaction {
         DictionaryTable.batchInsert(
-            dictionary,
+            data = dictionary,
             ignore = true,
             shouldReturnGeneratedValues = false
         ) { dictionary ->
@@ -134,5 +126,6 @@ class DictionaryRepository {
             this[radical] = dictionary.radical
             this[matches] = Json.encodeToString(dictionary.matches)
         }
+        return@suspendTransaction
     }
 }

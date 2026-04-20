@@ -1,36 +1,30 @@
-package com.louisgautier.server.domain
+package com.louisgautier.server.domain.repo.implem
 
 import com.louisgautier.server.database.entity.UserTable
-import org.jetbrains.exposed.sql.ResultRow
+import com.louisgautier.server.domain.mapper.toUserEntity
+import com.louisgautier.server.domain.model.UserEntity
+import com.louisgautier.server.domain.repo.UserRepository
+import com.louisgautier.server.domain.suspendTransaction
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import kotlin.time.Clock
 
-class UserRepository {
+class DefaultUserRepository : UserRepository {
 
-    private fun ResultRow.toUserEntity() = UserEntity(
-        installationId = this[UserTable.installationId],
-        supabaseUserId = this[UserTable.supabaseUserId],
-        supabaseRefreshToken = this[UserTable.supabaseRefreshToken],
-        fcmToken = this[UserTable.fcmToken],
-        createdAt = this[UserTable.createdAt],
-        updatedAt = this[UserTable.updatedAt]
-    )
-
-    suspend fun getUserByInstallationId(id: String): UserEntity? = suspendTransaction {
+    override suspend fun getUserByInstallationId(id: String): UserEntity? = suspendTransaction {
         UserTable.selectAll()
             .where { UserTable.installationId eq id }
             .firstOrNull()?.toUserEntity()
     }
 
-    suspend fun getUserBySupabaseId(id: String): UserEntity? = suspendTransaction {
+    override suspend fun getUserBySupabaseId(id: String): UserEntity? = suspendTransaction {
         UserTable.selectAll()
             .where { UserTable.supabaseUserId eq id }
             .firstOrNull()?.toUserEntity()
     }
 
-    suspend fun create(
+    override suspend fun create(
         installationId: String,
         supabaseUserId: String,
         supabaseUserRefreshToken: String,
@@ -44,23 +38,26 @@ class UserRepository {
             it[createdAt] = Clock.System.now().toString()
             it[updatedAt] = Clock.System.now().toString()
         }
+        return@suspendTransaction
     }
 
-    suspend fun updateFcm(
+    override suspend fun updateFcm(
         installationId: String,
         fcmToken: String,
     ) = suspendTransaction {
         UserTable.update({ UserTable.installationId eq installationId }) {
             it[UserTable.fcmToken] = fcmToken
         }
+        return@suspendTransaction
     }
 
-    suspend fun updateSession(
+    override suspend fun updateSession(
         supabaseUserId: String,
         refreshToken: String,
     ) = suspendTransaction {
         UserTable.update({ UserTable.supabaseUserId eq supabaseUserId }) {
             it[UserTable.supabaseRefreshToken] = refreshToken
         }
+        return@suspendTransaction
     }
 }

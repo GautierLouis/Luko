@@ -1,9 +1,10 @@
-package com.louisgautier.server
+package com.louisgautier.server.auth
 
 import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.louisgautier.server.ServerConfig
 import io.ktor.http.auth.HttpAuthHeader
 import io.ktor.server.auth.jwt.JWTCredential
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -12,11 +13,16 @@ import java.security.interfaces.ECPublicKey
 import java.util.concurrent.TimeUnit
 
 class JwtProvider(
-    private val buildEnvironment: BuildEnvironment
+    private val serverConfig: ServerConfig
 ) {
 
+    companion object Constants {
+        const val JWT_NAME = "supabase-jwt"
+        const val CLAIM = "sub"
+    }
+
     private val provider by lazy {
-        JwkProviderBuilder(URI(buildEnvironment.supabaseJwks).toURL())
+        JwkProviderBuilder(URI(serverConfig.supabaseJwks).toURL())
             .cached(10, 24, TimeUnit.HOURS)
             .rateLimited(10, 1, TimeUnit.MINUTES)
             .build()
@@ -34,8 +40,8 @@ class JwtProvider(
             }
 
             return JWT.require(Algorithm.ECDSA256(publicKey, null))
-                .withIssuer(buildEnvironment.supabaseIssuer)
-                .withAudience(buildEnvironment.supabaseAudience)
+                .withIssuer(serverConfig.supabaseIssuer)
+                .withAudience(serverConfig.supabaseAudience)
                 .build()
 
         } catch (_: Exception) {
@@ -44,7 +50,7 @@ class JwtProvider(
     }
 
     fun validate(credential: JWTCredential): JWTPrincipal? {
-        return if (credential.payload.getClaim(Constants.CLAIM).asString() != null) {
+        return if (credential.payload.getClaim(CLAIM).asString() != null) {
             JWTPrincipal(credential.payload)
         } else null
     }

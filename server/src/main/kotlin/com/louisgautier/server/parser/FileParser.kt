@@ -3,15 +3,12 @@ package com.louisgautier.server.parser
 import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.DecompositionDto
 import com.louisgautier.apicontracts.dto.DictionaryDto
-import com.louisgautier.apicontracts.dto.EtymologyDto
 import com.louisgautier.apicontracts.dto.GraphicDto
 import com.louisgautier.server.database.entity.DictionaryDao
 import com.louisgautier.server.database.entity.GraphicDao
-import com.louisgautier.server.domain.DictionaryRepository
-import com.louisgautier.server.domain.GraphicRepository
+import com.louisgautier.server.domain.repo.DictionaryRepository
+import com.louisgautier.server.domain.repo.GraphicRepository
 import com.louisgautier.server.domain.suspendTransaction
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.toListOf
@@ -174,46 +171,3 @@ class FileParser(
             ?: throw IllegalStateException("Resource not found: $fileName")
     }
 }
-
-@Serializable
-data class CsvRow(
-    @SerialName("this_table") val this_table: Int,
-    @SerialName("simplified") val simplified: String? = null,
-    @SerialName("traditional") val traditional: String? = null,
-    @SerialName("pinyin") val pinyin: String? = null,
-    @SerialName("pinyin_style2") val pinyin_style2: String? = null,
-    @SerialName("zhuyin_bopomofo") val zhuyin_bopomofo: String? = null,
-    @SerialName("jyupting") val jyupting: String? = null,
-    @SerialName("decomposition1") val decomposition1: String? = null,
-    @SerialName("decomposition2_with_radical") val decomposition2_with_radical: String? = null,
-    @SerialName("meaning_decomposition2_with_radical") val meaning_decomposition2_with_radical: String? = null,
-    @SerialName("decomposition3_graphical") val decomposition3_graphical: String? = null,
-    @SerialName("component_in") val component_in: String? = null,
-    @SerialName("example_words") val example_words: String? = null,
-    @SerialName("meaning_junda") val meaning_junda: String? = null,
-    @SerialName("key_word_rsh") val key_word_rsh: String? = null,
-    @SerialName("hsk30_level") val hsk30_level: String? = null,
-    @SerialName("rank_rsh") val rank_rsh: Int? = null,
-    @SerialName("frequency_junda") val frequency_junda: Int? = null,
-    @SerialName("index_gscc") val index_gscc: String? = null,
-    @SerialName("learning_order_ccm") val learning_order_ccm: Int? = null,
-    @SerialName("cc_cedict_definitions") val cc_cedict_definitions: String? = null
-)
-
-@Serializable
-data class DictionaryParsed(
-    val character: Char,
-    val definition: String = "",
-    val pinyin: List<String> = emptyList(),
-    val decomposition: String = "",
-    val etymology: EtymologyDto? = null,
-    val radical: String? = null,
-    val matches: List<List<Int>?> = emptyList()
-)
-
-@Serializable
-data class GraphicParser(
-    val character: Char,
-    val strokes: List<String>,
-    val medians: List<List<List<Float>>>
-)

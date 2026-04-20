@@ -1,4 +1,4 @@
-package com.louisgautier.server.domain
+package com.louisgautier.server.domain.repo.implem
 
 import com.louisgautier.apicontracts.dto.RegisterDeviceRequestDto
 import com.louisgautier.apicontracts.dto.UserAuthMethodProvider
@@ -6,13 +6,14 @@ import com.louisgautier.apicontracts.dto.UserInfoJson
 import com.louisgautier.apicontracts.dto.UserMetadata
 import com.louisgautier.apicontracts.dto.UserRegistrationResponseJson
 import com.louisgautier.apicontracts.dto.UserTokenJson
+import com.louisgautier.server.domain.repo.AuthenticationRepository
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.user.UserSession
 
-internal class AuthenticationRepositoryImpl(
+internal class DefaultAuthenticationRepository(
     private val client: SupabaseClient,
-    private val userRepository: UserRepository,
+    private val userRepository: DefaultUserRepository,
 ) : AuthenticationRepository {
 
     private fun buildUserResponse(

@@ -1,21 +1,13 @@
-package com.louisgautier.server.domain
+package com.louisgautier.server.domain.mapper
 
 import com.louisgautier.apicontracts.dto.DecompositionDto
 import com.louisgautier.apicontracts.dto.DictionaryDto
 import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
 import com.louisgautier.apicontracts.dto.EtymologyDto
-import com.louisgautier.apicontracts.dto.GraphicDto
 import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
 import com.louisgautier.server.database.entity.DictionaryTable
-import com.louisgautier.server.database.entity.GraphicTable
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.ResultRow
-
-fun ResultRow.toGraphic() = GraphicDto(
-    code = this[GraphicTable.code],
-    strokes = this[GraphicTable.strokes].split(","),
-    medians = Json.decodeFromString(this[GraphicTable.medians]),
-)
 
 fun ResultRow.toDictionary() = DictionaryDto(
     code = this[DictionaryTable.code],

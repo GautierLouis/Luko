@@ -1,4 +1,4 @@
-package com.louisgautier.server.domain
+package com.louisgautier.server.domain.model
 
 data class UserEntity(
     val installationId: String,
@@ -7,4 +7,6 @@ data class UserEntity(
     val fcmToken: String,
     val createdAt: String,
     val updatedAt: String,
-)
+) {
+    companion object
+}
