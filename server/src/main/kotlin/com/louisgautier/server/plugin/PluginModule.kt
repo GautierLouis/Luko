@@ -7,5 +7,6 @@ val pluginModule = module {
     singleOf(::BasePlugin)
     singleOf(::AuthenticationPlugin)
     singleOf(::MetricsPlugin)
+    singleOf(::ErrorPlugin)
     single { RouterPlugin(getAll()) }
 }

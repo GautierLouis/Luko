@@ -9,8 +9,8 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.resources.Resources
 
-class BasePlugin {
-    fun Application.register() {
+class BasePlugin : Plugin {
+    override fun Application.register() {
         install(ContentNegotiation) {
             json(defaultJson)
         }

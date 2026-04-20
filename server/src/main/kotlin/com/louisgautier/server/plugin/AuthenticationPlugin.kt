@@ -11,8 +11,8 @@ import io.ktor.server.response.respond
 
 class AuthenticationPlugin(
     private val jwtProvider: JwtProvider
-) {
-    fun Application.register() {
+) : Plugin {
+    override fun Application.register() {
         install(Authentication) {
             jwt(JWT_NAME) {
                 verifier { header -> jwtProvider.verify(header) }

@@ -38,6 +38,6 @@ internal class DefaultCharacterRepository(
     override suspend fun getByName(code: Int): Result<DictionaryWithGraphic> =
         characterService.getByName(code).map { it.toDomain() }
 
-    override suspend fun getSVG(code: Int) = characterService.getSVG(code)
+    override suspend fun getGraphic(code: Int) = characterService.getGraphic(code)
         .map { it.toDomain() }
 }

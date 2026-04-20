@@ -28,6 +28,6 @@ interface CharacterRepository {
     ): Result<ResponseList<SimpleDictionary>>
 
     suspend fun getByName(code: Int): Result<DictionaryWithGraphic>
-    suspend fun getSVG(code: Int): Result<Graphic>
+    suspend fun getGraphic(code: Int): Result<Graphic>
 }
 

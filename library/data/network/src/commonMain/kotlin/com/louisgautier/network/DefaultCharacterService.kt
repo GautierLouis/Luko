@@ -27,7 +27,7 @@ class DefaultCharacterService(
         limit: Int
     ): Result<List<DictionaryWithGraphicDto>> {
         return call {
-            client.get(EndPoint.GenerateSession(level = level, limit = limit))
+            client.get(EndPoint.GenerateSession(levels = level, limit = limit))
         }
     }
 
@@ -63,10 +63,10 @@ class DefaultCharacterService(
         }
     }
 
-    override suspend fun getSVG(code: Int): Result<GraphicDto> {
+    override suspend fun getGraphic(code: Int): Result<GraphicDto> {
         return call {
             client.get(
-                EndPoint.Characters.ByName.SVG(
+                EndPoint.Characters.ByName.Graphic(
                     parent = EndPoint.Characters.ByName(code = code)
                 )
             )

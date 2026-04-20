@@ -4,6 +4,8 @@ import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.DecompositionDto
 import com.louisgautier.apicontracts.dto.DictionaryDto
 import com.louisgautier.apicontracts.dto.GraphicDto
+import com.louisgautier.apicontracts.dto.PointDto
+import com.louisgautier.apicontracts.dto.StrokeDto
 import com.louisgautier.server.database.entity.DictionaryDao
 import com.louisgautier.server.database.entity.GraphicDao
 import com.louisgautier.server.domain.repo.DictionaryRepository
@@ -51,9 +53,13 @@ class FileParser(
             if (graphicCount == EMPTY_COUNT) {
                 val graph = parseGraphic().map { g ->
                     GraphicDto(
-                        g.character.toString().codePointAt(0),
-                        g.strokes,
-                        g.medians
+                        code = g.character.toString().codePointAt(0),
+                        strokes = g.strokes,
+                        medians = g.medians.map { s ->
+                            StrokeDto(s.map { p ->
+                                PointDto(p[0], p[1])
+                            })
+                        }
                     )
                 }
                 graphicRepository.batchCreate(graph)

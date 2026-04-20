@@ -12,9 +12,8 @@ import java.time.Duration
 
 class MetricsPlugin(
     private val meterRegistry: PrometheusMeterRegistry
-) {
-
-    fun Application.register() {
+) : Plugin {
+    override fun Application.register() {
         install(MicrometerMetrics) {
             registry = meterRegistry
             meterBinders = listOf(

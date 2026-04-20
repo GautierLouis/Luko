@@ -56,7 +56,7 @@ class DefaultDictionaryRepository : DictionaryRepository {
                 .where { (level inList levels) and isValid() }
                 .count()
 
-            val offset = Random.nextLong(0, maxOf(0, total - limit))
+            val offset = if (total > limit) Random.nextLong(0, total - limit) else 0L
 
             DictionaryTable
                 .join(GraphicTable, JoinType.INNER, code, GraphicTable.code)

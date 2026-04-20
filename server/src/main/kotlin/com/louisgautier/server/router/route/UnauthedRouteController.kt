@@ -8,12 +8,18 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.resources.post
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
 
 class UnauthedRouteController(
     private val authenticationRepository: AuthenticationRepository
 ) : RouteController {
     override fun Route.register() {
+        get("/") {
+            call.respondText("Ktor")
+        }
+
         post<EndPoint.RegisterAnonymously> {
             val creds = call.receive<RegisterDeviceRequestDto>()
 

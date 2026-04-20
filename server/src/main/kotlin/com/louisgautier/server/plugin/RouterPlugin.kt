@@ -6,8 +6,8 @@ import io.ktor.server.routing.routing
 
 class RouterPlugin(
     private val controllers: List<RouteController>
-) {
-    fun Application.register() {
+) : Plugin {
+    override fun Application.register() {
         routing {
             controllers.forEach { controller ->
                 with(controller) { register() }

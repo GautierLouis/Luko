@@ -8,8 +8,10 @@ import com.louisgautier.apicontracts.dto.EtymologyDto
 import com.louisgautier.apicontracts.dto.EtymologyTypeDto
 import com.louisgautier.apicontracts.dto.GraphicDto
 import com.louisgautier.apicontracts.dto.LevelCountDto
+import com.louisgautier.apicontracts.dto.PointDto
 import com.louisgautier.apicontracts.dto.ResponseListDto
 import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
+import com.louisgautier.apicontracts.dto.StrokeDto
 import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Decomposition
 import com.louisgautier.domain.model.Dictionary
@@ -47,7 +49,16 @@ internal fun CharacterFrequencyLevel.toDto() =
 internal fun GraphicDto.toDomain() = Graphic(
     code = code,
     strokes = strokes,
-    medians = medians.map { s -> Stroke(s.map { p -> Point(p[0], p[1]) }) }
+    medians = medians.map { it.toDomain() }
+)
+
+internal fun StrokeDto.toDomain() = Stroke(
+    points = this.points.map { it.toDomain() }
+)
+
+internal fun PointDto.toDomain() = Point(
+    x = this.x,
+    y = this.y
 )
 
 internal fun <T, U> ResponseListDto<T>.toDomain(converter: (T) -> U) =
