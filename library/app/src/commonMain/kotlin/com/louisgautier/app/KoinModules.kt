@@ -26,7 +26,7 @@ val libraryModule = module {
     includes(domainModule)
 
     single {
-        val flavor = Flavor.valueOf(get<String>(named(Environment.FLAVOR)))
+        val flavor = Flavor.valueOf(get<String>(named(Environment.FLAVOR)).uppercase())
 
         AppConfig(
             platform = get(named(Environment.PLATFORM)),

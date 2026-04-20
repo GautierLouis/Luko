@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
 plugins {
     alias(libs.plugins.multiplatform.convention)
 }
@@ -13,6 +15,22 @@ kotlin {
             baseName = "FirebaseModule"
             isStatic = true
         }
+    }
+
+    swiftPMDependencies {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        swiftPackage(
+            url = url("https://github.com/firebase/firebase-ios-sdk.git"),
+            version = from("12.5.0"),
+            products = listOf(
+                product("FirebaseAnalytics"),
+                product("FirebaseMessaging"),
+                product("FirebaseAuth"),
+                product("FirebaseRemoteConfig"),
+                product("FirebaseCore"),
+                product("FirebaseInstallations")
+            )
+        )
     }
 
     sourceSets {

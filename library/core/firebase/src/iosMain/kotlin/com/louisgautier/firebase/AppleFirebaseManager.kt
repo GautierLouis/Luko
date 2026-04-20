@@ -1,121 +1,151 @@
 package com.louisgautier.firebase
 
-//import cocoapods.FirebaseCore.FIRApp
-//import cocoapods.FirebaseMessaging.FIRMessaging
-//import cocoapods.FirebaseMessaging.FIRMessagingDelegateProtocol
-//import cocoapods.FirebaseRemoteConfig.FIRRemoteConfig
-//import cocoapods.FirebaseRemoteConfig.FIRRemoteConfigSettings
-import com.louisgautier.firebase.event.TrackingEvent
-//import kotlinx.cinterop.ExperimentalForeignApi
-//import platform.darwin.NSObject
+import com.louisgautier.logger.AppLogger
+import com.louisgautier.tracking.TrackingEvent
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import platform.Foundation.NSData
+import platform.UIKit.UIApplication
+import platform.UIKit.registerForRemoteNotifications
+import platform.UserNotifications.UNAuthorizationOptionAlert
+import platform.UserNotifications.UNAuthorizationOptionBadge
+import platform.UserNotifications.UNAuthorizationOptionSound
+import platform.UserNotifications.UNUserNotificationCenter
+import swiftPMImport.Learn.Chinese.library.core.library.core.firebase.FIRAnalytics
+import swiftPMImport.Learn.Chinese.library.core.library.core.firebase.FIRApp
+import swiftPMImport.Learn.Chinese.library.core.library.core.firebase.FIRInstallations
+import swiftPMImport.Learn.Chinese.library.core.library.core.firebase.FIRMessaging
+import swiftPMImport.Learn.Chinese.library.core.library.core.firebase.FIRRemoteConfig
+import swiftPMImport.Learn.Chinese.library.core.library.core.firebase.FIRRemoteConfigFetchAndActivateStatus
+import kotlin.coroutines.resumeWithException
 
-//@OptIn(ExperimentalForeignApi::class)
-class AppleFirebaseManager(): FirebaseManager {
+@OptIn(ExperimentalForeignApi::class)
+class AppleFirebaseManager : FirebaseManager {
 
-//    private val rc: FIRRemoteConfig
-//        get() = FIRRemoteConfig.remoteConfig()
+    private val apnsTokenFlow = MutableStateFlow<NSData?>(null)
 
     override fun initialize() {
-//        FIRApp.configure()
-//
-//        val settings = FIRRemoteConfigSettings().apply {
-//            minimumFetchInterval = DEFAULT_MIN_FETCH_INTERVAL.toDouble()
-//        }
-//        rc.configSettings = settings
-//
-//        FIRMessaging.messaging().delegate = object : NSObject(), FIRMessagingDelegateProtocol {
-//            override fun messaging(messaging: FIRMessaging, didReceiveRegistrationToken: String?) {
-//                AppLogger.d("FCM Token: $didReceiveRegistrationToken")
-//            }
-//        }
+        FIRApp.configure()
+        requestNotificationPermissionAndRegister()
+    }
+
+    fun onApnsTokenReceived(token: NSData) {
+        FIRMessaging.messaging().APNSToken = token
+        apnsTokenFlow.value = token
+    }
+
+    private fun requestNotificationPermissionAndRegister() {
+        UNUserNotificationCenter.currentNotificationCenter()
+            .requestAuthorizationWithOptions(
+                UNAuthorizationOptionAlert or
+                        UNAuthorizationOptionBadge or
+                        UNAuthorizationOptionSound
+            ) { granted, error ->
+                if (error != null) {
+                    println("Notification permission error: ${error.localizedDescription}")
+                    return@requestAuthorizationWithOptions
+                }
+                if (granted) {
+                    // Must be called on main thread
+                    GlobalScope.launch(Dispatchers.Main) {
+                        UIApplication.sharedApplication
+                            .registerForRemoteNotifications()
+                    }
+                }
+            }
     }
 
     override suspend fun getFCMToken(): String {
-        TODO("Not yet implemented")
+        apnsTokenFlow.first { it != null }
+
+        return suspendCancellableCoroutine { continuation ->
+            FIRMessaging.messaging().tokenWithCompletion { token, error ->
+                when {
+                    error != null -> {
+                        println("error is not null")
+                        continuation.resumeWithException(
+                            Exception(error.localizedDescription)
+                        )
+                    }
+
+                    token != null -> {
+                        println("has token")
+                        continuation.resume(token) { cause, _, _ ->
+                            continuation.resumeWithException(cause)
+                        }
+                    }
+
+                    else -> {
+                        println("error else")
+                        continuation.resumeWithException(
+                            Exception("FCM token is null")
+                        )
+                    }
+                }
+            }
+        }
     }
 
-    override suspend fun getInstallationId(): String {
-        TODO("Not yet implemented")
+    override suspend fun getInstallationId(): String = suspendCancellableCoroutine { continuation ->
+        FIRInstallations.installations().installationIDWithCompletion { id, error ->
+            when {
+                error != null -> continuation.resumeWithException(
+                    Exception(error.localizedDescription)
+                )
+
+                id != null -> continuation.resume(id) { cause, _, _ ->
+                    continuation.resumeWithException(cause)
+                }
+
+                else -> continuation.resumeWithException(
+                    Exception("Installation ID is null")
+                )
+            }
+        }
     }
 
     override fun logEvent(event: TrackingEvent) {
-        TODO("Not yet implemented")
+        FIRAnalytics.logEventWithName(
+            name = event.key,
+            parameters = event.params.toMap()
+        )
     }
 
     override fun setUserId(userId: String) {
-        TODO("Not yet implemented")
+        FIRAnalytics.setUserID(userId)
     }
 
     override fun setUserProperty(name: String, value: String) {
-        TODO("Not yet implemented")
+        FIRAnalytics.setUserPropertyString(value, forName = name)
     }
 
     override fun fetchRemoteConfig() {
-//        rc.fetchWithCompletionHandler { status, error ->
-//            if (error != null) {
-//                //cont.resume(false)
-//            } else {
-//                // activate
-//                rc.fetchAndActivateWithCompletionHandler { changed, actError ->
-//                    if (actError != null) {
-//                        //cont.resume(false)
-//                    } else {
-//                        //cont.resume(true)
-//                    }
-//                }
-//            }
-//        }
+        val remoteConfig = FIRRemoteConfig.remoteConfig()
+        remoteConfig.fetchAndActivateWithCompletionHandler { status, error ->
+            if (error != null) {
+                AppLogger.e(
+                    tag = "RemoteConfig",
+                    message = "fetched error: ${error.localizedDescription}"
+                )
+                return@fetchAndActivateWithCompletionHandler
+            }
+            when (status) {
+                FIRRemoteConfigFetchAndActivateStatus
+                    .FIRRemoteConfigFetchAndActivateStatusSuccessFetchedFromRemote ->
+                    AppLogger.i(tag = "RemoteConfig", message = "fetched and activated from remote")
+
+                FIRRemoteConfigFetchAndActivateStatus
+                    .FIRRemoteConfigFetchAndActivateStatusSuccessUsingPreFetchedData ->
+                    AppLogger.i(tag = "RemoteConfig", message = "activated using pre-fetched data")
+
+                else ->
+                    AppLogger.i(tag = "RemoteConfig", message = "fetched failed or no change")
+            }
+        }
     }
-
-
 }
-//@OptIn(ExperimentalForeignApi::class)
-//class iOSFirebaseManager: FirebaseManager {
-//
-//    private val rc: FIRRemoteConfig
-//        get() = FIRRemoteConfig.remoteConfig()
-//
-//    private val fm: FIRMessaging
-//        get() = FIRMessaging.messaging()
-//
-//    override fun initialize() {
-//
-//        val settings = FIRRemoteConfigSettings().apply {
-//            minimumFetchInterval = DEFAULT_MIN_FETCH_INTERVAL.toDouble()
-//        }
-//        rc.configSettings = settings
-//
-//        fm.delegate = object : NSObject(), FIRMessagingDelegateProtocol {
-//            override fun messaging(messaging: FIRMessaging, didReceiveRegistrationToken: String?) {
-//                AppLogger.d("FCM Token: $didReceiveRegistrationToken")
-//            }
-//        }
-//    }
-//
-//    override fun logEvent(event: TrackingEvent) {
-//    }
-//
-//    override fun setUserId(userId: String) {
-//    }
-//
-//    override fun setUserProperty(name: String, value: String) {
-//    }
-//
-//    override fun fetchRemoteConfig() {
-//        rc.fetchWithCompletionHandler { status, error ->
-//            if (error != null) {
-//                //cont.resume(false)
-//            } else {
-//                // activate
-//                rc.fetchAndActivateWithCompletionHandler { changed, actError ->
-//                    if (actError != null) {
-//                        //cont.resume(false)
-//                    } else {
-//                        //cont.resume(true)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//}

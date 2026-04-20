@@ -13,7 +13,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "App"
             isStatic = true
-            //export(projects.client.core.firebase)
         }
     }
 

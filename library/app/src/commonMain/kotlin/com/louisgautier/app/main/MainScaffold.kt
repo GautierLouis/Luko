@@ -48,11 +48,13 @@ private fun MainScaffold(
 ) {
     BaseScaffold(
         bottomBar = {
-            BottomBar(
-                items = state.bottomNavItem,
-                selectedItem = state.selectedItem,
-                onClick = { onEvent(OnBottomItemClicked(it)) }
-            )
+            if (state.enableBottomBar) {
+                BottomBar(
+                    items = state.bottomNavItem,
+                    selectedItem = state.selectedItem,
+                    onClick = { onEvent(OnBottomItemClicked(it)) }
+                )
+            }
         }
     ) { paddingValues ->
         Box(

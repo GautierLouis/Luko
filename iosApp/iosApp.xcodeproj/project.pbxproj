@@ -7,14 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		99ACAA522F18E7E6004B302D /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA512F18E7E6004B302D /* FirebaseAnalytics */; };
-		99ACAA542F18E7E6004B302D /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA532F18E7E6004B302D /* FirebaseAnalyticsCore */; };
-		99ACAA562F18E7E6004B302D /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA552F18E7E6004B302D /* FirebaseAppCheck */; };
-		99ACAA582F18E7E6004B302D /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA572F18E7E6004B302D /* FirebaseCore */; settings = {ATTRIBUTES = (Required, ); }; };
-		99ACAA5A2F18E7E6004B302D /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA592F18E7E6004B302D /* FirebaseCrashlytics */; };
-		99ACAA5C2F18E7E6004B302D /* FirebaseInstallations in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA5B2F18E7E6004B302D /* FirebaseInstallations */; };
-		99ACAA5E2F18E7E6004B302D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA5D2F18E7E6004B302D /* FirebaseMessaging */; };
-		99ACAA602F18E7E6004B302D /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 99ACAA5F2F18E7E6004B302D /* FirebaseRemoteConfig */; };
+		9917D4A52F95C9CD00C2541C /* KotlinMultiplatformLinkedPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FE5251E7F11A6923D375CC0 /* KotlinMultiplatformLinkedPackage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,18 +41,11 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D7F926270AC085079E39AD96 /* Frameworks */ = {
+		99313E692F9280DD004C45E6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				99ACAA522F18E7E6004B302D /* FirebaseAnalytics in Frameworks */,
-				99ACAA562F18E7E6004B302D /* FirebaseAppCheck in Frameworks */,
-				99ACAA5E2F18E7E6004B302D /* FirebaseMessaging in Frameworks */,
-				99ACAA5A2F18E7E6004B302D /* FirebaseCrashlytics in Frameworks */,
-				99ACAA5C2F18E7E6004B302D /* FirebaseInstallations in Frameworks */,
-				99ACAA582F18E7E6004B302D /* FirebaseCore in Frameworks */,
-				99ACAA542F18E7E6004B302D /* FirebaseAnalyticsCore in Frameworks */,
-				99ACAA602F18E7E6004B302D /* FirebaseRemoteConfig in Frameworks */,
+				9917D4A52F95C9CD00C2541C /* KotlinMultiplatformLinkedPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,8 +57,16 @@
 			children = (
 				25A76963B87050699CA1C7A2 /* Configuration */,
 				7218D14EF226F5314FB7F335 /* iosApp */,
+				99313E6A2F9280FA004C45E6 /* Frameworks */,
 				E8E996A9FCD76138E2F0A104 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		99313E6A2F9280FA004C45E6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		E8E996A9FCD76138E2F0A104 /* Products */ = {
@@ -93,7 +87,7 @@
 				99A4C3962F1613D2006CB46A /* Compile Kotlin Framework */,
 				26BB25D98E239C08AB864D9A /* Sources */,
 				FB522C7D37D6E274E1BA1B05 /* Resources */,
-				D7F926270AC085079E39AD96 /* Frameworks */,
+				99313E692F9280DD004C45E6 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -103,6 +97,9 @@
 				7218D14EF226F5314FB7F335 /* iosApp */,
 			);
 			name = iosApp;
+			packageProductDependencies = (
+				2FE5251E7F11A6923D375CC0 /* KotlinMultiplatformLinkedPackage */,
+			);
 			productName = iosApp;
 			productReference = E59A0F03F3AD98808292A682 /* Sample.app */;
 			productType = "com.apple.product-type.application";
@@ -137,7 +134,7 @@
 			mainGroup = 3D25AE9431F2A88A58DAAD79;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1A44E235E5285699BB53AD99 /* XCLocalSwiftPackageReference "KotlinMultiplatformLinkedPackage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E8E996A9FCD76138E2F0A104 /* Products */;
@@ -177,7 +174,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :client:composeApp:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\ncd \"$SRCROOT/..\"\n./gradlew :library:app:embedAndSignAppleFrameworkForXcode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -268,9 +265,13 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = Q9CF3CWFV4;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../client/composeApp/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../library/app/build/xcode-frameworks/$(CONFIGURATION)/iphonesimulator",
+					"$(SRCROOT)/../library/app/build/xcode-frameworks/$(CONFIGURATION)/iphoneos",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -361,9 +362,13 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = Q9CF3CWFV4;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../client/composeApp/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../library/app/build/xcode-frameworks/$(CONFIGURATION)/iphonesimulator",
+					"$(SRCROOT)/../library/app/build/xcode-frameworks/$(CONFIGURATION)/iphoneos",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -408,57 +413,17 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 12.8.0;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		1A44E235E5285699BB53AD99 /* XCLocalSwiftPackageReference "KotlinMultiplatformLinkedPackage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = KotlinMultiplatformLinkedPackage;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		99ACAA512F18E7E6004B302D /* FirebaseAnalytics */ = {
+		2FE5251E7F11A6923D375CC0 /* KotlinMultiplatformLinkedPackage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		99ACAA532F18E7E6004B302D /* FirebaseAnalyticsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsCore;
-		};
-		99ACAA552F18E7E6004B302D /* FirebaseAppCheck */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAppCheck;
-		};
-		99ACAA572F18E7E6004B302D /* FirebaseCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
-		};
-		99ACAA592F18E7E6004B302D /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
-		};
-		99ACAA5B2F18E7E6004B302D /* FirebaseInstallations */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseInstallations;
-		};
-		99ACAA5D2F18E7E6004B302D /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
-		};
-		99ACAA5F2F18E7E6004B302D /* FirebaseRemoteConfig */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 99ACAA502F18E7E6004B302D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseRemoteConfig;
+			productName = KotlinMultiplatformLinkedPackage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

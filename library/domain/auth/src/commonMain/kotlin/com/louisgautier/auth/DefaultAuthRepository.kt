@@ -2,6 +2,7 @@ package com.louisgautier.auth
 
 import com.louisgautier.apicontracts.dto.RegisterDeviceRequestDto
 import com.louisgautier.firebase.FirebaseManager
+import com.louisgautier.logger.AppLogger
 import com.louisgautier.network.interfaces.AuthService
 import com.louisgautier.preferences.AppPreferences
 
@@ -14,6 +15,11 @@ internal class DefaultAuthRepository(
     override suspend fun registerAnonymously(): Result<Unit> {
         val installationId = firebaseManager.getInstallationId()
         val fcmToken = firebaseManager.getFCMToken()
+
+        AppLogger.i(
+            tag = "Registration",
+            message = "Register anonymously with FCM $fcmToken for installation $installationId"
+        )
 
         preferences.setInstallationId(installationId)
         preferences.setFcmToken(fcmToken)
