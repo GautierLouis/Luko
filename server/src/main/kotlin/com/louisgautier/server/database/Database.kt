@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.Database as DatabaseFactory
 class Database(
     private val config: ServerConfig
 ) {
-    init {
+    fun init() {
         val dataSource = buildDataSource()
         connect(dataSource)
         migrate()

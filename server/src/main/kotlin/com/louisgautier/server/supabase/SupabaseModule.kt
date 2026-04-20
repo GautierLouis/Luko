@@ -12,8 +12,8 @@ val supabaseModule = module {
     single {
         val env = get<ServerConfig>()
         createSupabaseClient(
-            supabaseUrl = get<ServerConfig>().supabaseUrl,
-            supabaseKey = get<ServerConfig>().supabasePublicKey
+            supabaseUrl = env.supabaseUrl,
+            supabaseKey = env.supabasePublicKey
         ) {
             install(Auth)
             defaultLogLevel = env.ktorLogLevel

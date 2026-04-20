@@ -1,5 +1,6 @@
 package com.louisgautier.server
 
+import com.louisgautier.server.database.Database
 import com.louisgautier.server.di.initKoin
 import com.louisgautier.server.parser.FileParser
 import io.ktor.server.application.Application
@@ -19,6 +20,10 @@ fun Application.module() {
 
     with(get<ServerRegistry>()) {
         start()
+    }
+
+    with(get<Database>()) {
+        init()
     }
 
     launch {
