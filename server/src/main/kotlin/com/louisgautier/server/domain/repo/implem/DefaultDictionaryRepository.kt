@@ -1,125 +1,75 @@
 package com.louisgautier.server.domain.repo.implem
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.DictionaryDto
+import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
 import com.louisgautier.apicontracts.dto.LevelCountDto
 import com.louisgautier.apicontracts.dto.ResponseListDto
 import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
-import com.louisgautier.server.database.defaultWhere
-import com.louisgautier.server.database.entity.DictionaryTable
+import com.louisgautier.apicontracts.routing.EndPoint
 import com.louisgautier.server.database.entity.DictionaryTable.code
-import com.louisgautier.server.database.entity.DictionaryTable.decomposition
-import com.louisgautier.server.database.entity.DictionaryTable.decompositionList
-import com.louisgautier.server.database.entity.DictionaryTable.definition
-import com.louisgautier.server.database.entity.DictionaryTable.etymologyHint
-import com.louisgautier.server.database.entity.DictionaryTable.etymologyPhonetic
-import com.louisgautier.server.database.entity.DictionaryTable.etymologySemantic
-import com.louisgautier.server.database.entity.DictionaryTable.etymologyType
 import com.louisgautier.server.database.entity.DictionaryTable.level
-import com.louisgautier.server.database.entity.DictionaryTable.matches
-import com.louisgautier.server.database.entity.DictionaryTable.pinyin
-import com.louisgautier.server.database.entity.DictionaryTable.radical
-import com.louisgautier.server.database.joinGraphic
-import com.louisgautier.server.database.matchesPinyin
-import com.louisgautier.server.database.paginated
+import com.louisgautier.server.database.source.DictionaryDataSource
 import com.louisgautier.server.domain.mapper.toDictionary
+import com.louisgautier.server.domain.mapper.toDictionaryEntity
 import com.louisgautier.server.domain.mapper.toDictionaryWithGraphic
+import com.louisgautier.server.domain.mapper.toDto
+import com.louisgautier.server.domain.mapper.toEntity
 import com.louisgautier.server.domain.mapper.toSimpleDictionary
 import com.louisgautier.server.domain.repo.DictionaryRepository
-import com.louisgautier.server.domain.suspendTransaction
-import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.batchInsert
+import com.louisgautier.server.error.missingParameter
 import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.selectAll
-import kotlin.random.Random
 
-class DefaultDictionaryRepository : DictionaryRepository {
+class DefaultDictionaryRepository(
+    private val source: DictionaryDataSource
+) : DictionaryRepository {
 
-    override suspend fun getLevelCount() = suspendTransaction {
-        DictionaryTable
-            .select(level, code.count())
-            .groupBy(level)
+    override suspend fun getLevelCount(): List<LevelCountDto> {
+        return source.getLevelCount()
             .map { row ->
-                LevelCountDto(row[level], row[code.count()].toInt())
+                LevelCountDto(row[level].toDto(), row[code.count()].toInt())
             }
     }
 
     override suspend fun getRandomCharacters(
-        levels: List<CharacterFrequencyLevelDto>,
-        limit: Int
-    ) = suspendTransaction {
-        DictionaryTable
-            .joinGraphic()
-            .selectAll()
-            .defaultWhere { level inList levels }
-            .let { query ->
-                val total = query.count()
-                val offset = if (total > limit) Random.nextLong(0, total - limit) else 0L
-                query.limit(limit).offset(offset)
-            }
-            .map { it.toDictionaryWithGraphic() }
-    }
+        params: EndPoint.GenerateSession
+    ): List<DictionaryWithGraphicDto> {
 
-    override suspend fun getAll(
-        page: Int,
-        limit: Int,
-        levels: List<CharacterFrequencyLevelDto>
-    ): ResponseListDto<DictionaryDto> = suspendTransaction {
-        DictionaryTable.selectAll()
-            .defaultWhere { level inList levels }
-            .paginated(page, limit) { it.toDictionary() }
+        return source.getRandomCharacters(
+            levels = params.levels?.map { it.toEntity() } ?: throw missingParameter("levels"),
+            limit = params.limit
+        ).map { it.toDictionaryWithGraphic() }
     }
 
     override suspend fun getByLevel(
-        page: Int,
-        limit: Int,
-        level: CharacterFrequencyLevelDto
-    ): ResponseListDto<SimpleDictionaryDto> = suspendTransaction {
-        DictionaryTable.selectAll()
-            .defaultWhere { DictionaryTable.level eq level }
-            .paginated(page, limit) { it.toSimpleDictionary() }
+        params: EndPoint.Characters.ByLevel
+    ): ResponseListDto<SimpleDictionaryDto> {
+        val (hasNextPage, data) = source.getByLevel(
+            page = params.page,
+            limit = params.limit,
+            level = params.level?.toEntity() ?: throw missingParameter("level"),
+        )
+        return ResponseListDto(hasNextPage, data.map { it.toSimpleDictionary() })
     }
 
     override suspend fun search(
-        levels: List<CharacterFrequencyLevelDto>,
-        query: String,
-        page: Int,
-        limit: Int
-    ): ResponseListDto<SimpleDictionaryDto> = suspendTransaction {
-        DictionaryTable.selectAll()
-            .defaultWhere { level inList levels and matchesPinyin(query) }
-            .paginated(page, limit) { it.toSimpleDictionary() }
-
+        params: EndPoint.Characters.Search
+    ): ResponseListDto<SimpleDictionaryDto> {
+        val (hasNextPage, data) = source.search(
+            levels = params.levels?.map { it.toEntity() } ?: throw missingParameter("levels"),
+            query = params.query,
+            page = params.page,
+            limit = params.limit
+        )
+        return ResponseListDto(hasNextPage, data.map { it.toSimpleDictionary() })
     }
 
-    override suspend fun get(code: Int): DictionaryDto? = suspendTransaction {
-        DictionaryTable.selectAll()
-            .where { DictionaryTable.code eq code }
-            .limit(1)
-            .map { it.toDictionary() }
-            .firstOrNull()
+    override suspend fun get(
+        params: EndPoint.Characters.ByName
+    ): DictionaryDto? {
+        return source.get(params.code)?.toDictionary()
     }
 
-    override suspend fun batchCreate(dictionary: List<DictionaryDto>) = suspendTransaction {
-        DictionaryTable.batchInsert(
-            data = dictionary,
-            ignore = true,
-            shouldReturnGeneratedValues = false
-        ) { dictionary ->
-            this[code] = dictionary.code
-            this[definition] = dictionary.definition
-            this[pinyin] = dictionary.pinyin.joinToString()
-            this[decomposition] = dictionary.decomposition
-            this[decompositionList] = Json.encodeToString(dictionary.decompositionList)
-            this[level] = dictionary.level
-            this[etymologyType] = dictionary.etymology?.type
-            this[etymologyPhonetic] = dictionary.etymology?.phonetic
-            this[etymologySemantic] = dictionary.etymology?.semantic
-            this[etymologyHint] = dictionary.etymology?.hint
-            this[radical] = dictionary.radical
-            this[matches] = Json.encodeToString(dictionary.matches)
-        }
-        return@suspendTransaction
+    override suspend fun batchCreate(dictionary: List<DictionaryDto>) {
+        source.batchInsert(dictionary.map { it.toDictionaryEntity() })
     }
 }

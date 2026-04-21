@@ -1,10 +1,10 @@
 package com.louisgautier.server.domain.repo.implem
 
 import com.louisgautier.server.database.entity.UserTable
+import com.louisgautier.server.database.suspendTransaction
 import com.louisgautier.server.domain.mapper.toUserEntity
 import com.louisgautier.server.domain.model.UserEntity
 import com.louisgautier.server.domain.repo.UserRepository
-import com.louisgautier.server.domain.suspendTransaction
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update

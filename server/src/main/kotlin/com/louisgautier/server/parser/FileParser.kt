@@ -8,9 +8,9 @@ import com.louisgautier.apicontracts.dto.PointDto
 import com.louisgautier.apicontracts.dto.StrokeDto
 import com.louisgautier.server.database.entity.DictionaryDao
 import com.louisgautier.server.database.entity.GraphicDao
+import com.louisgautier.server.database.suspendTransaction
 import com.louisgautier.server.domain.repo.DictionaryRepository
 import com.louisgautier.server.domain.repo.GraphicRepository
-import com.louisgautier.server.domain.suspendTransaction
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.toListOf

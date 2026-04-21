@@ -1,40 +1,30 @@
 package com.louisgautier.server.domain.repo
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
 import com.louisgautier.apicontracts.dto.DictionaryDto
 import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
 import com.louisgautier.apicontracts.dto.LevelCountDto
 import com.louisgautier.apicontracts.dto.ResponseListDto
 import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
+import com.louisgautier.apicontracts.routing.EndPoint
 
 interface DictionaryRepository {
     suspend fun getLevelCount(): List<LevelCountDto>
 
     suspend fun getRandomCharacters(
-        levels: List<CharacterFrequencyLevelDto>,
-        limit: Int
+        params: EndPoint.GenerateSession
     ): List<DictionaryWithGraphicDto>
 
-    suspend fun getAll(
-        page: Int,
-        limit: Int,
-        levels: List<CharacterFrequencyLevelDto>
-    ): ResponseListDto<DictionaryDto>
-
     suspend fun getByLevel(
-        page: Int,
-        limit: Int,
-        level: CharacterFrequencyLevelDto
+        params: EndPoint.Characters.ByLevel
     ): ResponseListDto<SimpleDictionaryDto>
 
     suspend fun search(
-        levels: List<CharacterFrequencyLevelDto>,
-        query: String,
-        page: Int,
-        limit: Int
+        params: EndPoint.Characters.Search
     ): ResponseListDto<SimpleDictionaryDto>
 
-    suspend fun get(code: Int): DictionaryDto?
+    suspend fun get(
+        params: EndPoint.Characters.ByName
+    ): DictionaryDto?
 
     suspend fun batchCreate(dictionary: List<DictionaryDto>)
 }

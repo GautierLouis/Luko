@@ -1,8 +1,9 @@
 package com.louisgautier.server.domain.repo
 
 import com.louisgautier.apicontracts.dto.GraphicDto
+import com.louisgautier.apicontracts.routing.EndPoint
 
 interface GraphicRepository {
-    suspend fun get(code: Int): GraphicDto?
+    suspend fun get(params: EndPoint.Characters.ByName): GraphicDto?
     suspend fun batchCreate(graphic: List<GraphicDto>)
 }

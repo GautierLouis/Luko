@@ -8,7 +8,9 @@ import com.louisgautier.server.domain.repo.implem.DefaultAuthenticationRepositor
 import com.louisgautier.server.domain.repo.implem.DefaultDictionaryRepository
 import com.louisgautier.server.domain.repo.implem.DefaultGraphicRepository
 import com.louisgautier.server.domain.repo.implem.DefaultUserRepository
+import com.louisgautier.server.domain.usecase.GetFullDictionary
 import com.louisgautier.server.parser.FileParser
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -19,4 +21,6 @@ val domainModule = module {
     singleOf(::DefaultGraphicRepository) bind GraphicRepository::class
     singleOf(::DefaultUserRepository) bind UserRepository::class
     singleOf(::FileParser)
+
+    factoryOf(::GetFullDictionary)
 }
