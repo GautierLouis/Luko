@@ -5,6 +5,7 @@ import com.louisgautier.apicontracts.dto.DictionaryDto
 import com.louisgautier.apicontracts.dto.LevelCountDto
 import com.louisgautier.apicontracts.dto.ResponseListDto
 import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
+import com.louisgautier.server.database.defaultWhere
 import com.louisgautier.server.database.entity.DictionaryTable
 import com.louisgautier.server.database.entity.DictionaryTable.code
 import com.louisgautier.server.database.entity.DictionaryTable.decomposition
@@ -18,26 +19,22 @@ import com.louisgautier.server.database.entity.DictionaryTable.level
 import com.louisgautier.server.database.entity.DictionaryTable.matches
 import com.louisgautier.server.database.entity.DictionaryTable.pinyin
 import com.louisgautier.server.database.entity.DictionaryTable.radical
-import com.louisgautier.server.database.entity.GraphicTable
+import com.louisgautier.server.database.joinGraphic
+import com.louisgautier.server.database.matchesPinyin
+import com.louisgautier.server.database.paginated
 import com.louisgautier.server.domain.mapper.toDictionary
 import com.louisgautier.server.domain.mapper.toDictionaryWithGraphic
 import com.louisgautier.server.domain.mapper.toSimpleDictionary
 import com.louisgautier.server.domain.repo.DictionaryRepository
 import com.louisgautier.server.domain.suspendTransaction
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 import kotlin.random.Random
 
 class DefaultDictionaryRepository : DictionaryRepository {
-
-    private fun SqlExpressionBuilder.isValid() =
-        ((pinyin.isNotNull() or decompositionList.neq("[]")) and (level inList CharacterFrequencyLevelDto.validEntry))
 
     override suspend fun getLevelCount() = suspendTransaction {
         DictionaryTable
@@ -48,42 +45,30 @@ class DefaultDictionaryRepository : DictionaryRepository {
             }
     }
 
-    override suspend fun getRandomCharacters(levels: List<CharacterFrequencyLevelDto>, limit: Int) =
-        suspendTransaction {
-            val total = DictionaryTable
-                .join(GraphicTable, JoinType.INNER, code, GraphicTable.code)
-                .selectAll()
-                .where { (level inList levels) and isValid() }
-                .count()
-
-            val offset = if (total > limit) Random.nextLong(0, total - limit) else 0L
-
-            DictionaryTable
-                .join(GraphicTable, JoinType.INNER, code, GraphicTable.code)
-                .selectAll()
-                .where { (level inList levels) and isValid() }
-                .limit(limit)
-                .offset(offset)
-                .map {
-                    it.toDictionaryWithGraphic()
-                }
-
-        }
+    override suspend fun getRandomCharacters(
+        levels: List<CharacterFrequencyLevelDto>,
+        limit: Int
+    ) = suspendTransaction {
+        DictionaryTable
+            .joinGraphic()
+            .selectAll()
+            .defaultWhere { level inList levels }
+            .let { query ->
+                val total = query.count()
+                val offset = if (total > limit) Random.nextLong(0, total - limit) else 0L
+                query.limit(limit).offset(offset)
+            }
+            .map { it.toDictionaryWithGraphic() }
+    }
 
     override suspend fun getAll(
         page: Int,
         limit: Int,
         levels: List<CharacterFrequencyLevelDto>
     ): ResponseListDto<DictionaryDto> = suspendTransaction {
-        val result = DictionaryTable.selectAll()
-            .where { (level inList levels) and isValid() }
-            .limit(limit + 1)
-            .offset(page * limit.toLong())
-            .toList()
-
-        val data = result.dropLast(1).map { it.toDictionary() }
-        val hasNextPage = result.size > limit
-        ResponseListDto(hasNextPage, data)
+        DictionaryTable.selectAll()
+            .defaultWhere { level inList levels }
+            .paginated(page, limit) { it.toDictionary() }
     }
 
     override suspend fun getByLevel(
@@ -91,20 +76,29 @@ class DefaultDictionaryRepository : DictionaryRepository {
         limit: Int,
         level: CharacterFrequencyLevelDto
     ): ResponseListDto<SimpleDictionaryDto> = suspendTransaction {
-        val result = DictionaryTable.selectAll()
-            .where { (DictionaryTable.level eq level) and isValid() }
-            .limit(limit + 1)
-            .offset(page * limit.toLong())
-            .toList()
+        DictionaryTable.selectAll()
+            .defaultWhere { DictionaryTable.level eq level }
+            .paginated(page, limit) { it.toSimpleDictionary() }
+    }
 
-        val data = result.dropLast(1).map { it.toSimpleDictionary() }
-        val hasNextPage = result.size > limit
-        ResponseListDto(hasNextPage, data)
+    override suspend fun search(
+        levels: List<CharacterFrequencyLevelDto>,
+        query: String,
+        page: Int,
+        limit: Int
+    ): ResponseListDto<SimpleDictionaryDto> = suspendTransaction {
+        DictionaryTable.selectAll()
+            .defaultWhere { level inList levels and matchesPinyin(query) }
+            .paginated(page, limit) { it.toSimpleDictionary() }
+
     }
 
     override suspend fun get(code: Int): DictionaryDto? = suspendTransaction {
-        DictionaryTable.selectAll().where { DictionaryTable.code eq code }.limit(1)
-            .map { it.toDictionary() }.firstOrNull()
+        DictionaryTable.selectAll()
+            .where { DictionaryTable.code eq code }
+            .limit(1)
+            .map { it.toDictionary() }
+            .firstOrNull()
     }
 
     override suspend fun batchCreate(dictionary: List<DictionaryDto>) = suspendTransaction {

@@ -27,6 +27,13 @@ interface DictionaryRepository {
         level: CharacterFrequencyLevelDto
     ): ResponseListDto<SimpleDictionaryDto>
 
+    suspend fun search(
+        levels: List<CharacterFrequencyLevelDto>,
+        query: String,
+        page: Int,
+        limit: Int
+    ): ResponseListDto<SimpleDictionaryDto>
+
     suspend fun get(code: Int): DictionaryDto?
 
     suspend fun batchCreate(dictionary: List<DictionaryDto>)

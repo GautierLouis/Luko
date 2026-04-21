@@ -43,6 +43,22 @@ class CharacterRouteController(
             call.respond(HttpStatusCode.OK, result)
         }
 
+        get<EndPoint.Characters.Search> { resources ->
+            val page = resources.page
+            val limit = resources.limit
+            val levels = resources.levels
+                ?: throw missingParameter("levels")
+            val query = resources.query
+
+            val result = dictionaryRepository.search(
+                levels,
+                query,
+                page,
+                limit
+            )
+            call.respond(HttpStatusCode.OK, result)
+        }
+
         get<EndPoint.Characters.ByName> { resource ->
             val dictionary = dictionaryRepository.get(resource.code)
                 ?: throw dictionaryNotFound(resource.code)
