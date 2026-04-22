@@ -23,6 +23,10 @@ class DefaultDictionaryRepository(
     private val source: DictionaryDataSource
 ) : DictionaryRepository {
 
+    override suspend fun exist(): Boolean {
+        return source.exist()
+    }
+
     override suspend fun getLevelCount(): List<LevelCountDto> {
         return source.getLevelCount()
             .map { row ->

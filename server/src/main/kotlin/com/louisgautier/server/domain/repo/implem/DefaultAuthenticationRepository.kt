@@ -101,6 +101,5 @@ internal class DefaultAuthenticationRepository(
             installationId = device.installationId,
             fcmToken = device.fcmToken
         )
-
     }
 }

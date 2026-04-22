@@ -207,6 +207,7 @@ firebase-auth = { module = "com.google.firebase:firebase-auth" }
 supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
 supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
 supabase-auth-ui = { module = "io.github.jan-tennert.supabase:compose-auth-ui" }
+supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt" }
 
 # === Convention Plugins ===
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }

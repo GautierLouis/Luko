@@ -10,6 +10,7 @@ import com.louisgautier.server.domain.model.CharacterFrequencyLevelEntity
 import com.louisgautier.server.domain.model.DictionaryEntity
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.count
@@ -17,6 +18,12 @@ import org.jetbrains.exposed.sql.selectAll
 import kotlin.random.Random
 
 class DefaultDictionaryDataSource : DictionaryDataSource {
+    override suspend fun exist(): Boolean {
+        return suspendTransaction {
+            !SchemaUtils.listTables().contains(DictionaryTable.tableName)
+        }
+    }
+
     override suspend fun getLevelCount(): List<ResultRow> {
         return suspendTransaction {
             DictionaryTable

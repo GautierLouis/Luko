@@ -11,6 +11,10 @@ class DefaultGraphicRepository(
     private val source: GraphicDataSource
 ) : GraphicRepository {
 
+    override suspend fun exist(): Boolean {
+        return source.exist()
+    }
+
     override suspend fun get(
         params: EndPoint.Characters.ByName
     ): GraphicDto? {

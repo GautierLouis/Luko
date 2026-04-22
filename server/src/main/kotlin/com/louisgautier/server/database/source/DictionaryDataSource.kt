@@ -5,6 +5,8 @@ import com.louisgautier.server.domain.model.DictionaryEntity
 import org.jetbrains.exposed.sql.ResultRow
 
 interface DictionaryDataSource {
+    suspend fun exist(): Boolean
+
     suspend fun getLevelCount(): List<ResultRow>
 
     suspend fun getRandomCharacters(

@@ -4,19 +4,25 @@ import com.louisgautier.server.ServerConfig
 import com.louisgautier.server.database.entity.DictionaryTable
 import com.louisgautier.server.database.entity.GraphicTable
 import com.louisgautier.server.database.entity.UserTable
+import com.louisgautier.server.domain.usecase.PrepopulateDatabaseUseCase
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.Database as DatabaseFactory
 
 class Database(
-    private val config: ServerConfig
+    private val config: ServerConfig,
+    private val prepopulate: PrepopulateDatabaseUseCase
 ) {
     fun init() {
         val dataSource = buildDataSource()
         connect(dataSource)
         migrate()
+        prepopulate()
     }
 
     private fun connect(dataSource: HikariDataSource) {
@@ -27,6 +33,12 @@ class Database(
         transaction {
             addLogger(config.sqlLogger)
             SchemaUtils.create(DictionaryTable, GraphicTable, UserTable)
+        }
+    }
+
+    private fun prepopulate() {
+        CoroutineScope(Dispatchers.IO).launch {
+            prepopulate.init()
         }
     }
 

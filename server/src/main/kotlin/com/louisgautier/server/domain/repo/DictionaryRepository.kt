@@ -8,6 +8,8 @@ import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
 import com.louisgautier.apicontracts.routing.EndPoint
 
 interface DictionaryRepository {
+    suspend fun exist(): Boolean
+
     suspend fun getLevelCount(): List<LevelCountDto>
 
     suspend fun getRandomCharacters(

@@ -5,7 +5,6 @@ import com.louisgautier.server.ServerRegistry
 import com.louisgautier.server.auth.authModule
 import com.louisgautier.server.database.databaseModule
 import com.louisgautier.server.domain.domainModule
-import com.louisgautier.server.parser.FileParser
 import com.louisgautier.server.plugin.pluginModule
 import com.louisgautier.server.router.routerModule
 import com.louisgautier.server.supabase.supabaseModule
@@ -37,7 +36,6 @@ fun Application.initKoin() {
             single { PrometheusMeterRegistry(PrometheusConfig.DEFAULT) }
             single { env }
             singleOf(::ServerRegistry)
-            singleOf(::FileParser)
         })
     }
 }
