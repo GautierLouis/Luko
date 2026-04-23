@@ -11,10 +11,7 @@ import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnPreviousPag
 import com.louisgautier.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
 import com.louisgautier.learning.routing.LearningInternalRoute
 import com.louisgautier.navigation.AppNavigation
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,9 +33,6 @@ internal class SessionBuilderViewModel : ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state = _state.asStateFlow()
-
-    private val _pageEvent = MutableSharedFlow<Int>()
-    val pageAction: SharedFlow<Int> = _pageEvent.asSharedFlow()
 
     fun onEventReceived(event: SessionBuilderScreenEvent) {
         when (event) {
@@ -63,22 +57,22 @@ internal class SessionBuilderViewModel : ViewModel() {
             }
 
             is OnNextPage -> {
-                viewModelScope.launch {
-                    if (event.currentPage < event.pageCount - 1) {
-                        _state.update { it.copy(currentPage = event.currentPage + 1) }
-                        _pageEvent.emit(event.currentPage + 1)
-                    } else {
-                        onFinish()
-                    }
+                if (event.currentPage < event.pageCount - 1) {
+                    updatePageState(event.currentPage + 1)
+                } else {
+                    onFinish()
                 }
             }
 
             is OnPreviousPage -> {
-                viewModelScope.launch {
-                    _state.update { it.copy(currentPage = event.currentPage - 1) }
-                    _pageEvent.emit(event.currentPage - 1)
-                }
+                updatePageState(event.currentPage - 1)
             }
+        }
+    }
+
+    private fun updatePageState(page: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(currentPage = page) }
         }
     }
 

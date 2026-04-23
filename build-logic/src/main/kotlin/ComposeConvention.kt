@@ -32,6 +32,7 @@ class ComposeConvention : Plugin<Project> {
                     implementation(libs.compose.components.resources)
                     implementation(libs.compose.components.ui.tooling.preview)
 
+                    implementation(libs.compose.lifecycle.viewmodelNavigation3)
                     implementation(libs.compose.lifecycle.viewmodel)
                     implementation(libs.compose.lifecycle.runtime)
                     implementation(libs.compose.navigation)

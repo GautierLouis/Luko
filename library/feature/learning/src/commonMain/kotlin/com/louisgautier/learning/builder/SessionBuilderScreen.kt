@@ -45,9 +45,9 @@ internal fun SessionBuilderScreen() {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val pager = rememberPagerState(initialPage = state.currentPage) { PAGE_COUNT }
 
-    LaunchedEffect(Unit) {
-        viewModel.pageAction.collect { page ->
-            pager.animateScrollToPage(page)
+    LaunchedEffect(state.currentPage) {
+        if (pager.currentPage != state.currentPage) {
+            pager.animateScrollToPage(state.currentPage)
         }
     }
 

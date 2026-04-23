@@ -18,5 +18,12 @@ sealed class TrackingEvent(
         )
     )
 
-    data class NavigateTo(val name: String) : TrackingEvent(key = "nav_to_$name")
+    data class NavigateTo(
+        val name: String
+    ) : TrackingEvent(
+        key = "navigate_to",
+        params = mutableMapOf(
+            "route" to name
+        )
+    )
 }

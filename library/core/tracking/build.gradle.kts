@@ -4,4 +4,9 @@ plugins {
 
 kotlin {
 
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.library.core.logger)
+        }
+    }
 }

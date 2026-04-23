@@ -1,5 +1,6 @@
 package com.louisgautier.firebase
 
+import com.louisgautier.logger.AppLogger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -16,6 +17,7 @@ class RemoteConfigManager {
 
     fun register(flags: RemoteConfigFlags) {
         _flags.tryEmit(flags)
+        AppLogger.d(tag = "Remote config", message = "Remote config completed")
         _completed.tryEmit(true)
     }
 

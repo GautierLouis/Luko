@@ -5,8 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.louisgautier.app.main.MainScaffold
 import com.louisgautier.designsystem.components.page.BaseScaffold
@@ -36,6 +38,10 @@ fun App() {
             }
         ) { _ ->
             NavDisplay(
+                entryDecorators = listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator()// scopes VM to back stack entry
+                ),
                 backStack = backStack,
                 onBack = { backStack.removeLast() },
                 entryProvider = entryProvider {

@@ -9,7 +9,6 @@ import com.louisgautier.domain.repository.SettingTheme
 import com.louisgautier.domain.repository.UserRepository
 import com.louisgautier.firebase.FirebaseManager
 import com.louisgautier.firebase.RemoteConfigManager
-import com.louisgautier.logger.AppLogger
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.AppRoute
 import com.louisgautier.navigation.NavigationCommand
@@ -57,15 +56,11 @@ internal class AppViewModel(
         }.launchIn(viewModelScope)
 
         viewModelScope.launch {
-            remoteConfigManager.completed.filter { it }.collect {
-                AppLogger.d(tag = "Remote config", message = "Remote config completed")
-                AppNavigation.navigateHome()
-            }
+            remoteConfigManager.completed.filter { it }.collect {}
         }
 
         viewModelScope.launch {
             Tracker.events.collect { event ->
-                AppLogger.d(tag = "Tracking event", message = event.toString())
                 firebaseManager.logEvent(event)
             }
         }
@@ -74,25 +69,23 @@ internal class AppViewModel(
     fun observeNavigation(stack: NavBackStack<NavKey>) {
         viewModelScope.launch {
             AppNavigation.navigationEvents.collect { event ->
-                AppLogger.d(tag = "Navigation event", message = event.toString())
-                Tracker.track(TrackingEvent.NavigateTo(event.toString()))
                 withContext(Dispatchers.Main) {
                     when (event) {
                         is NavigationCommand.Navigate -> {
+                            Tracker.track(TrackingEvent.NavigateTo(event.route.toString()))
+
                             if (event.clearBackStack) {
                                 stack.clear()
                                 stack += AppRoute.MainRoute()
                             }
-                            stack += event.route
+
+                            if (event.route !is AppRoute.MainRoute) {
+                                stack += event.route
+                            }
                         }
 
                         is NavigationCommand.NavigateUp -> {
                             stack.removeLast()
-                        }
-
-                        is NavigationCommand.NavigateHome -> {
-                            stack.clear()
-                            stack += AppRoute.MainRoute()
                         }
                     }
                 }
