@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 internal class SessionBuilderViewModel : ViewModel() {
 
     companion object {
-        const val PAGE_COUNT = 2
+        const val PAGE_COUNT = 3
     }
 
     internal data class UiState(
@@ -29,6 +29,7 @@ internal class SessionBuilderViewModel : ViewModel() {
         val currentPage: Int = 0
     ) {
         val isFinished = currentPage + 1 == PAGE_COUNT
+        val showPreviewButton = currentPage > 0
     }
 
     private val _state = MutableStateFlow(UiState())

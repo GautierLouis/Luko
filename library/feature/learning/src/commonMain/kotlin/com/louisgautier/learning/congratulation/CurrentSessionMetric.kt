@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,7 +37,6 @@ internal fun CurrentSessionMetric(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
             .background(
                 color = Theme.materialColors.secondaryContainer,
                 shape = ShapeDefaults.button()
@@ -47,7 +45,6 @@ internal fun CurrentSessionMetric(
         verticalArrangement = Spacing.medium
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -72,7 +69,6 @@ internal fun CurrentSessionMetric(
             style = Theme.typography.headlineLarge,
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
         )
     }
 }

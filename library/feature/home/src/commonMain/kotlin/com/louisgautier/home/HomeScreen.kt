@@ -1,23 +1,23 @@
 package com.louisgautier.home
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.baseui.session.toUiModel
+import com.louisgautier.designsystem.components.AdaptiveLayout
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
 import com.louisgautier.designsystem.components.metrics.SessionCard
 import com.louisgautier.designsystem.components.page.BaseScaffold
+import com.louisgautier.designsystem.preview.ScreenPreview
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.token.dimens.Padding
-import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.previewSession
 import com.louisgautier.domain.previewStatistics
 import com.louisgautier.navigation.AppNavigation
@@ -46,14 +46,14 @@ private fun HomeScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(Padding.large),
         ) {
-            Column(
-                verticalArrangement = Spacing.largest
+            AdaptiveLayout(
+                spacing = Padding.large
             ) {
                 OverallStatisticsCard(
                     streak = state.stats.currentDayStreak.toString(),
@@ -71,7 +71,7 @@ private fun HomeScreen(
     }
 }
 
-@Preview
+@ScreenPreview
 @Composable
 private fun PreviewHomeScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode

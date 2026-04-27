@@ -3,12 +3,13 @@ package com.louisgautier.learning.congratulation
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,6 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.louisgautier.designsystem.components.AdaptiveLayout
+import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation
+import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.COLUMN
+import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.ROW
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import com.louisgautier.designsystem.preview.ThemeMode
@@ -32,7 +37,6 @@ import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
-import com.louisgautier.designsystem.token.dimens.Spacing
 import kotlinx.coroutines.delay
 
 @Composable
@@ -40,8 +44,11 @@ internal fun RewardCard(
     score: Int,
     questionCount: String,
     time: String,
+    parentOrientation: AdaptiveLayoutOrientation,
     modifier: Modifier = Modifier,
 ) {
+
+    val orientation = if (parentOrientation == ROW) COLUMN else ROW
 
     val animatedProgress = remember { Animatable(0f) }
     val animatedScore = remember { Animatable(0f) }
@@ -69,21 +76,22 @@ internal fun RewardCard(
         colors = CardDefaults.cardColors(
             containerColor = Theme.materialColors.surfaceContainer
         ),
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.wrapContentHeight()
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
+        AdaptiveLayout(
+            modifier = Modifier
+                .wrapContentHeight()
                 .padding(Padding.large),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Spacing.large
+            orientation = orientation,
+            spacing = Padding.large
         ) {
-
             Box(
-                contentAlignment = Alignment.Center
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(150.dp),
+                    modifier = Modifier
+                        .size(150.dp),
                     strokeWidth = 15.dp,
                     trackColor = Theme.materialColors.tertiaryContainer,
                     color = Theme.materialColors.tertiary,
@@ -108,23 +116,24 @@ internal fun RewardCard(
                 }
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Spacing.medium
+            AdaptiveLayout(
+                modifier = Modifier.wrapContentHeight(),
+                orientation = parentOrientation,
+                spacing = Padding.medium
             ) {
                 CurrentSessionMetric(
                     item = MetricItem.SessionMetric(
                         metric = SessionStatistic.QuestionCount,
                         value = questionCount
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).wrapContentHeight()
                 )
                 CurrentSessionMetric(
                     item = MetricItem.SessionMetric(
                         metric = SessionStatistic.Time,
                         value = time
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).wrapContentHeight()
                 )
             }
         }
@@ -137,6 +146,19 @@ private fun PreviewRewardCard(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
 ) {
     AppTheme(themeMode) {
-        RewardCard(50, "5", "10:00")
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            RewardCard(
+                score = 50,
+                questionCount = "5",
+                time = "10:00",
+                parentOrientation = COLUMN
+            )
+            RewardCard(
+                score = 50,
+                questionCount = "5",
+                time = "10:00",
+                parentOrientation = ROW
+            )
+        }
     }
 }

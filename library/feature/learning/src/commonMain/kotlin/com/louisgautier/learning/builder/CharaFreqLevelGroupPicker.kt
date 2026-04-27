@@ -1,17 +1,16 @@
 package com.louisgautier.learning.builder
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.louisgautier.designsystem.components.AdaptiveLayout
 import com.louisgautier.designsystem.components.attrs.FrequencyLevel
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
-import com.louisgautier.designsystem.token.dimens.Spacing
 
 @Composable
 internal fun CharaFreqLevelGroupPicker(
@@ -19,11 +18,8 @@ internal fun CharaFreqLevelGroupPicker(
     selectedLevels: List<FrequencyLevel> = listOf(),
     onClick: (FrequencyLevel) -> Unit = {}
 ) {
-
-    Column(
+    AdaptiveLayout(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Spacing.large
     ) {
         FrequencyLevel.entries.forEach {
             CharaFreqLevelCard(
@@ -35,7 +31,8 @@ internal fun CharaFreqLevelGroupPicker(
     }
 }
 
-@Preview
+@Preview(device = Devices.TABLET)
+@Preview(device = Devices.PHONE)
 @Composable
 private fun PreviewCharaFreqLevelGroupPicker(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode

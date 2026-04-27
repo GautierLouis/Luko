@@ -1,16 +1,16 @@
 package com.louisgautier.learning.builder
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.louisgautier.designsystem.components.AdaptiveLayout
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.Padding
 
 @Composable
 internal fun QuestionCountPicker(
@@ -23,9 +23,8 @@ internal fun QuestionCountPicker(
         label = Theme.strings.builderPickQuestionCount,
         modifier = modifier
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+        AdaptiveLayout(
+            spacing = Padding.large
         ) {
             QuestionCount.entries.forEach { item ->
                 QuestionCountItem(
@@ -38,7 +37,8 @@ internal fun QuestionCountPicker(
     }
 }
 
-@Preview
+@Preview(device = Devices.TABLET)
+@Preview(device = Devices.PHONE)
 @Composable
 private fun PreviewQuestionCountPicker(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode

@@ -16,7 +16,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.designsystem.components.button.AppButton
@@ -25,6 +24,7 @@ import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.components.topbar.action.ActionNavigateUp
+import com.louisgautier.designsystem.preview.ScreenPreview
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
@@ -74,7 +74,6 @@ private fun SessionBuilderScreen(
             )
         },
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -82,14 +81,12 @@ private fun SessionBuilderScreen(
         ) {
             HorizontalPager(
                 state = pager,
-                userScrollEnabled = false,
-                pageSpacing = Padding.large,
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxWidth()
+                    .weight(1f)
                     .padding(horizontal = Padding.large),
-            ) { page ->
-                when (page) {
+            ) {
+                when (pager.currentPage) {
                     0 -> {
                         CharaFreqLevelGroupPicker(
                             selectedLevels = state.levels,
@@ -100,13 +97,18 @@ private fun SessionBuilderScreen(
                     }
 
                     1 -> {
-                        PickerContent(
+                        DifficultyPicker(
                             difficulty = state.difficulty,
-                            questionCount = state.questionCount,
                             onDifficultySelected = {
                                 onEvent(OnDifficultySelected(it))
-                            },
-                            onQuestionCountSelected = {
+                            }
+                        )
+                    }
+
+                    2 -> {
+                        QuestionCountPicker(
+                            selectedCount = state.questionCount,
+                            onCountClicked = {
                                 onEvent(OnQuestionCountSelected(it))
                             }
                         )
@@ -120,7 +122,7 @@ private fun SessionBuilderScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AnimatedVisibility(
-                    visible = pager.currentPage > 0,
+                    visible = state.showPreviewButton,
                     modifier = Modifier
                         .weight(1f),
                     enter = slideInHorizontally(),
@@ -150,7 +152,8 @@ private fun SessionBuilderScreen(
     }
 }
 
-@Preview
+
+@ScreenPreview
 @Composable
 private fun PreviewSessionBuilderScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
@@ -158,7 +161,7 @@ private fun PreviewSessionBuilderScreen(
     AppTheme(themeMode) {
         SessionBuilderScreen(
             state = SessionBuilderViewModel.UiState(),
-            pager = rememberPagerState(initialPage = 1) { 2 }
+            pager = rememberPagerState(initialPage = 1) { PAGE_COUNT }
         )
     }
 }

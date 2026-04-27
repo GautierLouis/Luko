@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.louisgautier.designsystem.components.AdaptiveLayout
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
@@ -27,7 +29,7 @@ internal fun PickerLayout(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .wrapContentHeight()
             .background(
                 color = Theme.materialColors.surfaceContainer,
                 shape = ShapeDefaults.card()
@@ -52,7 +54,9 @@ internal fun PickerLayout(
                 color = Theme.materialColors.onBackground,
                 fontWeight = FontWeight.Medium,
             )
-            content()
+            AdaptiveLayout {
+                content()
+            }
         }
     }
 }

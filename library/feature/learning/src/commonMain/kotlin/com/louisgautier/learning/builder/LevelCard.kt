@@ -84,18 +84,19 @@ internal fun LevelCard(
                 icon = icon
             )
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
+                verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.Top,
                     horizontalArrangement = Spacing.medium
                 ) {
                     Text(
+
                         text = title,
                         fontWeight = FontWeight.bold,
                         style = Theme.typography.bodyLarge,
                         color = Theme.materialColors.onSurface,
+                        modifier = Modifier.weight(1f),
                     )
                     tagLabel?.let {
                         LabelTag(
