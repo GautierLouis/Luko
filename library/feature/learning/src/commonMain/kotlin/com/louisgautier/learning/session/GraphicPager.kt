@@ -108,7 +108,6 @@ internal fun GraphicSketcher(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center)
-                    .aspectRatio(1f)
                     .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
                     .then(drawingModifier)
             )
@@ -132,18 +131,21 @@ private fun PreviewGraphicPager(
                 drawReference = true,
                 drawHint = true,
                 state = mockState,
+                modifier = Modifier.aspectRatio(1f)
             )
 
             GraphicSketcher(
                 drawReference = false,
                 drawHint = true,
                 state = mockState,
+                modifier = Modifier.aspectRatio(1f)
             )
 
             GraphicSketcher(
                 drawReference = false,
                 drawHint = false,
                 state = mockState,
+                modifier = Modifier.aspectRatio(1f)
             )
         }
     }

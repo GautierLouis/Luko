@@ -2,11 +2,11 @@ package com.louisgautier.learning.session
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,23 +18,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.louisgautier.designsystem.components.button.AppButton
-import com.louisgautier.designsystem.components.button.attrs.ButtonRole
-import com.louisgautier.designsystem.components.button.attrs.ButtonShape
-import com.louisgautier.designsystem.components.button.attrs.ButtonSize
+import com.louisgautier.baseui.device.rememberAdaptiveWindowInfo
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.page.ErrorScreen
 import com.louisgautier.designsystem.components.page.LoadingScreen
 import com.louisgautier.designsystem.preview.LoadingMode
 import com.louisgautier.designsystem.preview.LoadingModeProvider
+import com.louisgautier.designsystem.preview.ScreenPreview
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.theme.AppTheme
-import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
 import com.louisgautier.domain.previewDictionaryWithGraphic
-import com.louisgautier.learning.session.SessionScreenEvent.Finish
-import com.louisgautier.learning.session.SessionScreenEvent.Next
 import com.louisgautier.learning.session.SessionScreenEvent.Reload
 import com.louisgautier.learning.session.SessionScreenEvent.ToggleLeaveDialog
 import com.louisgautier.navigation.AppNavigation
@@ -95,15 +90,16 @@ private fun SessionScreen(
         )
     }
 
+    val device = rememberAdaptiveWindowInfo()
+
     LaunchedEffect(state.currentPage) {
         pagerState.animateScrollToPage(pagerState.currentPage + 1)
     }
 
     BaseScaffold(
         topBar = {
-            Header(
+            SessionHeader(
                 pager = pagerState,
-                char = state.currentQuestion.question.dictionary,
                 modifier = Modifier.padding(top = 32.dp)
             )
         },
@@ -111,53 +107,61 @@ private fun SessionScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .padding(Padding.large),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Spacer(Modifier.weight(1f))
-                HorizontalPager(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Padding.large),
-                    userScrollEnabled = false,
-                    state = pagerState
-                ) {
-                    GraphicSketcher(
-                        state = state.currentQuestion,
-                        drawReference = state.drawReference,
-                        drawHint = state.drawHint,
-                        onEvent = onEvent,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
+                if (device.isPhoneLandscape) {
+                    Row(
+                        modifier = Modifier,
+                        horizontalArrangement = Spacing.large
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
+                            verticalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            PinyinCharacter(
+                                char = state.currentQuestion.question.dictionary,
+                                modifier = Modifier.wrapContentHeight()
+                            )
+                            FooterAction(
+                                isLastQuestion = state.isLastQuestion,
+                                isAnswered = state.currentQuestion.isAnswered,
+                                onEvent = onEvent
+                            )
+                        }
 
-                Spacer(Modifier.weight(3f))
+                        Pager(
+                            pagerState = pagerState,
+                            state = state,
+                            onEvent = onEvent,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-                Column(
-                    modifier = Modifier.padding(Padding.large),
-                    verticalArrangement = Spacing.medium
-                ) {
-                    AppButton(
-                        text = if (state.isLastQuestion) Theme.strings.sessionComplete else Theme.strings.sessionFinish,
-                        shape = ButtonShape.Filled,
-                        role = ButtonRole.Primary,
-                        enabled = state.currentQuestion.isAnswered,
-                        size = ButtonSize.Large,
-                        onClick = {
-                            val event = if (state.isLastQuestion) Next else Finish
-                            onEvent(event)
-                        },
-                    )
-
-                    AppButton(
-                        text = Theme.strings.sessionQuit,
-                        shape = ButtonShape.Ghost,
-                        role = ButtonRole.Error,
-                        size = ButtonSize.Large,
-                        onClick = { onEvent(ToggleLeaveDialog) },
-                    )
+                } else {
+                    Column(
+                        verticalArrangement = Spacing.large
+                    ) {
+                        PinyinCharacter(
+                            char = state.currentQuestion.question.dictionary,
+                            modifier = Modifier.wrapContentHeight()
+                        )
+                        Pager(
+                            pagerState = pagerState,
+                            state = state,
+                            onEvent = onEvent,
+                            modifier = Modifier.weight(1f)
+                        )
+                        FooterAction(
+                            isLastQuestion = state.isLastQuestion,
+                            isAnswered = state.currentQuestion.isAnswered,
+                            onEvent = onEvent
+                        )
+                    }
                 }
             }
         }
@@ -194,7 +198,7 @@ private fun PreviewSessionScreenDay(
     }
 }
 
-@Preview
+@ScreenPreview
 @Composable
 private fun PreviewSessionScreenNight(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
