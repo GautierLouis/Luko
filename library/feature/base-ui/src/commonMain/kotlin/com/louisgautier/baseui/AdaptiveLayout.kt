@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.components
+package com.louisgautier.baseui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -6,22 +6,10 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.COLUMN
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.ROW
-import com.louisgautier.designsystem.rememberAdaptiveWindowInfo
-
-enum class AdaptiveLayoutOrder {
-    NATURAL, REVERSED
-}
-
-private fun <T> List<T>.sort(order: AdaptiveLayoutOrder) = when (order) {
-    AdaptiveLayoutOrder.REVERSED -> reversed()
-    AdaptiveLayoutOrder.NATURAL -> this
-}
-
-enum class AdaptiveLayoutOrientation {
-    ROW, COLUMN
-}
+import com.louisgautier.baseui.AdaptiveLayoutOrder.Companion.sort
+import com.louisgautier.baseui.AdaptiveLayoutOrientation.COLUMN
+import com.louisgautier.baseui.AdaptiveLayoutOrientation.ROW
+import com.louisgautier.baseui.device.rememberAdaptiveWindowInfo
 
 @Composable
 fun AdaptiveLayout(

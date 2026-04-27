@@ -24,10 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.components.AdaptiveLayout
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.COLUMN
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.ROW
+import com.louisgautier.baseui.AdaptiveLayout
+import com.louisgautier.baseui.AdaptiveLayoutOrientation
+import com.louisgautier.baseui.AdaptiveLayoutOrientation.COLUMN
+import com.louisgautier.baseui.AdaptiveLayoutOrientation.ROW
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import com.louisgautier.designsystem.preview.ThemeMode

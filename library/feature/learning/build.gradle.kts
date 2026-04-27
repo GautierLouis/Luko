@@ -10,6 +10,7 @@ kotlin {
             implementation(projects.library.core.navigation)
             implementation(projects.library.designSystem)
             implementation(projects.library.domain)
+            implementation(projects.library.feature.baseUi)
         }
     }
 }

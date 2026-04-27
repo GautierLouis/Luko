@@ -1,4 +1,4 @@
-package com.louisgautier.designsystem.theme
+package com.louisgautier.baseui.device
 
 data class AdaptiveWindowInfo(
     val deviceType: DeviceType,

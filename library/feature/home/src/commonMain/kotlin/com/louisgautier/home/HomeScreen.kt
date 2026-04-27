@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.louisgautier.baseui.AdaptiveLayout
 import com.louisgautier.baseui.session.toUiModel
-import com.louisgautier.designsystem.components.AdaptiveLayout
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
 import com.louisgautier.designsystem.components.metrics.SessionCard
 import com.louisgautier.designsystem.components.page.BaseScaffold

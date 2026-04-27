@@ -15,10 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.louisgautier.designsystem.components.AdaptiveLayout
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrder
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.COLUMN
-import com.louisgautier.designsystem.components.AdaptiveLayoutOrientation.ROW
+import com.louisgautier.baseui.AdaptiveLayout
+import com.louisgautier.baseui.AdaptiveLayoutOrder
+import com.louisgautier.baseui.AdaptiveLayoutOrientation.COLUMN
+import com.louisgautier.baseui.AdaptiveLayoutOrientation.ROW
+import com.louisgautier.baseui.device.rememberAdaptiveWindowInfo
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonRole
 import com.louisgautier.designsystem.components.button.attrs.ButtonShape
@@ -27,7 +28,6 @@ import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.preview.ScreenPreview
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
-import com.louisgautier.designsystem.rememberAdaptiveWindowInfo
 import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding

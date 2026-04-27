@@ -1,14 +1,10 @@
-package com.louisgautier.designsystem
+package com.louisgautier.baseui.device
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
-import com.louisgautier.designsystem.theme.AdaptiveWindowInfo
-import com.louisgautier.designsystem.theme.DeviceOrientation
-import com.louisgautier.designsystem.theme.DeviceType
-
 
 @Composable
 fun rememberAdaptiveWindowInfo(): AdaptiveWindowInfo {
