@@ -8,6 +8,7 @@ plugins {
 repositories {
     google()
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
@@ -16,6 +17,7 @@ dependencies {
     compileOnly(libs.kotlin.gradle.get())
     compileOnly(libs.kotlin.multiplatform.gradle.plugin)
     implementation(libs.compose.gradle.get())
+    implementation(libs.ktlint.gradle)
 }
 
 gradlePlugin {

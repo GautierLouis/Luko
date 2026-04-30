@@ -37,6 +37,11 @@ compose-lifecycle = "2.10.0"
 compose-navigation = "2.9.1"
 compose-navigation3 = "1.0.0-alpha05"
 
+#Lint
+ktlint-engine = "1.6.0"
+ktlint-gradle = "12.2.0"
+ktlint-ruleset-compose = "0.5.6"
+
 # KotlinX
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1"
@@ -102,6 +107,10 @@ androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.r
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "androidx-room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+
+# === Lint ===
+ktlint-ruleset-compose = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint-ruleset-compose" }
+ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint-gradle" }
 
 # === Mockkery ===
 mokkery-coroutine = { module = "dev.mokkery:mokkery-coroutines", version.ref = "mokkery" }
@@ -239,6 +248,7 @@ android-lint = { id = "com.android.lint", version.ref = "agp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }
 
 # Convention Plugins
 compose-convention = { id = "com.louisgautier.compose.convention" }

@@ -3,10 +3,12 @@ import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 @Suppress("unused")
 class MultiplatformConvention : Plugin<Project> {
@@ -19,12 +21,30 @@ class MultiplatformConvention : Plugin<Project> {
             apply(libs.plugins.android.kotlin.multiplatform.library.get().pluginId)
             apply(libs.plugins.serialization.get().pluginId)
             apply(libs.plugins.mokkery.plugin.get().pluginId)
+            apply(libs.plugins.ktlint.get().pluginId)
         }
 
+        configureKtLint(libs)
         configureKotlinMultiplatform()
         configureAndroid(libs)
         configureBaseSourceSets(libs)
 
+    }
+
+    private fun Project.configureKtLint(libs: LibrariesForLibs) {
+        extensions.configure<KtlintExtension> {
+            version.set(libs.versions.ktlint.engine)
+            verbose.set(true)
+            outputToConsole.set(true)
+            coloredOutput.set(true)
+        }
+
+        dependencies {
+            add(
+                "ktlintRuleset",
+                libs.ktlint.ruleset.compose.get()
+            )
+        }
     }
 
     private fun Project.configureKotlinMultiplatform() {
