@@ -12,15 +12,15 @@ import com.louisgautier.designsystem.theme.Theme
 @Composable
 fun ActionFilter(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     IconButton(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
             imageVector = AppIcon.Filter,
-            contentDescription = Theme.strings.actionFilter
+            contentDescription = Theme.strings.actionFilter,
         )
     }
 }

@@ -26,24 +26,25 @@ import com.louisgautier.designsystem.token.dimens.Spacing
 @Composable
 fun SessionMetricItem(
     item: MetricItem.SessionMetric,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .background(
-                color = Theme.materialColors.surfaceContainer,
-            ),
-        verticalArrangement = Spacing.medium
+        modifier =
+            modifier
+                .background(
+                    color = Theme.materialColors.surfaceContainer,
+                ),
+        verticalArrangement = Spacing.medium,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Spacing.medium
+            horizontalArrangement = Spacing.medium,
         ) {
             Icon(
                 imageVector = item.metric.icon(),
                 contentDescription = null,
                 modifier = Modifier.size(12.dp),
-                tint = Theme.materialColors.onBackground
+                tint = Theme.materialColors.onBackground,
             )
             Text(
                 text = item.metric.label(),
@@ -64,14 +65,15 @@ fun SessionMetricItem(
 @Preview
 @Composable
 private fun PreviewSessionValue(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         SessionMetricItem(
-            item = MetricItem.SessionMetric(
-                metric = SessionStatistic.Difficulty,
-                value = "Hard"
-            )
+            item =
+                MetricItem.SessionMetric(
+                    metric = SessionStatistic.Difficulty,
+                    value = "Hard",
+                ),
         )
     }
 }

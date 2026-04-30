@@ -9,7 +9,7 @@ import org.koin.mp.KoinPlatform
 import platform.Foundation.NSData
 import platform.UIKit.UIViewController
 
-@Suppress("unused")
+@Suppress("ktlint:standard:function-naming")
 fun MainViewController(): UIViewController =
     ComposeUIViewController {
         KoinApplication(application = {
@@ -22,7 +22,9 @@ fun MainViewController(): UIViewController =
 @Suppress("unused")
 object FirebaseAPNS {
     fun onAPNSReceived(token: NSData) {
-        KoinPlatform.getKoin().get<FirebaseManager>()
+        KoinPlatform
+            .getKoin()
+            .get<FirebaseManager>()
             .let { it as AppleFirebaseManager }
             .onApnsTokenReceived(token)
     }

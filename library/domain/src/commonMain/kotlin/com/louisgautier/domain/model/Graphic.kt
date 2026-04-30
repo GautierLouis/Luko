@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Graphic(
     val code: Int,
     val strokes: List<String>,
-    val medians: List<Stroke>
+    val medians: List<Stroke>,
 ) {
     val character: Char
         get() = Char(code)
@@ -14,11 +14,11 @@ data class Graphic(
 
 @Serializable
 data class Stroke(
-    val points: List<Point>
+    val points: List<Point>,
 )
 
 @Serializable
 data class Point(
     val x: Float,
-    val y: Float
+    val y: Float,
 )

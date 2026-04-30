@@ -24,7 +24,7 @@ import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.topbar.AppTopbar
 import com.louisgautier.designsystem.components.topbar.action.ActionNavigateUp
-import com.louisgautier.designsystem.preview.ScreenPreview
+import com.louisgautier.designsystem.preview.PreviewScreen
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
@@ -153,7 +153,7 @@ private fun SessionBuilderScreen(
 }
 
 
-@ScreenPreview
+@PreviewScreen
 @Composable
 private fun PreviewSessionBuilderScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode

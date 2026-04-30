@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class GraphicDto(
     val code: Int,
     val strokes: List<String>,
-    val medians: List<StrokeDto>
+    val medians: List<StrokeDto>,
 )
 
 @Serializable

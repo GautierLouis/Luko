@@ -12,7 +12,7 @@ import com.louisgautier.database.entity.SessionEntity
 @Database(
     entities = [
         SessionEntity::class,
-        ResponseEntity::class
+        ResponseEntity::class,
     ],
     version = 1,
 )
@@ -27,4 +27,3 @@ abstract class AppDatabase : RoomDatabase() {
 internal expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
     override fun initialize(): AppDatabase
 }
-

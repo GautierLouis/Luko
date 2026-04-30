@@ -7,11 +7,18 @@ package com.louisgautier.permission
  */
 interface PermissionsManager {
     fun isPermissionGranted(permission: PermissionType): PermissionResult
-    suspend fun requestPermission(permission: PermissionType, callback: PermissionCallback)
+
+    suspend fun requestPermission(
+        permission: PermissionType,
+        callback: PermissionCallback,
+    )
 }
 
 interface PermissionCallback {
-    fun onPermissionStatus(permissionType: PermissionType, status: PermissionResult)
+    fun onPermissionStatus(
+        permissionType: PermissionType,
+        status: PermissionResult,
+    )
 }
 
 enum class PermissionResult {
@@ -22,5 +29,5 @@ enum class PermissionResult {
 enum class PermissionType {
     GALLERY,
     LOCALISATION,
-    NOTIFICATION
+    NOTIFICATION,
 }

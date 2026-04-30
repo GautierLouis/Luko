@@ -11,20 +11,21 @@ import androidx.core.app.NotificationManagerCompat
 class AndroidPushNotificationManager(
     private val context: Context,
 ) : PushNotificationManager {
-
     init {
-        //Create Channel if needed
-        //createNotificationChannel()
+        // Create Channel if needed
+        // createNotificationChannel()
     }
 
     @SuppressLint("MissingPermission")
     override fun sendNotification(data: PushNotificationData) {
-        val builder = NotificationCompat.Builder(context, "CHANNEL_ID")
+        val builder =
+            NotificationCompat
+                .Builder(context, "CHANNEL_ID")
 //            .setSmallIcon() TODO(Fix): Crash if no icon
-            .setContentTitle(data.title)
-            .setContentText(data.body)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT) // Set priority for older Android versions
-            .setAutoCancel(true) // Automatically removes the notification when the user taps it
+                .setContentTitle(data.title)
+                .setContentText(data.body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT) // Set priority for older Android versions
+                .setAutoCancel(true) // Automatically removes the notification when the user taps it
 
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
@@ -38,9 +39,10 @@ class AndroidPushNotificationManager(
             val name = "My Channel Name"
             val descriptionText = "My Channel Description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
-                description = descriptionText
-            }
+            val channel =
+                NotificationChannel("CHANNEL_ID", name, importance).apply {
+                    description = descriptionText
+                }
 
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

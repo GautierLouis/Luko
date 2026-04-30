@@ -8,5 +8,5 @@ data class BasicStatistics(
     val averageTime: Long,
     val sessionCount: Int,
     val difficulties: List<String>?,
-    val uniqueDates: List<String>?
+    val uniqueDates: List<String>?,
 )

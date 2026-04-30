@@ -8,13 +8,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 
 object AppNavigation {
-    private val _navigationEvents = Channel<NavigationCommand>(
-        capacity = Channel.BUFFERED,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _navigationEvents =
+        Channel<NavigationCommand>(
+            capacity = Channel.BUFFERED,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
     val navigationEvents: Flow<NavigationCommand> = _navigationEvents.receiveAsFlow()
 
-    fun navigate(route: NavKey, clearBackStack: Boolean = false) {
+    fun navigate(
+        route: NavKey,
+        clearBackStack: Boolean = false,
+    ) {
         navigate(NavigationCommand.Navigate(route, clearBackStack))
     }
 

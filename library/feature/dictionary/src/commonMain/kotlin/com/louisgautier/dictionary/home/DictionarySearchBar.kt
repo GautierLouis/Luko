@@ -34,31 +34,32 @@ import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 
 @Composable
-internal fun DictionarySearchBar(
-    textFieldState: TextFieldState,
-) {
+internal fun DictionarySearchBar(textFieldState: TextFieldState) {
     Column(
-        modifier = Modifier
-            .height(TopAppBarDefaults.TopAppBarExpandedHeight)
+        modifier =
+            Modifier
+                .height(TopAppBarDefaults.TopAppBarExpandedHeight),
     ) {
         OutlinedTextField(
             state = textFieldState,
             lineLimits = TextFieldLineLimits.SingleLine,
             shape = ShapeDefaults.button(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrectEnabled = false,
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Search,
-                showKeyboardOnFocus = true
-            ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+            keyboardOptions =
+                KeyboardOptions(
+                    capitalization = KeyboardCapitalization.None,
+                    autoCorrectEnabled = false,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Search,
+                    showKeyboardOnFocus = true,
+                ),
             leadingIcon = {
                 Icon(
                     imageVector = AppIcon.Search,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             },
             trailingIcon = {
@@ -77,21 +78,20 @@ internal fun DictionarySearchBar(
                 Text(
                     text = Theme.strings.searchPlaceholder,
                     style = Theme.typography.bodyMedium,
-                    color = Theme.materialColors.outline
+                    color = Theme.materialColors.outline,
                 )
             },
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Theme.materialColors.surfaceContainer,
-                unfocusedTextColor = Theme.materialColors.onSurfaceVariant,
-                unfocusedIndicatorColor = Theme.materialColors.outline,
-                unfocusedTrailingIconColor = Theme.materialColors.outline,
-
-                focusedContainerColor = Theme.materialColors.surfaceContainer,
-                focusedTextColor = Theme.materialColors.primary,
-                focusedIndicatorColor = Theme.materialColors.primary,
-                focusedTrailingIconColor = Theme.materialColors.primary,
-
-                )
+            colors =
+                TextFieldDefaults.colors(
+                    unfocusedContainerColor = Theme.materialColors.surfaceContainer,
+                    unfocusedTextColor = Theme.materialColors.onSurfaceVariant,
+                    unfocusedIndicatorColor = Theme.materialColors.outline,
+                    unfocusedTrailingIconColor = Theme.materialColors.outline,
+                    focusedContainerColor = Theme.materialColors.surfaceContainer,
+                    focusedTextColor = Theme.materialColors.primary,
+                    focusedIndicatorColor = Theme.materialColors.primary,
+                    focusedTrailingIconColor = Theme.materialColors.primary,
+                ),
         )
     }
 }
@@ -99,7 +99,7 @@ internal fun DictionarySearchBar(
 @Preview
 @Composable
 private fun PreviewDictionarySearchBar(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         DictionarySearchBar(

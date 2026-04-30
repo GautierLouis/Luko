@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.update
 internal class DictionaryListViewModel(
     private val characterRepository: CharacterRepository,
 ) : ViewModel() {
-
     @OptIn(ExperimentalMaterial3Api::class)
     internal data class UIState(
         val selectedCharacter: Int? = null,
@@ -39,15 +38,17 @@ internal class DictionaryListViewModel(
     private val _state = MutableStateFlow(UIState())
     private val _activeFilter = MutableStateFlow(ActiveFilter())
     private val debouncedQuery =
-        snapshotFlow { _state.value.textFieldState.text.toString() }
-            .map { it.trim() }
+        snapshotFlow {
+            _state.value.textFieldState.text
+                .toString()
+        }.map { it.trim() }
             .distinctUntilChanged()
 
     val state = _state.asStateFlow()
     val items: Flow<PagingData<SimpleDictionary>> =
         combine(
             flow = _activeFilter,
-            flow2 = debouncedQuery
+            flow2 = debouncedQuery,
         ) { filter, query -> filter to query }
             .distinctUntilChanged()
             .flatMapLatest { (filter, query) -> createPaging(filter, query) }
@@ -57,24 +58,26 @@ internal class DictionaryListViewModel(
         filter: ActiveFilter,
         query: String,
     ): Flow<PagingData<SimpleDictionary>> {
-        val levels = buildList {
-            if (filter.isCommonActivated) add(CharacterFrequencyLevel.COMMON)
-            if (filter.isFrequentActivated) add(CharacterFrequencyLevel.FREQUENT)
-            if (filter.isStandardActivated) add(CharacterFrequencyLevel.STANDARD)
-        }
+        val levels =
+            buildList {
+                if (filter.isCommonActivated) add(CharacterFrequencyLevel.COMMON)
+                if (filter.isFrequentActivated) add(CharacterFrequencyLevel.FREQUENT)
+                if (filter.isStandardActivated) add(CharacterFrequencyLevel.STANDARD)
+            }
 
         return Pager(PagingConfig(pageSize = 100)) {
             PaginatedResponse(characterRepository, levels, query)
         }.flow.cachedIn(viewModelScope)
     }
 
-    fun onEventReceived(event: DictionaryScreenEvent) = when (event) {
-        is DictionaryScreenEvent.OnCharacterClicked -> onCharacterClicked(event.code)
-        is DictionaryScreenEvent.OnFilterToggle -> toggleFilterMenu()
-        is DictionaryScreenEvent.OnFilterChange -> updateActiveFilter(event.activeFilter)
-        is DictionaryScreenEvent.OnSearch -> {}
-        is DictionaryScreenEvent.OnModalDismiss -> dismissModal()
-    }
+    fun onEventReceived(event: DictionaryScreenEvent) =
+        when (event) {
+            is DictionaryScreenEvent.OnCharacterClicked -> onCharacterClicked(event.code)
+            is DictionaryScreenEvent.OnFilterToggle -> toggleFilterMenu()
+            is DictionaryScreenEvent.OnFilterChange -> updateActiveFilter(event.activeFilter)
+            is DictionaryScreenEvent.OnSearch -> {}
+            is DictionaryScreenEvent.OnModalDismiss -> dismissModal()
+        }
 
     private fun onCharacterClicked(code: Int) {
         _state.update { current -> current.copy(selectedCharacter = code) }

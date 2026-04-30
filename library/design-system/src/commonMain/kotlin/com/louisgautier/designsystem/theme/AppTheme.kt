@@ -16,9 +16,8 @@ import com.louisgautier.designsystem.token.typo.AppTypography
 fun AppTheme(
     themeMode: ThemeMode,
     forcedLocale: StringsLocale? = null,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-
     val locale = forcedLocale ?: Locale.current.toStringsLocale()
     val strings = remember(locale) { locale.toStrings() }
     val materialColors = remember(themeMode) { themeMode.toMaterialColors() }

@@ -13,7 +13,7 @@ import com.louisgautier.baseui.session.toUiModel
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
 import com.louisgautier.designsystem.components.metrics.SessionCard
 import com.louisgautier.designsystem.components.page.BaseScaffold
-import com.louisgautier.designsystem.preview.ScreenPreview
+import com.louisgautier.designsystem.preview.PreviewScreen
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
@@ -71,7 +71,7 @@ private fun HomeScreen(
     }
 }
 
-@ScreenPreview
+@PreviewScreen
 @Composable
 private fun PreviewHomeScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode

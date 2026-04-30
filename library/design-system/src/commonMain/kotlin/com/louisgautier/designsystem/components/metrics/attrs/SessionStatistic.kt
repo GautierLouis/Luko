@@ -11,24 +11,26 @@ enum class SessionStatistic {
     QuestionCount,
     Time,
     Score,
-    Difficulty;
+    Difficulty,
+    ;
 
     companion object Companion {
+        @Composable
+        fun SessionStatistic.label() =
+            when (this) {
+                QuestionCount -> Theme.strings.questions
+                Time -> Theme.strings.totalScore
+                Score -> Theme.strings.sessions
+                Difficulty -> Theme.strings.difficulty
+            }
 
         @Composable
-        fun SessionStatistic.label() = when (this) {
-            QuestionCount -> Theme.strings.questions
-            Time -> Theme.strings.totalScore
-            Score -> Theme.strings.sessions
-            Difficulty -> Theme.strings.difficulty
-        }
-
-        @Composable
-        fun SessionStatistic.icon() = when (this) {
-            QuestionCount -> AppIcon.RoundedTarget
-            Time -> AppIcon.RoundedAvgTime
-            Score -> AppIcon.RoundedBolt
-            Difficulty -> AppIcon.RoundedBolt
-        }
+        fun SessionStatistic.icon() =
+            when (this) {
+                QuestionCount -> AppIcon.RoundedTarget
+                Time -> AppIcon.RoundedAvgTime
+                Score -> AppIcon.RoundedBolt
+                Difficulty -> AppIcon.RoundedBolt
+            }
     }
 }

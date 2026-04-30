@@ -9,16 +9,15 @@ import com.louisgautier.preferences.AppPreferences
 internal class DefaultAuthRepository(
     private val client: AuthService,
     private val preferences: AppPreferences,
-    private val firebaseManager: FirebaseManager
+    private val firebaseManager: FirebaseManager,
 ) : AuthRepository {
-
     override suspend fun registerAnonymously(): Result<Unit> {
         val installationId = firebaseManager.getInstallationId()
         val fcmToken = firebaseManager.getFCMToken()
 
         AppLogger.i(
             tag = "Registration",
-            message = "Register anonymously with FCM $fcmToken for installation $installationId"
+            message = "Register anonymously with FCM $fcmToken for installation $installationId",
         )
 
         preferences.setInstallationId(installationId)
@@ -35,4 +34,3 @@ internal class DefaultAuthRepository(
         return client.updateFcm(RegisterDeviceRequestDto(installationId, token))
     }
 }
-

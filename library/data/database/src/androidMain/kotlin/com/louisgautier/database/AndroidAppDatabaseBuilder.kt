@@ -6,9 +6,9 @@ import androidx.room.RoomDatabase
 import org.koin.core.component.KoinComponent
 
 class AndroidAppDataBaseBuilder(
-    private val context: Context
-) : AppDatabaseBuilder, KoinComponent {
-
+    private val context: Context,
+) : AppDatabaseBuilder,
+    KoinComponent {
     override fun createDatabase(databaseFileName: String): RoomDatabase.Builder<AppDatabase> {
         val appContext = context.applicationContext
         val dbFile = appContext.getDatabasePath(databaseFileName)

@@ -27,29 +27,32 @@ import com.louisgautier.designsystem.token.color.model.LevelColors
 internal fun RoundIcon(
     icon: ImageVector,
     colors: LevelColors,
-    size: RoundIconSize = RoundIconSize.Small,
     modifier: Modifier = Modifier,
+    size: RoundIconSize = RoundIconSize.Small,
 ) {
-    val iconSize = when (size) {
-        RoundIconSize.Small -> 24.dp
-        RoundIconSize.Large -> 36.dp
-    }
-    val padding = when (size) {
-        RoundIconSize.Small -> 4.dp
-        RoundIconSize.Large -> 8.dp
-    }
+    val iconSize =
+        when (size) {
+            RoundIconSize.Small -> 24.dp
+            RoundIconSize.Large -> 36.dp
+        }
+    val padding =
+        when (size) {
+            RoundIconSize.Small -> 4.dp
+            RoundIconSize.Large -> 8.dp
+        }
     Box(
         modifier = modifier,
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = colors.onSubtle,
-            modifier = Modifier
-                .size(iconSize)
-                .background(colors.subtle, CircleShape)
-                .padding(padding)
+            modifier =
+                Modifier
+                    .size(iconSize)
+                    .background(colors.subtle, CircleShape)
+                    .padding(padding),
         )
     }
 }
@@ -57,7 +60,7 @@ internal fun RoundIcon(
 @Preview
 @Composable
 private fun PreviewRoundIcon(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Row {
@@ -65,13 +68,13 @@ private fun PreviewRoundIcon(
                 icon = AppIcon.RoundedBarChart,
                 colors = Theme.appLevelColors.totalScore,
                 size = RoundIconSize.Large,
-                modifier = Modifier
+                modifier = Modifier,
             )
             RoundIcon(
                 icon = AppIcon.RoundedBarChart,
                 colors = Theme.appLevelColors.totalScore,
                 size = RoundIconSize.Small,
-                modifier = Modifier
+                modifier = Modifier,
             )
         }
     }

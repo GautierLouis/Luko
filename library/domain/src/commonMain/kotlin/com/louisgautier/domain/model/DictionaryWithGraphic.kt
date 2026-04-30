@@ -2,7 +2,7 @@ package com.louisgautier.domain.model
 
 data class DictionaryWithGraphic(
     val dictionary: Dictionary,
-    val graphics: Graphic
+    val graphics: Graphic,
 ) {
     val code: Int
         get() = dictionary.code

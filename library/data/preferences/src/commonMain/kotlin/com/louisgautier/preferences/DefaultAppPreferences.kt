@@ -44,8 +44,7 @@ internal class DefaultAppPreferences(
     //endregion
 
     //region ================  GET  =======================
-    override fun getUserTokenAsFlow() =
-        store.data.map { preferences -> preferences[USER_TOKEN] }
+    override fun getUserTokenAsFlow() = store.data.map { preferences -> preferences[USER_TOKEN] }
 
     override fun getUserRefreshTokenAsFlow() =
         store.data.map { preferences -> preferences[USER_REFRESH_TOKEN] }
@@ -57,14 +56,11 @@ internal class DefaultAppPreferences(
 
     override suspend fun getUserRefreshToken() = getUserRefreshTokenAsFlow().firstOrNull()
 
-    override suspend fun getInstallationId(): String? =
-        store.data.first()[KEY_INSTALLATION_ID]
+    override suspend fun getInstallationId(): String? = store.data.first()[KEY_INSTALLATION_ID]
 
-    override suspend fun getFcmToken(): String? =
-        store.data.first()[KEY_FCM_TOKEN]
+    override suspend fun getFcmToken(): String? = store.data.first()[KEY_FCM_TOKEN]
 
-    override suspend fun getTheme(): String? =
-        observeTheme().firstOrNull()
+    override suspend fun getTheme(): String? = observeTheme().firstOrNull()
     //endregion
 
     //region ================  REMOVE  =======================

@@ -1,6 +1,5 @@
 package com.louisgautier.apicontracts.dto
 
-import com.louisgautier.apicontracts.KeepForR8
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -26,7 +25,6 @@ data class UserInfoJson(
     val provider: List<UserAuthMethodProvider>,
 )
 
-@KeepForR8
 @Serializable
 enum class UserAuthMethodProvider {
     ANONYMOUS,

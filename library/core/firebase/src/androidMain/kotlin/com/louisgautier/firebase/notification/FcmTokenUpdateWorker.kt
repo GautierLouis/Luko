@@ -17,49 +17,55 @@ import java.util.concurrent.TimeUnit
 
 class FcmTokenUpdateWorker(
     context: Context,
-    params: WorkerParameters
+    params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
-
     override suspend fun doWork(): Result {
-        val token = inputData.getString(KEY_FCM_TOKEN)
-            ?: return Result.failure()
+        val token =
+            inputData.getString(KEY_FCM_TOKEN)
+                ?: return Result.failure()
 
         AppLogger.d(tag = "FCM Worker", message = "New token received: $token")
 
-        //Koin might not be initialized - retry until app launch
-        return GlobalContext.getOrNull()?.getOrNull<FcmAccessor>()
+        // Koin might not be initialized - retry until app launch
+        return GlobalContext
+            .getOrNull()
+            ?.getOrNull<FcmAccessor>()
             ?.registerNewToken(token)
             ?.fold(
                 onSuccess = { Result.success() },
-                onFailure = { Result.retry() }
+                onFailure = { Result.retry() },
             ) ?: Result.retry()
     }
 
     companion object {
         const val KEY_FCM_TOKEN = "fcm_token"
 
-        fun enqueue(context: Context, token: String) {
+        fun enqueue(
+            context: Context,
+            token: String,
+        ) {
             val data = workDataOf(KEY_FCM_TOKEN to token)
 
-            val request = OneTimeWorkRequestBuilder<FcmTokenUpdateWorker>()
-                .setInputData(data)
-                .setBackoffCriteria(
-                    BackoffPolicy.EXPONENTIAL,
-                    WorkRequest.Companion.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS
-                )
-                .setConstraints(
-                    Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()
-                )
-                .build()
+            val request =
+                OneTimeWorkRequestBuilder<FcmTokenUpdateWorker>()
+                    .setInputData(data)
+                    .setBackoffCriteria(
+                        BackoffPolicy.EXPONENTIAL,
+                        WorkRequest.MIN_BACKOFF_MILLIS,
+                        TimeUnit.MILLISECONDS,
+                    ).setConstraints(
+                        Constraints
+                            .Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build(),
+                    ).build()
 
-            WorkManager.getInstance(context)
+            WorkManager
+                .getInstance(context)
                 .enqueueUniqueWork(
                     "fcm_token_update",
                     ExistingWorkPolicy.REPLACE,
-                    request
+                    request,
                 )
         }
     }

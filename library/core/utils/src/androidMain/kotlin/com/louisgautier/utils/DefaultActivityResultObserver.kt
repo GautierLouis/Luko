@@ -12,8 +12,7 @@ import kotlinx.coroutines.CompletableDeferred
  * The [onActivityResult] method should be called by the component that receives the activity result (e.g., a Fragment or Activity)
  * to complete the suspended coroutine.
  */
-abstract class DefaultActivityResultObserver<T>() {
-
+abstract class DefaultActivityResultObserver<T> {
     private var completer: CompletableDeferred<ActivityResult>? = null
     private lateinit var startForResult: ActivityResultLauncher<T>
 
@@ -31,4 +30,3 @@ abstract class DefaultActivityResultObserver<T>() {
         completer?.complete(result)
     }
 }
-

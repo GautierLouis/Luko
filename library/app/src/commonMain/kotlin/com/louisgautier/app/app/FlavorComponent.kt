@@ -18,20 +18,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.louisgautier.utils.Flavor
 
 @Composable
-internal fun FlavorComponent(
-    flavor: Flavor,
-) {
-
+internal fun FlavorComponent(flavor: Flavor) {
     val density = LocalDensity.current
     val height = with(density) { WindowInsets.statusBars.getTop(this).toDp() }
 
     Column(
-        modifier = Modifier
-            .height(height)
-            .fillMaxWidth()
-            .background(if (flavor == Flavor.DEV) Color.Red else Color.Blue),
+        modifier =
+            Modifier
+                .height(height)
+                .fillMaxWidth()
+                .background(if (flavor == Flavor.DEV) Color.Red else Color.Blue),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = flavor.name.uppercase(),

@@ -23,7 +23,7 @@ import com.louisgautier.domain.model.SimpleDictionary
 internal fun DictionaryContent(
     items: LazyPagingItems<SimpleDictionary>,
     modifier: Modifier = Modifier,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit,
 ) {
     val state = rememberLazyGridState()
 
@@ -39,12 +39,12 @@ internal fun DictionaryContent(
     ) {
         items(
             count = items.itemCount,
-            key = { index -> items.peek(index)?.code ?: index }
+            key = { index -> items.peek(index)?.code ?: index },
         ) { index ->
             val dictionary = items[index]!!
             CharacterItem(
                 dictionary = dictionary,
-                onClick = { onItemClick(dictionary.code) }
+                onClick = { onItemClick(dictionary.code) },
             )
         }
 

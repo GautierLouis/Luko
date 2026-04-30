@@ -33,41 +33,43 @@ import com.louisgautier.domain.previewSimpleDictionary
 internal fun CharacterItem(
     dictionary: SimpleDictionary,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
-
     Card(
-        modifier = modifier
-            .clip(ShapeDefaults.card())
-            .clickable(
-                role = Role.Button,
-                onClickLabel = dictionary.pinyin.first(),
-                onClick = onClick,
-            ),
+        modifier =
+            modifier
+                .clip(ShapeDefaults.card())
+                .clickable(
+                    role = Role.Button,
+                    onClickLabel = dictionary.pinyin.first(),
+                    onClick = onClick,
+                ),
         shape = ShapeDefaults.card(),
-        colors = CardDefaults.cardColors(
-            containerColor = Theme.materialColors.background,
-            contentColor = Theme.materialColors.onBackground
-        ),
-        border = BorderStrokeDefaults.minimum(Theme.materialColors.outline)
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Theme.materialColors.background,
+                contentColor = Theme.materialColors.onBackground,
+            ),
+        border = BorderStrokeDefaults.minimum(Theme.materialColors.outline),
     ) {
         Column(
-            modifier = Modifier
-                .aspectRatio(CharacterItemDefault.RATIO)
-                .padding(Padding.small),
+            modifier =
+                Modifier
+                    .aspectRatio(CharacterItemDefault.RATIO)
+                    .padding(Padding.small),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterVertically),
         ) {
             Text(
                 text = dictionary.character.toString(),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                style = Theme.typography.displayMedium
+                style = Theme.typography.displayMedium,
             )
 
             Text(
                 text = dictionary.pinyin.first(),
-                style = Theme.typography.bodyLarge
+                style = Theme.typography.bodyLarge,
             )
         }
     }
@@ -76,12 +78,12 @@ internal fun CharacterItem(
 @Preview
 @Composable
 private fun PreviewCharacterItem(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         CharacterItem(
             previewSimpleDictionary,
-            modifier = Modifier.width(CharacterItemDefault.MINIMUM_WIDTH.dp)
+            modifier = Modifier.width(CharacterItemDefault.MINIMUM_WIDTH.dp),
         )
     }
 }

@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ActionContainer(
     modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        content = content
+        content = content,
     )
 }

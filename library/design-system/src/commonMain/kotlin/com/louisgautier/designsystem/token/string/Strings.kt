@@ -5,21 +5,18 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class Strings(
     val greeting: String,
-
-    //Home
+    // Home
     val practice: String,
     val goodMorning: String,
     val goodAfternoon: String,
     val goodEvening: String,
     val welcomeBack: String,
-
-    //BottomBar
+    // BottomBar
     val home: String,
     val dictionary: String,
     val feed: String,
     val profile: String,
-
-    //Statistic
+    // Statistic
     val streak: String,
     val sessions: String,
     val totalScore: String,
@@ -28,8 +25,7 @@ data class Strings(
     val score: String,
     val difficulty: String,
     val overallStatistics: String,
-
-    //Difficulty
+    // Difficulty
     val easy: String,
     val medium: String,
     val hard: String,
@@ -39,16 +35,14 @@ data class Strings(
     val mediumCaption: String,
     val hardTitle: String,
     val hardCaption: String,
-
-    //HSK Level
+    // HSK Level
     val common: String,
     val frequent: String,
     val standard: String,
     val commonCaption: String,
     val frequentCaption: String,
     val standardCaption: String,
-
-    //Learning
+    // Learning
     val newSession: String,
     val next: String,
     val previous: String,
@@ -59,39 +53,31 @@ data class Strings(
     val sessionComplete: String,
     val sessionFinish: String,
     val sessionQuit: String,
-
     val leaveDialogTitle: String,
     val leaveDialogMessage: String,
     val leaveDialogConfirmation: String,
     val leaveDialogDismiss: String,
-
     val congratulationTitle: String,
     val congratulationMessage: String,
     val congratulationButtonRestart: String,
     val congratulationButtonHome: String,
-
-    //Dictionary
+    // Dictionary
     val searchPlaceholder: String,
     val filterFrequencyGroup: String,
-
-    //Date
+    // Date
     val today: String,
     val yesterday: String,
     val lastWeek: String,
     val lastMonth: String,
-
-    //Error
+    // Error
     val error: String,
     val retry: String,
-
-    //Content Description
+    // Content Description
     val actionSearch: String,
     val actionBack: String,
     val actionFilter: String,
     val actionClear: String,
     val actionReset: String,
-
-    //Formatter
+    // Formatter
     val datePattern: String,
 )
-

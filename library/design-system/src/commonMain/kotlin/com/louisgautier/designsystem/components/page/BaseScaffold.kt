@@ -31,14 +31,14 @@ fun BaseScaffold(
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = Theme.materialColors.background,
-        contentColor = Theme.materialColors.onBackground
+        contentColor = Theme.materialColors.onBackground,
     )
 }
 
 @Preview
 @Composable
 private fun PreviewBaseScaffold(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         BaseScaffold {

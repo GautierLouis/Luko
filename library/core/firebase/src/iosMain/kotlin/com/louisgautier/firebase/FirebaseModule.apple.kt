@@ -6,9 +6,13 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 @OptIn(ExperimentalForeignApi::class)
-actual val firebasePlatformModule = module {
-    single {
-        if (get<AppConfig>().isProduction) AppleFirebaseManager()
-        else DebugFirebaseManager()
-    } bind FirebaseManager::class
-}
+actual val firebasePlatformModule =
+    module {
+        single {
+            if (get<AppConfig>().isProduction) {
+                AppleFirebaseManager()
+            } else {
+                DebugFirebaseManager()
+            }
+        } bind FirebaseManager::class
+    }

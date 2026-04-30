@@ -29,17 +29,17 @@ import com.louisgautier.designsystem.theme.Theme
 @Composable
 fun ErrorContent(
     modifier: Modifier = Modifier,
-    action: () -> Unit = {}
+    action: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = Theme.strings.error,
             style = Theme.typography.bodyMedium,
-            color = Theme.materialColors.onSurface
+            color = Theme.materialColors.onSurface,
         )
         AppButton(
             text = Theme.strings.retry,
@@ -47,7 +47,7 @@ fun ErrorContent(
             role = ButtonRole.Error,
             size = ButtonSize.Medium,
             onClick = action,
-            trailingIcon = AppIcon.Refresh
+            trailingIcon = AppIcon.Refresh,
         )
     }
 }
@@ -55,7 +55,7 @@ fun ErrorContent(
 @Preview
 @Composable
 private fun PreviewErrorContent(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         ErrorContent()

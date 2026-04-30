@@ -32,22 +32,26 @@ internal fun DictionaryTopBar(
     modifier: Modifier = Modifier,
     filterMenuExpended: Boolean = false,
     enabled: Boolean = true,
-    onEvent: (DictionaryScreenEvent) -> Unit = {}
+    onEvent: (DictionaryScreenEvent) -> Unit = {},
 ) {
-
-    val containerColor = if (filterMenuExpended) Theme.materialColors.surfaceContainer
-    else Theme.materialColors.surface
+    val containerColor =
+        if (filterMenuExpended) {
+            Theme.materialColors.surfaceContainer
+        } else {
+            Theme.materialColors.surface
+        }
 
     Column(
-        modifier = Modifier
-            .background(containerColor)
+        modifier =
+            Modifier
+                .background(containerColor),
     ) {
         CenterAlignedTopAppBar(
             modifier = modifier,
             title = {
                 Text(
                     text = Theme.strings.dictionary,
-                    style = Theme.typography.titleLarge
+                    style = Theme.typography.titleLarge,
                 )
             },
             actions = {
@@ -55,11 +59,12 @@ internal fun DictionaryTopBar(
                     ActionFilter { onEvent(DictionaryScreenEvent.OnFilterToggle) }
                 }
             },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                titleContentColor = Theme.materialColors.onBackground,
-                actionIconContentColor = Theme.materialColors.onBackground
-            )
+            colors =
+                TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = Theme.materialColors.onBackground,
+                    actionIconContentColor = Theme.materialColors.onBackground,
+                ),
         )
 
         Column {
@@ -68,7 +73,7 @@ internal fun DictionaryTopBar(
             }
 
             AnimatedVisibility(
-                visible = filterMenuExpended
+                visible = filterMenuExpended,
             ) {
                 HorizontalDivider(thickness = .5.dp, color = Theme.materialColors.outline)
                 DictionaryFilter(activeFilter, onEvent)
@@ -80,7 +85,7 @@ internal fun DictionaryTopBar(
 @Preview
 @Composable
 private fun PreviewDictionaryTopBar(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column {
@@ -88,7 +93,7 @@ private fun PreviewDictionaryTopBar(
                 textFieldState = rememberTextFieldState(),
                 filterMenuExpended = false,
                 enabled = true,
-                activeFilter = ActiveFilter()
+                activeFilter = ActiveFilter(),
             )
 
             Spacer(Modifier.height(50.dp))
@@ -97,7 +102,7 @@ private fun PreviewDictionaryTopBar(
                 textFieldState = rememberTextFieldState(),
                 filterMenuExpended = true,
                 enabled = true,
-                activeFilter = ActiveFilter()
+                activeFilter = ActiveFilter(),
             )
 
             Spacer(Modifier.height(50.dp))
@@ -106,7 +111,7 @@ private fun PreviewDictionaryTopBar(
                 textFieldState = rememberTextFieldState(),
                 filterMenuExpended = false,
                 enabled = false,
-                activeFilter = ActiveFilter()
+                activeFilter = ActiveFilter(),
             )
         }
     }

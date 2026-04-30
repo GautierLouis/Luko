@@ -7,6 +7,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.modules.plus
 
 @OptIn(ExperimentalSerializationApi::class)
-val navigationConfiguration = SavedStateConfiguration {
-    serializersModule = learningInternalRouteSerializer + appRouteSerializers
-}
+val navigationConfiguration =
+    SavedStateConfiguration {
+        serializersModule = learningInternalRouteSerializer + appRouteSerializers
+    }

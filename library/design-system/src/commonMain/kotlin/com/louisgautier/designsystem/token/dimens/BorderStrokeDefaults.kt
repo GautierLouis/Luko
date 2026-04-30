@@ -6,5 +6,6 @@ import androidx.compose.ui.unit.dp
 
 object BorderStrokeDefaults {
     fun minimum(color: Color) = BorderStroke(1.dp, color)
+
     fun medium(color: Color) = BorderStroke(2.dp, color)
 }

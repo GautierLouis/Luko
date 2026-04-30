@@ -9,7 +9,7 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "FirebaseModule"
@@ -22,14 +22,15 @@ kotlin {
         swiftPackage(
             url = url("https://github.com/firebase/firebase-ios-sdk.git"),
             version = from("12.5.0"),
-            products = listOf(
-                product("FirebaseAnalytics"),
-                product("FirebaseMessaging"),
-                product("FirebaseAuth"),
-                product("FirebaseRemoteConfig"),
-                product("FirebaseCore"),
-                product("FirebaseInstallations")
-            )
+            products =
+                listOf(
+                    product("FirebaseAnalytics"),
+                    product("FirebaseMessaging"),
+                    product("FirebaseAuth"),
+                    product("FirebaseRemoteConfig"),
+                    product("FirebaseCore"),
+                    product("FirebaseInstallations"),
+                ),
         )
     }
 

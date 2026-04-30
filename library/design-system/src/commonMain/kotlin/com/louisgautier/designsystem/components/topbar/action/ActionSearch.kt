@@ -12,15 +12,15 @@ import com.louisgautier.designsystem.theme.Theme
 @Composable
 fun ActionSearch(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     IconButton(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
             imageVector = AppIcon.Search,
-            contentDescription = Theme.strings.actionSearch
+            contentDescription = Theme.strings.actionSearch,
         )
     }
 }

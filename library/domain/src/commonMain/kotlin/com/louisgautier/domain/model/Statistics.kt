@@ -7,5 +7,5 @@ data class Statistics(
     val averageTime: Duration,
     val averageDifficulty: DifficultyLevel?,
     val currentDayStreak: Int,
-    val sessionCount: Int
+    val sessionCount: Int,
 )

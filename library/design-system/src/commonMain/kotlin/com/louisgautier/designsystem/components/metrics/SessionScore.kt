@@ -20,10 +20,10 @@ fun SessionScore(
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "+",
@@ -34,27 +34,26 @@ fun SessionScore(
                 text = score,
                 color = Theme.materialColors.tertiary,
                 fontWeight = FontWeight.SemiBold,
-                style = Theme.typography.titleLarge
+                style = Theme.typography.titleLarge,
             )
         }
         Text(
             text = " XP",
             color = Theme.materialColors.tertiary,
             style = Theme.typography.bodySmall,
-            lineHeight = Theme.typography.bodyLarge.lineHeight
+            lineHeight = Theme.typography.bodyLarge.lineHeight,
         )
     }
 }
 
 @Preview
 @Composable
-fun PreviewSessionScore(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+private fun PreviewSessionScore(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
-
     AppTheme(themeMode) {
         SessionScore(
-            score = "2000"
+            score = "2000",
         )
     }
 }

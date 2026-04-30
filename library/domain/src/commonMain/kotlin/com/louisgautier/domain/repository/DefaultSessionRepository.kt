@@ -19,49 +19,51 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 internal class DefaultSessionRepository(
-    private val dao: SessionDao
+    private val dao: SessionDao,
 ) : SessionRepository {
-
     val dayStreakComputer = ComputeDayStreak()
     val difficultyComputer = ComputeDifficulty()
 
-
-    override suspend fun save(session: Session, responses: List<SessionResponse>) {
+    override suspend fun save(
+        session: Session,
+        responses: List<SessionResponse>,
+    ) {
         val sessionEntity = session.toEntity()
         val responseEntity = responses.map { it.toEntity() }
         dao.insertSessionWithResponses(sessionEntity, responseEntity)
     }
 
-    override suspend fun getLastSessions(limit: Int): List<Session> {
-        return dao.getLast(limit).map { it.toDto() }
-    }
+    override suspend fun getLastSessions(limit: Int): List<Session> =
+        dao.getLast(limit).map { it.toDto() }
 
-    override fun getSessions(): Flow<PagingData<Session>> = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            prefetchDistance = 5,
-            enablePlaceholders = false
-        ),
-        pagingSourceFactory = { dao.getAllPaged() }
-    ).flow.map { pagingData ->
-        pagingData.map { it.toDto() }
-    }
+    override fun getSessions(): Flow<PagingData<Session>> =
+        Pager(
+            config =
+                PagingConfig(
+                    pageSize = 20,
+                    prefetchDistance = 5,
+                    enablePlaceholders = false,
+                ),
+            pagingSourceFactory = { dao.getAllPaged() },
+        ).flow.map { pagingData ->
+            pagingData.map { it.toDto() }
+        }
 
-    override suspend fun getLastSessionsFor(code: Int): List<Session> {
-        return dao.getLastFor(code).map { it.toDto() }
-    }
+    override suspend fun getLastSessionsFor(code: Int): List<Session> =
+        dao.getLastFor(code).map { it.toDto() }
 
     override suspend fun getStatistics(): Statistics {
         val basic = dao.getBasicStatistics()
-        val dates = basic.uniqueDates
-            ?.map { it.toUTCDate() }
-            .orEmpty()
+        val dates =
+            basic.uniqueDates
+                ?.map { it.toUTCDate() }
+                .orEmpty()
         return Statistics(
             totalScore = basic.totalScore,
             averageTime = basic.averageTime.toDuration(DurationUnit.SECONDS),
             averageDifficulty = difficultyComputer.average(basic.difficulties.orEmpty()),
             currentDayStreak = dayStreakComputer.calculateCurrentDayStreak(dates),
-            sessionCount = basic.sessionCount
+            sessionCount = basic.sessionCount,
         )
     }
 }

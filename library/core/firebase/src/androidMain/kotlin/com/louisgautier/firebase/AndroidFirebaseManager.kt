@@ -21,14 +21,12 @@ import kotlinx.coroutines.tasks.await
 
 class AndroidFirebaseManager(
     private val context: Context,
-    private val remoteConfigManager: RemoteConfigManager
+    private val remoteConfigManager: RemoteConfigManager,
 ) : FirebaseManager {
-
     private lateinit var analytics: FirebaseAnalytics
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var messaging: FirebaseMessaging
     private lateinit var auth: FirebaseAuth
-
 
     override fun initialize() {
         FirebaseApp.initializeApp(context)
@@ -39,40 +37,38 @@ class AndroidFirebaseManager(
 
         auth.signInAnonymously()
 
-        remoteConfig = Firebase.remoteConfig.apply {
-            val configSettings = remoteConfigSettings {
-                minimumFetchIntervalInSeconds = 0
+        remoteConfig =
+            Firebase.remoteConfig.apply {
+                val configSettings =
+                    remoteConfigSettings {
+                        minimumFetchIntervalInSeconds = 0
+                    }
+                setConfigSettingsAsync(configSettings)
             }
-            setConfigSettingsAsync(configSettings)
-        }
 
         messaging = Firebase.messaging
 
         fetchRemoteConfig()
     }
 
-    override suspend fun getFCMToken(): String {
-        return messaging.token.await()
-    }
+    override suspend fun getFCMToken(): String = messaging.token.await()
 
-    override suspend fun getInstallationId(): String {
-        return FirebaseInstallations.getInstance().id.await()
-    }
+    override suspend fun getInstallationId(): String =
+        FirebaseInstallations.getInstance().id.await()
 
-    override fun logEvent(
-        event: TrackingEvent
-    ) {
-        val bundle = Bundle().apply {
-            event.params.forEach {
-                when (it.value) {
-                    is String -> putString(it.key, it.value as String)
-                    is Int -> putInt(it.key, it.value as Int)
-                    is Double -> putDouble(it.key, it.value as Double)
-                    is Boolean -> putBoolean(it.key, it.value as Boolean)
-                    else -> putString(it.key, it.value.toString())
+    override fun logEvent(event: TrackingEvent) {
+        val bundle =
+            Bundle().apply {
+                event.params.forEach {
+                    when (it.value) {
+                        is String -> putString(it.key, it.value as String)
+                        is Int -> putInt(it.key, it.value as Int)
+                        is Double -> putDouble(it.key, it.value as Double)
+                        is Boolean -> putBoolean(it.key, it.value as Boolean)
+                        else -> putString(it.key, it.value.toString())
+                    }
                 }
             }
-        }
 
         analytics.logEvent(event.key, bundle)
     }
@@ -81,35 +77,38 @@ class AndroidFirebaseManager(
         analytics.setUserId(userId)
     }
 
-    override fun setUserProperty(name: String, value: String) {
+    override fun setUserProperty(
+        name: String,
+        value: String,
+    ) {
         analytics.setUserProperty(name, value)
     }
 
     override fun fetchRemoteConfig() {
-        val default = mapOf(
-            FeatureFlagKey.ENABLE_DICTIONARY to false,
-            FeatureFlagKey.ENABLE_BOTTOM_NAV to false,
-        )
+        val default =
+            mapOf(
+                FeatureFlagKey.ENABLE_DICTIONARY to false,
+                FeatureFlagKey.ENABLE_BOTTOM_NAV to false,
+            )
         remoteConfig
             .setDefaultsAsync(default)
             .continueWithTask { remoteConfig.fetchAndActivate() }
             .addOnSuccessListener {
                 AppLogger.d(
                     tag = "FirebaseManager",
-                    message = "Remote config fetched"
+                    message = "Remote config fetched",
                 )
-            }
-            .addOnFailureListener {
+            }.addOnFailureListener {
                 AppLogger.d(
                     tag = "FirebaseManager",
-                    message = "Remote config fetch failed: ${it.message}"
+                    message = "Remote config fetch failed: ${it.message}",
                 )
-            }
-            .addOnCompleteListener {
-                val flags = RemoteConfigFlags(
-                    isDictionaryEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_DICTIONARY),
-                    isBottomBarEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_BOTTOM_NAV)
-                )
+            }.addOnCompleteListener {
+                val flags =
+                    RemoteConfigFlags(
+                        isDictionaryEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_DICTIONARY),
+                        isBottomBarEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_BOTTOM_NAV),
+                    )
                 remoteConfigManager.register(flags)
             }
     }

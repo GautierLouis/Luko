@@ -56,7 +56,7 @@ class EndPoint {
         ) {
             @Resource("graphic")
             class Graphic(
-                val parent: ByName
+                val parent: ByName,
             )
         }
 
@@ -87,6 +87,6 @@ class EndPoint {
     class GenerateSession(
         val parent: EndPoint = EndPoint(),
         val levels: List<CharacterFrequencyLevelDto>? = null,
-        val limit: Int
+        val limit: Int,
     )
 }

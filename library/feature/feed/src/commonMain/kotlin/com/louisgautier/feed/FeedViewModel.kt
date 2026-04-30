@@ -12,9 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 
 internal class FeedViewModel(
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
-
     data class UIState(
         val sessions: Flow<PagingData<Session>> = emptyFlow(),
     )
@@ -22,8 +21,8 @@ internal class FeedViewModel(
     private val _state = MutableStateFlow(UIState())
     val state = _state.asStateFlow()
 
-    val sessions = sessionRepository
-        .getSessions()
-        .cachedIn(viewModelScope)
-
+    val sessions =
+        sessionRepository
+            .getSessions()
+            .cachedIn(viewModelScope)
 }

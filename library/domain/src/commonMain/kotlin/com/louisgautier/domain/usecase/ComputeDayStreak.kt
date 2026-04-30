@@ -6,9 +6,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 
-
 internal class ComputeDayStreak {
-
     fun calculateCurrentDayStreak(sortedDates: List<LocalDate>): Int {
         if (sortedDates.isEmpty()) return 0
 
@@ -60,5 +58,4 @@ internal class ComputeDayStreak {
 
         return longestStreak
     }
-
 }

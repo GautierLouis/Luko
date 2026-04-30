@@ -32,23 +32,26 @@ import com.louisgautier.domain.previewSession
 internal fun DetailsContent(
     dictionaryWithGraphic: DictionaryWithGraphic,
     lastSession: List<Session> = emptyList(),
-    onPractice: () -> Unit = {}
+    onPractice: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
-            .padding(Padding.large),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(Padding.large),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Spacing.large
+        verticalArrangement = Spacing.large,
     ) {
         Text(
-            text = dictionaryWithGraphic
-                .dictionary
-                .pinyin
-                .firstOrNull()
-                .orEmpty(),
+            text =
+                dictionaryWithGraphic
+                    .dictionary
+                    .pinyin
+                    .firstOrNull()
+                    .orEmpty(),
             style = Theme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         AnimatedGraphic(dictionaryWithGraphic.graphics)
@@ -62,20 +65,20 @@ internal fun DetailsContent(
         )
 
         if (lastSession.isNotEmpty()) {
-
             Spacer(Modifier.height(16.dp))
 
             Text(
                 text = "Last Seen in:",
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Start
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
+                textAlign = TextAlign.Start,
             )
 
             lastSession.forEach {
-                //SessionCard(session = it)
+                // SessionCard(session = it)
             }
         }
     }
@@ -84,12 +87,12 @@ internal fun DetailsContent(
 @Preview
 @Composable
 private fun PreviewDetailsContent(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         DetailsContent(
             dictionaryWithGraphic = previewDictionaryWithGraphic,
-            lastSession = listOf(previewSession, previewSession)
+            lastSession = listOf(previewSession, previewSession),
         )
     }
 }

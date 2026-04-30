@@ -8,4 +8,3 @@ data class SimpleDictionary(
     val character: Char
         get() = Char(code)
 }
-

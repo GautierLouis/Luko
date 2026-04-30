@@ -51,25 +51,29 @@ private fun DictionaryScreen(
     items: LazyPagingItems<SimpleDictionary>,
     onEvent: (DictionaryScreenEvent) -> Unit = {},
 ) {
-
     val isError = items.loadState.refresh is LoadState.Error
     val isLoading = items.loadState.refresh is LoadState.Loading
 
     if (state.selectedCharacter != null) {
-        val modalVm = koinViewModel<ModalCharacterDetailsViewModel>(
-            parameters = { parametersOf(state.selectedCharacter) }
-        )
+        val modalVm =
+            koinViewModel<ModalCharacterDetailsViewModel>(
+                parameters = { parametersOf(state.selectedCharacter) },
+            )
 
         ModalCharacterDetails(
             viewModel = modalVm,
             onDismiss = {
                 onEvent(DictionaryScreenEvent.OnModalDismiss)
-            }
+            },
         )
     }
 
-    val contentTopCorner = if (state.filterMenuExpended) Padding.extraLarge
-    else Padding.none
+    val contentTopCorner =
+        if (state.filterMenuExpended) {
+            Padding.extraLarge
+        } else {
+            Padding.none
+        }
 
     BaseScaffold(
         topBar = {
@@ -78,43 +82,48 @@ private fun DictionaryScreen(
                 filterMenuExpended = state.filterMenuExpended,
                 activeFilter = state.activeFilter,
                 enabled = !isError && !isLoading,
-                onEvent = onEvent
+                onEvent = onEvent,
             )
         },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .padding(top = paddingValues.calculateTopPadding())
-                .background(
-                    color = Theme.materialColors.background,
-                    shape = RoundedCornerShape(
-                        topStart = contentTopCorner,
-                        topEnd = contentTopCorner
-                    )
-                )
+            modifier =
+                Modifier
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .background(
+                        color = Theme.materialColors.background,
+                        shape =
+                            RoundedCornerShape(
+                                topStart = contentTopCorner,
+                                topEnd = contentTopCorner,
+                            ),
+                    ),
         ) {
             when {
                 isLoading -> {
                     LoadingContent(
-                        modifier = Modifier
-                            .fillMaxHeight()
+                        modifier =
+                            Modifier
+                                .fillMaxHeight(),
                     )
                 }
 
                 isError -> {
                     ErrorContent(
-                        modifier = Modifier
-                            .fillMaxHeight(),
-                        action = { items.retry() }
+                        modifier =
+                            Modifier
+                                .fillMaxHeight(),
+                        action = { items.retry() },
                     )
                 }
 
-                else -> DictionaryContent(
-                    items = items,
-                    onItemClick = {
-                        onEvent(OnCharacterClicked(it))
-                    }
-                )
+                else ->
+                    DictionaryContent(
+                        items = items,
+                        onItemClick = {
+                            onEvent(OnCharacterClicked(it))
+                        },
+                    )
             }
         }
     }
@@ -126,15 +135,16 @@ private class DictionaryScreenProvider :
 @Preview
 @Composable
 private fun PreviewDictionaryScreenDay(
-    @PreviewParameter(DictionaryScreenProvider::class) pagingData: PagingData<SimpleDictionary>
+    @PreviewParameter(DictionaryScreenProvider::class) pagingData: PagingData<SimpleDictionary>,
 ) {
     AppTheme(ThemeMode.Day) {
         DictionaryScreen(
-            state = DictionaryListViewModel.UIState(
-                selectedCharacter = null,
-                filterMenuExpended = false
-            ),
-            items = flowOf(pagingData).collectAsLazyPagingItems()
+            state =
+                DictionaryListViewModel.UIState(
+                    selectedCharacter = null,
+                    filterMenuExpended = false,
+                ),
+            items = flowOf(pagingData).collectAsLazyPagingItems(),
         )
     }
 }
@@ -142,15 +152,16 @@ private fun PreviewDictionaryScreenDay(
 @Preview
 @Composable
 private fun PreviewDictionaryScreenNight(
-    @PreviewParameter(DictionaryScreenProvider::class) pagingData: PagingData<SimpleDictionary>
+    @PreviewParameter(DictionaryScreenProvider::class) pagingData: PagingData<SimpleDictionary>,
 ) {
     AppTheme(ThemeMode.Night) {
         DictionaryScreen(
-            state = DictionaryListViewModel.UIState(
-                selectedCharacter = null,
-                filterMenuExpended = false
-            ),
-            items = flowOf(pagingData).collectAsLazyPagingItems()
+            state =
+                DictionaryListViewModel.UIState(
+                    selectedCharacter = null,
+                    filterMenuExpended = false,
+                ),
+            items = flowOf(pagingData).collectAsLazyPagingItems(),
         )
     }
 }

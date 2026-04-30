@@ -26,43 +26,42 @@ internal fun AppMetricItem(
     item: MetricItem.AppMetric,
     modifier: Modifier = Modifier,
 ) {
-
     Column(
         modifier = modifier,
         verticalArrangement = Spacing.small,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RoundIcon(
             icon = item.metric.icon(),
             colors = item.metric.colors(),
-            size = RoundIconSize.Large
+            size = RoundIconSize.Large,
         )
         Text(
             text = item.value,
             fontWeight = FontWeight.Bold,
             style = Theme.typography.bodyMedium,
-            color = Theme.materialColors.onBackground
+            color = Theme.materialColors.onBackground,
         )
         Text(
             text = item.metric.label(),
             style = Theme.typography.bodyMedium,
-            color = Theme.materialColors.onBackground
+            color = Theme.materialColors.onBackground,
         )
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 private fun PreviewAppMetricItem(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         AppMetricItem(
-            item = MetricItem.AppMetric(
-                metric = AppStatistic.Streak,
-                value = "10"
-            )
+            item =
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Streak,
+                    value = "10",
+                ),
         )
     }
 }

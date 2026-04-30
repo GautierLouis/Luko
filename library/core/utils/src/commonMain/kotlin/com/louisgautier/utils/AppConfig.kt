@@ -11,5 +11,5 @@ class AppConfig(
 enum class Flavor {
     DEV,
     STAGING,
-    PROD
+    PROD,
 }

@@ -16,9 +16,8 @@ import kotlinx.coroutines.launch
 internal class ModalCharacterDetailsViewModel(
     private val characterCode: Int,
     private val characterRepository: CharacterRepository,
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
-
     sealed class UIState {
         data class Success(
             val selectedDictionary: DictionaryWithGraphic,
@@ -26,6 +25,7 @@ internal class ModalCharacterDetailsViewModel(
         ) : UIState()
 
         data object Error : UIState()
+
         data object Loading : UIState()
     }
 
@@ -40,18 +40,19 @@ internal class ModalCharacterDetailsViewModel(
         viewModelScope.launch {
             val dictionary = characterRepository.getByName(characterCode)
 
-            dictionary.onSuccess { dictionary ->
-                val sessions = sessionRepository.getLastSessionsFor(characterCode)
+            dictionary
+                .onSuccess { dictionary ->
+                    val sessions = sessionRepository.getLastSessionsFor(characterCode)
 
-                _state.update { current ->
-                    UIState.Success(
-                        selectedDictionary = dictionary,
-                        lastSession = sessions
-                    )
+                    _state.update { current ->
+                        UIState.Success(
+                            selectedDictionary = dictionary,
+                            lastSession = sessions,
+                        )
+                    }
+                }.onFailure {
+                    _state.update { UIState.Error }
                 }
-            }.onFailure {
-                _state.update { UIState.Error }
-            }
         }
     }
 

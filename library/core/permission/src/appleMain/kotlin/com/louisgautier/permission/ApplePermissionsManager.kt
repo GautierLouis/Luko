@@ -7,10 +7,9 @@ import platform.Photos.PHAuthorizationStatusDenied
 import platform.Photos.PHAuthorizationStatusNotDetermined
 import platform.Photos.PHPhotoLibrary
 
-
-class ApplePermissionsManager: PermissionsManager {
-    override fun isPermissionGranted(permission: PermissionType): PermissionResult {
-        return when (permission) {
+class ApplePermissionsManager : PermissionsManager {
+    override fun isPermissionGranted(permission: PermissionType): PermissionResult =
+        when (permission) {
             PermissionType.GALLERY -> {
                 val status = PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
                 if (status) PermissionResult.GRANTED else PermissionResult.DENIED
@@ -20,11 +19,10 @@ class ApplePermissionsManager: PermissionsManager {
                 TODO("Not implemented yet!")
             }
         }
-    }
 
     override suspend fun requestPermission(
         permission: PermissionType,
-        callback: PermissionCallback
+        callback: PermissionCallback,
     ) {
         when (permission) {
             PermissionType.GALLERY -> {
@@ -38,11 +36,10 @@ class ApplePermissionsManager: PermissionsManager {
         }
     }
 
-
     private fun askGalleryPermission(
         status: PHAuthorizationStatus,
         permission: PermissionType,
-        callback: PermissionCallback
+        callback: PermissionCallback,
     ) {
         when (status) {
             PHAuthorizationStatusAuthorized -> {
@@ -57,7 +54,8 @@ class ApplePermissionsManager: PermissionsManager {
 
             PHAuthorizationStatusDenied -> {
                 callback.onPermissionStatus(
-                    permission, PermissionResult.DENIED
+                    permission,
+                    PermissionResult.DENIED,
                 )
             }
 

@@ -7,5 +7,5 @@ import kotlin.time.Clock
 data class ResponseError(
     val code: String,
     val message: String,
-    val timestamp: Long = Clock.System.now().toEpochMilliseconds()
+    val timestamp: Long = Clock.System.now().toEpochMilliseconds(),
 )

@@ -22,7 +22,7 @@ import com.louisgautier.designsystem.theme.Theme
 fun LoadingContent(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(
-            color = Theme.materialColors.tertiary
+            color = Theme.materialColors.tertiary,
         )
     }
 }
@@ -30,7 +30,7 @@ fun LoadingContent(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun PreviewLoadingContent(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         LoadingContent()

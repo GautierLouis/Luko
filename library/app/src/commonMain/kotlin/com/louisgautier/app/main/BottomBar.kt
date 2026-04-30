@@ -26,7 +26,7 @@ internal fun BottomBar(
     items: ImmutableList<BottomNavItem>,
     selectedItem: BottomNavItem,
     modifier: Modifier = Modifier,
-    onClick: (BottomNavItem) -> Unit = {}
+    onClick: (BottomNavItem) -> Unit = {},
 ) {
     NavigationBar(
         modifier = modifier,
@@ -48,13 +48,14 @@ internal fun BottomBar(
                         style = Theme.typography.labelMedium,
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Theme.materialColors.surfaceContainer,
-                    selectedTextColor = Theme.materialColors.primary,
-                    unselectedTextColor = Theme.materialColors.onSurface,
-                    selectedIconColor = Theme.materialColors.primary,
-                    unselectedIconColor = Theme.materialColors.onSurface,
-                )
+                colors =
+                    NavigationBarItemDefaults.colors(
+                        indicatorColor = Theme.materialColors.surfaceContainer,
+                        selectedTextColor = Theme.materialColors.primary,
+                        unselectedTextColor = Theme.materialColors.onSurface,
+                        selectedIconColor = Theme.materialColors.primary,
+                        unselectedIconColor = Theme.materialColors.onSurface,
+                    ),
             )
         }
     }
@@ -63,14 +64,14 @@ internal fun BottomBar(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewBottomBar(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column {
             Spacer(Modifier.height(56.dp).background(Theme.materialColors.background))
             BottomBar(
                 BottomNavItem.entries.toImmutableList(),
-                BottomNavItem.Home
+                BottomNavItem.Home,
             )
         }
     }

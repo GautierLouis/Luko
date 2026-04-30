@@ -11,16 +11,14 @@ import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.navigation.AppNavigation
 
 @Composable
-fun ActionNavigateUp(
-    modifier: Modifier = Modifier,
-) {
+fun ActionNavigateUp(modifier: Modifier = Modifier) {
     IconButton(
         modifier = modifier,
-        onClick = { AppNavigation.navigateUp() }
+        onClick = { AppNavigation.navigateUp() },
     ) {
         Icon(
             imageVector = AppIcon.ArrowBack,
-            contentDescription = Theme.strings.actionBack
+            contentDescription = Theme.strings.actionBack,
         )
     }
 }

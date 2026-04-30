@@ -16,12 +16,12 @@ internal fun RowScope.MetricHeader(
 ) {
     RoundIcon(
         icon = icon,
-        colors = Theme.appLevelColors.appMetrics
+        colors = Theme.appLevelColors.appMetrics,
     )
     Text(
         text = title,
         style = Theme.typography.titleMedium,
-        color = Theme.materialColors.onBackground
+        color = Theme.materialColors.onBackground,
     )
     Spacer(Modifier.weight(1f))
     trailing()

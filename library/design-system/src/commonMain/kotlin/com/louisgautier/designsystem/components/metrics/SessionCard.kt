@@ -26,7 +26,7 @@ data class SessionUiModel(
 @Composable
 fun SessionCard(
     model: SessionUiModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     MetricCardLayout(
         modifier = modifier,
@@ -34,40 +34,42 @@ fun SessionCard(
             MetricHeader(
                 title = model.date,
                 icon = AppIcon.RoundedTrophy,
-                trailing = { SessionScore(model.score) }
+                trailing = { SessionScore(model.score) },
             )
         },
-        items = persistentListOf(
-            MetricItem.SessionMetric(
-                metric = SessionStatistic.QuestionCount,
-                value = model.questionsCount
+        items =
+            persistentListOf(
+                MetricItem.SessionMetric(
+                    metric = SessionStatistic.QuestionCount,
+                    value = model.questionsCount,
+                ),
+                MetricItem.SessionMetric(
+                    metric = SessionStatistic.Time,
+                    value = model.duration,
+                ),
+                MetricItem.SessionMetric(
+                    metric = SessionStatistic.Difficulty,
+                    value = model.difficulty,
+                ),
             ),
-            MetricItem.SessionMetric(
-                metric = SessionStatistic.Time,
-                value = model.duration
-            ),
-            MetricItem.SessionMetric(
-                metric = SessionStatistic.Difficulty,
-                value = model.difficulty
-            )
-        )
     )
 }
 
 @Preview
 @Composable
 private fun PreviewSessionCard(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         SessionCard(
-            model = SessionUiModel(
-                date = "2026-31-01",
-                duration = "0",
-                questionsCount = "10",
-                difficulty = "Hard",
-                score = "1000"
-            )
+            model =
+                SessionUiModel(
+                    date = "2026-31-01",
+                    duration = "0",
+                    questionsCount = "10",
+                    difficulty = "Hard",
+                    score = "1000",
+                ),
         )
     }
 }

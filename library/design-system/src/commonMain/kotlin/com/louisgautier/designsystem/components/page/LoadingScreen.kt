@@ -11,9 +11,7 @@ import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
 
 @Composable
-fun LoadingScreen(
-    modifier: Modifier = Modifier,
-) {
+fun LoadingScreen(modifier: Modifier = Modifier) {
     BaseScaffold(
         modifier = modifier,
     ) { paddingValues ->
@@ -24,7 +22,7 @@ fun LoadingScreen(
 @Preview
 @Composable
 private fun PreviewLoadingScreen(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         LoadingScreen()

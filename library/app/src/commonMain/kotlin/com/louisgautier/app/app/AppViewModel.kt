@@ -31,13 +31,12 @@ internal class AppViewModel(
     private val authRepository: AuthRepository,
     private val remoteConfigManager: RemoteConfigManager,
     userRepository: UserRepository,
-    appConfig: AppConfig
+    appConfig: AppConfig,
 ) : ViewModel() {
-
     data class UiState(
         val isProduction: Boolean,
         val flavor: Flavor,
-        val theme: SettingTheme = SettingTheme.Default
+        val theme: SettingTheme = SettingTheme.Default,
     )
 
     private val _state = MutableStateFlow(UiState(appConfig.isProduction, appConfig.flavor))
@@ -51,9 +50,11 @@ internal class AppViewModel(
             authRepository.registerAnonymously()
         }
 
-        userRepository.observeTheme().onEach { theme ->
-            _state.update { it.copy(theme = theme) }
-        }.launchIn(viewModelScope)
+        userRepository
+            .observeTheme()
+            .onEach { theme ->
+                _state.update { it.copy(theme = theme) }
+            }.launchIn(viewModelScope)
 
         viewModelScope.launch {
             remoteConfigManager.completed.filter { it }.collect {}

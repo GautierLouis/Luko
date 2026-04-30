@@ -41,7 +41,6 @@ internal fun AnimatedGraphic(
     graphic: Graphic,
     modifier: Modifier = Modifier,
 ) {
-
     var canvasSize by remember { mutableStateOf(IntSize(0, 0)) }
 
     val strokes = TransformStroke.transformPath(graphic.strokes, canvasSize)
@@ -53,7 +52,7 @@ internal fun AnimatedGraphic(
     var started by remember { mutableStateOf(isPreview) }
     val progress by animateFloatAsState(
         targetValue = if (started) strokes.size.toFloat() else 0f,
-        animationSpec = tween(3000, easing = LinearEasing)
+        animationSpec = tween(3000, easing = LinearEasing),
     )
 
     LaunchedEffect(Unit) {
@@ -64,17 +63,18 @@ internal fun AnimatedGraphic(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
     ) {
         Canvas(
-            modifier = Modifier
-                .width(150.dp)
-                .aspectRatio(1f)
-                .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
+            modifier =
+                Modifier
+                    .width(150.dp)
+                    .aspectRatio(1f)
+                    .onGloballyPositioned { coordinates -> canvasSize = coordinates.size },
         ) {
-
             strokes.forEachIndexed { index, path ->
 
                 val strokeProgress = (progress - index).coerceIn(0f, 1f)
@@ -82,7 +82,6 @@ internal fun AnimatedGraphic(
                 val currentMedian = TransformStroke.transformOffset(medians[index], canvasSize)
                 if (strokeProgress > 0f) {
                     clipPath(path) {
-
                         val medianPath = Path()
                         val totalPoints = currentMedian.size
                         val currentIndex = (strokeProgress * (totalPoints - 1)).toInt()
@@ -90,13 +89,13 @@ internal fun AnimatedGraphic(
 
                         medianPath.moveTo(
                             currentMedian[0].x,
-                            currentMedian[0].y
+                            currentMedian[0].y,
                         )
 
                         for (i in 1..currentIndex) {
                             medianPath.lineTo(
                                 currentMedian[i].x,
-                                currentMedian[i].y
+                                currentMedian[i].y,
                             )
                         }
 
@@ -105,14 +104,14 @@ internal fun AnimatedGraphic(
                             val next = currentMedian[currentIndex + 1]
                             medianPath.lineTo(
                                 current.x + (next.x - current.x) * fraction,
-                                current.y + (next.y - current.y) * fraction
+                                current.y + (next.y - current.y) * fraction,
                             )
                         }
 
                         drawPath(
                             path = medianPath,
                             color = strokeColor,
-                            style = Stroke(width = 100f, cap = StrokeCap.Round)
+                            style = Stroke(width = 100f, cap = StrokeCap.Round),
                         )
                     }
                 }
@@ -124,7 +123,7 @@ internal fun AnimatedGraphic(
 @Preview
 @Composable
 private fun PreviewAnimatedGraphic(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         AnimatedGraphic(

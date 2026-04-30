@@ -6,8 +6,9 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val authModule = module {
-    singleOf(::DefaultTokenAccessor) bind TokenAccessor::class
-    singleOf(::DefaultFcmAccessor) bind FcmAccessor::class
-    singleOf(::DefaultAuthRepository) bind AuthRepository::class
-}
+val authModule =
+    module {
+        singleOf(::DefaultTokenAccessor) bind TokenAccessor::class
+        singleOf(::DefaultFcmAccessor) bind FcmAccessor::class
+        singleOf(::DefaultAuthRepository) bind AuthRepository::class
+    }

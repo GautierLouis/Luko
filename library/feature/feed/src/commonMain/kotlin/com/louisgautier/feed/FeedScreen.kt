@@ -31,14 +31,13 @@ fun FeedScreen() {
 @Composable
 private fun FeedScreen(
     state: FeedViewModel.UIState,
-    sessions: LazyPagingItems<Session>
+    sessions: LazyPagingItems<Session>,
 ) {
-
     Scaffold { paddingValues ->
         LazyColumn {
             items(
                 count = sessions.itemCount,
-                key = { index -> sessions[index]?.id ?: index }
+                key = { index -> sessions[index]?.id ?: index },
             ) {
                 val session = sessions[it]?.toUiModel() ?: return@items
                 SessionCard(
@@ -49,18 +48,17 @@ private fun FeedScreen(
     }
 }
 
-private class FeedScreenProvider :
-    PagingDataPreviewParameter<Session>(listOf(previewSession))
+private class FeedScreenProvider : PagingDataPreviewParameter<Session>(listOf(previewSession))
 
 @Preview
 @Composable
 private fun PreviewFeedScreenDay(
-    @PreviewParameter(FeedScreenProvider::class) pagingData: PagingData<Session>
+    @PreviewParameter(FeedScreenProvider::class) pagingData: PagingData<Session>,
 ) {
     AppTheme(ThemeMode.Day) {
         FeedScreen(
             state = FeedViewModel.UIState(),
-            sessions = flowOf(pagingData).collectAsLazyPagingItems()
+            sessions = flowOf(pagingData).collectAsLazyPagingItems(),
         )
     }
 }
@@ -68,14 +66,12 @@ private fun PreviewFeedScreenDay(
 @Preview
 @Composable
 private fun PreviewFeedScreenNight(
-    @PreviewParameter(FeedScreenProvider::class) pagingData: PagingData<Session>
+    @PreviewParameter(FeedScreenProvider::class) pagingData: PagingData<Session>,
 ) {
     AppTheme(ThemeMode.Night) {
         FeedScreen(
             state = FeedViewModel.UIState(),
-            sessions = flowOf(pagingData).collectAsLazyPagingItems()
+            sessions = flowOf(pagingData).collectAsLazyPagingItems(),
         )
     }
 }
-
-

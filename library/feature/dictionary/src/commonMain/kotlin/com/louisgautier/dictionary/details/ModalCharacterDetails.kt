@@ -42,7 +42,7 @@ internal fun ModalCharacterDetails(
                 OnRetry -> viewModel.retry()
                 OnPractice -> viewModel.practice()
             }
-        }
+        },
     )
 }
 
@@ -53,16 +53,17 @@ internal fun ModalCharacterDetails(
     onEvent: (ModalCharacterDetailsEvent) -> Unit = {},
     onDismiss: () -> Unit = {},
 ) {
-
-    val modalState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false
-    )
+    val modalState =
+        rememberModalBottomSheetState(
+            skipPartiallyExpanded = false,
+        )
 
     // Force partial on Loading/Error, allow full on Success
     LaunchedEffect(state) {
         when (state) {
             is UIState.Loading,
-            is UIState.Error -> modalState.partialExpand()
+            is UIState.Error,
+                -> modalState.partialExpand()
 
             is UIState.Success -> Unit
         }
@@ -75,7 +76,7 @@ internal fun ModalCharacterDetails(
         scrimColor = Theme.materialColors.scrim,
         dragHandle = {
             BottomSheetDefaults.DragHandle(
-                color = Theme.materialColors.onBackground
+                color = Theme.materialColors.onBackground,
             )
         },
         onDismissRequest = onDismiss,
@@ -85,46 +86,48 @@ internal fun ModalCharacterDetails(
                     is UIState.Error -> {
                         ErrorContent(
                             modifier = Modifier.fillMaxHeight(.5f),
-                            action = { onEvent(OnRetry) }
+                            action = { onEvent(OnRetry) },
                         )
                     }
 
                     is UIState.Loading -> {
                         LoadingContent(
-                            modifier = Modifier.fillMaxHeight(.5f)
+                            modifier = Modifier.fillMaxHeight(.5f),
                         )
                     }
 
-                    is UIState.Success -> DetailsContent(
-                        dictionaryWithGraphic = state.selectedDictionary,
-                        lastSession = state.lastSession,
-                        onPractice = {
-                            onEvent(OnPractice)
-                        }
-                    )
+                    is UIState.Success ->
+                        DetailsContent(
+                            dictionaryWithGraphic = state.selectedDictionary,
+                            lastSession = state.lastSession,
+                            onPractice = {
+                                onEvent(OnPractice)
+                            },
+                        )
                 }
             }
-        }
+        },
     )
 }
 
 @Preview
 @Composable
 private fun PreviewModalCharacterDetailsDay(
-    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
+    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
 ) {
     AppTheme(ThemeMode.Day) {
         ModalCharacterDetails(
-            state = when (mode) {
-                LoadingMode.LOADING -> UIState.Loading
-                LoadingMode.ERROR -> UIState.Error
-                LoadingMode.SUCCESS -> {
-                    UIState.Success(
-                        selectedDictionary = previewDictionaryWithGraphic,
-                        lastSession = listOf(previewSession, previewSession)
-                    )
-                }
-            }
+            state =
+                when (mode) {
+                    LoadingMode.LOADING -> UIState.Loading
+                    LoadingMode.ERROR -> UIState.Error
+                    LoadingMode.SUCCESS -> {
+                        UIState.Success(
+                            selectedDictionary = previewDictionaryWithGraphic,
+                            lastSession = listOf(previewSession, previewSession),
+                        )
+                    }
+                },
         )
     }
 }
@@ -132,20 +135,21 @@ private fun PreviewModalCharacterDetailsDay(
 @Preview
 @Composable
 private fun PreviewModalCharacterDetailsNight(
-    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
+    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
 ) {
     AppTheme(ThemeMode.Night) {
         ModalCharacterDetails(
-            state = when (mode) {
-                LoadingMode.LOADING -> UIState.Loading
-                LoadingMode.ERROR -> UIState.Error
-                LoadingMode.SUCCESS -> {
-                    UIState.Success(
-                        selectedDictionary = previewDictionaryWithGraphic,
-                        lastSession = listOf(previewSession, previewSession)
-                    )
-                }
-            }
+            state =
+                when (mode) {
+                    LoadingMode.LOADING -> UIState.Loading
+                    LoadingMode.ERROR -> UIState.Error
+                    LoadingMode.SUCCESS -> {
+                        UIState.Success(
+                            selectedDictionary = previewDictionaryWithGraphic,
+                            lastSession = listOf(previewSession, previewSession),
+                        )
+                    }
+                },
         )
     }
 }

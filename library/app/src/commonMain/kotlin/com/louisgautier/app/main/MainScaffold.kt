@@ -22,9 +22,7 @@ import com.louisgautier.profile.ProfileScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-internal fun MainScaffold(
-    viewModel: MainViewModel = koinViewModel(),
-) {
+internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     MainScaffold(
         state = state,
@@ -36,7 +34,7 @@ internal fun MainScaffold(
                 BottomNavItem.Profile -> ProfileScreen()
             }
         },
-        onEvent = { event -> viewModel.onEventReceived(event) }
+        onEvent = { event -> viewModel.onEventReceived(event) },
     )
 }
 
@@ -52,15 +50,16 @@ private fun MainScaffold(
                 BottomBar(
                     items = state.bottomNavItem,
                     selectedItem = state.selectedItem,
-                    onClick = { onEvent(OnBottomItemClicked(it)) }
+                    onClick = { onEvent(OnBottomItemClicked(it)) },
                 )
             }
-        }
+        },
     ) { paddingValues ->
         Box(
-            modifier = Modifier.padding(
-                bottom = paddingValues.calculateBottomPadding()
-            )
+            modifier =
+                Modifier.padding(
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
         ) {
             screenContent()
         }
@@ -70,16 +69,17 @@ private fun MainScaffold(
 @Preview
 @Composable
 private fun PreviewMainScaffold(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         MainScaffold(
-            state = UiState(
-                selectedItem = BottomNavItem.Dictionary
-            ),
+            state =
+                UiState(
+                    selectedItem = BottomNavItem.Dictionary,
+                ),
             screenContent = {
                 Box(Modifier.fillMaxSize())
-            }
+            },
         )
     }
 }

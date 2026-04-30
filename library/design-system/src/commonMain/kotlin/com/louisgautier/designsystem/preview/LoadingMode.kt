@@ -1,5 +1,7 @@
 package com.louisgautier.designsystem.preview
 
 enum class LoadingMode {
-    ERROR, SUCCESS, LOADING
+    ERROR,
+    SUCCESS,
+    LOADING,
 }

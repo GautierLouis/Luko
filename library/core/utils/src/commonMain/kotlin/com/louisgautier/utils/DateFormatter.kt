@@ -9,7 +9,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Instant
 
-//TODO actual/expect
+// TODO actual/expect
 fun Instant.toISODateString(): String {
     val localDateTime = this.toLocalDateTime(TimeZone.currentSystemDefault())
     return "${localDateTime.year}-${
@@ -25,7 +25,6 @@ fun Duration.toHHMMSS(): String {
     val minutes = (absSeconds % 3600) / 60
     val seconds = absSeconds % 60
 
-
     return buildString {
         if (hours > 0) {
             append(hours)
@@ -38,4 +37,5 @@ fun Duration.toHHMMSS(): String {
 }
 
 fun String.toUTCDate() = Instant.parse(this).toLocalDateTime(TimeZone.UTC).date
+
 fun nowInUtc() = Clock.System.todayIn(TimeZone.UTC)

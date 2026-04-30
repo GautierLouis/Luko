@@ -19,26 +19,27 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val libraryModule = module {
-    includes(libraryPlatformModule)
-    includeCoreModule()
-    includeFeatureModule()
-    includes(domainModule)
+val libraryModule =
+    module {
+        includes(libraryPlatformModule)
+        includeCoreModule()
+        includeFeatureModule()
+        includes(domainModule)
 
-    single {
-        val flavor = Flavor.valueOf(get<String>(named(Environment.FLAVOR)).uppercase())
+        single {
+            val flavor = Flavor.valueOf(get<String>(named(Environment.FLAVOR)).uppercase())
 
-        AppConfig(
-            platform = get(named(Environment.PLATFORM)),
-            flavor = flavor,
-            isProduction = get<String>(named(Environment.FLAVOR)) == Environment.PROD,
-            versionName = get(named(Environment.VERSION_NAME)),
-            versionCode = get(named(Environment.VERSION_CODE))
-        )
+            AppConfig(
+                platform = get(named(Environment.PLATFORM)),
+                flavor = flavor,
+                isProduction = get<String>(named(Environment.FLAVOR)) == Environment.PROD,
+                versionName = get(named(Environment.VERSION_NAME)),
+                versionCode = get(named(Environment.VERSION_CODE)),
+            )
+        }
+        viewModelOf(::AppViewModel)
+        viewModelOf(::MainViewModel)
     }
-    viewModelOf(::AppViewModel)
-    viewModelOf(::MainViewModel)
-}
 
 private fun Module.includeCoreModule() {
     includes(
@@ -47,7 +48,6 @@ private fun Module.includeCoreModule() {
         firebaseModule,
     )
 }
-
 
 private fun Module.includeFeatureModule() {
     includes(

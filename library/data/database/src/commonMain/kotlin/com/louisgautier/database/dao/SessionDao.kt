@@ -13,7 +13,6 @@ import kotlinx.serialization.json.Json
 
 @Dao
 interface SessionDao {
-
     @Insert
     suspend fun insertSession(session: SessionEntity): Long
 
@@ -26,14 +25,15 @@ interface SessionDao {
         responses: List<EmbeddedResponse>,
     ) {
         val sessionId = insertSession(session)
-        val responseEntities = responses.map { response ->
-            ResponseEntity(
-                sessionId = sessionId.toInt(),
-                code = response.code,
-                overallAccuracy = response.statistics.overallAccuracy,
-                response = Json.encodeToString(response),
-            )
-        }
+        val responseEntities =
+            responses.map { response ->
+                ResponseEntity(
+                    sessionId = sessionId.toInt(),
+                    code = response.code,
+                    overallAccuracy = response.statistics.overallAccuracy,
+                    response = Json.encodeToString(response),
+                )
+            }
         insertResponses(responseEntities)
     }
 
@@ -46,7 +46,8 @@ interface SessionDao {
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
     fun getAllPaged(): PagingSource<Int, SessionEntity>
 
-    @Query("""
+    @Query(
+        """
         SELECT 
             s.* 
         FROM SessionEntity s 
@@ -55,7 +56,8 @@ interface SessionDao {
         WHERE r.code = :code 
         ORDER BY s.date 
         DESC LIMIT 3
-    """)
+    """,
+    )
     suspend fun getLastFor(code: Int): List<SessionEntity>
 
     @Query("SELECT AVG(overallAccuracy) FROM ResponseEntity WHERE code = :code")
@@ -70,8 +72,7 @@ interface SessionDao {
             GROUP_CONCAT(difficulty) AS difficulties,
             GROUP_CONCAT(DISTINCT date) AS uniqueDates
         FROM SessionEntity
-    """
+    """,
     )
     suspend fun getBasicStatistics(): BasicStatistics
-
 }

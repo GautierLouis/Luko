@@ -7,4 +7,3 @@ data class ResponseListDto<T>(
     val hasNextPage: Boolean,
     val data: List<T>,
 )
-

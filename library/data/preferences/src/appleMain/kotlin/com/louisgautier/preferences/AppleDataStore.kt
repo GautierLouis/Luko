@@ -10,7 +10,6 @@ import platform.Foundation.NSUserDomainMask
 
 @OptIn(ExperimentalForeignApi::class)
 class AppleDataStore : DataStore {
-
     override fun getPath(name: String): Path {
         val documentDirectory: NSURL? =
             NSFileManager.defaultManager.URLForDirectory(

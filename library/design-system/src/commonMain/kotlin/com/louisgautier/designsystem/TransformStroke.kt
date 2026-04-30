@@ -12,10 +12,11 @@ import androidx.compose.ui.unit.IntSize
  * Also ued to transform user's stoke to compare it with the reference
  */
 object TransformStroke {
-    private val matrix = Matrix().apply {
-        scale(1f, -1f)
-        translate(0f, -900f)
-    }
+    private val matrix =
+        Matrix().apply {
+            scale(1f, -1f)
+            translate(0f, -900f)
+        }
 
     fun transformOffset(
         offset: List<Offset>,
@@ -31,22 +32,23 @@ object TransformStroke {
     fun transformPath(
         svgPathDataList: List<String>,
         canvasSize: IntSize,
-        padding: Float = 0f
+        padding: Float = 0f,
     ): List<Path> {
         if (svgPathDataList.isEmpty()) return emptyList()
 
         val centerMatrix = centerMatrix(canvasSize, padding)
-        val transformedPaths = svgPathDataList.map { pathData ->
-            val path = PathParser().parsePathString(pathData).toPath()
-            path.transformWith(matrix)
-        }
+        val transformedPaths =
+            svgPathDataList.map { pathData ->
+                val path = PathParser().parsePathString(pathData).toPath()
+                path.transformWith(matrix)
+            }
 
         return transformedPaths.map { it.transformWith(centerMatrix) }
     }
 
     private fun centerMatrix(
         canvasSize: IntSize,
-        padding: Float = 0f
+        padding: Float = 0f,
     ): Matrix {
         // Use the original SVG viewBox size (1024x1024) for consistent aspect ratio
         val svgViewBoxSize = 1024f

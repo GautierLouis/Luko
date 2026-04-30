@@ -9,29 +9,24 @@ import swiftPMImport.Learn.Chinese.library.core.library.core.firebase.FIRRemoteC
 
 @OptIn(ExperimentalForeignApi::class)
 class DebugFirebaseManager : FirebaseManager {
-
     override fun initialize() {
         FIRApp.configure()
     }
 
-    override suspend fun getFCMToken(): String {
-        return "mock-token"
-    }
+    override suspend fun getFCMToken(): String = "mock-token"
 
-    override suspend fun getInstallationId(): String {
-        return "mock-installation-id"
-    }
+    override suspend fun getInstallationId(): String = "mock-installation-id"
 
     override fun logEvent(event: TrackingEvent) {
-
     }
 
     override fun setUserId(userId: String) {
-
     }
 
-    override fun setUserProperty(name: String, value: String) {
-
+    override fun setUserProperty(
+        name: String,
+        value: String,
+    ) {
     }
 
     override fun fetchRemoteConfig() {
@@ -40,17 +35,19 @@ class DebugFirebaseManager : FirebaseManager {
             if (error != null) {
                 AppLogger.e(
                     tag = "RemoteConfig",
-                    message = "fetched error: ${error.localizedDescription}"
+                    message = "fetched error: ${error.localizedDescription}",
                 )
                 return@fetchAndActivateWithCompletionHandler
             }
             when (status) {
                 FIRRemoteConfigFetchAndActivateStatus
-                    .FIRRemoteConfigFetchAndActivateStatusSuccessFetchedFromRemote ->
+                    .FIRRemoteConfigFetchAndActivateStatusSuccessFetchedFromRemote,
+                    ->
                     AppLogger.i(tag = "RemoteConfig", message = "fetched and activated from remote")
 
                 FIRRemoteConfigFetchAndActivateStatus
-                    .FIRRemoteConfigFetchAndActivateStatusSuccessUsingPreFetchedData ->
+                    .FIRRemoteConfigFetchAndActivateStatusSuccessUsingPreFetchedData,
+                    ->
                     AppLogger.i(tag = "RemoteConfig", message = "activated using pre-fetched data")
 
                 else ->

@@ -38,29 +38,33 @@ internal fun MetricCardLayout(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         shape = ShapeDefaults.card(),
-        elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = 16.dp
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = Theme.materialColors.surfaceContainer,
-        )
+        elevation =
+            CardDefaults.elevatedCardElevation(
+                defaultElevation = 16.dp,
+            ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Theme.materialColors.surfaceContainer,
+            ),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Padding.large),
-            verticalArrangement = Spacing.large
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(Padding.large),
+            verticalArrangement = Spacing.large,
         ) {
             Column(
-                verticalArrangement = Spacing.medium
+                verticalArrangement = Spacing.medium,
             ) {
                 Row(
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Spacing.medium
+                    horizontalArrangement = Spacing.medium,
                 ) {
                     header()
                 }
@@ -71,13 +75,13 @@ internal fun MetricCardLayout(
 }
 
 @Composable
-private fun MetricRow(
-    items: ImmutableList<MetricItem>
-) {
+private fun MetricRow(items: ImmutableList<MetricItem>) {
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = Padding.large),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Padding.large),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         items.take(3).forEach { item ->
             when (item) {
@@ -96,7 +100,7 @@ private fun MetricRow(
 @Preview
 @Composable
 private fun PreviewMetricCardLayout(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column {
@@ -107,20 +111,21 @@ private fun PreviewMetricCardLayout(
                         icon = AppIcon.RoundedBarChart,
                     )
                 },
-                items = persistentListOf(
-                    MetricItem.AppMetric(
-                        metric = AppStatistic.Streak,
-                        value = "10"
+                items =
+                    persistentListOf(
+                        MetricItem.AppMetric(
+                            metric = AppStatistic.Streak,
+                            value = "10",
+                        ),
+                        MetricItem.AppMetric(
+                            metric = AppStatistic.Streak,
+                            value = "10",
+                        ),
+                        MetricItem.AppMetric(
+                            metric = AppStatistic.Streak,
+                            value = "10",
+                        ),
                     ),
-                    MetricItem.AppMetric(
-                        metric = AppStatistic.Streak,
-                        value = "10"
-                    ),
-                    MetricItem.AppMetric(
-                        metric = AppStatistic.Streak,
-                        value = "10"
-                    )
-                ),
             )
             MetricCardLayout(
                 header = {
@@ -129,20 +134,21 @@ private fun PreviewMetricCardLayout(
                         icon = AppIcon.RoundedBarChart,
                     )
                 },
-                items = persistentListOf(
-                    MetricItem.SessionMetric(
-                        metric = SessionStatistic.QuestionCount,
-                        value = "10"
+                items =
+                    persistentListOf(
+                        MetricItem.SessionMetric(
+                            metric = SessionStatistic.QuestionCount,
+                            value = "10",
+                        ),
+                        MetricItem.SessionMetric(
+                            metric = SessionStatistic.QuestionCount,
+                            value = "10",
+                        ),
+                        MetricItem.SessionMetric(
+                            metric = SessionStatistic.QuestionCount,
+                            value = "10",
+                        ),
                     ),
-                    MetricItem.SessionMetric(
-                        metric = SessionStatistic.QuestionCount,
-                        value = "10"
-                    ),
-                    MetricItem.SessionMetric(
-                        metric = SessionStatistic.QuestionCount,
-                        value = "10"
-                    ),
-                )
             )
         }
     }

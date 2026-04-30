@@ -5,7 +5,8 @@ import com.louisgautier.dictionary.home.DictionaryListViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-val dictionaryModule = module {
-    viewModelOf(::DictionaryListViewModel)
-    viewModelOf(::ModalCharacterDetailsViewModel)
-}
+val dictionaryModule =
+    module {
+        viewModelOf(::DictionaryListViewModel)
+        viewModelOf(::ModalCharacterDetailsViewModel)
+    }

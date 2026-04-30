@@ -18,12 +18,12 @@ data class SessionEntity(
 data class EmbeddedResponse(
     val code: Int,
     val statistics: EmbeddedStrokeComparisonResult,
-    val strokes: List<EmbeddedStroke>
+    val strokes: List<EmbeddedStroke>,
 )
 
 @Serializable
 data class EmbeddedStroke(
-    val points: List<EmbeddedCoordinates>
+    val points: List<EmbeddedCoordinates>,
 )
 
 @Serializable
@@ -37,7 +37,7 @@ data class EmbeddedStrokeComparisonResult(
     val overallAccuracy: Float, // 0-100
     val strokeAccuracies: List<Float>,
     val orderAccuracy: Float,
-    val details: EmbeddedComparisonDetails
+    val details: EmbeddedComparisonDetails,
 )
 
 @Serializable
@@ -46,5 +46,5 @@ data class EmbeddedComparisonDetails(
     val startPointAccuracy: Float,
     val endPointAccuracy: Float,
     val directionAccuracy: Float,
-    val orderPenalty: Float
+    val orderPenalty: Float,
 )

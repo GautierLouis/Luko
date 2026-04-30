@@ -10,12 +10,12 @@ interface AppDatabaseBuilder {
 }
 
 class DatabaseProvider(
-    private val builder: AppDatabaseBuilder
+    private val builder: AppDatabaseBuilder,
 ) {
-    fun getDatabase(): AppDatabase = builder.createDatabase()
-        .setDriver(BundledSQLiteDriver())
-        .setQueryCoroutineContext(Dispatchers.IO)
-        .build()
+    fun getDatabase(): AppDatabase =
+        builder
+            .createDatabase()
+            .setDriver(BundledSQLiteDriver())
+            .setQueryCoroutineContext(Dispatchers.IO)
+            .build()
 }
-
-

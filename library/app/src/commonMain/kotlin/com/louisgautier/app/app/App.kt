@@ -35,19 +35,21 @@ fun App() {
                 if (!state.isProduction) {
                     FlavorComponent(state.flavor)
                 }
-            }
+            },
         ) { _ ->
             NavDisplay(
-                entryDecorators = listOf(
-                    rememberSaveableStateHolderNavEntryDecorator(),
-                    rememberViewModelStoreNavEntryDecorator()// scopes VM to back stack entry
-                ),
+                entryDecorators =
+                    listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator(), // scopes VM to back stack entry
+                    ),
                 backStack = backStack,
                 onBack = { backStack.removeLast() },
-                entryProvider = entryProvider {
-                    entry<AppRoute.MainRoute> { MainScaffold() }
-                    learningScreens()
-                }
+                entryProvider =
+                    entryProvider {
+                        entry<AppRoute.MainRoute> { MainScaffold() }
+                        learningScreens()
+                    },
             )
         }
     }

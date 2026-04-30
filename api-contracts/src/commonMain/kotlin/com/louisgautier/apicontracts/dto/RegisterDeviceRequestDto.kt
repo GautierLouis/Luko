@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RegisterDeviceRequestDto(
     val installationId: String,
-    val fcmToken: String
+    val fcmToken: String,
 )

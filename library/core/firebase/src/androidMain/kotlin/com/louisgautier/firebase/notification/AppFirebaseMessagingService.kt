@@ -7,8 +7,9 @@ import com.louisgautier.logger.AppLogger
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class AppFirebaseMessagingService : KoinComponent, FirebaseMessagingService() {
-
+class AppFirebaseMessagingService :
+    FirebaseMessagingService(),
+    KoinComponent {
     private val manager: PushNotificationManager by inject()
 
     override fun onNewToken(token: String) {
@@ -26,7 +27,5 @@ class AppFirebaseMessagingService : KoinComponent, FirebaseMessagingService() {
         AppLogger.d("Push Notification received : ${remoteMessage.messageId}")
 
         manager.sendNotification(PushNotificationData(title, body, data))
-
     }
 }
-

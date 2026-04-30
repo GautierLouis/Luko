@@ -8,9 +8,8 @@ import com.louisgautier.utils.IntentActivityResultObserver
 
 internal class DefaultActivityObserver(
     private val intentObserver: IntentActivityResultObserver,
-    private val permissionObserver: PermissionActivityResultObserver
+    private val permissionObserver: PermissionActivityResultObserver,
 ) : ActivityObserver {
-
     override fun setIntentLauncher(launcher: ActivityResultLauncher<Intent>) {
         intentObserver.setLauncher(launcher)
     }

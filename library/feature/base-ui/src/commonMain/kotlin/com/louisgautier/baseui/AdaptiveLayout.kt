@@ -17,13 +17,13 @@ fun AdaptiveLayout(
     orientation: AdaptiveLayoutOrientation = if (rememberAdaptiveWindowInfo().isLandscape) ROW else COLUMN,
     spacing: Dp = 8.dp,
     order: AdaptiveLayoutOrder = AdaptiveLayoutOrder.NATURAL,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val spacingPx = with(LocalDensity.current) { spacing.roundToPx() }
 
     Layout(
         modifier = modifier,
-        content = content
+        content = content,
     ) { measurables, constraints ->
         when (orientation) {
             ROW -> {
@@ -31,16 +31,17 @@ fun AdaptiveLayout(
                 val itemWidth = (constraints.maxWidth - totalSpacing) / measurables.size
                 val itemHeight = measurables.maxOf { it.maxIntrinsicHeight(itemWidth) }
 
-                val placeables = measurables.map {
-                    it.measure(
-                        constraints.copy(
-                            minWidth = itemWidth,
-                            maxWidth = itemWidth,
-                            minHeight = itemHeight,
-                            maxHeight = itemHeight
+                val placeables =
+                    measurables.map {
+                        it.measure(
+                            constraints.copy(
+                                minWidth = itemWidth,
+                                maxWidth = itemWidth,
+                                minHeight = itemHeight,
+                                maxHeight = itemHeight,
+                            ),
                         )
-                    )
-                }
+                    }
 
                 layout(constraints.maxWidth, itemHeight) {
                     var x = 0
@@ -54,16 +55,17 @@ fun AdaptiveLayout(
             COLUMN -> {
                 val itemHeight = measurables.maxOf { it.maxIntrinsicHeight(constraints.maxWidth) }
 
-                val placeables = measurables.map {
-                    it.measure(
-                        constraints.copy(
-                            minWidth = constraints.maxWidth,
-                            maxWidth = constraints.maxWidth,
-                            minHeight = constraints.minHeight,
-                            maxHeight = constraints.maxHeight
+                val placeables =
+                    measurables.map {
+                        it.measure(
+                            constraints.copy(
+                                minWidth = constraints.maxWidth,
+                                maxWidth = constraints.maxWidth,
+                                minHeight = constraints.minHeight,
+                                maxHeight = constraints.maxHeight,
+                            ),
                         )
-                    )
-                }
+                    }
 
                 val totalHeight =
                     placeables.sumOf { it.height } + spacingPx * (measurables.size - 1)

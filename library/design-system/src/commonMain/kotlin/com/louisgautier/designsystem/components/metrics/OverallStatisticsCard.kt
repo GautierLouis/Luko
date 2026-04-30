@@ -29,27 +29,28 @@ fun OverallStatisticsCard(
             )
         },
         modifier = modifier,
-        items = persistentListOf(
-            MetricItem.AppMetric(
-                metric = AppStatistic.Streak,
-                value = streak
+        items =
+            persistentListOf(
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Streak,
+                    value = streak,
+                ),
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Sessions,
+                    value = sessions,
+                ),
+                MetricItem.AppMetric(
+                    metric = AppStatistic.TotalScore,
+                    value = score,
+                ),
             ),
-            MetricItem.AppMetric(
-                metric = AppStatistic.Sessions,
-                value = sessions
-            ),
-            MetricItem.AppMetric(
-                metric = AppStatistic.TotalScore,
-                value = score
-            )
-        ),
     )
 }
 
 @Preview
 @Composable
 private fun PreviewOverallStatisticsCard(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         OverallStatisticsCard(

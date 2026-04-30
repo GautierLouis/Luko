@@ -10,17 +10,16 @@ import com.louisgautier.utils.toHHMMSS
 import com.louisgautier.utils.toISODateString
 
 @Composable
-fun Session.toUiModel(): SessionUiModel {
-
-    return SessionUiModel(
+fun Session.toUiModel(): SessionUiModel =
+    SessionUiModel(
         date = remember(date) { date.toISODateString() },
         duration = remember(duration) { duration.toHHMMSS() },
-        difficulty = when (difficulty) {
-            DifficultyLevel.EASY -> Theme.strings.easy
-            DifficultyLevel.MEDIUM -> Theme.strings.medium
-            DifficultyLevel.HARD -> Theme.strings.hard
-        },
+        difficulty =
+            when (difficulty) {
+                DifficultyLevel.EASY -> Theme.strings.easy
+                DifficultyLevel.MEDIUM -> Theme.strings.medium
+                DifficultyLevel.HARD -> Theme.strings.hard
+            },
         questionsCount = questionsCount.toString(),
-        score = score.toString()
+        score = score.toString(),
     )
-}

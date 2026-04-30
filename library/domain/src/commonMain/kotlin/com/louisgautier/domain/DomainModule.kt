@@ -12,11 +12,12 @@ import com.louisgautier.preferences.preferencesModule
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val domainModule = module {
-    includes(networkModule, databaseModule, preferencesModule)
+val domainModule =
+    module {
+        includes(networkModule, databaseModule, preferencesModule)
 
-    single { DefaultCharacterRepository(get()) } bind CharacterRepository::class
-    single { DefaultSessionRepository(get()) } bind SessionRepository::class
+        single { DefaultCharacterRepository(get()) } bind CharacterRepository::class
+        single { DefaultSessionRepository(get()) } bind SessionRepository::class
 
-    single { DefaultUserRepository(get()) } bind UserRepository::class
-}
+        single { DefaultUserRepository(get()) } bind UserRepository::class
+    }

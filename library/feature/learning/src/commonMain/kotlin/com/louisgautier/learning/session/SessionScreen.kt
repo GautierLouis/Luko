@@ -24,7 +24,7 @@ import com.louisgautier.designsystem.components.page.ErrorScreen
 import com.louisgautier.designsystem.components.page.LoadingScreen
 import com.louisgautier.designsystem.preview.LoadingMode
 import com.louisgautier.designsystem.preview.LoadingModeProvider
-import com.louisgautier.designsystem.preview.ScreenPreview
+import com.louisgautier.designsystem.preview.PreviewScreen
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.token.dimens.Padding
@@ -198,7 +198,7 @@ private fun PreviewSessionScreenDay(
     }
 }
 
-@ScreenPreview
+@PreviewScreen
 @Composable
 private fun PreviewSessionScreenNight(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode

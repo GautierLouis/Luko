@@ -26,7 +26,6 @@ import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalForeignApi::class)
 class AppleFirebaseManager : FirebaseManager {
-
     private val apnsTokenFlow = MutableStateFlow<NSData?>(null)
 
     override fun initialize() {
@@ -40,11 +39,12 @@ class AppleFirebaseManager : FirebaseManager {
     }
 
     private fun requestNotificationPermissionAndRegister() {
-        UNUserNotificationCenter.currentNotificationCenter()
+        UNUserNotificationCenter
+            .currentNotificationCenter()
             .requestAuthorizationWithOptions(
                 UNAuthorizationOptionAlert or
                         UNAuthorizationOptionBadge or
-                        UNAuthorizationOptionSound
+                        UNAuthorizationOptionSound,
             ) { granted, error ->
                 if (error != null) {
                     println("Notification permission error: ${error.localizedDescription}")
@@ -69,7 +69,7 @@ class AppleFirebaseManager : FirebaseManager {
                     error != null -> {
                         println("error is not null")
                         continuation.resumeWithException(
-                            Exception(error.localizedDescription)
+                            Exception(error.localizedDescription),
                         )
                     }
 
@@ -83,7 +83,7 @@ class AppleFirebaseManager : FirebaseManager {
                     else -> {
                         println("error else")
                         continuation.resumeWithException(
-                            Exception("FCM token is null")
+                            Exception("FCM token is null"),
                         )
                     }
                 }
@@ -91,28 +91,32 @@ class AppleFirebaseManager : FirebaseManager {
         }
     }
 
-    override suspend fun getInstallationId(): String = suspendCancellableCoroutine { continuation ->
-        FIRInstallations.installations().installationIDWithCompletion { id, error ->
-            when {
-                error != null -> continuation.resumeWithException(
-                    Exception(error.localizedDescription)
-                )
+    override suspend fun getInstallationId(): String =
+        suspendCancellableCoroutine { continuation ->
+            FIRInstallations.installations().installationIDWithCompletion { id, error ->
+                when {
+                    error != null ->
+                        continuation.resumeWithException(
+                            Exception(error.localizedDescription),
+                        )
 
-                id != null -> continuation.resume(id) { cause, _, _ ->
-                    continuation.resumeWithException(cause)
+                    id != null ->
+                        continuation.resume(id) { cause, _, _ ->
+                            continuation.resumeWithException(cause)
+                        }
+
+                    else ->
+                        continuation.resumeWithException(
+                            Exception("Installation ID is null"),
+                        )
                 }
-
-                else -> continuation.resumeWithException(
-                    Exception("Installation ID is null")
-                )
             }
         }
-    }
 
     override fun logEvent(event: TrackingEvent) {
         FIRAnalytics.logEventWithName(
             name = event.key,
-            parameters = event.params.toMap()
+            parameters = event.params.toMap(),
         )
     }
 
@@ -120,7 +124,10 @@ class AppleFirebaseManager : FirebaseManager {
         FIRAnalytics.setUserID(userId)
     }
 
-    override fun setUserProperty(name: String, value: String) {
+    override fun setUserProperty(
+        name: String,
+        value: String,
+    ) {
         FIRAnalytics.setUserPropertyString(value, forName = name)
     }
 
@@ -130,17 +137,19 @@ class AppleFirebaseManager : FirebaseManager {
             if (error != null) {
                 AppLogger.e(
                     tag = "RemoteConfig",
-                    message = "fetched error: ${error.localizedDescription}"
+                    message = "fetched error: ${error.localizedDescription}",
                 )
                 return@fetchAndActivateWithCompletionHandler
             }
             when (status) {
                 FIRRemoteConfigFetchAndActivateStatus
-                    .FIRRemoteConfigFetchAndActivateStatusSuccessFetchedFromRemote ->
+                    .FIRRemoteConfigFetchAndActivateStatusSuccessFetchedFromRemote,
+                    ->
                     AppLogger.i(tag = "RemoteConfig", message = "fetched and activated from remote")
 
                 FIRRemoteConfigFetchAndActivateStatus
-                    .FIRRemoteConfigFetchAndActivateStatusSuccessUsingPreFetchedData ->
+                    .FIRRemoteConfigFetchAndActivateStatusSuccessUsingPreFetchedData,
+                    ->
                     AppLogger.i(tag = "RemoteConfig", message = "activated using pre-fetched data")
 
                 else ->

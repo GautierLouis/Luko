@@ -23,4 +23,3 @@ object Theme {
         @Composable
         get() = LocalTypography.current
 }
-

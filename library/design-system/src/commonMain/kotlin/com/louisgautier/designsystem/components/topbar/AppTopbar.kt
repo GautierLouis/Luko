@@ -34,22 +34,22 @@ fun AppTopbar(
         actions = {
             ActionContainer { rightIcons() }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Theme.materialColors.background,
-            navigationIconContentColor = Theme.materialColors.onBackground,
-            titleContentColor = Theme.materialColors.onBackground,
-            actionIconContentColor = Theme.materialColors.onBackground
-        )
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = Theme.materialColors.background,
+                navigationIconContentColor = Theme.materialColors.onBackground,
+                titleContentColor = Theme.materialColors.onBackground,
+                actionIconContentColor = Theme.materialColors.onBackground,
+            ),
     )
 }
 
 @Preview
 @Composable
 private fun PreviewAppTopbar(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         AppTopbar("Title")
     }
 }
-

@@ -15,7 +15,7 @@ import com.louisgautier.designsystem.theme.AppTheme
 @Composable
 fun ErrorScreen(
     modifier: Modifier = Modifier,
-    action: () -> Unit = {}
+    action: () -> Unit = {},
 ) {
     BaseScaffold(
         modifier = modifier,
@@ -24,15 +24,16 @@ fun ErrorScreen(
                 title = "",
                 leftIcons = {
                     ActionNavigateUp()
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         ErrorContent(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxHeight(),
-            action = action
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxHeight(),
+            action = action,
         )
     }
 }
@@ -40,7 +41,7 @@ fun ErrorScreen(
 @Preview
 @Composable
 private fun PreviewErrorScreen(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         ErrorScreen()

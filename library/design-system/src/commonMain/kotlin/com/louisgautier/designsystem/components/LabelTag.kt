@@ -23,19 +23,19 @@ fun LabelTag(
     containerColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified,
 ) {
-
     Box(
-        modifier = modifier
-            .background(
-                color = containerColor,
-                shape = ShapeDefaults.tag()
-            )
+        modifier =
+            modifier
+                .background(
+                    color = containerColor,
+                    shape = ShapeDefaults.tag(),
+                ),
     ) {
         Text(
             text = label,
             color = contentColor,
             style = Theme.typography.labelSmall,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
         )
     }
 }
@@ -43,13 +43,13 @@ fun LabelTag(
 @Preview
 @Composable
 private fun PreviewAppBadge(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         LabelTag(
             label = "Label",
             containerColor = Theme.materialColors.primary,
-            contentColor = Theme.materialColors.onPrimary
+            contentColor = Theme.materialColors.onPrimary,
         )
     }
 }

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class SessionResponse(
     val code: Int,
     val statistics: StrokeComparisonResult,
-    val strokes: List<Stroke>
+    val strokes: List<Stroke>,
 )
 
 @Serializable
@@ -14,7 +14,7 @@ data class StrokeComparisonResult(
     val overallAccuracy: Float, // 0-100
     val strokeAccuracies: List<Float>,
     val orderAccuracy: Float,
-    val details: ComparisonDetails
+    val details: ComparisonDetails,
 )
 
 @Serializable
@@ -23,5 +23,5 @@ data class ComparisonDetails(
     val startPointAccuracy: Float,
     val endPointAccuracy: Float,
     val directionAccuracy: Float,
-    val orderPenalty: Float
+    val orderPenalty: Float,
 )

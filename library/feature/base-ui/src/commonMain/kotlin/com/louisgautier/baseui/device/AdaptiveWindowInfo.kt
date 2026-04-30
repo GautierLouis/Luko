@@ -2,7 +2,7 @@ package com.louisgautier.baseui.device
 
 data class AdaptiveWindowInfo(
     val deviceType: DeviceType,
-    val orientation: DeviceOrientation
+    val orientation: DeviceOrientation,
 ) {
     val isPhone = deviceType == DeviceType.PHONE
     val isTablet = deviceType == DeviceType.TABLET

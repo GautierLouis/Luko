@@ -5,10 +5,11 @@ import okio.Path
 import okio.Path.Companion.toPath
 
 class AndroidDataStore(
-    private val context: Context
+    private val context: Context,
 ) : DataStore {
-
-    override fun getPath(name: String): Path {
-        return context.filesDir.resolve(name).absolutePath.toPath()
-    }
+    override fun getPath(name: String): Path =
+        context.filesDir
+            .resolve(name)
+            .absolutePath
+            .toPath()
 }

@@ -11,13 +11,11 @@ class PaginatedResponse(
     private val levels: List<CharacterFrequencyLevel>,
     private val query: String,
 ) : PagingSource<Int, SimpleDictionary>() {
-
-    override fun getRefreshKey(state: PagingState<Int, SimpleDictionary>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
+    override fun getRefreshKey(state: PagingState<Int, SimpleDictionary>): Int? =
+        state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
-    }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SimpleDictionary> {
         val page = params.key ?: 0
@@ -36,7 +34,7 @@ class PaginatedResponse(
         return LoadResult.Page(
             data = data.data,
             prevKey = if (page == 0) null else page.dec(),
-            nextKey = if (data.hasNextPage) page.inc() else null
+            nextKey = if (data.hasNextPage) page.inc() else null,
         )
     }
 }

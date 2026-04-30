@@ -3,7 +3,6 @@ package com.louisgautier.designsystem.token.color.palette
 import androidx.compose.ui.graphics.Color
 
 internal object AppPalette {
-
     // --- Neutrals ---
     val white = Color(0xFFFFFFFF)
     val black = Color(0xFF000000)

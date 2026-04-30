@@ -3,31 +3,28 @@ package com.louisgautier.designsystem.preview
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 
-@PhonePreview
-@PhoneLandscapePreview
-@TabletPreview
-@TabletPortraitPreview
-@FoldablePreview
-@FoldableLandscapePreview
-annotation class ScreenPreview
+@PreviewPhone
+@PreviewPhoneLandscape
+@PreviewTablet
+@PreviewTabletPortrait
+@PreviewFoldable
+@PreviewFoldableLandscape
+annotation class PreviewScreen
 
 @Preview(device = Devices.PHONE, name = "Phone")
-annotation class PhonePreview
+annotation class PreviewPhone
 
 @Preview(device = "spec:width=891dp,height=411dp", name = "Phone landscape")
-annotation class PhoneLandscapePreview
+annotation class PreviewPhoneLandscape
 
 @Preview(device = Devices.TABLET, name = "Tablet")
-annotation class TabletPreview
+annotation class PreviewTablet
 
 @Preview(device = "spec:width=800dp,height=1280dp,dpi=240", name = "Tablet portrait")
-annotation class TabletPortraitPreview
+annotation class PreviewTabletPortrait
 
 @Preview(device = Devices.FOLDABLE, name = "Foldable")
-annotation class FoldablePreview
+annotation class PreviewFoldable
 
 @Preview(device = "spec:width=841dp,height=673dp", name = "Foldable landscape")
-annotation class FoldableLandscapePreview
-
-
-
+annotation class PreviewFoldableLandscape

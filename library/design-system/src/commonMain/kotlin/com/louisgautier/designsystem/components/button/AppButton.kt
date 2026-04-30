@@ -32,125 +32,128 @@ import com.louisgautier.designsystem.token.dimens.Spacing
 @Composable
 fun AppButton(
     text: String,
+    modifier: Modifier = Modifier,
     shape: ButtonShape = ButtonShape.Filled,
     role: ButtonRole = ButtonRole.Primary,
     size: ButtonSize = ButtonSize.Small,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     onClick: () -> Unit = {},
 ) {
-
     val style = resolveButtonStyle(shape, role)
 
-    val shape = when (shape) {
-        ButtonShape.Filled -> ShapeDefaults.button()
-        ButtonShape.Outlined -> ShapeDefaults.roundButton()
-        ButtonShape.Ghost -> ShapeDefaults.roundButton()
-    }
+    val shape =
+        when (shape) {
+            ButtonShape.Filled -> ShapeDefaults.button()
+            ButtonShape.Outlined -> ShapeDefaults.roundButton()
+            ButtonShape.Ghost -> ShapeDefaults.roundButton()
+        }
 
-    val height = when (size) {
-        ButtonSize.Small -> 34.dp
-        ButtonSize.Medium -> 40.dp
-        ButtonSize.Large -> 56.dp
-    }
+    val height =
+        when (size) {
+            ButtonSize.Small -> 34.dp
+            ButtonSize.Medium -> 40.dp
+            ButtonSize.Large -> 56.dp
+        }
 
-    val width = when (size) {
-        ButtonSize.Small -> Modifier.wrapContentSize()
-        ButtonSize.Medium -> Modifier.wrapContentSize()
-        ButtonSize.Large -> Modifier.fillMaxWidth()
-    }
+    val width =
+        when (size) {
+            ButtonSize.Small -> Modifier.wrapContentSize()
+            ButtonSize.Medium -> Modifier.wrapContentSize()
+            ButtonSize.Large -> Modifier.fillMaxWidth()
+        }
 
     Button(
-        modifier = modifier
-            .height(height)
-            .then(width),
+        modifier =
+            modifier
+                .height(height)
+                .then(width),
         onClick = { onClick() },
         border = style.borderColor?.let { BorderStrokeDefaults.minimum(it) },
         shape = shape,
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = style.containerColor,
-            contentColor = style.contentColor
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = style.containerColor,
+                contentColor = style.contentColor,
+            ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Spacing.medium
+            horizontalArrangement = Spacing.medium,
         ) {
             leadingIcon?.let {
                 Icon(
                     imageVector = it,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
             Text(
                 text = text,
-                style = Theme.typography.labelLarge
+                style = Theme.typography.labelLarge,
             )
             trailingIcon?.let {
                 Icon(
                     imageVector = it,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         }
     }
 }
 
-
 @Preview
 @Composable
 private fun PreviewAppButton(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             AppButton(
                 text = "Filled Primary",
                 shape = ButtonShape.Filled,
-                role = ButtonRole.Primary
+                role = ButtonRole.Primary,
             )
             AppButton(
                 text = "Filled Secondary",
                 shape = ButtonShape.Filled,
-                role = ButtonRole.Secondary
+                role = ButtonRole.Secondary,
             )
             AppButton(
                 text = "Filled Error",
                 shape = ButtonShape.Filled,
-                role = ButtonRole.Error
+                role = ButtonRole.Error,
             )
             AppButton(
                 text = "Outline Primary",
                 shape = ButtonShape.Outlined,
-                role = ButtonRole.Primary
+                role = ButtonRole.Primary,
             )
             AppButton(
                 text = "Outline Secondary",
                 shape = ButtonShape.Outlined,
-                role = ButtonRole.Secondary
+                role = ButtonRole.Secondary,
             )
             AppButton(
                 text = "Outline Error",
                 shape = ButtonShape.Outlined,
-                role = ButtonRole.Secondary
+                role = ButtonRole.Secondary,
             )
             AppButton(
                 text = "Ghost Primary",
                 shape = ButtonShape.Ghost,
-                role = ButtonRole.Primary
+                role = ButtonRole.Primary,
             )
             AppButton(
                 text = "Ghost Secondary",
                 shape = ButtonShape.Ghost,
-                role = ButtonRole.Secondary
+                role = ButtonRole.Secondary,
             )
             AppButton(
                 text = "Ghost Error",
                 shape = ButtonShape.Ghost,
-                role = ButtonRole.Error
+                role = ButtonRole.Error,
             )
         }
     }
