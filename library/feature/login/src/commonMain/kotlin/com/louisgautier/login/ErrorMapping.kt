@@ -10,9 +10,9 @@ import org.jetbrains.compose.resources.StringResource
 
 
 fun AppErrorCode.toResourceString(): StringResource = when (this) {
-    AppErrorCode.AppError -> Res.string.error_unknown // or your real key
-    AppErrorCode.NetworkError -> Res.string.error_network
-    AppErrorCode.ServerError -> Res.string.error_server
-    AppErrorCode.InvalidCredentials -> Res.string.error_invalid_credentials
+    AppErrorCode.AppError() -> Res.string.error_unknown // or your real key
+    AppErrorCode.NetworkError() -> Res.string.error_network
+    AppErrorCode.ServerError() -> Res.string.error_server
+    AppErrorCode.InvalidCredentials() -> Res.string.error_invalid_credentials
     else -> Res.string.error_unknown
 }
