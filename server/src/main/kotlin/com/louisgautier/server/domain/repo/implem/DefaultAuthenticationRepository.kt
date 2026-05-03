@@ -6,14 +6,18 @@ import com.louisgautier.apicontracts.dto.UserInfoJson
 import com.louisgautier.apicontracts.dto.UserMetadata
 import com.louisgautier.apicontracts.dto.UserRegistrationResponseJson
 import com.louisgautier.apicontracts.dto.UserTokenJson
+import com.louisgautier.server.ServerConfig
 import com.louisgautier.server.domain.repo.AuthenticationRepository
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.user.UserSession
+import io.github.jan.supabase.createSupabaseClient
 
 internal class DefaultAuthenticationRepository(
     private val client: SupabaseClient,
     private val userRepository: DefaultUserRepository,
+    private val config: ServerConfig,
 ) : AuthenticationRepository {
 
     private fun buildUserResponse(
@@ -42,8 +46,7 @@ internal class DefaultAuthenticationRepository(
 
         if (existingUser != null) {
 
-            val session = client.auth.currentSessionOrNull()
-                ?: client.auth.refreshSession(existingUser.supabaseRefreshToken)
+            val session = client.auth.refreshSession(existingUser.supabaseRefreshToken)
 
             userRepository.updateFcm(
                 installationId = existingUser.installationId,
@@ -59,9 +62,16 @@ internal class DefaultAuthenticationRepository(
 
 
         return runCatching {
-            client.auth.signInAnonymously()
-            val session = client.auth.currentSessionOrNull()
+            val tempClient = createSupabaseClient(
+                supabaseUrl = config.supabaseUrl,
+                supabaseKey = config.supabasePublicKey
+            ) { install(Auth) }
+
+            tempClient.auth.signInAnonymously()
+
+            val session = tempClient.auth.currentSessionOrNull()
                 ?: throw IllegalStateException("No session after signInAnonymously")
+            tempClient.close()
 
             userRepository.create(
                 installationId = device.installationId,

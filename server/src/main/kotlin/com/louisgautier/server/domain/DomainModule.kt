@@ -24,7 +24,8 @@ val domainModule = module {
     single {
         DefaultAuthenticationRepository(
             client = get(named(SupabaseClientMode.USER)),
-            userRepository = get()
+            userRepository = get(),
+            config = get(),
         )
     } bind AuthenticationRepository::class
     singleOf(::DefaultDictionaryRepository) bind DictionaryRepository::class
