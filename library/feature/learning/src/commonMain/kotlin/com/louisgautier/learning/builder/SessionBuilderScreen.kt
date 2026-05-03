@@ -81,6 +81,7 @@ private fun SessionBuilderScreen(
         ) {
             HorizontalPager(
                 state = pager,
+                userScrollEnabled = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)

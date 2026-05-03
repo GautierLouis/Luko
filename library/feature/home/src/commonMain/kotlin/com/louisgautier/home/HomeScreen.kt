@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.baseui.AdaptiveLayout
+import com.louisgautier.baseui.device.rememberAdaptiveWindowInfo
 import com.louisgautier.baseui.session.toUiModel
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
 import com.louisgautier.designsystem.components.metrics.SessionCard
@@ -35,11 +37,21 @@ fun HomeScreen() {
 private fun HomeScreen(
     state: HomeViewModel.UIState,
 ) {
+    val windowInfo = rememberAdaptiveWindowInfo()
+
+    val position = if (windowInfo.isPhoneLandscape) FabPosition.End
+    else FabPosition.Center
+
+    val fabAttrs =
+        if (windowInfo.isPhoneLandscape) PracticeButtonAttrs.SMALL else PracticeButtonAttrs.LARGE
+
     BaseScaffold(
+        modifier = Modifier.testTag("home_screen"),
         topBar = { HomeTopbar(state.topbarTitle) },
-        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButtonPosition = position,
         floatingActionButton = {
             PracticeButton(
+                attrs = fabAttrs,
                 onClick = {
                     AppNavigation.navigate(AppRoute.LearningRoute.NewSessionRoute)
                 }
