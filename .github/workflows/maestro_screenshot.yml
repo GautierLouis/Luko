@@ -43,6 +43,11 @@ jobs:
           profile: ${{ matrix.device }}
           script: |
             maestro test .maestro/
+            echo "MAESTRO_EXIT=$?" >> $GITHUB_ENV
+          continue-on-error: true
+
+      - name: Check Maestro result
+        run: exit ${{ env.MAESTRO_EXIT }}
 
       - name: Upload screenshots
         if: always()   # upload even if tests fail
