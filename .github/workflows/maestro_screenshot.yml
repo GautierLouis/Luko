@@ -36,14 +36,18 @@ jobs:
       - name: Build debug APK
         run: ./gradlew :composeApp:assembleDebug
 
+      - name: Accept Android SDK licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
       - name: Run Maestro tests
         uses: reactivecircus/android-emulator-runner@v2
         continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
           profile: ${{ matrix.device }}
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
-            maestro test .maestro/Start App.yaml
+            maestro test .maestro/start_app.yaml
             echo "MAESTRO_EXIT=$?" >> $GITHUB_ENV
 
       - name: Check Maestro result
