@@ -1,0 +1,88 @@
+name: Maestro UI Tests
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - api-level: 31
+            profile: "pixel_4"        # Normal ~5.7"
+          - api-level: 33
+            profile: "pixel_7_pro"    # Large ~6.7"
+          - api-level: 34
+            profile: "Nexus 7"        # Tablet ~7"
+          - api-level: 34
+            profile: "Nexus 5"        # Smallest ~4.95"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build debug APK
+        run: ./gradlew :composeApp:assembleDebug
+
+      - name: Run Maestro tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          profile: ${{ matrix.device }}
+          script: |
+            maestro test .maestro/
+
+      - name: Upload screenshots
+        if: always()   # upload even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-android-api${{ matrix.api-level }}-${{ matrix.device }}
+          path: screenshots/
+          retention-days: 14
+
+  ios:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - device: "iPhone 15"
+            os: "17.0"
+          - device: "iPhone 15 Pro Max"
+            os: "17.0"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start simulator
+        run: |
+          UDID=$(xcrun simctl create "test-${{ matrix.device }}" \
+            "com.apple.CoreSimulator.SimDeviceType.$(echo '${{ matrix.device }}' | tr ' ' '-')" \
+            "com.apple.CoreSimulator.SimRuntime.iOS-$(echo '${{ matrix.os }}' | tr '.' '-')")
+          xcrun simctl boot $UDID
+          echo "SIMULATOR_UDID=$UDID" >> $GITHUB_ENV
+
+      - name: Build iOS app
+        run: |
+          xcodebuild -workspace iosApp/iosApp.xcworkspace \
+            -scheme iosApp \
+            -destination "id=${{ env.SIMULATOR_UDID }}" \
+            -configuration Debug \
+            build
+
+      - name: Install Maestro
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
+
+      - name: Run Maestro tests
+        run: maestro --device ${{ env.SIMULATOR_UDID }} test .maestro/
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-ios-${{ matrix.device }}-${{ matrix.os }}
+          path: screenshots/
+          retention-days: 14
