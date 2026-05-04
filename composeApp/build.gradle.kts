@@ -52,13 +52,16 @@ android {
 
     signingConfigs {
         create("release") {
-            val props = Properties()
-            file("keystore.properties").inputStream().use { props.load(it) }
+            val keystoreFile = file("keystore.properties")
+            if (keystoreFile.exists()) {
+                val props = Properties()
+                keystoreFile.inputStream().use { props.load(it) }
 
-            storeFile = file(props["keyStoreFile"] as String)
-            storePassword = props["keyStorePassword"] as String
-            keyAlias = props["keyAlias"] as String
-            keyPassword = props["keyPassword"] as String
+                storeFile = file(props["keyStoreFile"] as String)
+                storePassword = props["keyStorePassword"] as String
+                keyAlias = props["keyAlias"] as String
+                keyPassword = props["keyPassword"] as String
+            }
         }
     }
 
