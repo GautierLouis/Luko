@@ -50,7 +50,7 @@ jobs:
         run: exit ${{ env.MAESTRO_EXIT }}
 
       - name: Upload screenshots
-        if: always()   # upload even if tests fail
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-android-api${{ matrix.api-level }}-${{ matrix.device }}
@@ -71,11 +71,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: List available runtimes
+        run: xcrun simctl list runtimes
+
       - name: Start simulator
         run: |
           UDID=$(xcrun simctl create "test-${{ matrix.device }}" \
-            "com.apple.CoreSimulator.SimDeviceType.$(echo '${{ matrix.device }}' | tr ' ' '-')" \
-            "com.apple.CoreSimulator.SimRuntime.iOS-$(echo '${{ matrix.os }}' | tr '.' '-')")
+          "${{ matrix.device }}" \
+          "iOS ${{ matrix.os }}")
           xcrun simctl boot $UDID
           echo "SIMULATOR_UDID=$UDID" >> $GITHUB_ENV
 
