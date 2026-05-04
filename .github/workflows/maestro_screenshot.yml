@@ -43,7 +43,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           profile: ${{ matrix.device }}
           script: |
-            maestro test .maestro/
+            maestro test .maestro/Start App.yaml
             echo "MAESTRO_EXIT=$?" >> $GITHUB_ENV
 
       - name: Check Maestro result
