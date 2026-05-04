@@ -8,6 +8,9 @@ on:
 jobs:
   android:
     runs-on: ubuntu-latest
+    continue-on-error: false
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 5
     strategy:
       fail-fast: false
       matrix:
