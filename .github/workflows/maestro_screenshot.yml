@@ -48,6 +48,9 @@ jobs:
 
       - name: Check Maestro result
         run: exit ${{ env.MAESTRO_EXIT }}
+      - name: Find screenshots
+        if: always()
+        run: find . -name "*.png" 2>/dev/null
 
       - name: Upload screenshots
         if: always()
@@ -64,9 +67,9 @@ jobs:
       matrix:
         include:
           - device: "iPhone 15"
-            os: "17.0"
+            os: "18.5"
           - device: "iPhone 15 Pro Max"
-            os: "17.0"
+            os: "26.1"
 
     steps:
       - uses: actions/checkout@v4
