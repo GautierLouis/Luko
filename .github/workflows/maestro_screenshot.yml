@@ -38,13 +38,13 @@ jobs:
 
       - name: Run Maestro tests
         uses: reactivecircus/android-emulator-runner@v2
+        continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
           profile: ${{ matrix.device }}
           script: |
             maestro test .maestro/
             echo "MAESTRO_EXIT=$?" >> $GITHUB_ENV
-          continue-on-error: true
 
       - name: Check Maestro result
         run: exit ${{ env.MAESTRO_EXIT }}
