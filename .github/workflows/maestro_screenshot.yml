@@ -39,12 +39,17 @@ jobs:
       - name: Accept Android SDK licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
+      - name: Install Maestro CLI
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
       - name: Run Maestro tests
         uses: reactivecircus/android-emulator-runner@v2
         continue-on-error: true
         with:
           api-level: ${{ matrix.api-level }}
-          profile: ${{ matrix.device }}
+          profile: ${{ matrix.profile }}
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
             maestro test .maestro/start_app.yaml
@@ -60,7 +65,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots-android-api${{ matrix.api-level }}-${{ matrix.device }}
+          name: screenshots-android-api${{ matrix.api-level }}-${{ matrix.profile }}
           path: .maestro/screenshots/
           retention-days: 14
 
@@ -71,9 +76,9 @@ jobs:
       matrix:
         include:
           - device: "iPhone 15"
-            os: "18.5"
+            os: "18.4"
           - device: "iPhone 15 Pro Max"
-            os: "26.1"
+            os: "18.4"
 
     steps:
       - uses: actions/checkout@v4
@@ -108,5 +113,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-ios-${{ matrix.device }}-${{ matrix.os }}
-          path: screenshots/
+          path: .maestro/screenshots/
           retention-days: 14
