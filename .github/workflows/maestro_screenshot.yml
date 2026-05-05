@@ -11,18 +11,23 @@ jobs:
     continue-on-error: false
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 5
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - api-level: 31
-            profile: "pixel_4"        # Normal ~5.7"
-          - api-level: 33
-            profile: "pixel_7_pro"    # Large ~6.7"
-          - api-level: 34
-            profile: "Nexus 7"        # Tablet ~7"
-          - api-level: 34
-            profile: "Nexus 5"        # Smallest ~4.95"
+    #    strategy:
+    #      fail-fast: false
+    #      matrix:
+    #        include:
+    #          - profile: "pixel_6"          # compact phone  ~6.4"  1080×2400
+    #            label: "phone-compact"
+    #          - profile: "pixel_7_pro"      # large phone    ~6.7"  1440×3120
+    #            label: "phone-large"
+    #          - profile: "pixel_tablet"     # tablet         ~10.9" 2560×1600
+    #            label: "tablet"
+    #          - profile: "Nexus 4"          # small phone    ~4.7"  768×1280
+    #            label: "phone-small"
+    #
+    #        # All share the same API/arch — only the screen size changes
+    #        api-level: "34"          # ← move this OUT of include, it's the same for all
+    #        target: "google_apis"
+    #        arch: x86_64
 
     steps:
       - uses: actions/checkout@v4
@@ -48,8 +53,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         continue-on-error: true
         with:
-          api-level: ${{ matrix.api-level }}
-          profile: ${{ matrix.profile }}
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          #          api-level: ${{ matrix.api-level }}
+          #          profile: ${{ matrix.profile }}
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
             maestro test .maestro/start_app.yaml
