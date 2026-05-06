@@ -70,6 +70,30 @@ jobs:
           disable-animations: true
           emulator-boot-timeout: 300
           script: |
+            # Wait for boot to fully complete
+            $ANDROID_HOME/platform-tools/adb wait-for-device
+            
+            # Wait until package manager is actually ready (not just boot_completed)
+            until $ANDROID_HOME/platform-tools/adb shell pm path android > /dev/null 2>&1; do
+            echo "Waiting for package manager..."
+            sleep 3
+            done
+            echo "Package manager ready"
+            
+            # Wait for launcher to be ready
+            until $ANDROID_HOME/platform-tools/adb shell dumpsys window | grep -q "mCurrentFocus"; do
+            echo "Waiting for launcher..."
+            sleep 2
+            done
+            echo "Launcher ready"
+            
+            $ANDROID_HOME/platform-tools/adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
+            
+            # Warm up: launch once so first render is cached
+            $ANDROID_HOME/platform-tools/adb shell am start -n com.louisgautier.composeApp.dev/.MainActivity 
+            sleep 15
+            $ANDROID_HOME/platform-tools/adb shell input keyevent 3 
+            sleep 2
             $ANDROID_HOME/platform-tools/adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
             maestro test --test-output-dir maestro-output .maestro/start_app.yaml
 
