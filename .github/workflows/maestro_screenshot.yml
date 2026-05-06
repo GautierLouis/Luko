@@ -71,7 +71,7 @@ jobs:
           emulator-boot-timeout: 300
           script: |
             $ANDROID_HOME/platform-tools/adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
-            maestro test --test-output-dir maestro-output .maestro/start_app.yml
+            maestro test --test-output-dir maestro-output .maestro/start_app.yaml
 
       - name: Check Maestro result
         run: exit ${{ env.MAESTRO_EXIT }}
