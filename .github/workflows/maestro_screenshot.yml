@@ -72,7 +72,7 @@ jobs:
           emulator-boot-timeout: 300
           script: |
             # Install the APK
-            adb install -r composeApp/build/outputs/apk/debug/composeApp-debug.apk
+            adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
 
             # Run the flow
             maestro test \
