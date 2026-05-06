@@ -10,8 +10,8 @@ appId: com.louisgautier.composeApp.dev
     path: screenshots/Home/home_portrait.png
 - setOrientation: LANDSCAPE_LEFT
 - extendedWaitUntil:
-  visible:
-    label: "home_screen"
+    visible:
+      label: "home_screen"
   timeout: 10000
 - takeScreenshot:
     path: screenshots/Home/home_landscape.png
