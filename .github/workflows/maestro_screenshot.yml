@@ -48,9 +48,6 @@ jobs:
       - name: Build debug APK
         run: ./gradlew :composeApp:assembleDebug
 
-      - name: Install the APK
-        run: adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
-
       - name: Accept Android SDK licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
@@ -73,6 +70,7 @@ jobs:
           disable-animations: true
           emulator-boot-timeout: 300
           script: |
+            $ANDROID_HOME/platform-tools/adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
             maestro test --test-output-dir maestro-output .maestro/start_app.yml
 
       - name: Check Maestro result
