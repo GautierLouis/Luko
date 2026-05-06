@@ -42,5 +42,9 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.junit)
         }
+
+        jvmMain.dependencies {
+            implementation(libs.kotlinx.coroutines.swing)
+        }
     }
 }

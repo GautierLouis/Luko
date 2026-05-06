@@ -39,6 +39,7 @@ include(":server")
 include(":api-contracts")
 //App
 include(":composeApp")
+include(":desktop")
 include(":library:app")
 //Feature
 include(":library:feature:base-ui")
