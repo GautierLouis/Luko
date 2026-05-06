@@ -12,6 +12,6 @@ appId: com.louisgautier.composeApp.dev
 - extendedWaitUntil:
     visible:
       label: "home_screen"
-  timeout: 10000
+    timeout: 10000
 - takeScreenshot:
     path: screenshots/Home/home_landscape.png
