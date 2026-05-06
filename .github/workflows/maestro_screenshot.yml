@@ -32,7 +32,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ✅ Must be FIRST — before the emulator is ever touched
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
@@ -48,6 +47,9 @@ jobs:
 
       - name: Build debug APK
         run: ./gradlew :composeApp:assembleDebug
+
+      - name: Install the APK
+        run: adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
 
       - name: Accept Android SDK licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
@@ -71,15 +73,7 @@ jobs:
           disable-animations: true
           emulator-boot-timeout: 300
           script: |
-            # Install the APK
-            adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
-
-            # Run the flow
-            maestro test \
-            --test-output-dir maestro-output \
-            .maestro/start_app.yml
-
-            echo "MAESTRO_EXIT=$?" >> $GITHUB_ENV
+            maestro test --test-output-dir maestro-output .maestro/start_app.yml
 
       - name: Check Maestro result
         run: exit ${{ env.MAESTRO_EXIT }}
@@ -89,8 +83,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: maestro-results
-          # Your flow writes to screenshots/ relative to working dir
-          # maestro-output/ contains the XML report + any failure screenshots
           path: |
             screenshots/
             maestro-output/
