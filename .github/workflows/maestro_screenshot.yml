@@ -32,6 +32,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ✅ Must be FIRST — before the emulator is ever touched
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -59,23 +67,33 @@ jobs:
           profile: pixel_6
           #          api-level: ${{ matrix.api-level }}
           #          profile: ${{ matrix.profile }}
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -accel on
+          disable-animations: true
+          emulator-boot-timeout: 300
           script: |
-            maestro test .maestro/start_app.yaml
+            # Install the APK
+            adb install -r composeApp/build/outputs/apk/debug/composeApp-debug.apk
+
+            # Run the flow
+            maestro test \
+            --test-output-dir maestro-output \
+            .maestro/start_app.yml
+
             echo "MAESTRO_EXIT=$?" >> $GITHUB_ENV
 
       - name: Check Maestro result
         run: exit ${{ env.MAESTRO_EXIT }}
-      - name: Find screenshots
-        if: always()
-        run: find . -name "*.png" 2>/dev/null
 
-      - name: Upload screenshots
+      - name: Upload screenshots & report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots-android-api${{ matrix.api-level }}-${{ matrix.profile }}
-          path: .maestro/screenshots/
+          name: maestro-results
+          # Your flow writes to screenshots/ relative to working dir
+          # maestro-output/ contains the XML report + any failure screenshots
+          path: |
+            screenshots/
+            maestro-output/
           retention-days: 14
 
   ios:
