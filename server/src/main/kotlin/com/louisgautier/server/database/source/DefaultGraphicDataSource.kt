@@ -4,7 +4,6 @@ import com.louisgautier.server.database.entity.GraphicTable
 import com.louisgautier.server.database.suspendTransaction
 import com.louisgautier.server.domain.model.GraphicEntity
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.selectAll
 
@@ -12,7 +11,7 @@ class DefaultGraphicDataSource : GraphicDataSource {
 
     override suspend fun exist(): Boolean {
         return suspendTransaction {
-            !SchemaUtils.listTables().contains(GraphicTable.tableName)
+            GraphicTable.selectAll().count() > 0L
         }
     }
 
