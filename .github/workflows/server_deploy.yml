@@ -12,7 +12,8 @@ on:
       - "build.gradle.kts"
       - "settings.gradle.kts"
       - "gradle.properties"
-      - ".github/workflows/server/**"
+      - ".github/workflows/server_deploy.yml"
+      - ".github/workflows/server_deploy.yml"
       - "Dockerfile"
       - "infra/docker-compose.yml"
 jobs:
