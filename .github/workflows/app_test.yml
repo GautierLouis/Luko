@@ -51,7 +51,9 @@ jobs:
   test-ios:
     name: iOS Unit Tests
     runs-on: macos-latest
-    if: ${{ github.head_ref == 'develop' }}
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      contains(github.event.workflow_run.pull_requests.*.labels.*.name, 'mobile')
 
     steps:
       - name: Checkout
@@ -86,7 +88,9 @@ jobs:
   test-desktop:
     name: Desktop Unit Tests
     runs-on: ubuntu-latest
-    if: ${{ github.head_ref == 'develop' }}
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      contains(github.event.workflow_run.pull_requests.*.labels.*.name, 'mobile')
 
     steps:
       - name: Checkout
@@ -121,7 +125,9 @@ jobs:
     name: All Library Tests Passed
     runs-on: ubuntu-latest
     needs: [ test-android, test-ios, test-desktop ]
-    if: ${{ always() && github.head_ref == 'develop' }}
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      contains(github.event.workflow_run.pull_requests.*.labels.*.name, 'mobile')
 
     steps:
       - name: Check results
