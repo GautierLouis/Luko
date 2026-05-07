@@ -52,7 +52,6 @@ internal class DefaultService(
         defaultRequest {
             url { protocol = env.scheme }
             host = env.host
-            port = env.port
             header("X-Platform", appConfig.platform)
             header("App-Version", appConfig.versionName)
             header("App-Build", appConfig.versionCode)
