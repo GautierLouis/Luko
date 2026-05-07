@@ -2,7 +2,7 @@ name: Library Tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ develop ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
