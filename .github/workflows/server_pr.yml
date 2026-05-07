@@ -11,7 +11,7 @@ on:
 
 jobs:
   test-server:
-    name: Run :server tests + update Swagger
+    name: Run :server tests
     runs-on: ubuntu-latest
     if: |
       contains(github.event.pull_request.labels.*.name, 'server')
