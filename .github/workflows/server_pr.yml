@@ -14,7 +14,6 @@ jobs:
     name: Run :server tests + update Swagger
     runs-on: ubuntu-latest
     if: |
-      github.event.workflow_run.conclusion == 'success' &&
       contains(github.event.pull_request.labels.*.name, 'server')
 
     steps:
