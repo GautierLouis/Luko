@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.ktor.server.call.id)
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.metrics.micrometer)
+    implementation(libs.ktor.server.routing.openapi)
     implementation(libs.ktor.server.openapi)
     implementation(libs.ktor.server.swagger)
     implementation(libs.ktor.server.cors)
