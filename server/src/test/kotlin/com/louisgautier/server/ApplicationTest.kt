@@ -7,6 +7,7 @@ class ApplicationTest {
 
     @Test
     fun testRoot() = testApplication {
+        //
 //        environment {
 //            config = ApplicationConfig("application-test.conf")
 //        }

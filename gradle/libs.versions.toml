@@ -49,7 +49,7 @@ kotlinx-serialization = "1.10.0"
 kotlinx-collection-immutable = "0.4.0"
 
 # Networking & Server
-ktor = "3.3.3"
+ktor = "3.4.3"
 
 # DI
 koin = "4.1.1"
@@ -133,6 +133,7 @@ ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", versio
 ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor" }
 ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
+ktor-server-routing-openapi = { module = "io.ktor:ktor-server-routing-openapi", version.ref = "ktor" }
 ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 
 # === Ktor Client ===
