@@ -1,12 +1,10 @@
 package com.louisgautier.server
 
-import com.louisgautier.server.database.configureDatabase
-import com.louisgautier.server.parser.FileParser
+import com.louisgautier.server.database.Database
+import com.louisgautier.server.di.initKoin
 import io.ktor.server.application.Application
 import io.ktor.server.netty.EngineMain
-import kotlinx.coroutines.launch
-import org.koin.core.module.Module
-import org.koin.ktor.ext.inject
+import org.koin.ktor.ext.get
 
 /**
  * Main entry point for the application
@@ -14,22 +12,15 @@ import org.koin.ktor.ext.inject
  */
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
-fun Application.module(
-    envModule: Module = buildEnvModule(this.environment)
-) {
+fun Application.module() {
 
-    installModule(envModule)
-    configureDatabase()
-    configureServer()
-    configureRouting()
+    initKoin()
 
-    prefillDatabase()
-}
+    with(get<ServerRegistry>()) {
+        start()
+    }
 
-private fun Application.prefillDatabase() {
-    val fileParser: FileParser by inject()
-
-    launch {
-        fileParser.init()
+    with(get<Database>()) {
+        init()
     }
 }

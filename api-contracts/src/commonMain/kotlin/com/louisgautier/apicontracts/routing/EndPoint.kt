@@ -25,18 +25,13 @@ class EndPoint {
         )
     }
 
-    @Resource("register")
-    class Register(
-        val parent: EndPoint = EndPoint(),
-    )
-
     @Resource("register_anon")
     class RegisterAnonymously(
         val parent: EndPoint = EndPoint(),
     )
 
-    @Resource("login")
-    class Login(
+    @Resource("update_fcm")
+    class UpdateFcm(
         val parent: EndPoint = EndPoint(),
     )
 
@@ -59,18 +54,27 @@ class EndPoint {
             val parent: Characters = Characters(),
             val code: Int,
         ) {
-            @Resource("svg")
-            class SVG(
-                val parent: ByName
+            @Resource("graphic")
+            class Graphic(
+                val parent: ByName,
             )
         }
 
         @Resource("by_level")
         class ByLevel(
             val parent: Characters = Characters(),
-            val level: CharacterFrequencyLevelDto,
-            val page: Int? = null,
-            val limit: Int? = null,
+            val level: CharacterFrequencyLevelDto? = null,
+            val page: Int = 0,
+            val limit: Int = 100,
+        )
+
+        @Resource("search")
+        class Search(
+            val parent: Characters = Characters(),
+            val levels: List<CharacterFrequencyLevelDto>? = null,
+            val query: String = "",
+            val page: Int = 0,
+            val limit: Int = 100,
         )
     }
 
@@ -79,10 +83,10 @@ class EndPoint {
         val parent: EndPoint = EndPoint(),
     )
 
-    @Resource("generateQuiz")
+    @Resource("createSession")
     class GenerateSession(
         val parent: EndPoint = EndPoint(),
-        val level: List<CharacterFrequencyLevelDto> = CharacterFrequencyLevelDto.entries,
-        val limit: Int
+        val levels: List<CharacterFrequencyLevelDto>? = null,
+        val limit: Int,
     )
 }

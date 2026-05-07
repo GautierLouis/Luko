@@ -1,0 +1,22 @@
+server:
+  - api-contracts/**
+  - server/**
+  - gradle/**
+  - build.gradle.kts
+  - settings.gradle.kts
+  - gradle.properties
+  - ".github/workflows/server_pr.yml"
+  - ".github/workflows/server_pr.yml"
+  - Dockerfile
+  - infra/docker-compose.yml
+
+mobile:
+  - api-contracts/**
+  - build-logic/**
+  - library/**
+  - composeApp/**
+  - iosApp/**
+  - desktop/**
+  - gradle/**
+  - "*.gradle.kts"
+  - ".maestro/**"

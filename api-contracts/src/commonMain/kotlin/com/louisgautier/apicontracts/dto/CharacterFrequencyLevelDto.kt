@@ -1,9 +1,7 @@
 package com.louisgautier.apicontracts.dto
 
-import com.louisgautier.apicontracts.KeepForR8
 import kotlinx.serialization.Serializable
 
-@KeepForR8
 @Serializable
 enum class CharacterFrequencyLevelDto {
     UNKNOWN,
@@ -12,6 +10,10 @@ enum class CharacterFrequencyLevelDto {
     STANDARD,
     EXTENDED,
     RARE,
-    OBSOLETE;
-}
+    OBSOLETE,
+    ;
 
+    companion object {
+        val validEntry = listOf(COMMON, FREQUENT, STANDARD)
+    }
+}

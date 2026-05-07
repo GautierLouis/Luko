@@ -12,5 +12,5 @@ data class DictionaryDto(
     val level: CharacterFrequencyLevelDto = CharacterFrequencyLevelDto.UNKNOWN,
     val etymology: EtymologyDto? = null,
     val radical: String? = null,
-    val matches: List<List<Int>?> = emptyList()
+    val matches: List<List<Int>?> = emptyList(),
 )

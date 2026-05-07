@@ -1,0 +1,99 @@
+name: Maestro UI Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  android:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build debug APK
+        run: ./gradlew :composeApp:assembleDebug
+
+      - name: Install Maestro CLI
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      - name: Run Maestro tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: default
+          arch: arm64-v8a
+          profile: pixel_6
+          emulator-boot-timeout: 300
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          disable-animations: true
+          script: |
+            adb wait-for-device
+            adb shell input keyevent 82   # unlock screen
+            sleep 10                      # let system services settle
+            adb install -r composeApp/build/outputs/apk/dev/debug/composeApp-dev-debug.apk
+            $HOME/.maestro/bin/maestro test --test-output-dir maestro-output .maestro/start_app.yml
+
+      - name: Upload screenshots & report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-results
+          path: |
+            screenshots/
+            maestro-output/
+          retention-days: 14
+
+#  ios:
+#    runs-on: macos-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - device: "iPhone 15"
+#            os: "18.4"
+#          - device: "iPhone 15 Pro Max"
+#            os: "18.4"
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: List available runtimes
+#        run: xcrun simctl list runtimes
+#
+#      - name: Start simulator
+#        run: |
+#          UDID=$(xcrun simctl create "test-${{ matrix.device }}" \
+#          "${{ matrix.device }}" \
+#          "iOS ${{ matrix.os }}")
+#          xcrun simctl boot $UDID
+#          echo "SIMULATOR_UDID=$UDID" >> $GITHUB_ENV
+#
+#      - name: Build iOS app
+#        run: |
+#          xcodebuild -workspace iosApp/iosApp.xcworkspace \
+#            -scheme iosApp \
+#            -destination "id=${{ env.SIMULATOR_UDID }}" \
+#            -configuration Debug \
+#            build
+#
+#      - name: Install Maestro
+#        run: curl -Ls "https://get.maestro.mobile.dev" | bash
+#
+#      - name: Run Maestro tests
+#        run: maestro --device ${{ env.SIMULATOR_UDID }} test .maestro/
+#
+#      - name: Upload screenshots
+#        if: always()
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: screenshots-ios-${{ matrix.device }}-${{ matrix.os }}
+#          path: .maestro/screenshots/
+#          retention-days: 14

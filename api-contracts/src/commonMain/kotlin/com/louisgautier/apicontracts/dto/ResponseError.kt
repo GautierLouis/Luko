@@ -1,10 +1,11 @@
 package com.louisgautier.apicontracts.dto
 
 import kotlinx.serialization.Serializable
+import kotlin.time.Clock
 
 @Serializable
 data class ResponseError(
+    val code: String,
     val message: String,
-    val code: Int = 0,
-    val additionalInfo: String? = null,
+    val timestamp: Long = Clock.System.now().toEpochMilliseconds(),
 )
