@@ -6,10 +6,15 @@ on:
       - develop
       - main
     paths:
+      - "api-contracts/**"
       - "server/**"
       - "gradle/**"
       - "build.gradle.kts"
       - "settings.gradle.kts"
+      - "gradle.properties"
+      - ".github/workflows/server/**"
+      - "Dockerfile"
+      - "infra/docker-compose.yml"
 jobs:
   deploy-staging:
     if: github.ref == 'refs/heads/develop'
