@@ -32,7 +32,6 @@ val libraryModule =
             AppConfig(
                 platform = get(named(Environment.PLATFORM)),
                 flavor = flavor,
-                isProduction = get<String>(named(Environment.FLAVOR)) == Environment.PROD,
                 versionName = get(named(Environment.VERSION_NAME)),
                 versionCode = get(named(Environment.VERSION_CODE)),
             )

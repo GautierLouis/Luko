@@ -31,7 +31,6 @@ class BaseHttpClientTest {
     private val mockAppConfig = AppConfig(
         platform = "mock",
         flavor = Flavor.DEV,
-        isProduction = true,
         versionName = "mock",
         versionCode = "mock"
     )

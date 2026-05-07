@@ -82,6 +82,7 @@ private fun SessionBuilderScreen(
             HorizontalPager(
                 state = pager,
                 userScrollEnabled = false,
+                pageSpacing = Padding.large,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)

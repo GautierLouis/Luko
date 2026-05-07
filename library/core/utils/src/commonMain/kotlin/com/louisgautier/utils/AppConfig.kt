@@ -3,10 +3,12 @@ package com.louisgautier.utils
 class AppConfig(
     val platform: String,
     val flavor: Flavor,
-    val isProduction: Boolean,
     val versionName: String,
     val versionCode: String,
-)
+) {
+    val isProduction
+        get() = flavor == Flavor.PROD
+}
 
 enum class Flavor {
     DEV,

@@ -33,6 +33,7 @@ android {
         minSdk = libs.versions.android.min.sdk.get().toInt()
         versionCode = libs.versions.app.version.code.get().toInt()
         versionName = libs.versions.app.version.asProvider().get()
+        manifestPlaceholders["appName"] = "Learn Chinese"
     }
 
     flavorDimensions += "environment"
@@ -43,7 +44,7 @@ android {
                 flavor.alias?.let {
                     applicationIdSuffix = ".${flavor.name}"
                     versionNameSuffix = "-${flavor.name}"
-                    buildConfigField("String", "app_name", "\"(${flavor.alias}) Learn Chinese\"")
+                    manifestPlaceholders["appName"] = "(${it}) Learn Chinese"
                 }
                 buildConfigField("String", "ENVIRONMENT", "\"${flavor.name}\"")
             }
