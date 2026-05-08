@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -28,6 +29,7 @@ import com.louisgautier.baseui.AdaptiveLayout
 import com.louisgautier.baseui.AdaptiveLayoutOrientation
 import com.louisgautier.baseui.AdaptiveLayoutOrientation.COLUMN
 import com.louisgautier.baseui.AdaptiveLayoutOrientation.ROW
+import com.louisgautier.baseui.TestTags
 import com.louisgautier.designsystem.components.metrics.attrs.MetricItem
 import com.louisgautier.designsystem.components.metrics.attrs.SessionStatistic
 import com.louisgautier.designsystem.preview.ThemeMode
@@ -77,6 +79,7 @@ internal fun RewardCard(
             containerColor = Theme.materialColors.surfaceContainer
         ),
         modifier = modifier.wrapContentHeight()
+            .testTag(TestTags.Misc.CONGRATS_CARD)
     ) {
         AdaptiveLayout(
             modifier = Modifier

@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.baseui.AdaptiveLayout
+import com.louisgautier.baseui.TestTags
 import com.louisgautier.baseui.device.rememberAdaptiveWindowInfo
 import com.louisgautier.baseui.session.toUiModel
 import com.louisgautier.designsystem.components.metrics.OverallStatisticsCard
@@ -24,7 +25,6 @@ import com.louisgautier.domain.previewSession
 import com.louisgautier.domain.previewStatistics
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.AppRoute
-import com.louisgautier.utils.TestTags
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -47,7 +47,7 @@ private fun HomeScreen(
         if (windowInfo.isPhoneLandscape) PracticeButtonAttrs.SMALL else PracticeButtonAttrs.LARGE
 
     BaseScaffold(
-        modifier = Modifier.testTag(TestTags.Home.SCREEN),
+        modifier = Modifier.testTag(TestTags.Screen.HOME),
         floatingActionButtonPosition = position,
         floatingActionButton = {
             PracticeButton(

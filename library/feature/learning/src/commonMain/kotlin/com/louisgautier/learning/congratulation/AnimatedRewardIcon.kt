@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.louisgautier.baseui.TestTags
 import com.louisgautier.designsystem.icon.AppIcon
 import com.louisgautier.designsystem.icon.RoundedTrophy
 import com.louisgautier.designsystem.preview.ThemeMode
@@ -43,20 +45,25 @@ internal fun AnimatedRewardIcon(
         modifier = modifier
     ) {
         AnimatedStar(
-            modifier = Modifier.size(40.dp).align(Alignment.TopEnd),
+            modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.TopEnd)
+                .testTag(TestTags.Misc.STAR1),
             delay = 0
         )
 
         AnimatedStar(
             modifier = Modifier.size(20.dp)
-                .align(Alignment.TopStart),
+                .align(Alignment.TopStart)
+                .testTag(TestTags.Misc.STAR2),
             initialOffset = Offset(y = 10f, x = 5f),
             delay = 5
         )
 
         AnimatedStar(
             modifier = Modifier.size(25.dp)
-                .align(Alignment.BottomStart),
+                .align(Alignment.BottomStart)
+                .testTag(TestTags.Misc.STAR3),
             initialOffset = Offset(y = -15f, x = 5f),
             delay = 10
         )
@@ -68,7 +75,8 @@ internal fun AnimatedRewardIcon(
             ),
             modifier = Modifier
                 .wrapContentSize()
-                .padding(Padding.large),
+                .padding(Padding.large)
+                .testTag(TestTags.Misc.REWARD),
             elevation = CardDefaults.elevatedCardElevation(
                 defaultElevation = 60.dp
             )

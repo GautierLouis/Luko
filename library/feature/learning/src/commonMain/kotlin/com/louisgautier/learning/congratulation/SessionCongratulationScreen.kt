@@ -13,12 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.louisgautier.baseui.AdaptiveLayout
 import com.louisgautier.baseui.AdaptiveLayoutOrder
 import com.louisgautier.baseui.AdaptiveLayoutOrientation.COLUMN
 import com.louisgautier.baseui.AdaptiveLayoutOrientation.ROW
+import com.louisgautier.baseui.TestTags
 import com.louisgautier.baseui.device.rememberAdaptiveWindowInfo
 import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonRole
@@ -78,6 +80,7 @@ private fun SessionCongratulationScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(Padding.large)
+                .testTag(TestTags.Screen.CONGRATS)
         ) {
             AdaptiveLayout(
                 orientation = orientation,
@@ -126,6 +129,7 @@ private fun SessionCongratulationScreen(
                 AppButton(
                     text = Theme.strings.congratulationButtonHome,
                     size = ButtonSize.Large,
+                    modifier = Modifier.testTag(TestTags.Action.PRIMARY),
                     role = ButtonRole.Secondary,
                     shape = ButtonShape.Ghost,
                     onClick = { AppNavigation.navigateHome() }
@@ -134,6 +138,7 @@ private fun SessionCongratulationScreen(
                 AppButton(
                     text = Theme.strings.congratulationButtonRestart,
                     size = ButtonSize.Large,
+                    modifier = Modifier.testTag(TestTags.Action.SECONDARY),
                     onClick = {
                         AppNavigation.navigate(
                             AppRoute.LearningRoute.NewSessionRoute,
