@@ -2,12 +2,13 @@ package com.louisgautier.learning.session
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
@@ -24,13 +25,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
 import com.louisgautier.designsystem.TransformStroke
-import com.louisgautier.designsystem.modifier.dashedBorder
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
 import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
+import com.louisgautier.designsystem.token.dimens.BorderStrokeDefaults
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.ShapeDefaults
 import com.louisgautier.domain.previewDictionaryWithGraphic
@@ -78,12 +78,9 @@ internal fun GraphicSketcher(
                 color = Color.Unspecified,
                 shape = ShapeDefaults.card()
             )
-            .dashedBorder(
-                width = 2.dp,
-                color = Theme.materialColors.primary,
-                shape = RoundedCornerShape(11.dp),
-                on = 10.dp,
-                off = 10.dp,
+            .border(
+                border = BorderStrokeDefaults.medium(Theme.materialColors.primary),
+                shape = ShapeDefaults.tag()
             ),
     ) {
         Box {
@@ -107,6 +104,7 @@ internal fun GraphicSketcher(
                 ongoingStroke = drawnStroke,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight()
                     .align(Alignment.Center)
                     .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
                     .then(drawingModifier)

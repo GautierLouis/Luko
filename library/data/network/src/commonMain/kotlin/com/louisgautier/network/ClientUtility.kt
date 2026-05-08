@@ -15,10 +15,10 @@ internal suspend inline fun <reified T> call(request: suspend () -> HttpResponse
         val response = request()
         Result.success(response.body<T>())
     } catch (e: Throwable) {
-        AppLogger.e(e.message)
+        AppLogger.e(message = e.message)
         Result.failure(e.toAppAppErrorCode())
     } catch (e: CancellationException) {
-        AppLogger.e(e.message)
+        AppLogger.e(message = e.message)
         Result.failure(e.toAppAppErrorCode())
     }
 

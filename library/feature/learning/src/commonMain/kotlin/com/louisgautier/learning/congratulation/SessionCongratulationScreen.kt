@@ -25,6 +25,7 @@ import com.louisgautier.designsystem.components.button.attrs.ButtonRole
 import com.louisgautier.designsystem.components.button.attrs.ButtonShape
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.BaseScaffold
+import com.louisgautier.designsystem.components.page.LoadingScreen
 import com.louisgautier.designsystem.preview.PreviewScreen
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -32,6 +33,7 @@ import com.louisgautier.designsystem.theme.AppTheme
 import com.louisgautier.designsystem.theme.Theme
 import com.louisgautier.designsystem.token.dimens.Padding
 import com.louisgautier.designsystem.token.dimens.Spacing
+import com.louisgautier.domain.model.Session
 import com.louisgautier.domain.previewSession
 import com.louisgautier.learning.congratulation.SessionCongratulationViewModel.UIState
 import com.louisgautier.navigation.AppNavigation
@@ -50,7 +52,20 @@ internal fun SessionCongratulationScreen() {
 private fun SessionCongratulationScreen(
     state: UIState,
 ) {
-    val session = state.session!!
+    when (state) {
+        UIState.Loading -> LoadingScreen()
+        is UIState.Success -> SessionCongratulationScreen(state.session)
+        else -> {
+            /*VM navigate back automatically*/
+        }
+    }
+
+}
+
+@Composable
+private fun SessionCongratulationScreen(
+    session: Session
+) {
 
     val device = rememberAdaptiveWindowInfo()
 
@@ -138,9 +153,7 @@ private fun PreviewSessionCongratulationScreen(
 ) {
     AppTheme(themeMode) {
         SessionCongratulationScreen(
-            state = UIState(
-                session = previewSession
-            )
+            session = previewSession
         )
     }
 }

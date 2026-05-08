@@ -24,7 +24,10 @@ class AppFirebaseMessagingService :
         val body = remoteMessage.notification?.body
         val data = remoteMessage.data
 
-        AppLogger.d("Push Notification received : ${remoteMessage.messageId}")
+        AppLogger.d(
+            tag = "AppFirebaseMessagingService",
+            message = "Push Notification received : ${remoteMessage.messageId}"
+        )
 
         manager.sendNotification(PushNotificationData(title, body, data))
     }

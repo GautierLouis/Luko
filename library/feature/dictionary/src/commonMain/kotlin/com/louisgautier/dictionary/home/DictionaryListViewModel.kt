@@ -1,7 +1,6 @@
 package com.louisgautier.dictionary.home
 
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +26,6 @@ import kotlinx.coroutines.flow.update
 internal class DictionaryListViewModel(
     private val characterRepository: CharacterRepository,
 ) : ViewModel() {
-    @OptIn(ExperimentalMaterial3Api::class)
     internal data class UIState(
         val selectedCharacter: Int? = null,
         val filterMenuExpended: Boolean = false,

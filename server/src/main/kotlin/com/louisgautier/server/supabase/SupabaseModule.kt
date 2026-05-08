@@ -25,7 +25,6 @@ enum class SupabaseClientMode {
     ADMIN, USER
 }
 
-@OptIn(SupabaseInternal::class)
 val supabaseModule = module {
     single(named(SupabaseClientMode.USER)) {
         val config = get<ServerConfig>()

@@ -29,14 +29,14 @@ internal fun FooterAction(
         verticalArrangement = Spacing.medium
     ) {
         AppButton(
-            text = if (isLastQuestion) Theme.strings.sessionComplete else Theme.strings.sessionFinish,
+            text = if (!isLastQuestion) Theme.strings.sessionComplete else Theme.strings.sessionFinish,
             shape = ButtonShape.Filled,
             role = ButtonRole.Primary,
             enabled = isAnswered,
             size = ButtonSize.Large,
             onClick = {
                 val event =
-                    if (isLastQuestion) SessionScreenEvent.Next else SessionScreenEvent.Finish
+                    if (!isLastQuestion) SessionScreenEvent.Next else SessionScreenEvent.Finish
                 onEvent(event)
             },
         )

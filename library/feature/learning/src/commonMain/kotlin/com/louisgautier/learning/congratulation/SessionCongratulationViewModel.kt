@@ -14,18 +14,23 @@ internal class SessionCongratulationViewModel(
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
-    data class UIState(
-        val session: Session? = null
-    )
+    sealed class UIState {
+        data object Loading : UIState()
+        data object Error : UIState()
+        data class Success(val session: Session) : UIState()
+    }
 
-    private val _state = MutableStateFlow<UIState>(UIState())
+    private val _state = MutableStateFlow<UIState>(UIState.Loading)
     val state = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
             sessionRepository.getLastSessions(1).firstOrNull()
-                ?.let { lastSession -> _state.update { it.copy(session = lastSession) } }
-                ?: AppNavigation.navigateHome()
+                ?.let { s -> _state.update { UIState.Success(s) } }
+                ?: run {
+                    _state.update { UIState.Error }
+                    AppNavigation.navigateHome()
+                }
         }
     }
 }

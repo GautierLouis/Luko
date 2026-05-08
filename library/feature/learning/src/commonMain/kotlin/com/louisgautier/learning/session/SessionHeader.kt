@@ -35,7 +35,7 @@ internal fun SessionHeader(
             trackColor = Theme.materialColors.tertiaryContainer,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(8.dp),
+                .height(Padding.medium),
             gapSize = (-10).dp,
             drawStopIndicator = {}
         )

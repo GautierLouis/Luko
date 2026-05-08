@@ -87,8 +87,8 @@ private fun SessionBuilderScreen(
                     .fillMaxWidth()
                     .weight(1f)
                     .padding(horizontal = Padding.large),
-            ) {
-                when (pager.currentPage) {
+            ) { page ->
+                when (page) {
                     0 -> {
                         CharaFreqLevelGroupPicker(
                             selectedLevels = state.levels,
@@ -163,7 +163,7 @@ private fun PreviewSessionBuilderScreen(
     AppTheme(themeMode) {
         SessionBuilderScreen(
             state = SessionBuilderViewModel.UiState(),
-            pager = rememberPagerState(initialPage = 1) { PAGE_COUNT }
+            pager = rememberPagerState(initialPage = 0) { PAGE_COUNT }
         )
     }
 }

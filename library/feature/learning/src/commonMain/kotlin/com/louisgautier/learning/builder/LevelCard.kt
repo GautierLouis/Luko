@@ -69,7 +69,6 @@ internal fun LevelCard(
                 interactionSource = remember { MutableInteractionSource() },
                 enabled = true
             )
-
     ) {
         Row(
             modifier = Modifier
@@ -91,7 +90,6 @@ internal fun LevelCard(
                     horizontalArrangement = Spacing.medium
                 ) {
                     Text(
-
                         text = title,
                         fontWeight = FontWeight.bold,
                         style = Theme.typography.bodyLarge,
@@ -110,7 +108,6 @@ internal fun LevelCard(
                     text = caption,
                     style = Theme.typography.bodySmall,
                     color = textColor,
-                    modifier = Modifier.padding(end = 30.dp)
                 )
             }
         }

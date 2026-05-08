@@ -3,17 +3,16 @@ package com.louisgautier.navigation
 import androidx.navigation3.runtime.NavKey
 import com.louisgautier.logger.AppLogger
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 object AppNavigation {
-    private val _navigationEvents =
-        Channel<NavigationCommand>(
-            capacity = Channel.BUFFERED,
-            onBufferOverflow = BufferOverflow.DROP_OLDEST,
-        )
-    val navigationEvents: Flow<NavigationCommand> = _navigationEvents.receiveAsFlow()
+    private val _navigationEvents = MutableSharedFlow<NavigationCommand>(
+        replay = 0,
+        extraBufferCapacity = 8,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val navigationEvents = _navigationEvents.asSharedFlow()
 
     fun navigate(
         route: NavKey,
@@ -32,6 +31,6 @@ object AppNavigation {
 
     private fun navigate(command: NavigationCommand) {
         AppLogger.d(tag = "Navigation event", message = command.toString())
-        _navigationEvents.trySend(command)
+        _navigationEvents.tryEmit(command)
     }
 }

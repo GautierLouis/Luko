@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import com.louisgautier.baseui.device.rememberAdaptiveWindowInfo
 import com.louisgautier.designsystem.components.page.BaseScaffold
 import com.louisgautier.designsystem.components.page.ErrorScreen
@@ -47,7 +49,6 @@ internal fun SessionScreen() {
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SessionScreen(
     state: SessionViewModel.SessionState,
@@ -71,7 +72,6 @@ private fun SessionScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SessionScreen(
     state: SessionViewModel.SessionState.Success,
@@ -96,8 +96,20 @@ private fun SessionScreen(
     val device = rememberAdaptiveWindowInfo()
 
     LaunchedEffect(state.currentPage) {
-        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+        if (pagerState.currentPage != state.currentPage) {
+            pagerState.animateScrollToPage(state.currentPage)
+        }
     }
+
+    val backState = rememberNavigationEventState(
+        currentInfo = NavigationEventInfo.None
+    )
+
+    NavigationBackHandler(
+        state = backState,
+        isBackEnabled = !state.showLeaveDialog,
+        onBackCompleted = { onEvent(ToggleLeaveDialog) }
+    )
 
     BaseScaffold(
         topBar = {
@@ -119,7 +131,6 @@ private fun SessionScreen(
             ) {
                 if (device.isPhoneLandscape) {
                     Row(
-                        modifier = Modifier,
                         horizontalArrangement = Spacing.large
                     ) {
                         Column(
@@ -149,7 +160,7 @@ private fun SessionScreen(
 
                 } else {
                     Column(
-                        verticalArrangement = Spacing.large
+                        verticalArrangement = Spacing.large,
                     ) {
                         PinyinCharacter(
                             char = state.currentQuestion.question.dictionary,

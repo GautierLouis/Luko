@@ -3,7 +3,9 @@ package com.louisgautier.app.app
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
@@ -23,11 +25,13 @@ fun App() {
     val backStack = rememberNavBackStack(navigationConfiguration, AppRoute.MainRoute())
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(backStack) {
+    LaunchedEffect(Unit) {
         viewModel.observeNavigation(backStack)
     }
     val isSystemDark = isSystemInDarkTheme()
-    val themeMode = state.theme.toThemeMode(isSystemDark)
+    val themeMode by remember {
+        derivedStateOf { state.theme.toThemeMode(isSystemDark) }
+    }
 
     AppTheme(themeMode) {
         BaseScaffold(
