@@ -65,7 +65,7 @@ private fun SessionCongratulationScreen(
 }
 
 @Composable
-private fun SessionCongratulationScreen(
+internal fun SessionCongratulationScreen(
     session: Session
 ) {
 
@@ -79,7 +79,7 @@ private fun SessionCongratulationScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(Padding.large)
+                .padding(horizontal = Padding.large)
                 .testTag(TestTags.Screen.CONGRATS)
         ) {
             AdaptiveLayout(

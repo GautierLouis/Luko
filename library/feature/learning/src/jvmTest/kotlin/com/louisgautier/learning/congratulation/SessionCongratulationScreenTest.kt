@@ -13,6 +13,7 @@ import com.louisgautier.baseui.TestSizes
 import com.louisgautier.baseui.TestWindowSize
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.theme.AppTheme
+import com.louisgautier.domain.previewSession
 import kotlin.test.Test
 
 class SessionCongratulationScreenTest {
@@ -24,7 +25,7 @@ class SessionCongratulationScreenTest {
             runDesktopTest(size) {
                 setContent {
                     AppTheme(ThemeMode.Day) {
-                        SessionCongratulationScreen()
+                        SessionCongratulationScreen(previewSession)
                     }
                 }
                 assertNothingIsCropped()
