@@ -24,6 +24,7 @@ import com.louisgautier.domain.previewSession
 import com.louisgautier.domain.previewStatistics
 import com.louisgautier.navigation.AppNavigation
 import com.louisgautier.navigation.AppRoute
+import com.louisgautier.utils.TestTags
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -46,8 +47,7 @@ private fun HomeScreen(
         if (windowInfo.isPhoneLandscape) PracticeButtonAttrs.SMALL else PracticeButtonAttrs.LARGE
 
     BaseScaffold(
-        modifier = Modifier.testTag("home_screen"),
-        topBar = { HomeTopbar(state.topbarTitle) },
+        modifier = Modifier.testTag(TestTags.Home.SCREEN),
         floatingActionButtonPosition = position,
         floatingActionButton = {
             PracticeButton(

@@ -22,8 +22,6 @@ import com.louisgautier.designsystem.components.button.AppButton
 import com.louisgautier.designsystem.components.button.attrs.ButtonRole
 import com.louisgautier.designsystem.components.button.attrs.ButtonSize
 import com.louisgautier.designsystem.components.page.BaseScaffold
-import com.louisgautier.designsystem.components.topbar.AppTopbar
-import com.louisgautier.designsystem.components.topbar.action.ActionNavigateUp
 import com.louisgautier.designsystem.preview.PreviewScreen
 import com.louisgautier.designsystem.preview.ThemeMode
 import com.louisgautier.designsystem.preview.ThemeModeProvider
@@ -66,14 +64,7 @@ private fun SessionBuilderScreen(
     onEvent: (SessionBuilderScreenEvent) -> Unit = {}
 ) {
 
-    BaseScaffold(
-        topBar = {
-            AppTopbar(
-                title = Theme.strings.newSession,
-                leftIcons = { ActionNavigateUp() }
-            )
-        },
-    ) { paddingValues ->
+    BaseScaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
