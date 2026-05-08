@@ -31,7 +31,6 @@ kotlin {
 
             implementation(projects.library.feature.home)
             implementation(projects.library.feature.feed)
-            implementation(projects.library.feature.login)
             implementation(projects.library.feature.profile)
             implementation(projects.library.feature.learning)
             implementation(projects.library.feature.dictionary)

@@ -3,40 +3,94 @@ package com.louisgautier.baseui
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@ConsistentCopyVisibility
-data class TestWindowSize internal constructor(val width: Dp, val height: Dp, val name: String)
-
-object TestSizes {
+enum class TestWindowSize(
+    val width: Dp,
+    val height: Dp,
+) {
     // Android phones portrait
-    val SMALL_PHONE_PORTRAIT =
-        TestWindowSize(360.dp, 640.dp, "small_phone_portrait")       // Galaxy A03
-    val MEDIUM_PHONE_PORTRAIT =
-        TestWindowSize(390.dp, 844.dp, "medium_phone_portrait")     // Pixel 7
-    val LARGE_PHONE_PORTRAIT =
-        TestWindowSize(430.dp, 932.dp, "large_phone_portrait")       // Pixel 7 Pro
+    SMALL_PHONE_PORTRAIT(360.dp, 640.dp),
+    MEDIUM_PHONE_PORTRAIT(390.dp, 844.dp),
+    LARGE_PHONE_PORTRAIT(430.dp, 932.dp),
 
     // Android phones landscape
-    val SMALL_PHONE_LANDSCAPE = TestWindowSize(640.dp, 360.dp, "small_phone_landscape")
-    val MEDIUM_PHONE_LANDSCAPE = TestWindowSize(844.dp, 390.dp, "medium_phone_landscape")
-    val LARGE_PHONE_LANDSCAPE = TestWindowSize(932.dp, 430.dp, "large_phone_landscape")
+    SMALL_PHONE_LANDSCAPE(640.dp, 360.dp),
+    MEDIUM_PHONE_LANDSCAPE(844.dp, 390.dp),
+    LARGE_PHONE_LANDSCAPE(932.dp, 430.dp),
 
-    // Android tablets portrait
-    val TABLET_PORTRAIT =
-        TestWindowSize(800.dp, 1280.dp, "tablet_portrait")                // Pixel Tablet
-    val TABLET_LANDSCAPE = TestWindowSize(1280.dp, 800.dp, "tablet_landscape")
+    // Android tablets
+    TABLET_PORTRAIT(800.dp, 1280.dp),
+    TABLET_LANDSCAPE(1280.dp, 800.dp),
 
     // iPhone
-    val IPHONE_SE_PORTRAIT = TestWindowSize(375.dp, 667.dp, "iphone_se_portrait")
-    val IPHONE_15_PORTRAIT = TestWindowSize(393.dp, 852.dp, "iphone_15_portrait")
-    val IPHONE_15_LANDSCAPE = TestWindowSize(852.dp, 393.dp, "iphone_15_landscape")
-    val IPHONE_15_PRO_MAX_PORTRAIT = TestWindowSize(430.dp, 932.dp, "iphone_15_pro_max_portrait")
-    val IPHONE_15_PRO_MAX_LANDSCAPE = TestWindowSize(932.dp, 430.dp, "iphone_15_pro_max_landscape")
+    IPHONE_SE_PORTRAIT(375.dp, 667.dp),
+    IPHONE_15_PORTRAIT(393.dp, 852.dp),
+    IPHONE_15_LANDSCAPE(852.dp, 393.dp),
+    IPHONE_15_PRO_MAX_PORTRAIT(430.dp, 932.dp),
+    IPHONE_15_PRO_MAX_LANDSCAPE(932.dp, 430.dp),
 
-    val ALL = listOf(
-        SMALL_PHONE_PORTRAIT, MEDIUM_PHONE_PORTRAIT, LARGE_PHONE_PORTRAIT,
-        SMALL_PHONE_LANDSCAPE, MEDIUM_PHONE_LANDSCAPE, LARGE_PHONE_LANDSCAPE,
-        TABLET_PORTRAIT, TABLET_LANDSCAPE,
-        IPHONE_SE_PORTRAIT, IPHONE_15_PORTRAIT, IPHONE_15_LANDSCAPE,
-        IPHONE_15_PRO_MAX_PORTRAIT, IPHONE_15_PRO_MAX_LANDSCAPE
-    )
+    DESKTOP(800.dp, 600.dp);
 }
+//
+//@OptIn(ExperimentalTestApi::class)
+//class MainTest {
+//
+//    @BeforeTest
+//    fun setup() {
+//        startKoin { modules(libraryModule) }
+//    }
+//
+//    @AfterTest
+//    fun teardown() = stopKoin()
+//
+//    @Test
+//    fun allSizes_noComponentCropped() {
+//        TestWindowSize.entries.forEach { size ->
+//            runComposeUiTest {
+//                setContent {
+//                    Box(modifier = Modifier.size(size.width, size.height)) {
+//                        App()
+//                    }
+//                }
+//                assertNothingIsCropped()
+//            }
+//        }
+//    }
+//}
+//
+//@OptIn(ExperimentalTestApi::class)
+//fun runDesktopTest(
+//    size: TestWindowSize,
+//    block: ComposeUiTest.() -> Unit
+//) = runComposeUiTest {
+//    setContent {
+//        Box(modifier = Modifier.size(size.width, size.height)) {
+//            block()
+//        }
+//    }
+//}
+//
+//@OptIn(ExperimentalTestApi::class)
+//fun ComposeUiTest.assertNothingIsCropped() {
+//    val rootBounds = onRoot().fetchSemanticsNode().boundsInRoot
+//
+//    onAllNodes(hasTestTag(""), useUnmergedTree = true)
+//        .fetchSemanticsNodes()
+//        .filter { node ->
+//            node.config.contains(SemanticsProperties.TestTag)
+//        }
+//        .forEach { node ->
+//            val tag = node.config[SemanticsProperties.TestTag]
+//            val bounds = node.boundsInRoot
+//
+//            assert(
+//                bounds.left >= rootBounds.left - 1f &&
+//                        bounds.top >= rootBounds.top - 1f &&
+//                        bounds.right <= rootBounds.right + 1f &&
+//                        bounds.bottom <= rootBounds.bottom + 1f
+//            ) {
+//                "Node '$tag' is cropped.\n" +
+//                        "Node bounds:  left=${bounds.left}, top=${bounds.top}, right=${bounds.right}, bottom=${bounds.bottom}\n" +
+//                        "Root bounds:  left=${rootBounds.left}, top=${rootBounds.top}, right=${rootBounds.right}, bottom=${rootBounds.bottom}"
+//            }
+//        }
+//}

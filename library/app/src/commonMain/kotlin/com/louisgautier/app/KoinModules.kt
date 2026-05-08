@@ -8,7 +8,6 @@ import com.louisgautier.feed.feedModule
 import com.louisgautier.firebase.firebaseModule
 import com.louisgautier.home.homeModule
 import com.louisgautier.learning.learningModule
-import com.louisgautier.login.loginModule
 import com.louisgautier.permission.permissionModule
 import com.louisgautier.profile.profileModule
 import com.louisgautier.utils.AppConfig
@@ -52,7 +51,6 @@ private fun Module.includeFeatureModule() {
     includes(
         homeModule,
         feedModule,
-        loginModule,
         profileModule,
         learningModule,
         dictionaryModule,
