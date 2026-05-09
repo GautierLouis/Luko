@@ -8,9 +8,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class CalculateScoreTest {
+class CalculateScoreUseCaseTest {
 
-    private val computer = CalculateScore()
+    private val computer = CalculateScoreUseCase()
 
     /**
      * Utility method to generate fake questions for testing.
@@ -39,7 +39,7 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertEquals(score, CalculateScore.ScoreDefault.BASE_MIN_POINT)
+        assertEquals(score, CalculateScoreUseCase.ScoreDefault.BASE_MIN_POINT)
 
     }
 
@@ -73,7 +73,7 @@ class CalculateScoreTest {
 
     @Test
     fun `Calculate max points`() {
-        val questions = generateQuestion(CharacterFrequencyLevel.EXTENDED, QuestionCount.TWENTY)
+        val questions = generateQuestion(CharacterFrequencyLevel.STANDARD, QuestionCount.TWENTY)
 
         val score = computer.calculate(
             questions = questions,
@@ -81,7 +81,7 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertEquals(score, CalculateScore.ScoreDefault.BASE_MAX_POINT)
+        assertEquals(score, CalculateScoreUseCase.ScoreDefault.BASE_MAX_POINT)
     }
 
     @Test
@@ -94,7 +94,7 @@ class CalculateScoreTest {
             timeElapsed = Long.MAX_VALUE
         )
 
-        assertEquals(score, CalculateScore.ScoreDefault.BASE_MIN_POINT)
+        assertEquals(score, CalculateScoreUseCase.ScoreDefault.BASE_MIN_POINT)
     }
 
     @Test
@@ -108,9 +108,9 @@ class CalculateScoreTest {
         )
 
         //check only bonus
-        val bonus = score - CalculateScore.ScoreDefault.BASE_MIN_POINT
+        val bonus = score - CalculateScoreUseCase.ScoreDefault.BASE_MIN_POINT
 
-        assertEquals(bonus, CalculateScore.ScoreDefault.TIME_MIN_POINT)
+        assertEquals(bonus, CalculateScoreUseCase.ScoreDefault.TIME_MIN_POINT)
     }
 
     @Test
@@ -124,8 +124,8 @@ class CalculateScoreTest {
         )
 
         //check only bonus
-        val bonus = score - CalculateScore.ScoreDefault.BASE_MIN_POINT
+        val bonus = score - CalculateScoreUseCase.ScoreDefault.BASE_MIN_POINT
 
-        assertEquals(bonus, CalculateScore.ScoreDefault.TIME_MAX_POINT)
+        assertEquals(bonus, CalculateScoreUseCase.ScoreDefault.TIME_MAX_POINT)
     }
 }

@@ -18,6 +18,7 @@ dependencies {
     compileOnly(libs.kotlin.multiplatform.gradle.plugin)
     implementation(libs.compose.gradle.get())
     implementation(libs.ktlint.gradle)
+    implementation(libs.kover.gradle)
 }
 
 gradlePlugin {

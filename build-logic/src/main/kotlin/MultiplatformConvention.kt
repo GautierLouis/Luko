@@ -21,13 +21,13 @@ class MultiplatformConvention : Plugin<Project> {
             apply(libs.plugins.android.kotlin.multiplatform.library.get().pluginId)
             apply(libs.plugins.serialization.get().pluginId)
             apply(libs.plugins.ktlint.get().pluginId)
+            apply(libs.plugins.kover.get().pluginId)
         }
 
         configureKtLint(libs)
         configureKotlinMultiplatform()
         configureAndroid(libs)
         configureBaseSourceSets(libs)
-
     }
 
     private fun Project.configureKtLint(libs: LibrariesForLibs) {

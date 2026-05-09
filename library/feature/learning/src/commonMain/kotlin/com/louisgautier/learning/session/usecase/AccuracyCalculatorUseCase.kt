@@ -8,7 +8,7 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-internal class AccuracyCalculator {
+internal class AccuracyCalculatorUseCase {
 
     private companion object {
         private const val TOLERANCE_RADIUS: Float = 50f // Acceptable deviation in pixels

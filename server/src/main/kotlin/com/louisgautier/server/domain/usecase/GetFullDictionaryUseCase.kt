@@ -7,7 +7,7 @@ import com.louisgautier.server.domain.repo.GraphicRepository
 import com.louisgautier.server.error.dictionaryNotFound
 import com.louisgautier.server.error.graphicNotFound
 
-class GetFullDictionary(
+class GetFullDictionaryUseCase(
     private val dictionaryRepository: DictionaryRepository,
     private val graphicRepository: GraphicRepository
 ) {

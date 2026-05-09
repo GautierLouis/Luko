@@ -12,7 +12,35 @@ plugins {
     alias(libs.plugins.android.lint) apply false
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.kover)
 
     alias(libs.plugins.multiplatform.convention) apply false
     alias(libs.plugins.compose.convention) apply false
+}
+
+subprojects {
+    pluginManager.withPlugin("org.jetbrains.kotlinx.kover") {
+        rootProject.dependencies {
+            add("kover", this@subprojects)
+        }
+    }
+}
+
+kover {
+    reports {
+        filters {
+            includes {
+                classes(
+                    "**.*UseCase*",
+                    "**.*DataSource*",
+                    "**.*Repository*",
+                    "**.*ViewModel*",
+                    "**.*Service*",
+                    "**.*Dao*",
+                    "**.*Mapper*",
+                )
+            }
+        }
+        total { html { } }
+    }
 }

@@ -11,7 +11,7 @@ import com.louisgautier.server.domain.repo.implem.DefaultDictionaryRepository
 import com.louisgautier.server.domain.repo.implem.DefaultFileRepository
 import com.louisgautier.server.domain.repo.implem.DefaultGraphicRepository
 import com.louisgautier.server.domain.repo.implem.DefaultUserRepository
-import com.louisgautier.server.domain.usecase.GetFullDictionary
+import com.louisgautier.server.domain.usecase.GetFullDictionaryUseCase
 import com.louisgautier.server.domain.usecase.PrepopulateDatabaseUseCase
 import com.louisgautier.server.supabase.SupabaseClientMode
 import org.koin.core.module.dsl.factoryOf
@@ -34,6 +34,6 @@ val domainModule = module {
     singleOf(::DefaultFileRepository) bind FileRepository::class
 
     factoryOf(::PrepopulateDatabaseUseCase)
-    factoryOf(::GetFullDictionary)
+    factoryOf(::GetFullDictionaryUseCase)
     factoryOf(::CompositionUseCase)
 }

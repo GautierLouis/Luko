@@ -4,7 +4,7 @@ import com.louisgautier.domain.model.CharacterFrequencyLevel
 import com.louisgautier.domain.model.Dictionary
 import com.louisgautier.domain.model.DifficultyLevel
 
-internal class CalculateScore() {
+internal class CalculateScoreUseCase {
 
     object ScoreDefault {
         const val MULTIPLIER_EASY = 1f
@@ -22,7 +22,7 @@ internal class CalculateScore() {
         const val MAX_TIME_FOR_EXTENDED = 20
 
         const val BASE_MIN_POINT = 50
-        const val BASE_MAX_POINT = 1000
+        const val BASE_MAX_POINT = 800
 
         const val TIME_MIN_POINT = 0
         const val TIME_MAX_POINT = 1000

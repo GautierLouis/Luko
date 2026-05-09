@@ -23,8 +23,8 @@ import com.louisgautier.learning.session.SessionScreenEvent.Reload
 import com.louisgautier.learning.session.SessionScreenEvent.Reset
 import com.louisgautier.learning.session.SessionScreenEvent.StrokeCompleted
 import com.louisgautier.learning.session.SessionScreenEvent.ToggleLeaveDialog
-import com.louisgautier.learning.session.usecase.AccuracyCalculator
-import com.louisgautier.learning.session.usecase.CalculateScore
+import com.louisgautier.learning.session.usecase.AccuracyCalculatorUseCase
+import com.louisgautier.learning.session.usecase.CalculateScoreUseCase
 import com.louisgautier.navigation.AppNavigation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,8 +39,8 @@ internal class SessionViewModel(
     savedStateHandle: SavedStateHandle,
     private val repository: CharacterRepository,
     private val sessionRepository: SessionRepository,
-    private val analyzeUserDrawing: AccuracyCalculator,
-    private val scoreCalculator: CalculateScore,
+    private val analyzeUserDrawing: AccuracyCalculatorUseCase,
+    private val scoreCalculator: CalculateScoreUseCase,
 ) : ViewModel() {
 
     private val descriptor = LearningInternalRoute.SessionRoute.serializer().descriptor

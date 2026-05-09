@@ -3,7 +3,7 @@ package com.louisgautier.server.router.route
 import com.louisgautier.apicontracts.routing.EndPoint
 import com.louisgautier.server.domain.repo.DictionaryRepository
 import com.louisgautier.server.domain.repo.GraphicRepository
-import com.louisgautier.server.domain.usecase.GetFullDictionary
+import com.louisgautier.server.domain.usecase.GetFullDictionaryUseCase
 import com.louisgautier.server.error.graphicNotFound
 import com.louisgautier.server.router.RouteController
 import io.ktor.http.HttpStatusCode
@@ -15,7 +15,7 @@ import io.ktor.server.routing.Route
 class CharacterRouteController(
     private val dictionaryRepository: DictionaryRepository,
     private val graphicRepository: GraphicRepository,
-    private val getFullDictionary: GetFullDictionary
+    private val getFullDictionary: GetFullDictionaryUseCase
 ) : RouteController {
 
     private suspend inline fun <reified T : Any> ApplicationCall.respondOk(body: T) =
