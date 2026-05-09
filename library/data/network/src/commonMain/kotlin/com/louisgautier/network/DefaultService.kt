@@ -36,7 +36,7 @@ internal class DefaultService(
 
     val authedClient = createDefaultClient { installAuth() }
 
-    internal fun createDefaultClient(
+    private fun createDefaultClient(
         config: HttpClientConfig<*>.() -> Unit = { },
     ) = HttpClient(engine) {
         expectSuccess = true
