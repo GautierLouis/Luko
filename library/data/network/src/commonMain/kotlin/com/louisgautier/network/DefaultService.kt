@@ -29,7 +29,7 @@ import io.ktor.serialization.kotlinx.json.json
 internal class DefaultService(
     private val engine: HttpClientEngine = engineFactory.create(),
     private val tokenAccessor: TokenAccessor,
-    private val env: NetworkEnvironment,
+    private val baseUrl: String,
     private val appConfig: AppConfig
 ) {
     val unauthedClient = createDefaultClient()
@@ -50,8 +50,7 @@ internal class DefaultService(
         }
 
         defaultRequest {
-            url { protocol = env.scheme }
-            host = env.host
+            url(urlString = baseUrl)
             header("X-Platform", appConfig.platform)
             header("App-Version", appConfig.versionName)
             header("App-Build", appConfig.versionCode)

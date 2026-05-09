@@ -19,17 +19,15 @@ private object NamedNetworkModule {
 
 val networkModule: Module = module {
     single {
-        when (get<AppConfig>().flavor) {
-            Flavor.DEV -> NetworkEnvironment.Dev
-            Flavor.STAGING -> NetworkEnvironment.Preprod
-            Flavor.PROD -> NetworkEnvironment.Prod
+        val baseUrl = when (get<AppConfig>().flavor) {
+            Flavor.DEV -> "10.0.2.2"
+            Flavor.STAGING -> "https://learn-chinese-staging.up.railway.app"
+            Flavor.PROD -> "https://learn-chinese-production.up.railway.app"
         }
-    }
 
-    single {
         DefaultService(
             tokenAccessor = get(),
-            env = get(),
+            baseUrl = baseUrl,
             appConfig = get()
         )
     }

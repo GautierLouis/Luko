@@ -62,7 +62,6 @@ flyway = "11.18.0"
 
 # Testing
 junit4 = "4.13.2"
-mokkery = "3.3.0"
 
 # Logging
 kermit = "2.0.8"
@@ -111,9 +110,6 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 # === Lint ===
 ktlint-ruleset-compose = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint-ruleset-compose" }
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint-gradle" }
-
-# === Mockkery ===
-mokkery-coroutine = { module = "dev.mokkery:mokkery-coroutines", version.ref = "mokkery" }
 
 # === Ktor Server ===
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
@@ -238,7 +234,6 @@ compose-hot-reload = { id = "org.jetbrains.compose.hot-reload", version.ref = "c
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-mokkery-plugin = { id = "dev.mokkery", version.ref = "mokkery" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

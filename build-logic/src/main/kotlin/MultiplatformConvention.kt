@@ -20,7 +20,6 @@ class MultiplatformConvention : Plugin<Project> {
             apply(libs.plugins.kotlin.multiplatform.get().pluginId)
             apply(libs.plugins.android.kotlin.multiplatform.library.get().pluginId)
             apply(libs.plugins.serialization.get().pluginId)
-            apply(libs.plugins.mokkery.plugin.get().pluginId)
             apply(libs.plugins.ktlint.get().pluginId)
         }
 
@@ -96,7 +95,6 @@ class MultiplatformConvention : Plugin<Project> {
                 commonTest.dependencies {
                     implementation(libs.kotlin.test)
                     implementation(libs.koin.test)
-                    implementation(libs.mokkery.coroutine)
                     implementation(libs.kotlinx.coroutines.test)
                 }
             }

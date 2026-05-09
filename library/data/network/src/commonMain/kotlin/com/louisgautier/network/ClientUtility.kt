@@ -5,6 +5,7 @@ import com.louisgautier.utils.AppErrorCode
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.HttpResponse
 import kotlinx.io.IOException
@@ -14,14 +15,16 @@ internal suspend inline fun <reified T> call(request: suspend () -> HttpResponse
     try {
         val response = request()
         Result.success(response.body<T>())
-    } catch (e: Throwable) {
-        AppLogger.e(message = e.message)
-        Result.failure(e.toAppAppErrorCode())
     } catch (e: CancellationException) {
         AppLogger.e(message = e.message)
         Result.failure(e.toAppAppErrorCode())
+    } catch (e: ResponseException) {
+        AppLogger.e(message = e.message)
+        Result.failure(e.toAppAppErrorCode())
+    } catch (e: Throwable) {
+        AppLogger.e(message = e.message)
+        Result.failure(e.toAppAppErrorCode())
     }
-
 
 internal fun Throwable.toAppAppErrorCode() = when (this) {
     is CancellationException -> AppErrorCode.AppError()
