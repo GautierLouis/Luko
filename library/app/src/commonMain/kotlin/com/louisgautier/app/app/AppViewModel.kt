@@ -34,12 +34,12 @@ internal class AppViewModel(
     appConfig: AppConfig,
 ) : ViewModel() {
     data class UiState(
-        val isProduction: Boolean,
+        val showFlavorBanner: Boolean,
         val flavor: Flavor,
         val theme: SettingTheme = SettingTheme.Default,
     )
 
-    private val _state = MutableStateFlow(UiState(appConfig.isProduction, appConfig.flavor))
+    private val _state = MutableStateFlow(UiState(!appConfig.isProduction, appConfig.flavor))
     val state = _state.asStateFlow()
 
     init {

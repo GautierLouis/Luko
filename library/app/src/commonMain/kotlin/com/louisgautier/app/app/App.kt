@@ -36,7 +36,7 @@ fun App() {
     AppTheme(themeMode) {
         BaseScaffold(
             topBar = {
-                if (!state.isProduction) {
+                if (state.showFlavorBanner) {
                     FlavorComponent(state.flavor)
                 }
             },
