@@ -12,31 +12,38 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
-fun Application.initKoin() {
+fun Application.initKoin(
+    defaultModule: Module,
+) {
     install(Koin) {
         val env = ServerConfig.build(environment)
 
         slf4jLogger(env.koinLogLevel)
 
-        modules(module {
-            includes(
-                databaseModule,
-                domainModule,
-                supabaseModule,
-                routerModule,
-                authModule,
-                pluginModule
-            )
-
+        val internalModule = module {
             single { PrometheusMeterRegistry(PrometheusConfig.DEFAULT) }
             single { env }
-            singleOf(::ServerRegistry)
-        })
+        }
+
+        modules(listOf(defaultModule, internalModule))
     }
+}
+
+val serverModule = module {
+    includes(
+        databaseModule,
+        domainModule,
+        supabaseModule,
+        routerModule,
+        authModule,
+        pluginModule
+    )
+    singleOf(::ServerRegistry)
 }
 

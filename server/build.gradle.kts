@@ -85,6 +85,6 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.koin.test)
     testImplementation("io.mockk:mockk:1.14.2")
-    testImplementation("org.testcontainers:postgresql:1.19.0") // optional, integration
+    testImplementation("org.testcontainers:postgresql:1.19.0")
     testImplementation("com.h2database:h2:2.2.222")
 }

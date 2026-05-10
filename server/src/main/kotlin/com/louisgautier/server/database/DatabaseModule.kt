@@ -13,7 +13,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val databaseModule = module {
-    singleOf(::Database)
+    singleOf(::DefaultDatabase) bind Database::class
     singleOf(::DefaultDictionaryDataSource) bind DictionaryDataSource::class
     singleOf(::DefaultGraphicDataSource) bind GraphicDataSource::class
     single {
