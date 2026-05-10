@@ -2,7 +2,7 @@ package com.louisgautier.server
 
 import com.louisgautier.server.database.Database
 import com.louisgautier.server.di.initKoin
-import com.louisgautier.server.di.serverModule
+import com.louisgautier.server.di.provideServerModule
 import io.ktor.server.application.Application
 import io.ktor.server.netty.EngineMain
 import org.koin.core.module.Module
@@ -25,7 +25,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
  */
 fun Application.module(defaultModule: Module?) {
 
-    initKoin(defaultModule ?: serverModule)
+    initKoin(defaultModule ?: provideServerModule())
 
     with(get<ServerRegistry>()) {
         start()

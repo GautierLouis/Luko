@@ -35,11 +35,20 @@ fun Application.initKoin(
     }
 }
 
-val serverModule = module {
+fun provideServerModule() = module {
+    includes(infraModule, serverModule)
+}
+
+private val infraModule = module {
     includes(
         databaseModule,
-        domainModule,
         supabaseModule,
+    )
+}
+
+val serverModule = module {
+    includes(
+        domainModule,
         routerModule,
         authModule,
         pluginModule
