@@ -1,5 +1,6 @@
 package com.louisgautier.domain
 
+import com.louisgautier.auth.authModule
 import com.louisgautier.database.databaseModule
 import com.louisgautier.domain.repository.CharacterRepository
 import com.louisgautier.domain.repository.DefaultCharacterRepository
@@ -14,7 +15,7 @@ import org.koin.dsl.module
 
 val domainModule =
     module {
-        includes(networkModule, databaseModule, preferencesModule)
+        includes(networkModule, databaseModule, preferencesModule, authModule)
 
         single { DefaultCharacterRepository(get()) } bind CharacterRepository::class
         single { DefaultSessionRepository(get()) } bind SessionRepository::class
