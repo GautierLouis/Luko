@@ -1,4 +1,4 @@
-package com.louisgautier.permission
+package xyz.luko.permission
 
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

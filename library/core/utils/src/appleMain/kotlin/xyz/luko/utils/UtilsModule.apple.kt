@@ -1,4 +1,4 @@
-package com.louisgautier.utils
+package xyz.luko.utils
 
 import org.koin.core.module.Module
 import org.koin.dsl.module

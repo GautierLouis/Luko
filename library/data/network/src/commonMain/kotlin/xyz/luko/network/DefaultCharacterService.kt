@@ -1,4 +1,4 @@
-package com.louisgautier.network
+package xyz.luko.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.resources.get

@@ -1,11 +1,10 @@
-package com.louisgautier.firebase.notification
+package xyz.luko.firebase.notification
 
 import android.annotation.SuppressLint
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import xyz.luko.firebase.notification.PushNotificationManager
 import xyz.luko.logger.AppLogger
 
 class AppFirebaseMessagingService :

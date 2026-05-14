@@ -1,4 +1,0 @@
-language = Objective-C
-modules = FirebaseAnalytics FirebaseCrashlytics FirebaseRemoteConfig FirebaseMessaging
-package = com.louisgautier.firebase
-linkerOpts = -framework FirebaseAnalytics -framework FirebaseCrashlytics -framework FirebaseRemoteConfig -framework FirebaseMessaging

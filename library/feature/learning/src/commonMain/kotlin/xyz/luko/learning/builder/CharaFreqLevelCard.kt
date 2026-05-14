@@ -8,6 +8,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import xyz.luko.designsystem.components.attrs.FrequencyLevel
+import xyz.luko.designsystem.components.attrs.FrequencyLevel.Companion.caption
+import xyz.luko.designsystem.components.attrs.FrequencyLevel.Companion.colorFamily
+import xyz.luko.designsystem.components.attrs.FrequencyLevel.Companion.icon
+import xyz.luko.designsystem.components.attrs.FrequencyLevel.Companion.label
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme

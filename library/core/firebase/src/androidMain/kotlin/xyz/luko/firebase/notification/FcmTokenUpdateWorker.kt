@@ -1,4 +1,4 @@
-package com.louisgautier.firebase.notification
+package xyz.luko.firebase.notification
 
 import android.content.Context
 import androidx.work.BackoffPolicy
@@ -12,7 +12,6 @@ import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import org.koin.core.context.GlobalContext
-import xyz.luko.firebase.notification.FcmAccessor
 import xyz.luko.logger.AppLogger
 import java.util.concurrent.TimeUnit
 

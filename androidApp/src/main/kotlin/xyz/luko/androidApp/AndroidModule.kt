@@ -2,7 +2,6 @@ package xyz.luko.androidApp
 
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import xyz.luko.androidApp.BuildConfig
 import xyz.luko.app.Environment
 
 val androidModule = module {

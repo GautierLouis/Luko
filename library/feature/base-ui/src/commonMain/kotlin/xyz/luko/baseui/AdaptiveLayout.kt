@@ -6,6 +6,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import xyz.luko.baseui.AdaptiveLayoutOrder.Companion.sort
 import xyz.luko.baseui.AdaptiveLayoutOrientation.COLUMN
 import xyz.luko.baseui.AdaptiveLayoutOrientation.ROW
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
