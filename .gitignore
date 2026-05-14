@@ -35,3 +35,4 @@ iosApp/KotlinMultiplatformLinkedPackage/subpackages/
 
 # Package lockfiles (auto-resolved)
 **/Package.resolved
+.swiftpm-locks
