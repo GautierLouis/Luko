@@ -1,5 +1,6 @@
 import org.gradle.initialization.DependenciesAccessors
 import org.gradle.kotlin.dsl.support.serviceOf
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `kotlin-dsl`
@@ -11,6 +12,17 @@ repositories {
     gradlePluginPortal()
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
 dependencies {
     compileOnly(files(gradle.serviceOf<DependenciesAccessors>().classes.asFiles))
     compileOnly(libs.android.gradle.get())
@@ -19,6 +31,13 @@ dependencies {
     implementation(libs.compose.gradle.get())
     implementation(libs.ktlint.gradle)
     implementation(libs.kover.gradle)
+}
+
+tasks {
+    validatePlugins {
+        enableStricterValidation = true
+        failOnWarning = true
+    }
 }
 
 gradlePlugin {
