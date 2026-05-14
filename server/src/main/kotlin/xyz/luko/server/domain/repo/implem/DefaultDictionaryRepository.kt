@@ -7,6 +7,7 @@ import xyz.luko.apicontracts.dto.LevelCountDto
 import xyz.luko.apicontracts.dto.ResponseListDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.server.database.entity.DictionaryTable.code
 import xyz.luko.server.database.entity.DictionaryTable.level
 import xyz.luko.server.database.source.DictionaryDataSource
 import xyz.luko.server.domain.mapper.toDictionary

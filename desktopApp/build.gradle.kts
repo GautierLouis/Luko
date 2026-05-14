@@ -12,6 +12,6 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.louisgautier.desktopApp.MainKt"
+        mainClass = "xyz.luko.desktopApp.MainKt"
     }
 }

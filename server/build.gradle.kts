@@ -5,11 +5,11 @@ plugins {
     application
 }
 
-group = "com.louisgautier.server"
+group = "xyz.luko.server"
 version = "1.0.0"
 
 application {
-    mainClass.set("com.louisgautier.server.ApplicationKt")
+    mainClass.set("xyz.luko.server.ApplicationKt")
     
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
