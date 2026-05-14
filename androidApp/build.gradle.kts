@@ -1,0 +1,104 @@
+import java.util.Properties
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.compose.compiler)
+}
+
+object Flavors {
+    const val DEV = "dev"
+    const val STAGING = "staging"
+    const val PROD = "prod"
+}
+
+data class FlavorConfig(
+    val name: String,
+    val alias: String? = null,
+)
+
+val flavors = listOf(
+    FlavorConfig(Flavors.DEV, "Dev"),
+    FlavorConfig(Flavors.STAGING, "Staging"),
+    FlavorConfig(Flavors.PROD)
+)
+
+android {
+    namespace = "xyz.luko.androidApp"
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
+
+    defaultConfig {
+        applicationId = "xyz.luko.androidApp"
+        targetSdk = libs.versions.android.target.sdk.get().toInt()
+        minSdk = libs.versions.android.min.sdk.get().toInt()
+        versionCode = libs.versions.app.version.code.get().toInt()
+        versionName = libs.versions.app.version.asProvider().get()
+        manifestPlaceholders["appName"] = "Luko"
+    }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        flavors.forEach { flavor ->
+            create(flavor.name) {
+                dimension = "environment"
+                flavor.alias?.let {
+                    applicationIdSuffix = ".${flavor.name}"
+                    versionNameSuffix = "-${flavor.name}"
+                    manifestPlaceholders["appName"] = "(${it}) Luko"
+                }
+                buildConfigField("String", "ENVIRONMENT", "\"${flavor.name}\"")
+            }
+        }
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystoreFile = file("keystore.properties")
+            if (keystoreFile.exists()) {
+                val props = Properties()
+                keystoreFile.inputStream().use { props.load(it) }
+
+                storeFile = file(props["keyStoreFile"] as String)
+                storePassword = props["keyStorePassword"] as String
+                keyAlias = props["keyAlias"] as String
+                keyPassword = props["keyPassword"] as String
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt")
+            )
+        }
+
+        debug {
+            isMinifyEnabled = false
+            isDebuggable = true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+dependencies {
+    implementation(projects.library.app)
+
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.activity.compose)
+
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+}

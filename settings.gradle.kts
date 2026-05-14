@@ -1,4 +1,4 @@
-rootProject.name = "Learn-Chinese"
+rootProject.name = "Luko"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -39,8 +39,8 @@ include(":server")
 //Shared (library - server)
 include(":api-contracts")
 //App
-include(":composeApp")
-include(":desktop")
+include(":androidApp")
+include(":desktopApp")
 include(":library:app")
 //Feature
 include(":library:feature:base-ui")

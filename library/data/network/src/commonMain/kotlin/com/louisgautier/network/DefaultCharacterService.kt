@@ -1,16 +1,16 @@
 package com.louisgautier.network
 
-import com.louisgautier.apicontracts.dto.CharacterFrequencyLevelDto
-import com.louisgautier.apicontracts.dto.DictionaryWithGraphicDto
-import com.louisgautier.apicontracts.dto.GraphicDto
-import com.louisgautier.apicontracts.dto.LevelCountDto
-import com.louisgautier.apicontracts.dto.ResponseListDto
-import com.louisgautier.apicontracts.dto.SimpleDictionaryDto
-import com.louisgautier.apicontracts.routing.EndPoint
-import com.louisgautier.network.interfaces.CharacterService
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.resources.get
 import kotlinx.serialization.json.Json
+import xyz.luko.apicontracts.dto.CharacterFrequencyLevelDto
+import xyz.luko.apicontracts.dto.DictionaryWithGraphicDto
+import xyz.luko.apicontracts.dto.GraphicDto
+import xyz.luko.apicontracts.dto.LevelCountDto
+import xyz.luko.apicontracts.dto.ResponseListDto
+import xyz.luko.apicontracts.dto.SimpleDictionaryDto
+import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.network.interfaces.CharacterService
 
 class DefaultCharacterService(
     private val client: HttpClient,

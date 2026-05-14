@@ -1,7 +1,5 @@
 package com.louisgautier.network
 
-import com.louisgautier.logger.AppLogger
-import com.louisgautier.utils.AppErrorCode
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
@@ -9,6 +7,8 @@ import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.HttpResponse
 import kotlinx.io.IOException
+import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppErrorCode
 import kotlin.coroutines.cancellation.CancellationException
 
 internal suspend inline fun <reified T> call(request: suspend () -> HttpResponse): Result<T> =

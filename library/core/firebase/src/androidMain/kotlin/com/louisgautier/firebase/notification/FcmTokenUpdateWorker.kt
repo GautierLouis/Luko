@@ -11,8 +11,9 @@ import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.louisgautier.logger.AppLogger
 import org.koin.core.context.GlobalContext
+import xyz.luko.firebase.notification.FcmAccessor
+import xyz.luko.logger.AppLogger
 import java.util.concurrent.TimeUnit
 
 class FcmTokenUpdateWorker(

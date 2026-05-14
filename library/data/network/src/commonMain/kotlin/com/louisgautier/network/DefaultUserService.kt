@@ -1,10 +1,10 @@
 package com.louisgautier.network
 
-import com.louisgautier.apicontracts.dto.UserJson
-import com.louisgautier.apicontracts.routing.EndPoint
-import com.louisgautier.network.interfaces.UserService
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.resources.get
+import xyz.luko.apicontracts.dto.UserJson
+import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.network.interfaces.UserService
 
 internal class DefaultUserService(
     private val client: HttpClient,
