@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import xyz.luko.designsystem.drawing.toCatmullRomControlPoints
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -15,7 +16,7 @@ import kotlin.math.sin
 /**
  * Draw filled arrow head (alternative style)
  */
-fun DrawScope.drawDashedLineWithFilledArrow(
+internal fun DrawScope.drawDashedLineWithFilledArrow(
     points: List<Offset>,
     color: Color,
     dashWidth: Float = DrawableAreaDefault.STROKE_HINT_DASH_WIDTH,

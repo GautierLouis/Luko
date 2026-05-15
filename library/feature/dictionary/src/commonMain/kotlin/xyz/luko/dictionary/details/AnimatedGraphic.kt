@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import xyz.luko.designsystem.TransformStroke
+import xyz.luko.designsystem.drawing.TransformStroke
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -43,7 +43,7 @@ internal fun AnimatedGraphic(
 ) {
     var canvasSize by remember { mutableStateOf(IntSize(0, 0)) }
 
-    val strokes = TransformStroke.transformPath(graphic.strokes, canvasSize)
+    val strokes = TransformStroke.projectToCanvas(graphic.strokes, canvasSize)
     val medians = graphic.medians.map { s -> s.points.map { p -> Offset(p.x, p.y) } }
     val strokeColor = Theme.materialColors.onBackground
 
@@ -79,7 +79,7 @@ internal fun AnimatedGraphic(
 
                 val strokeProgress = (progress - index).coerceIn(0f, 1f)
 
-                val currentMedian = TransformStroke.transformOffset(medians[index], canvasSize)
+                val currentMedian = TransformStroke.projectToCanvas(medians[index], canvasSize)
                 if (strokeProgress > 0f) {
                     clipPath(path) {
                         val medianPath = Path()

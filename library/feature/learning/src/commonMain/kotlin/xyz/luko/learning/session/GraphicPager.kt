@@ -25,7 +25,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
-import xyz.luko.designsystem.TransformStroke
+import xyz.luko.designsystem.drawing.TransformStroke
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -52,7 +52,13 @@ internal fun GraphicSketcher(
 
     val referenceStrokes = remember(graphic.code, canvasSize) {
         graphic.medians.map { stroke ->
-            TransformStroke.transformOffset(stroke.points.map { Offset(it.x, it.y) }, canvasSize)
+            TransformStroke.projectToCanvas(stroke.points.map { Offset(it.x, it.y) }, canvasSize)
+        }
+    }
+
+    val previousDrawnScaled = remember(state.previousDrawnStrokes, canvasSize) {
+        state.previousDrawnStrokes.map { stroke ->
+            TransformStroke.projectToCanvas(stroke, canvasSize)
         }
     }
 
@@ -64,7 +70,12 @@ internal fun GraphicSketcher(
     else Modifier.drawingDetector(
         points = drawnStroke,
         onGestureComplete = {
-            onEvent(SessionScreenEvent.StrokeCompleted(drawnStroke.toList(), referenceStrokes))
+            onEvent(
+                SessionScreenEvent.StrokeCompleted(
+                    TransformStroke.unprojectFromCanvas(drawnStroke.toList(), canvasSize),
+                    referenceStrokes
+                )
+            )
             drawnStroke.clear()
         }
     )
@@ -100,7 +111,7 @@ internal fun GraphicSketcher(
                 referenceHint = referenceHint
                     ?.takeIf { drawHint }
                     .orEmpty(),
-                previousDrawnStrokes = state.previousDrawnStrokes,
+                previousDrawnStrokes = previousDrawnScaled,
                 ongoingStroke = drawnStroke,
                 modifier = Modifier
                     .fillMaxWidth()

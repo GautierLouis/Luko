@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
-import xyz.luko.designsystem.pointsToPath
+import xyz.luko.designsystem.drawing.pointsToPath
 import xyz.luko.designsystem.theme.Theme
 import androidx.compose.ui.graphics.drawscope.Stroke as AndroidStroke
 

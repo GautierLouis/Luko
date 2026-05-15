@@ -1,6 +1,6 @@
-package xyz.luko.learning.session.drawing
+package xyz.luko.designsystem.drawing
 
-internal data class CatmullRomControlPoint(
+data class CatmullRomControlPoint(
     val x1: Float,
     val y1: Float,
     val x2: Float,

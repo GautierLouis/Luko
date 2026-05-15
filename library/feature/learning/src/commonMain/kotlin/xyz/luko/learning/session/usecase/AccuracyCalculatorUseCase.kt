@@ -174,7 +174,7 @@ internal class AccuracyCalculatorUseCase {
     }
 
     /**
-     * Compare the shape of two stroke paths using Hausdorff distance
+     * Compare the shape of two strokes paths using Hausdorff distance
      */
     private fun comparePathShape(ref: List<Offset>, user: List<Offset>): Float {
         // Normalize both strokes to same number of points
