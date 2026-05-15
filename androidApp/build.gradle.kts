@@ -18,8 +18,8 @@ data class FlavorConfig(
 )
 
 val flavors = listOf(
-    FlavorConfig(Flavors.DEV, "Dev"),
-    FlavorConfig(Flavors.STAGING, "Staging"),
+    FlavorConfig(Flavors.DEV, "dev"),
+    FlavorConfig(Flavors.STAGING, "staging"),
     FlavorConfig(Flavors.PROD)
 )
 

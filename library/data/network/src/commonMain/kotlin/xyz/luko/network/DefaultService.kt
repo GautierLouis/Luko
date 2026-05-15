@@ -39,7 +39,7 @@ internal class DefaultService(
 
     private val baseUrl: String
         get() = when (appConfig.flavor) {
-            Flavor.DEV -> "http://10.0.2.2"
+            Flavor.DEV -> "http://10.0.2.2:8080"
             Flavor.STAGING -> "https://staging-api.lukoapp.xyz"
             Flavor.PROD -> "https://api.lukoapp.xyz"
         }
