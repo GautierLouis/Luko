@@ -250,5 +250,5 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 
 # Convention Plugins
-compose-convention = { id = "com.louisgautier.compose.convention" }
-multiplatform-convention = { id = "com.louisgautier.multiplatform.convention" }
+compose-convention = { id = "xyz.luko.compose.convention" }
+multiplatform-convention = { id = "xyz.luko.multiplatform.convention" }

@@ -70,7 +70,7 @@ class MultiplatformConvention : Plugin<Project> {
         pluginManager.withPlugin("com.android.kotlin.multiplatform.library") {
             extensions.configure<KotlinMultiplatformExtension> {
                 targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
-                    namespace = "com.louisgautier.${project.name.replace(":", ".").trim('.')}"
+                    namespace = "xyz.luko.${project.name.replace(":", ".").trim('.')}"
                     compileSdk = libs.versions.android.target.sdk.get().toInt()
                     minSdk = libs.versions.android.min.sdk.get().toInt()
                     compilerOptions {

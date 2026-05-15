@@ -25,16 +25,26 @@ import xyz.luko.apicontracts.dto.UserTokenJson
 import xyz.luko.apicontracts.routing.EndPoint
 import xyz.luko.network.interfaces.TokenAccessor
 import xyz.luko.utils.AppConfig
+import xyz.luko.utils.Flavor
 
 internal class DefaultService(
-    private val engine: HttpClientEngine = engineFactory.create(),
     private val tokenAccessor: TokenAccessor,
-    private val baseUrl: String,
-    private val appConfig: AppConfig
+    private val appConfig: AppConfig,
+    baseEngine: HttpClientEngine?,
 ) {
+
+    private val engine = baseEngine ?: engineFactory.create()
+
     val unauthedClient = createDefaultClient()
 
     val authedClient = createDefaultClient { installAuth() }
+
+    private val baseUrl: String
+        get() = when (appConfig.flavor) {
+            Flavor.DEV -> "http://10.0.2.2"
+            Flavor.STAGING -> "https://staging-api.lukoapp.xyz"
+            Flavor.PROD -> "https://api.lukoapp.xyz"
+        }
 
     private fun createDefaultClient(
         config: HttpClientConfig<*>.() -> Unit = { },
