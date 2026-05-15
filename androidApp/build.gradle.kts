@@ -24,11 +24,11 @@ val flavors = listOf(
 )
 
 android {
-    namespace = "xyz.luko.androidApp"
+    namespace = "xyz.luko.android"
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     defaultConfig {
-        applicationId = "xyz.luko.androidApp"
+        applicationId = "xyz.luko.android"
         targetSdk = libs.versions.android.target.sdk.get().toInt()
         minSdk = libs.versions.android.min.sdk.get().toInt()
         versionCode = libs.versions.app.version.code.get().toInt()

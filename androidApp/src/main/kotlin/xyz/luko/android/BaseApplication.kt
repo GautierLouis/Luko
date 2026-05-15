@@ -1,4 +1,4 @@
-package xyz.luko.androidApp
+package xyz.luko.android
 
 import android.app.Application
 

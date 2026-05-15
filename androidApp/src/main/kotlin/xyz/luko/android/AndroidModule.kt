@@ -1,4 +1,4 @@
-package xyz.luko.androidApp
+package xyz.luko.android
 
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

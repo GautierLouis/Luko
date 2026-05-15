@@ -1,4 +1,4 @@
-package xyz.luko.androidApp
+package xyz.luko.android
 
 import android.content.Intent
 import android.os.Build

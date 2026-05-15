@@ -1,7 +1,6 @@
 package xyz.luko.network
 
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -17,7 +16,7 @@ private object NamedNetworkModule {
 }
 
 val networkModule: Module = module {
-    singleOf(::DefaultService)
+    single { DefaultService(get(), get()) }
 
     single(named(UNAUTHED_CLIENT)) { get<DefaultService>().unauthedClient }
     single(named(AUTHED_CLIENT)) { get<DefaultService>().authedClient }

@@ -30,10 +30,8 @@ import xyz.luko.utils.Flavor
 internal class DefaultService(
     private val tokenAccessor: TokenAccessor,
     private val appConfig: AppConfig,
-    baseEngine: HttpClientEngine?,
+    private val engine: HttpClientEngine = engineFactory.create()
 ) {
-
-    private val engine = baseEngine ?: engineFactory.create()
 
     val unauthedClient = createDefaultClient()
 
