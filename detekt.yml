@@ -1,0 +1,12 @@
+style:
+  MagicNumber:
+    active: true
+    excludes: [ '**/icon/**', '**/token/**' ]
+
+naming:
+  FunctionNaming:
+    active: true
+    ignoreAnnotated: [ 'Composable' ]
+  MaxLineLength:
+    active: false
+

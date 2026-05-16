@@ -115,6 +115,7 @@ class MultiplatformConvention : Plugin<Project> {
             buildUponDefaultConfig.set(true)
             autoCorrect.set(false)
             parallel.set(true)
+            config.setFrom(rootProject.files("detekt.yml"))
             source.setFrom(
                 "src/commonMain/kotlin",
                 "src/androidMain/kotlin",
