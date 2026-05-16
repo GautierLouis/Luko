@@ -26,28 +26,28 @@ internal fun PickerLayout(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit = {},
 ) {
-
     Box(
-        modifier = modifier
-            .wrapContentHeight()
-            .background(
-                color = Theme.materialColors.surfaceContainer,
-                shape = ShapeDefaults.card()
-            )
-            .border(
-                BorderStroke(
-                    width = 1.dp,
-                    color = Theme.materialColors.outline
+        modifier =
+            modifier
+                .wrapContentHeight()
+                .background(
+                    color = Theme.materialColors.surfaceContainer,
+                    shape = ShapeDefaults.card(),
+                ).border(
+                    BorderStroke(
+                        width = 1.dp,
+                        color = Theme.materialColors.outline,
+                    ),
+                    shape = ShapeDefaults.card(),
                 ),
-                shape = ShapeDefaults.card()
-            ),
     ) {
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(Padding.large),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(Padding.large),
             verticalArrangement = Spacing.large,
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
             Text(
                 text = label,

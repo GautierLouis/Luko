@@ -58,7 +58,6 @@ internal fun RewardCard(
     parentOrientation: AdaptiveLayoutOrientation,
     modifier: Modifier = Modifier,
 ) {
-
     val orientation = if (parentOrientation == ROW) COLUMN else ROW
 
     val animatedProgress = remember { Animatable(0f) }
@@ -68,55 +67,62 @@ internal fun RewardCard(
         delay(300)
         animatedProgress.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 1000)
+            animationSpec = tween(durationMillis = 1000),
         )
     }
     LaunchedEffect(score) {
         animatedScore.animateTo(
             targetValue = score.toFloat(),
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = EaseOutCubic
-            )
+            animationSpec =
+                tween(
+                    durationMillis = 500,
+                    easing = EaseOutCubic,
+                ),
         )
     }
 
     Card(
         shape = ShapeDefaults.card(),
         border = BorderStrokeDefaults.minimum(Theme.materialColors.outline),
-        colors = CardDefaults.cardColors(
-            containerColor = Theme.materialColors.surfaceContainer
-        ),
-        modifier = modifier.wrapContentHeight()
-            .testTag(TestTags.Misc.CONGRATS_CARD)
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Theme.materialColors.surfaceContainer,
+            ),
+        modifier =
+            modifier
+                .wrapContentHeight()
+                .testTag(TestTags.Misc.CONGRATS_CARD),
     ) {
         AdaptiveLayout(
-            modifier = Modifier
-                .wrapContentHeight()
-                .padding(Padding.large),
+            modifier =
+                Modifier
+                    .wrapContentHeight()
+                    .padding(Padding.large),
             orientation = orientation,
-            spacing = Padding.large
+            spacing = Padding.large,
         ) {
             AccumulatedXp(animatedProgress, animatedScore)
 
             AdaptiveLayout(
                 modifier = Modifier.wrapContentHeight(),
                 orientation = parentOrientation,
-                spacing = Padding.medium
+                spacing = Padding.medium,
             ) {
                 CurrentSessionMetric(
-                    item = MetricItem.SessionMetric(
-                        metric = SessionStatistic.QuestionCount,
-                        value = questionCount
-                    ),
-                    modifier = Modifier.weight(1f).wrapContentHeight()
+                    item =
+                        MetricItem.SessionMetric(
+                            metric = SessionStatistic.QuestionCount,
+                            value = questionCount,
+                        ),
+                    modifier = Modifier.weight(1f).wrapContentHeight(),
                 )
                 CurrentSessionMetric(
-                    item = MetricItem.SessionMetric(
-                        metric = SessionStatistic.Time,
-                        value = time
-                    ),
-                    modifier = Modifier.weight(1f).wrapContentHeight()
+                    item =
+                        MetricItem.SessionMetric(
+                            metric = SessionStatistic.Time,
+                            value = time,
+                        ),
+                    modifier = Modifier.weight(1f).wrapContentHeight(),
                 )
             }
         }
@@ -126,47 +132,52 @@ internal fun RewardCard(
 @Composable
 private fun AccumulatedXp(
     animatedProgress: Animatable<Float, AnimationVector1D>,
-    animatedScore: Animatable<Float, AnimationVector1D>
+    animatedScore: Animatable<Float, AnimationVector1D>,
 ) {
     var progressSize by remember { mutableStateOf(IntSize.Zero) }
 
-    val size = with(LocalDensity.current) {
-        if (progressSize == IntSize.Zero) 150.dp
-        else progressSize.width.toDp()
-    }
+    val size =
+        with(LocalDensity.current) {
+            if (progressSize == IntSize.Zero) {
+                150.dp
+            } else {
+                progressSize.width.toDp()
+            }
+        }
 
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
-            modifier = Modifier
-                .heightIn(max = 150.dp)
-                .widthIn(max = 150.dp)
-                .aspectRatio(1f)
-                .onGloballyPositioned {
-                    progressSize = it.size
-                },
+            modifier =
+                Modifier
+                    .heightIn(max = 150.dp)
+                    .widthIn(max = 150.dp)
+                    .aspectRatio(1f)
+                    .onGloballyPositioned {
+                        progressSize = it.size
+                    },
             strokeWidth = size * 0.1f,
             trackColor = Theme.materialColors.tertiaryContainer,
             color = Theme.materialColors.tertiary,
             strokeCap = StrokeCap.Round,
-            progress = { animatedProgress.value }
+            progress = { animatedProgress.value },
         )
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = animatedScore.value.toInt().toString(),
                 color = Theme.materialColors.tertiary,
                 style = Theme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             Text(
                 text = "XP",
                 style = Theme.typography.bodyLarge,
-                color = Theme.materialColors.tertiary
+                color = Theme.materialColors.tertiary,
             )
         }
     }
@@ -175,7 +186,7 @@ private fun AccumulatedXp(
 @Preview
 @Composable
 private fun PreviewRewardCard(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -183,13 +194,13 @@ private fun PreviewRewardCard(
                 score = 50,
                 questionCount = "5",
                 time = "10:00",
-                parentOrientation = COLUMN
+                parentOrientation = COLUMN,
             )
             RewardCard(
                 score = 50,
                 questionCount = "5",
                 time = "10:00",
-                parentOrientation = ROW
+                parentOrientation = ROW,
             )
         }
     }

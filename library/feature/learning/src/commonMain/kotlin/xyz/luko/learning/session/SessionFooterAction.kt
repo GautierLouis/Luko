@@ -26,7 +26,7 @@ internal fun FooterAction(
 ) {
     Column(
         modifier = modifier.padding(Padding.large),
-        verticalArrangement = Spacing.medium
+        verticalArrangement = Spacing.medium,
     ) {
         AppButton(
             text = if (!isLastQuestion) Theme.strings.sessionComplete else Theme.strings.sessionFinish,
@@ -54,7 +54,7 @@ internal fun FooterAction(
 @Preview
 @Composable
 private fun PreviewSessionFooterAction(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         FooterAction(isLastQuestion = true, isAnswered = true)

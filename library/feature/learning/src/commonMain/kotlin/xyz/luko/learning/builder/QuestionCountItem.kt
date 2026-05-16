@@ -27,51 +27,63 @@ import xyz.luko.designsystem.token.dimens.ShapeDefaults
 @Composable
 internal fun QuestionCountItem(
     count: QuestionCount,
-    isSelected: Boolean = false,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {},
 ) {
+    val containerColor =
+        if (isSelected) {
+            Theme.materialColors.tertiaryContainer
+        } else {
+            Theme.materialColors.surfaceContainer
+        }
 
-    val containerColor = if (isSelected) Theme.materialColors.tertiaryContainer
-    else Theme.materialColors.surfaceContainer
+    val contentColor =
+        if (isSelected) {
+            Theme.materialColors.onTertiaryContainer
+        } else {
+            Theme.materialColors.onSurface
+        }
 
-    val contentColor = if (isSelected) Theme.materialColors.onTertiaryContainer
-    else Theme.materialColors.onSurface
-
-    val borderColor = if (isSelected) Theme.materialColors.onTertiaryContainer
-    else Theme.materialColors.outline
+    val borderColor =
+        if (isSelected) {
+            Theme.materialColors.onTertiaryContainer
+        } else {
+            Theme.materialColors.outline
+        }
 
     val shape = ShapeDefaults.button()
 
     Box(
-        modifier = modifier
-            .size(56.dp)
-            .clip(shape)
-            .border(
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = borderColor,
+        modifier =
+            modifier
+                .size(56.dp)
+                .clip(shape)
+                .border(
+                    border =
+                        BorderStroke(
+                            width = 1.dp,
+                            color = borderColor,
+                        ),
+                    shape = shape,
+                ).background(
+                    color = containerColor,
+                    shape = shape,
+                ).clickable(
+                    onClick = onClick,
+                    onClickLabel = count.value.toString(),
+                    role = Role.Checkbox,
                 ),
-                shape = shape
-            )
-            .background(
-                color = containerColor,
-                shape = shape
-            )
-            .clickable(
-                onClick = onClick,
-                onClickLabel = count.value.toString(),
-                role = Role.Checkbox,
-            ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = count.value.toString(),
             color = contentColor,
-            modifier = Modifier.padding(
-                horizontal = Padding.large,
-                vertical = Padding.medium
-            )
+            modifier =
+                Modifier.padding(
+                    horizontal = Padding.large,
+                    vertical = Padding.medium,
+                ),
         )
     }
 }
@@ -79,7 +91,7 @@ internal fun QuestionCountItem(
 @Preview
 @Composable
 private fun PreviewQuestionCountItem(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column {

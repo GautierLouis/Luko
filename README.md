@@ -3,11 +3,13 @@
 [![CI Build Status](https://github.com/louisgautier/Sample-Compose-Multiplatform/actions/workflows/ci.yml/badge.svg)](https://github.com/louisgautier/Sample-Compose-Multiplatform/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/github/v/release/louisgautier/Sample-Compose-Multiplatform.svg?label=Version&color=blue)](https://github.com/louisgautier/Sample-Compose-Multiplatform/releases/latest)
 
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM), and Server. It allows for sharing code across different platforms, reducing development time and ensuring consistency.
+This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM), and Server. It allows
+for sharing code across different platforms, reducing development time and ensuring consistency.
 
 ## Project Structure & Modules
 
-The project is organized into several modules, each serving a distinct purpose. Here\'s an overview of the key modules:
+The project is organized into several modules, each serving a distinct purpose. Here\'s an overview
+of the key modules:
 
 ## Module Dependency Graph
 
@@ -58,24 +60,19 @@ flowchart TD
     APP --> FLR
     APP --> FD
     APP --> DS
-
     FL --> DA
     FLR --> D
     FD --> D
-
     DA --> D
     D --> N
     D --> DB
     D --> PR
-
     N --> AC
     N --> LOG
     DB --> LOG
     PR --> LOG
-
     D --> LOG
     D --> UT
-
     S --> AC
 ```
 
@@ -98,7 +95,9 @@ side and `:server` on the backend, ensuring a type-safe contract between both en
 ### Server
 
 #### `:server`
-Ktor-based backend server. Consumes `:api-contracts` to expose type-safe endpoints matching what the client expects.
+
+Ktor-based backend server. Consumes `:api-contracts` to expose type-safe endpoints matching what the
+client expects.
 
 - **Targets:** JVM
 - **Key Libraries:** Ktor Server
@@ -107,7 +106,8 @@ Ktor-based backend server. Consumes `:api-contracts` to expose type-safe endpoin
 
 ### Feature Modules
 
-Feature modules contain UI and presentation logic for a specific user-facing area. They depend on domain modules for business logic and on the design system for UI components.
+Feature modules contain UI and presentation logic for a specific user-facing area. They depend on
+domain modules for business logic and on the design system for UI components.
 
 #### `:library:feature:login`
 
@@ -133,10 +133,13 @@ models.
 
 ### Domain
 
-Domain modules contain business logic, use cases, and domain models (`DomainModel` — no suffix). They are free of any framework or platform dependency.
+Domain modules contain business logic, use cases, and domain models (`DomainModel` — no suffix).
+They are free of any framework or platform dependency.
 
 #### `:library:domain`
-Houses shared business logic, use cases, and domain models used across multiple features. Sub-domains (e.g. `:domain:auth`) extend this layer for feature-specific business rules.
+
+Houses shared business logic, use cases, and domain models used across multiple features.
+Sub-domains (e.g. `:domain:auth`) extend this layer for feature-specific business rules.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
 - **Key Libraries:** Kotlinx Coroutines
@@ -154,21 +157,27 @@ on `:library:domain` for shared domain primitives.
 
 ### Data
 
-Data modules handle all I/O concerns — network, local database, and preferences. They expose repositories consumed by the domain layer and work with `Dto` objects from `:api-contracts` at the network boundary.
+Data modules handle all I/O concerns — network, local database, and preferences. They expose
+repositories consumed by the domain layer and work with `Dto` objects from `:api-contracts` at the
+network boundary.
 
 #### `:library:data:network`
-Implements the network client for API communication. Consumes `:api-contracts` DTOs for type-safe requests and responses, and maps them to domain models before exposing them upward.
+
+Implements the network client for API communication. Consumes `:api-contracts` DTOs for type-safe
+requests and responses, and maps them to domain models before exposing them upward.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (platform-specific Ktor engines)
 - **Key Libraries:** Ktor Client
 
 #### `:library:data:database`
+
 Manages local data persistence using a multiplatform database solution.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain` (platform-specific drivers)
 - **Key Libraries:** Room
 
 #### `:library:data:preferences`
+
 Handles lightweight key-value storage for user preferences and app settings.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
@@ -178,27 +187,33 @@ Handles lightweight key-value storage for user preferences and app settings.
 
 ### Core
 
-Core modules provide low-level, domain-agnostic utilities. They have no knowledge of features, domain, or data layers and can be depended on by any module.
+Core modules provide low-level, domain-agnostic utilities. They have no knowledge of features,
+domain, or data layers and can be depended on by any module.
 
 #### `:library:core:logger`
+
 Provides a shared logging abstraction across all client modules.
 
 - **Targets:** `commonMain`
 - **Key Libraries:** Kermit
 
 #### `:library:core:utils`
+
 General-purpose utility functions and extensions shared across client modules.
 
 - **Targets:** `commonMain`
 - **Todo:** Split into sub-domains (e.g Navigation)
 
 #### `:library:core:permission`
+
 Abstracts platform-specific permission handling (camera, location, etc.).
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`
 
 #### `:library:core:firebase`
-Firebase integration — analytics, crash reporting, and other Firebase services — shared across client modules.
+
+Firebase integration — analytics, crash reporting, and other Firebase services — shared across
+client modules.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`
 - **Key Libraries:** GitLive Firebase KMP SDK
@@ -208,13 +223,17 @@ Firebase integration — analytics, crash reporting, and other Firebase services
 ### UI Modules
 
 #### `:library:design-system`
-Contains reusable, domain-agnostic UI components, theming, and typography shared across all features. Has no dependency on domain or data layers.
+
+Contains reusable, domain-agnostic UI components, theming, and typography shared across all
+features. Has no dependency on domain or data layers.
 
 - **Targets:** `commonMain`
 - **Key Libraries:** Compose Multiplatform
 
 #### `:library:app`
-The top-level shared UI entry point. Wires together feature modules, applies the design system, and hosts navigation and app-level scaffolding.
+
+The top-level shared UI entry point. Wires together feature modules, applies the design system, and
+hosts navigation and app-level scaffolding.
 
 - **Targets:** `commonMain`, `androidMain`, `iosMain`, `jvmMain`
 - **Key Libraries:** Compose Multiplatform
@@ -228,7 +247,10 @@ The top-level shared UI entry point. Wires together feature modules, applies the
 | `:api-contracts` DTOs    | `Dto`  | `UserDto`, `LoginResponseDto` |
 | `:library:domain` models | none   | `User`, `LoginResult`         |
 
-DTOs represent the raw wire format exchanged with the server. Domain models are the canonical representation used throughout the app. Mapping between the two happens at the data layer boundary (e.g. `UserDto.toDomain(): User`).
+DTOs represent the raw wire format exchanged with the server. Domain models are the canonical
+representation used throughout the app. Mapping between the two happens at the data layer boundary (
+e.g. `UserDto.toDomain(): User`).
+
 ## Gradle Build Logic with Convention Plugins
 
 This project leverages Gradle\'s `build-logic` module to centralize and manage build configurations
@@ -258,19 +280,87 @@ This setup helps in managing a complex multi-module project more efficiently.
 ## Understanding Source Sets (Targets)
 
 In Kotlin Multiplatform modules, you\'ll typically find the following source sets:
-*   `commonMain`: Code that is common to all targeted platforms.
-*   `androidMain`: Kotlin code specific to the Android platform.
-*   `iosMain`: Kotlin code specific to the iOS platform (compiled to Native).
-*   `jvmMain`: Kotlin code specific to JVM environments (e.g., Desktop applications).
-*   `(platform)Test`: Unit tests for a specific platform, e.g. `commonTest`, `jvmTest`.
+
+* `commonMain`: Code that is common to all targeted platforms.
+* `androidMain`: Kotlin code specific to the Android platform.
+* `iosMain`: Kotlin code specific to the iOS platform (compiled to Native).
+* `jvmMain`: Kotlin code specific to JVM environments (e.g., Desktop applications).
+* `(platform)Test`: Unit tests for a specific platform, e.g. `commonTest`, `jvmTest`.
 
 ## Build and Run
 
 For detailed build and run instructions for each platform, please refer to the following sections.
 
+## Quality
+
+### Ktlint — Code Formatting
+
+Check formatting:
+
+```shell
+./gradlew ktlintCheck
+```
+
+Auto-fix formatting:
+
+```shell
+./gradlew ktlintFormat
+```
+
+ 
+---
+
+### Kover — Code Coverage
+
+Generate HTML coverage report:
+
+```shell
+./gradlew koverHtmlReport
+```
+
+Report: `build/reports/kover/html/index.html`
+ 
+---
+
+### Detekt — Static Analysis
+
+Run on all modules and merge reports:
+
+```shell
+./gradlew detektAll
+```
+
+Run on a specific module:
+
+```shell
+./gradlew :module:path:detekt
+```
+
+Report: `build/reports/detekt/merge.sarif`
+ 
+---
+
+### Dokka — API Documentation
+
+Generate HTML documentation:
+
+```shell
+./gradlew dokkaGeneratePublicationHtml
+```
+
+For multi-module aggregated docs:
+
+```shell
+./gradlew dokkaGenerateModuleHtml
+```
+
+Output: `build/dokka/html/index.html`
+
 ### Build and Run Android Application
 
-To build and run the development version of the Android app, use the run configuration from the run widget in your IDE’s toolbar or build it directly from the terminal:
+To build and run the development version of the Android app, use the run configuration from the run
+widget in your IDE’s toolbar or build it directly from the terminal:
+
 - on macOS/Linux
   ```shell
   ./gradlew :app:app:assembleDebug
@@ -282,7 +372,9 @@ To build and run the development version of the Android app, use the run configu
 
 ### Build and Run Desktop (JVM) Application
 
-To build and run the development version of the desktop app, use the run configuration from the run widget in your IDE’s toolbar or run it directly from the terminal:
+To build and run the development version of the desktop app, use the run configuration from the run
+widget in your IDE’s toolbar or run it directly from the terminal:
+
 - on macOS/Linux
   ```shell
   ./gradlew :app:app:run
@@ -294,7 +386,9 @@ To build and run the development version of the desktop app, use the run configu
 
 ### Build and Run Server
 
-To build and run the development version of the server, use the run configuration from the run widget in your IDE’s toolbar or run it directly from the terminal:
+To build and run the development version of the server, use the run configuration from the run
+widget in your IDE’s toolbar or run it directly from the terminal:
+
 - on macOS/Linux
   ```shell
   ./gradlew :server:run
@@ -306,29 +400,44 @@ To build and run the development version of the server, use the run configuratio
 
 ### Build and Run iOS Application
 
-To build and run the development version of the iOS app, use the run configuration from the run widget in your IDE’s toolbar or open the `[./iosApp](./iosApp)` directory in Xcode and run it from there.
+To build and run the development version of the iOS app, use the run configuration from the run
+widget in your IDE’s toolbar or open the `[./iosApp](./iosApp)` directory in Xcode and run it from
+there.
 
 ---
-**Note on Libraries:** The key libraries mentioned are indicative. For a complete list of dependencies for each module, please refer to the `build.gradle.kts` (or `build.gradle`) file within that module\'s directory.
+**Note on Libraries:
+** The key libraries mentioned are indicative. For a complete list of dependencies for each module,
+please refer to the
+`build.gradle.kts` (or `build.gradle`) file within that module\'s directory.
 ---
 
-Learn more about [Kotlin Multiplatform](https.www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+Learn more
+about [Kotlin Multiplatform](https.www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
 
 ## Future Enhancements (TODO)
 
 This section outlines planned improvements and potential areas for future development:
 
-*   **Secure Data Storage on Android (SQLCipher/Room):**
-    *   Investigate and implement encrypted local database storage on Android. This involves replacing the current placeholder database in the `/app/database` module with a robust solution like Room, potentially with SQLCipher for an added layer of security to protect sensitive user data.
+* **Secure Data Storage on Android (SQLCipher/Room):**
+    * Investigate and implement encrypted local database storage on Android. This involves replacing
+      the current placeholder database in the `/app/database` module with a robust solution like
+      Room, potentially with SQLCipher for an added layer of security to protect sensitive user
+      data.
 
-*   **Firebase Authentication (Server-Side):**
-    *   Implement user authentication on the `/server` using the Firebase Admin SDK. The server will handle token verification and user management, providing a secure authentication flow for all client applications.
+* **Firebase Authentication (Server-Side):**
+    * Implement user authentication on the `/server` using the Firebase Admin SDK. The server will
+      handle token verification and user management, providing a secure authentication flow for all
+      client applications.
 
-*   **Koin Dependency Injection Module Verification:**
-    *   Enhance testing by adding integrity checks for Koin modules. This involves writing tests (likely in `commonTest` or platform-specific test source sets) that utilize Koin\'s testing utilities to verify that all dependency graphs can be correctly resolved at runtime.
+* **Koin Dependency Injection Module Verification:**
+    * Enhance testing by adding integrity checks for Koin modules. This involves writing tests (
+      likely in `commonTest` or platform-specific test source sets) that utilize Koin\'s testing
+      utilities to verify that all dependency graphs can be correctly resolved at runtime.
 
-*   **Continuous Integration/Continuous Deployment (CI/CD) with GitHub Actions:**
-    *   Set up GitHub Actions workflows to automate the building, testing, and potentially deployment of the Android app, iOS app (if feasible via command-line tools), desktop app, and server application. This will ensure code quality and streamline the release process.
+* **Continuous Integration/Continuous Deployment (CI/CD) with GitHub Actions:**
+    * Set up GitHub Actions workflows to automate the building, testing, and potentially deployment
+      of the Android app, iOS app (if feasible via command-line tools), desktop app, and server
+      application. This will ensure code quality and streamline the release process.
 
 * **Auto generation of Mermaid graph:**
   *Make it reflect the current module dependency graph with a gradle task.

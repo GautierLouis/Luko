@@ -7,11 +7,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import xyz.luko.logger.AppLogger
 
 object AppNavigation {
-    private val _navigationEvents = MutableSharedFlow<NavigationCommand>(
-        replay = 0,
-        extraBufferCapacity = 8,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _navigationEvents =
+        MutableSharedFlow<NavigationCommand>(
+            replay = 0,
+            extraBufferCapacity = 8,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
     val navigationEvents = _navigationEvents.asSharedFlow()
 
     fun navigate(

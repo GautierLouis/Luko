@@ -9,11 +9,12 @@ import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 
-val learningModule = module {
-    viewModelOf(::SessionBuilderViewModel)
-    viewModelOf(::SessionViewModel)
-    viewModelOf(::SessionCongratulationViewModel)
+val learningModule =
+    module {
+        viewModelOf(::SessionBuilderViewModel)
+        viewModelOf(::SessionViewModel)
+        viewModelOf(::SessionCongratulationViewModel)
 
-    factoryOf(::CalculateScoreUseCase)
-    factoryOf(::AccuracyCalculatorUseCase)
-}
+        factoryOf(::CalculateScoreUseCase)
+        factoryOf(::AccuracyCalculatorUseCase)
+    }

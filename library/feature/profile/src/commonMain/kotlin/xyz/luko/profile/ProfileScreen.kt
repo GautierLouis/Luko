@@ -27,14 +27,14 @@ fun ProfileScreen() {
 
     ProfileScreen(
         state = state,
-        onEvent = viewModel::onEvent
+        onEvent = viewModel::onEvent,
     )
 }
 
 @Composable
 private fun ProfileScreen(
     state: ProfileViewModel.UiState,
-    onEvent: (ProfileScreenEvent) -> Unit = {}
+    onEvent: (ProfileScreenEvent) -> Unit = {},
 ) {
     BaseScaffold(
         topBar = {
@@ -43,20 +43,21 @@ private fun ProfileScreen(
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.padding(paddingValues),
-            contentPadding = PaddingValues(
-                horizontal = Padding.large
-            )
+            contentPadding =
+                PaddingValues(
+                    horizontal = Padding.large,
+                ),
         ) {
-
             item(key = ProfileSection.Theme) {
                 SettingPicker(
                     selected = state.selectedTheme ?: SettingTheme.Default,
-                    section = SettingSection.Theme(
-                        items = SettingTheme.entries.toPersistentList(),
-                    ),
+                    section =
+                        SettingSection.Theme(
+                            items = SettingTheme.entries.toPersistentList(),
+                        ),
                     onClick = {
                         onEvent(ProfileScreenEvent.OnThemeChanged(it))
-                    }
+                    },
                 )
             }
         }
@@ -71,11 +72,11 @@ internal fun ProfileTopbar() {
 @Preview
 @Composable
 private fun PreviewProfileScreen(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         ProfileScreen(
-            state = ProfileViewModel.UiState()
+            state = ProfileViewModel.UiState(),
         )
     }
 }

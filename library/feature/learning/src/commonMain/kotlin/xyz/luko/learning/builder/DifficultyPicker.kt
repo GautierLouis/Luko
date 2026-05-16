@@ -15,18 +15,17 @@ import xyz.luko.domain.model.DifficultyLevel
 internal fun DifficultyPicker(
     difficulty: DifficultyLevel,
     modifier: Modifier = Modifier,
-    onDifficultySelected: (DifficultyLevel) -> Unit = {}
+    onClick: (DifficultyLevel) -> Unit = {},
 ) {
-
     PickerLayout(
         label = Theme.strings.builderSelectDifficulty,
-        modifier = modifier
+        modifier = modifier,
     ) {
         DifficultyLevel.entries.forEach { item ->
             DifficultyCard(
                 difficulty = item,
                 selected = difficulty == item,
-                onClick = { onDifficultySelected(item) }
+                onClick = { onClick(item) },
             )
         }
     }
@@ -36,11 +35,11 @@ internal fun DifficultyPicker(
 @Preview(device = Devices.PHONE)
 @Composable
 private fun PreviewDifficultyPicker(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         DifficultyPicker(
-            difficulty = DifficultyLevel.EASY
+            difficulty = DifficultyLevel.EASY,
         )
     }
 }

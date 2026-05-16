@@ -33,33 +33,33 @@ import xyz.luko.designsystem.token.dimens.Spacing
 @Composable
 internal fun CurrentSessionMetric(
     item: MetricItem.SessionMetric,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .background(
-                color = Theme.materialColors.secondaryContainer,
-                shape = ShapeDefaults.button()
-            )
-            .padding(Padding.large),
-        verticalArrangement = Spacing.medium
+        modifier =
+            modifier
+                .background(
+                    color = Theme.materialColors.secondaryContainer,
+                    shape = ShapeDefaults.button(),
+                ).padding(Padding.large),
+        verticalArrangement = Spacing.medium,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Icon(
                 imageVector = item.metric.icon(),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
-                tint = Theme.materialColors.onSecondaryContainer
+                tint = Theme.materialColors.onSecondaryContainer,
             )
             Spacer(Modifier.width(4.dp))
 
             Text(
                 text = item.metric.label(),
                 color = Theme.materialColors.onSecondaryContainer,
-                style = Theme.typography.bodyLarge
+                style = Theme.typography.bodyLarge,
             )
         }
 
@@ -76,14 +76,15 @@ internal fun CurrentSessionMetric(
 @Preview
 @Composable
 private fun PreviewCurrentSessionMetric(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         CurrentSessionMetric(
-            item = MetricItem.SessionMetric(
-                metric = SessionStatistic.Difficulty,
-                value = "Hard"
-            )
+            item =
+                MetricItem.SessionMetric(
+                    metric = SessionStatistic.Difficulty,
+                    value = "Hard",
+                ),
         )
     }
 }

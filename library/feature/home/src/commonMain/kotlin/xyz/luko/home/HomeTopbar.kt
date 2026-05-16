@@ -16,20 +16,21 @@ internal fun HomeTopbar(
     modifier: Modifier = Modifier,
 ) {
     AppTopbar(
-        title = when (greetingMessage) {
-            GreetingMessage.GOOD_MORNING -> Theme.strings.goodMorning
-            GreetingMessage.GOOD_AFTERNOON -> Theme.strings.goodAfternoon
-            GreetingMessage.GOOD_EVENING -> Theme.strings.goodEvening
-            GreetingMessage.WELCOME_BACK -> Theme.strings.welcomeBack
-        },
-        modifier = modifier
+        title =
+            when (greetingMessage) {
+                GreetingMessage.GOOD_MORNING -> Theme.strings.goodMorning
+                GreetingMessage.GOOD_AFTERNOON -> Theme.strings.goodAfternoon
+                GreetingMessage.GOOD_EVENING -> Theme.strings.goodEvening
+                GreetingMessage.WELCOME_BACK -> Theme.strings.welcomeBack
+            },
+        modifier = modifier,
     )
 }
 
 @Preview
 @Composable
 private fun PreviewMainTopbar(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         HomeTopbar(GreetingMessage.GOOD_AFTERNOON)

@@ -15,63 +15,56 @@ import xyz.luko.network.interfaces.CharacterService
 class DefaultCharacterService(
     private val client: HttpClient,
 ) : CharacterService {
-
-    override suspend fun getLevelCount(): Result<List<LevelCountDto>> {
-        return call {
+    override suspend fun getLevelCount(): Result<List<LevelCountDto>> =
+        call {
             client.get(EndPoint.Level())
         }
-    }
 
     override suspend fun generateSession(
         level: List<CharacterFrequencyLevelDto>,
-        limit: Int
-    ): Result<List<DictionaryWithGraphicDto>> {
-        return call {
+        limit: Int,
+    ): Result<List<DictionaryWithGraphicDto>> =
+        call {
             client.get(EndPoint.GenerateSession(levels = level, limit = limit))
         }
-    }
 
     override suspend fun getByLevel(
         level: CharacterFrequencyLevelDto,
         page: Int,
-        limit: Int
-    ): Result<ResponseListDto<SimpleDictionaryDto>> {
-        return call {
+        limit: Int,
+    ): Result<ResponseListDto<SimpleDictionaryDto>> =
+        call {
             client.get(EndPoint.Characters.ByLevel(page = page, limit = limit, level = level))
         }
-    }
 
-    override suspend fun getByName(code: Int): Result<DictionaryWithGraphicDto> {
-        return call { client.get(EndPoint.Characters.ByName(code = code)) }
-    }
+    override suspend fun getByName(code: Int): Result<DictionaryWithGraphicDto> =
+        call { client.get(EndPoint.Characters.ByName(code = code)) }
 
     override suspend fun search(
         levels: List<CharacterFrequencyLevelDto>,
         query: String,
         page: Int,
-        limit: Int
-    ): Result<ResponseListDto<SimpleDictionaryDto>> {
-        return call {
+        limit: Int,
+    ): Result<ResponseListDto<SimpleDictionaryDto>> =
+        call {
             client.get(
                 EndPoint.Characters.Search(
                     levels = levels,
                     query = query,
                     page = page,
-                    limit = limit
-                )
+                    limit = limit,
+                ),
             )
         }
-    }
 
-    override suspend fun getGraphic(code: Int): Result<GraphicDto> {
-        return call {
+    override suspend fun getGraphic(code: Int): Result<GraphicDto> =
+        call {
             client.get(
                 EndPoint.Characters.ByName.Graphic(
-                    parent = EndPoint.Characters.ByName(code = code)
-                )
+                    parent = EndPoint.Characters.ByName(code = code),
+                ),
             )
         }
-    }
 }
 
 fun getMockResponse(): Result<List<DictionaryWithGraphicDto>> {

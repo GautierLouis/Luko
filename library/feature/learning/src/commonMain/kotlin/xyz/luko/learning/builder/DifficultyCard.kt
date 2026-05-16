@@ -34,7 +34,7 @@ internal fun DifficultyCard(
 @Preview(device = Devices.PHONE)
 @Composable
 private fun PreviewDifficultyCard(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column {

@@ -29,49 +29,50 @@ internal fun LeaveSessionDialog(
         title = {
             Text(
                 text = Theme.strings.leaveDialogTitle,
-                style = Theme.typography.headlineSmall
+                style = Theme.typography.headlineSmall,
             )
         },
         text = {
             Text(
                 text = Theme.strings.leaveDialogMessage,
-                style = Theme.typography.bodyMedium
+                style = Theme.typography.bodyMedium,
             )
         },
         confirmButton = {
             TextButton(
                 onClick = onConfirmation,
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.error
-                )
+                colors =
+                    ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    ),
             ) {
                 Text(
-                    text = Theme.strings.leaveDialogConfirmation
+                    text = Theme.strings.leaveDialogConfirmation,
                 )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissRequest,
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.primary
-                )
+                colors =
+                    ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.primary,
+                    ),
             ) {
                 Text(
-                    text = Theme.strings.leaveDialogDismiss
+                    text = Theme.strings.leaveDialogDismiss,
                 )
             }
-        }
+        },
     )
 }
 
 @Preview
 @Composable
 private fun PreviewLeaveSessionDialog(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         LeaveSessionDialog()
     }
-
 }

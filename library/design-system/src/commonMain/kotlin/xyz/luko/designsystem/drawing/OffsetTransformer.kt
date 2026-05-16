@@ -14,13 +14,19 @@ import androidx.compose.ui.unit.IntSize
 class OffsetTransformer(
     private val matrixProvider: StrokeMatrixProvider = StrokeMatrixProvider(),
 ) {
-    fun transform(offset: List<Offset>, canvasSize: IntSize): List<Offset> {
+    fun transform(
+        offset: List<Offset>,
+        canvasSize: IntSize,
+    ): List<Offset> {
         val base = matrixProvider.baseMatrix()
         val center = matrixProvider.centerMatrix(canvasSize)
         return offset.map { center.map(base.map(it)) }
     }
 
-    fun inverse(offset: List<Offset>, canvasSize: IntSize): List<Offset> {
+    fun inverse(
+        offset: List<Offset>,
+        canvasSize: IntSize,
+    ): List<Offset> {
         val invertedCenter = matrixProvider.centerMatrix(canvasSize).apply { invert() }
         val invertedBase = matrixProvider.baseMatrix().apply { invert() }
         return offset.map { invertedBase.map(invertedCenter.map(it)) }

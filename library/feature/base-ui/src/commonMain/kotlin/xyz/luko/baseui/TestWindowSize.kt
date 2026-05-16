@@ -28,11 +28,11 @@ enum class TestWindowSize(
     IPHONE_15_PRO_MAX_PORTRAIT(430.dp, 932.dp),
     IPHONE_15_PRO_MAX_LANDSCAPE(932.dp, 430.dp),
 
-    DESKTOP(800.dp, 600.dp);
+    DESKTOP(800.dp, 600.dp),
 }
 //
-//@OptIn(ExperimentalTestApi::class)
-//class MainTest {
+// @OptIn(ExperimentalTestApi::class)
+// class MainTest {
 //
 //    @BeforeTest
 //    fun setup() {
@@ -55,22 +55,22 @@ enum class TestWindowSize(
 //            }
 //        }
 //    }
-//}
+// }
 //
-//@OptIn(ExperimentalTestApi::class)
-//fun runDesktopTest(
+// @OptIn(ExperimentalTestApi::class)
+// fun runDesktopTest(
 //    size: TestWindowSize,
 //    block: ComposeUiTest.() -> Unit
-//) = runComposeUiTest {
+// ) = runComposeUiTest {
 //    setContent {
 //        Box(modifier = Modifier.size(size.width, size.height)) {
 //            block()
 //        }
 //    }
-//}
+// }
 //
-//@OptIn(ExperimentalTestApi::class)
-//fun ComposeUiTest.assertNothingIsCropped() {
+// @OptIn(ExperimentalTestApi::class)
+// fun ComposeUiTest.assertNothingIsCropped() {
 //    val rootBounds = onRoot().fetchSemanticsNode().boundsInRoot
 //
 //    onAllNodes(hasTestTag(""), useUnmergedTree = true)
@@ -93,4 +93,4 @@ enum class TestWindowSize(
 //                        "Root bounds:  left=${rootBounds.left}, top=${rootBounds.top}, right=${rootBounds.right}, bottom=${rootBounds.bottom}"
 //            }
 //        }
-//}
+// }

@@ -17,20 +17,20 @@ import kotlin.time.Duration
 import kotlin.time.Instant
 
 internal class HomeViewModel(
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
-
     data class UIState(
         val isLoading: Boolean = true,
         val lastSession: Session? = null,
-        val stats: Statistics = Statistics(
-            totalScore = 0,
-            averageTime = Duration.ZERO,
-            averageDifficulty = null,
-            currentDayStreak = 0,
-            sessionCount = 0
-        ),
-        val topbarTitle: GreetingMessage = GreetingMessage.GOOD_MORNING
+        val stats: Statistics =
+            Statistics(
+                totalScore = 0,
+                averageTime = Duration.ZERO,
+                averageDifficulty = null,
+                currentDayStreak = 0,
+                sessionCount = 0,
+            ),
+        val topbarTitle: GreetingMessage = GreetingMessage.GOOD_MORNING,
     )
 
     private val _state = MutableStateFlow(UIState())
@@ -38,31 +38,37 @@ internal class HomeViewModel(
 
     init {
         viewModelScope.launch {
-            val result = sessionRepository.getLastSessions(1)
-                .firstOrNull()
+            val result =
+                sessionRepository
+                    .getLastSessions(1)
+                    .firstOrNull()
             val stats = sessionRepository.getStatistics()
             _state.update {
                 it.copy(
                     isLoading = false,
                     lastSession = result,
                     stats = stats,
-                    topbarTitle = getGreeting(result?.date)
+                    topbarTitle = getGreeting(result?.date),
                 )
             }
         }
     }
 
     fun getGreeting(date: Instant?): GreetingMessage {
-        val hour = Clock.System.now()
-            .toLocalDateTime(TimeZone.currentSystemDefault())
-            .hour
+        val hour =
+            Clock.System
+                .now()
+                .toLocalDateTime(TimeZone.currentSystemDefault())
+                .hour
 
         return if (date?.isToday() == true) {
             GreetingMessage.WELCOME_BACK
-        } else when (hour) {
-            in 0..11 -> GreetingMessage.GOOD_MORNING
-            in 12..18 -> GreetingMessage.GOOD_AFTERNOON
-            else -> GreetingMessage.GOOD_EVENING
+        } else {
+            when (hour) {
+                in 0..11 -> GreetingMessage.GOOD_MORNING
+                in 12..18 -> GreetingMessage.GOOD_AFTERNOON
+                else -> GreetingMessage.GOOD_EVENING
+            }
         }
     }
 
@@ -72,4 +78,3 @@ internal class HomeViewModel(
         return other == today
     }
 }
-

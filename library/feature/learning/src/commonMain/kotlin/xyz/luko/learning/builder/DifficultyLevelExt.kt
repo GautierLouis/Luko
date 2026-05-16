@@ -12,36 +12,41 @@ import xyz.luko.domain.model.DifficultyLevel.HARD
 import xyz.luko.domain.model.DifficultyLevel.MEDIUM
 
 @Composable
-internal fun DifficultyLevel.label() = when (this) {
-    EASY -> Theme.strings.easy
-    MEDIUM -> Theme.strings.medium
-    HARD -> Theme.strings.hard
-}
+internal fun DifficultyLevel.label() =
+    when (this) {
+        EASY -> Theme.strings.easy
+        MEDIUM -> Theme.strings.medium
+        HARD -> Theme.strings.hard
+    }
 
 @Composable
-internal fun DifficultyLevel.title() = when (this) {
-    EASY -> Theme.strings.easyTitle
-    MEDIUM -> Theme.strings.mediumTitle
-    HARD -> Theme.strings.hardTitle
-}
+internal fun DifficultyLevel.title() =
+    when (this) {
+        EASY -> Theme.strings.easyTitle
+        MEDIUM -> Theme.strings.mediumTitle
+        HARD -> Theme.strings.hardTitle
+    }
 
 @Composable
-internal fun DifficultyLevel.caption() = when (this) {
-    EASY -> Theme.strings.easyCaption
-    MEDIUM -> Theme.strings.mediumCaption
-    HARD -> Theme.strings.hardCaption
-}
+internal fun DifficultyLevel.caption() =
+    when (this) {
+        EASY -> Theme.strings.easyCaption
+        MEDIUM -> Theme.strings.mediumCaption
+        HARD -> Theme.strings.hardCaption
+    }
 
 @Composable
-internal fun DifficultyLevel.icon() = when (this) {
-    EASY -> AppIcon.Lightbulb
-    MEDIUM -> AppIcon.Visibility
-    HARD -> AppIcon.VisibilityOff
-}
+internal fun DifficultyLevel.icon() =
+    when (this) {
+        EASY -> AppIcon.Lightbulb
+        MEDIUM -> AppIcon.Visibility
+        HARD -> AppIcon.VisibilityOff
+    }
 
 @Composable
-internal fun DifficultyLevel.colorFamily() = when (this) {
-    EASY -> Theme.appLevelColors.easy
-    MEDIUM -> Theme.appLevelColors.medium
-    HARD -> Theme.appLevelColors.hard
-}
+internal fun DifficultyLevel.colorFamily() =
+    when (this) {
+        EASY -> Theme.appLevelColors.easy
+        MEDIUM -> Theme.appLevelColors.medium
+        HARD -> Theme.appLevelColors.hard
+    }

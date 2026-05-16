@@ -34,7 +34,6 @@ internal class DictionaryListViewModel(
     )
 
     private val _state = MutableStateFlow(UIState())
-    private val _activeFilter = MutableStateFlow(ActiveFilter())
     private val debouncedQuery =
         snapshotFlow {
             _state.value.textFieldState.text
@@ -45,7 +44,7 @@ internal class DictionaryListViewModel(
     val state = _state.asStateFlow()
     val items: Flow<PagingData<SimpleDictionary>> =
         combine(
-            flow = _activeFilter,
+            flow = _state.map { it.activeFilter }.distinctUntilChanged(),
             flow2 = debouncedQuery,
         ) { filter, query -> filter to query }
             .distinctUntilChanged()
@@ -86,7 +85,6 @@ internal class DictionaryListViewModel(
     }
 
     private fun updateActiveFilter(activeFilter: ActiveFilter) {
-        _activeFilter.value = activeFilter
         _state.update { current -> current.copy(activeFilter = activeFilter) }
     }
 

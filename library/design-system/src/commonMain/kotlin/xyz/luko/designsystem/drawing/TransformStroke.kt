@@ -11,20 +11,17 @@ object TransformStroke {
 
     fun projectToCanvas(
         offset: List<Offset>,
-        canvasSize: IntSize
-    ): List<Offset> =
-        offsetTransformer.transform(offset, canvasSize)
+        canvasSize: IntSize,
+    ): List<Offset> = offsetTransformer.transform(offset, canvasSize)
 
     fun unprojectFromCanvas(
         offset: List<Offset>,
-        canvasSize: IntSize
-    ): List<Offset> =
-        offsetTransformer.inverse(offset, canvasSize)
+        canvasSize: IntSize,
+    ): List<Offset> = offsetTransformer.inverse(offset, canvasSize)
 
     fun projectToCanvas(
         svgPathDataList: List<String>,
         canvasSize: IntSize,
-        padding: Float = 0f
-    ): List<Path> =
-        pathTransformer.transform(svgPathDataList, canvasSize, padding)
+        padding: Float = 0f,
+    ): List<Path> = pathTransformer.transform(svgPathDataList, canvasSize, padding)
 }

@@ -11,20 +11,21 @@ internal fun Pager(
     pagerState: PagerState,
     state: SessionViewModel.SessionState.Success,
     modifier: Modifier = Modifier,
-    onEvent: (SessionScreenEvent) -> Unit
+    onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
     HorizontalPager(
         modifier = modifier,
         userScrollEnabled = false,
-        state = pagerState
+        state = pagerState,
     ) {
         GraphicSketcher(
             state = state.currentQuestion,
             drawReference = state.drawReference,
             drawHint = state.drawHint,
             onEvent = onEvent,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         )
     }
 }

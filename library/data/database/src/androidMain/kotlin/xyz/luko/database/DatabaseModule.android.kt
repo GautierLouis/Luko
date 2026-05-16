@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 internal actual val databasePlatformModule: Module =
     module {
-        singleOf(::AndroidAppDataBaseBuilder) bind AppDatabaseBuilder::class
+        singleOf(::AndroidAppDatabaseBuilder) bind AppDatabaseBuilder::class
     }

@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import org.koin.core.component.KoinComponent
 
-class AndroidAppDataBaseBuilder(
+class AndroidAppDatabaseBuilder(
     private val context: Context,
 ) : AppDatabaseBuilder,
     KoinComponent {

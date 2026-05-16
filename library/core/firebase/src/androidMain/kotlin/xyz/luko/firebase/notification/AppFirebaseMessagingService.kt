@@ -26,7 +26,7 @@ class AppFirebaseMessagingService :
 
         AppLogger.d(
             tag = "AppFirebaseMessagingService",
-            message = "Push Notification received : ${remoteMessage.messageId}"
+            message = "Push Notification received : ${remoteMessage.messageId}",
         )
 
         manager.sendNotification(PushNotificationData(title, body, data))

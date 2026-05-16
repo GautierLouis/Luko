@@ -43,8 +43,8 @@ class AppleFirebaseManager : FirebaseManager {
             .currentNotificationCenter()
             .requestAuthorizationWithOptions(
                 UNAuthorizationOptionAlert or
-                        UNAuthorizationOptionBadge or
-                        UNAuthorizationOptionSound,
+                    UNAuthorizationOptionBadge or
+                    UNAuthorizationOptionSound,
             ) { granted, error ->
                 if (error != null) {
                     println("Notification permission error: ${error.localizedDescription}")

@@ -15,65 +15,77 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class CallTest {
-
-    private fun mockClient(
-        status: HttpStatusCode = HttpStatusCode.OK,
-    ) = HttpClient(MockEngine { _ ->
-        respond(
-            content = ByteReadChannel("""string"""),
-            status = status,
-        )
-    }) { expectSuccess = true }
-
-    @Test
-    fun `success returns body`() = runTest {
-        val client = mockClient(HttpStatusCode.OK)
-        val result = call<String> {
-            client.get(urlString = "/fake")
-        }
-        assertTrue(result.isSuccess)
-        assertEquals("string", result.getOrNull())
-    }
+    private fun mockClient(status: HttpStatusCode = HttpStatusCode.OK) =
+        HttpClient(
+            MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel("""string"""),
+                    status = status,
+                )
+            },
+        ) { expectSuccess = true }
 
     @Test
-    fun `network IOException returns failure`() = runTest {
-        val result = call<String> {
-            throw IOException("No internet")
+    fun `success returns body`() =
+        runTest {
+            val client = mockClient(HttpStatusCode.OK)
+            val result =
+                call<String> {
+                    client.get(urlString = "/fake")
+                }
+            assertTrue(result.isSuccess)
+            assertEquals("string", result.getOrNull())
         }
-        assertTrue(result.isFailure)
-    }
 
     @Test
-    fun `HttpRequestTimeoutException returns failure`() = runTest {
-        val result = call<String> {
-            throw HttpRequestTimeoutException("url", 5000L)
+    fun `network IOException returns failure`() =
+        runTest {
+            val result =
+                call<String> {
+                    throw IOException("No internet")
+                }
+            assertTrue(result.isFailure)
         }
-        assertTrue(result.isFailure)
-    }
 
     @Test
-    fun `CancellationException returns failure`() = runTest {
-        val result = call<String> {
-            throw CancellationException("cancelled")
+    fun `HttpRequestTimeoutException returns failure`() =
+        runTest {
+            val result =
+                call<String> {
+                    throw HttpRequestTimeoutException("url", 5000L)
+                }
+            assertTrue(result.isFailure)
         }
-        assertTrue(result.isFailure)
-    }
 
     @Test
-    fun `500 response throws and returns failure`() = runTest {
-        val client = mockClient(HttpStatusCode.InternalServerError)
-        val result = call<String> {
-            client.get(urlString = "/fake")
+    fun `CancellationException returns failure`() =
+        runTest {
+            val result =
+                call<String> {
+                    throw CancellationException("cancelled")
+                }
+            assertTrue(result.isFailure)
         }
-        assertTrue(result.isFailure)
-    }
 
     @Test
-    fun `401 response returns failure`() = runTest {
-        val client = mockClient(HttpStatusCode.Unauthorized)
-        val result = call<String> {
-            client.get(urlString = "/fake")
+    fun `500 response throws and returns failure`() =
+        runTest {
+            val client = mockClient(HttpStatusCode.InternalServerError)
+            val result =
+                call<String> {
+                    client.get(urlString = "/fake")
+                }
+            assertTrue(result.isFailure)
         }
-        assertTrue(result.isFailure)
-    }
+
+    @Test
+    fun `401 response returns failure`() =
+        runTest {
+            val client = mockClient(HttpStatusCode.Unauthorized)
+            val result =
+                call<String> {
+                    client.get(urlString = "/fake")
+                }
+            assertTrue(result.isFailure)
+        }
 }

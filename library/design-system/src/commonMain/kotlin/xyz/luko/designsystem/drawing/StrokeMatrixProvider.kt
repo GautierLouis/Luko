@@ -15,12 +15,16 @@ import androidx.compose.ui.unit.IntSize
 class StrokeMatrixProvider(
     private val viewBox: SvgViewBox = SvgViewBox(),
 ) {
-    fun baseMatrix(): Matrix = Matrix().apply {
-        scale(1f, -1f)
-        translate(0f, -viewBox.flipY)
-    }
+    fun baseMatrix(): Matrix =
+        Matrix().apply {
+            scale(1f, -1f)
+            translate(0f, -viewBox.flipY)
+        }
 
-    fun centerMatrix(canvasSize: IntSize, padding: Float = 0f): Matrix {
+    fun centerMatrix(
+        canvasSize: IntSize,
+        padding: Float = 0f,
+    ): Matrix {
         val availableWidth = canvasSize.width - (padding * 2)
         val availableHeight = canvasSize.height - (padding * 2)
         val scale = minOf(availableWidth / viewBox.size, availableHeight / viewBox.size)

@@ -51,24 +51,18 @@ internal fun SessionCongratulationScreen() {
 }
 
 @Composable
-private fun SessionCongratulationScreen(
-    state: UIState,
-) {
+private fun SessionCongratulationScreen(state: UIState) {
     when (state) {
         UIState.Loading -> LoadingScreen()
         is UIState.Success -> SessionCongratulationScreen(state.session)
         else -> {
-            /*VM navigate back automatically*/
+            // VM navigate back automatically
         }
     }
-
 }
 
 @Composable
-internal fun SessionCongratulationScreen(
-    session: Session
-) {
-
+internal fun SessionCongratulationScreen(session: Session) {
     val device = rememberAdaptiveWindowInfo()
 
     val orientation =
@@ -76,29 +70,32 @@ internal fun SessionCongratulationScreen(
 
     BaseScaffold { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = Padding.large)
-                .testTag(TestTags.Screen.CONGRATS)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = Padding.large)
+                    .testTag(TestTags.Screen.CONGRATS),
         ) {
             AdaptiveLayout(
                 orientation = orientation,
-                modifier = Modifier.weight(1f)
-                    .wrapContentHeight()
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .wrapContentHeight(),
             ) {
                 Column(
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Spacer(Modifier.height(Padding.extraExtraLarge))
                     AnimatedRewardIcon(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
                     )
                     Spacer(Modifier.height(Padding.medium))
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Spacing.medium
+                        verticalArrangement = Spacing.medium,
                     ) {
                         Text(
                             text = Theme.strings.congratulationTitle,
@@ -115,16 +112,23 @@ internal fun SessionCongratulationScreen(
                     score = session.score,
                     questionCount = session.questionsCount.toString(),
                     time = session.duration.toHHMMSS(),
-                    parentOrientation = orientation
+                    parentOrientation = orientation,
                 )
             }
 
             AdaptiveLayout(
-                orientation = if (device.isPhoneLandscape || device.isTabletLandscape) ROW else
-                    COLUMN,
-                order = if (device.isPhoneLandscape || device.isTabletLandscape) {
-                    AdaptiveLayoutOrder.NATURAL
-                } else AdaptiveLayoutOrder.REVERSED
+                orientation =
+                    if (device.isPhoneLandscape || device.isTabletLandscape) {
+                        ROW
+                    } else {
+                        COLUMN
+                    },
+                order =
+                    if (device.isPhoneLandscape || device.isTabletLandscape) {
+                        AdaptiveLayoutOrder.NATURAL
+                    } else {
+                        AdaptiveLayoutOrder.REVERSED
+                    },
             ) {
                 AppButton(
                     text = Theme.strings.congratulationButtonHome,
@@ -132,7 +136,7 @@ internal fun SessionCongratulationScreen(
                     modifier = Modifier.testTag(TestTags.Action.PRIMARY),
                     role = ButtonRole.Secondary,
                     shape = ButtonShape.Ghost,
-                    onClick = { AppNavigation.navigateHome() }
+                    onClick = { AppNavigation.navigateHome() },
                 )
 
                 AppButton(
@@ -142,9 +146,9 @@ internal fun SessionCongratulationScreen(
                     onClick = {
                         AppNavigation.navigate(
                             AppRoute.LearningRoute.NewSessionRoute,
-                            true
+                            true,
                         )
-                    }
+                    },
                 )
             }
         }
@@ -154,11 +158,11 @@ internal fun SessionCongratulationScreen(
 @PreviewScreen
 @Composable
 private fun PreviewSessionCongratulationScreen(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         SessionCongratulationScreen(
-            session = previewSession
+            session = previewSession,
         )
     }
 }

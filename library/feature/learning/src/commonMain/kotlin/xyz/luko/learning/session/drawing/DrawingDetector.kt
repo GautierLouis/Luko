@@ -13,27 +13,28 @@ import androidx.compose.ui.input.pointer.pointerInput
 @Composable
 internal fun Modifier.drawingDetector(
     points: SnapshotStateList<Offset>,
-    onGestureComplete: () -> Unit = {}
+    onGestureComplete: () -> Unit = {},
 ): Modifier {
     val currentOnGestureComplete by rememberUpdatedState(onGestureComplete)
-    return this.pointerInput(Unit) {
-        detectDragGestures(
-            onDragStart = { offset ->
-                points.clear()
-                points.add(offset)
-            },
-            onDrag = { change, dragAmount ->
-                points.add(change.position)
-                change.consume()
-            },
-            onDragEnd = {
-                currentOnGestureComplete()
-                points.clear()
-            },
-            onDragCancel = {
-                currentOnGestureComplete()
-                points.clear()
-            }
-        )
-    }.clipToBounds()
+    return this
+        .pointerInput(Unit) {
+            detectDragGestures(
+                onDragStart = { offset ->
+                    points.clear()
+                    points.add(offset)
+                },
+                onDrag = { change, dragAmount ->
+                    points.add(change.position)
+                    change.consume()
+                },
+                onDragEnd = {
+                    currentOnGestureComplete()
+                    points.clear()
+                },
+                onDragCancel = {
+                    currentOnGestureComplete()
+                    points.clear()
+                },
+            )
+        }.clipToBounds()
 }

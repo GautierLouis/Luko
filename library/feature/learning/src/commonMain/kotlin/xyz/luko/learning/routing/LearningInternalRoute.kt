@@ -6,7 +6,6 @@ import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.learning.builder.QuestionCount
 
-
 @Serializable
 internal sealed interface LearningInternalRoute : NavKey {
     @Serializable
@@ -19,4 +18,3 @@ internal sealed interface LearningInternalRoute : NavKey {
     @Serializable
     data object CongratulationRoute : LearningInternalRoute
 }
-

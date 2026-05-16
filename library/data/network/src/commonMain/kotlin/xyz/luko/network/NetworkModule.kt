@@ -15,13 +15,14 @@ private object NamedNetworkModule {
     const val AUTHED_CLIENT = "AUTHED_CLIENT"
 }
 
-val networkModule: Module = module {
-    single { DefaultService(get(), get()) }
+val networkModule: Module =
+    module {
+        single { DefaultService(get(), get()) }
 
-    single(named(UNAUTHED_CLIENT)) { get<DefaultService>().unauthedClient }
-    single(named(AUTHED_CLIENT)) { get<DefaultService>().authedClient }
+        single(named(UNAUTHED_CLIENT)) { get<DefaultService>().unauthedClient }
+        single(named(AUTHED_CLIENT)) { get<DefaultService>().authedClient }
 
-    single { DefaultAuthService(get(named(UNAUTHED_CLIENT))) } bind AuthService::class
-    single { DefaultUserService(get(named(AUTHED_CLIENT))) } bind UserService::class
-    single { DefaultCharacterService(get(named(UNAUTHED_CLIENT))) } bind CharacterService::class
-}
+        single { DefaultAuthService(get(named(UNAUTHED_CLIENT))) } bind AuthService::class
+        single { DefaultUserService(get(named(AUTHED_CLIENT))) } bind UserService::class
+        single { DefaultCharacterService(get(named(UNAUTHED_CLIENT))) } bind CharacterService::class
+    }

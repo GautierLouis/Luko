@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.compose.gradle.get())
     implementation(libs.ktlint.gradle)
     implementation(libs.kover.gradle)
+    implementation(libs.detekt.gradle)
 }
 
 tasks {

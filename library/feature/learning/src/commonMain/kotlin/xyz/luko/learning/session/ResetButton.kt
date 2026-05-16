@@ -23,23 +23,25 @@ import xyz.luko.designsystem.token.dimens.ShapeDefaults
 @Composable
 internal fun ResetButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     IconButton(
         onClick = onClick,
         modifier = modifier.size(38.dp),
-        colors = IconButtonDefaults.iconButtonColors(
-            containerColor = Theme.materialColors.tertiaryContainer,
-            contentColor = Theme.materialColors.onTertiaryContainer
-        ),
-        shape = ShapeDefaults.button()
+        colors =
+            IconButtonDefaults.iconButtonColors(
+                containerColor = Theme.materialColors.tertiaryContainer,
+                contentColor = Theme.materialColors.onTertiaryContainer,
+            ),
+        shape = ShapeDefaults.button(),
     ) {
         Icon(
             imageVector = AppIcon.Reset,
             contentDescription = Theme.strings.actionReset,
-            modifier = Modifier
-                .padding(Padding.medium)
-                .graphicsLayer { scaleX = -1f }
+            modifier =
+                Modifier
+                    .padding(Padding.medium)
+                    .graphicsLayer { scaleX = -1f },
         )
     }
 }
@@ -47,7 +49,7 @@ internal fun ResetButton(
 @Preview
 @Composable
 private fun PreviewResetButton(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         ResetButton()

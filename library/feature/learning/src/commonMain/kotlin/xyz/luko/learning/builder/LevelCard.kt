@@ -38,9 +38,8 @@ internal fun LevelCard(
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     tagLabel: String? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit = {},
 ) {
-
     val borderColor = if (selected) color.primary else Theme.materialColors.outline
     val iconTint = if (selected) color.primary else Theme.materialColors.outline
     val cardContainerColor = if (selected) color.subtle else Theme.materialColors.surfaceContainer
@@ -49,45 +48,46 @@ internal fun LevelCard(
     val textColor = Theme.materialColors.onSurface
 
     Box(
-        modifier = modifier
-            .clip(ShapeDefaults.card())
-            .background(
-                color = cardContainerColor,
-                shape = ShapeDefaults.card()
-            )
-            .border(
-                border = BorderStrokeDefaults.medium(borderColor),
-                shape = ShapeDefaults.card()
-            )
-            .clickable(
-                onClick = onClick,
-                onClickLabel = tagLabel ?: title,
-                role = Role.Checkbox,
-                indication = ripple(
-                    color = color.primary,
+        modifier =
+            modifier
+                .clip(ShapeDefaults.card())
+                .background(
+                    color = cardContainerColor,
+                    shape = ShapeDefaults.card(),
+                ).border(
+                    border = BorderStrokeDefaults.medium(borderColor),
+                    shape = ShapeDefaults.card(),
+                ).clickable(
+                    onClick = onClick,
+                    onClickLabel = tagLabel ?: title,
+                    role = Role.Checkbox,
+                    indication =
+                        ripple(
+                            color = color.primary,
+                        ),
+                    interactionSource = remember { MutableInteractionSource() },
+                    enabled = true,
                 ),
-                interactionSource = remember { MutableInteractionSource() },
-                enabled = true
-            )
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Padding.large),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(Padding.large),
             horizontalArrangement = Spacing.medium,
             verticalAlignment = Alignment.Top,
         ) {
             LevelIconSelectable(
                 containerColor = iconContainerColor,
                 contentColor = iconTint,
-                icon = icon
+                icon = icon,
             )
             Column(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Row(
                     verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Spacing.medium
+                    horizontalArrangement = Spacing.medium,
                 ) {
                     Text(
                         text = title,
@@ -100,7 +100,7 @@ internal fun LevelCard(
                         LabelTag(
                             label = tagLabel,
                             containerColor = color.primary,
-                            contentColor = color.onPrimary
+                            contentColor = color.onPrimary,
                         )
                     }
                 }

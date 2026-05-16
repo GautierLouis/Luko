@@ -35,11 +35,12 @@ internal fun AnimatedStar(
     val offsetY by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = -10f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(600 + delay, easing = LinearOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "bounceY"
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(600 + delay, easing = LinearOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        label = "bounceY",
     )
 
     Image(
@@ -47,18 +48,19 @@ internal fun AnimatedStar(
         contentDescription = null,
         alignment = Alignment.Center,
         colorFilter = ColorFilter.tint(Color(0xFFFACC15)),
-        modifier = modifier
-            .offset(
-                x = initialOffset.x.dp,
-                y = initialOffset.y.dp + offsetY.dp
-            )
+        modifier =
+            modifier
+                .offset(
+                    x = initialOffset.x.dp,
+                    y = initialOffset.y.dp + offsetY.dp,
+                ),
     )
 }
 
 @Preview
 @Composable
 private fun PreviewAnimatedStar(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         AnimatedStar()

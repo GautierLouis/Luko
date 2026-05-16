@@ -50,75 +50,89 @@ internal fun GraphicSketcher(
     var canvasSize by remember { mutableStateOf(IntSize(0, 0)) }
     val drawnStroke = remember { mutableStateListOf<Offset>() }
 
-    val referenceStrokes = remember(graphic.code, canvasSize) {
-        graphic.medians.map { stroke ->
-            TransformStroke.projectToCanvas(stroke.points.map { Offset(it.x, it.y) }, canvasSize)
+    val referenceStrokes =
+        remember(graphic.code, canvasSize) {
+            graphic.medians.map { stroke ->
+                TransformStroke.projectToCanvas(
+                    stroke.points.map { Offset(it.x, it.y) },
+                    canvasSize
+                )
+            }
         }
-    }
 
-    val previousDrawnScaled = remember(state.previousDrawnStrokes, canvasSize) {
-        state.previousDrawnStrokes.map { stroke ->
-            TransformStroke.projectToCanvas(stroke, canvasSize)
+    val previousDrawnScaled =
+        remember(state.previousDrawnStrokes, canvasSize) {
+            state.previousDrawnStrokes.map { stroke ->
+                TransformStroke.projectToCanvas(stroke, canvasSize)
+            }
         }
-    }
 
     val referenceHint = referenceStrokes.getOrNull(state.previousDrawnStrokes.size)
 
     val isComplete = state.previousDrawnStrokes.size == referenceStrokes.size
 
-    val drawingModifier = if (isComplete) Modifier
-    else Modifier.drawingDetector(
-        points = drawnStroke,
-        onGestureComplete = {
-            onEvent(
-                SessionScreenEvent.StrokeCompleted(
-                    TransformStroke.unprojectFromCanvas(drawnStroke.toList(), canvasSize),
-                    referenceStrokes
-                )
+    val drawingModifier =
+        if (isComplete) {
+            Modifier
+        } else {
+            Modifier.drawingDetector(
+                points = drawnStroke,
+                onGestureComplete = {
+                    onEvent(
+                        SessionScreenEvent.StrokeCompleted(
+                            TransformStroke.unprojectFromCanvas(drawnStroke.toList(), canvasSize),
+                            referenceStrokes,
+                        ),
+                    )
+                    drawnStroke.clear()
+                },
             )
-            drawnStroke.clear()
         }
-    )
 
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = Theme.materialColors.surfaceContainer
-        ),
-        modifier = modifier
-            .background(
-                color = Color.Unspecified,
-                shape = ShapeDefaults.card()
-            )
-            .border(
-                border = BorderStrokeDefaults.medium(Theme.materialColors.primary),
-                shape = ShapeDefaults.tag()
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Theme.materialColors.surfaceContainer,
             ),
+        modifier =
+            modifier
+                .background(
+                    color = Color.Unspecified,
+                    shape = ShapeDefaults.card(),
+                ).border(
+                    border = BorderStrokeDefaults.medium(Theme.materialColors.primary),
+                    shape = ShapeDefaults.tag(),
+                ),
     ) {
         Box {
             this@Card.AnimatedVisibility(
                 visible = state.previousDrawnStrokes.isNotEmpty(),
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(Padding.large),
+                modifier =
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(Padding.large),
             ) {
                 ResetButton(onClick = { onEvent(SessionScreenEvent.Reset) })
             }
 
             DrawableArea(
-                referenceStrokes = referenceStrokes
-                    .takeIf { drawReference }
-                    .orEmpty(),
-                referenceHint = referenceHint
-                    ?.takeIf { drawHint }
-                    .orEmpty(),
+                referenceStrokes =
+                    referenceStrokes
+                        .takeIf { drawReference }
+                        .orEmpty(),
+                referenceHint =
+                    referenceHint
+                        ?.takeIf { drawHint }
+                        .orEmpty(),
                 previousDrawnStrokes = previousDrawnScaled,
                 ongoingStroke = drawnStroke,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .align(Alignment.Center)
-                    .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
-                    .then(drawingModifier)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .align(Alignment.Center)
+                        .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
+                        .then(drawingModifier),
             )
         }
     }
@@ -127,12 +141,13 @@ internal fun GraphicSketcher(
 @Preview(heightDp = 1180)
 @Composable
 private fun PreviewGraphicPager(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
-    val mockState = SessionViewModel.QuestionState(
-        question = previewDictionaryWithGraphic,
-        previousDrawnStrokes = listOf(listOf(Offset(1f, 1f))),
-    )
+    val mockState =
+        SessionViewModel.QuestionState(
+            question = previewDictionaryWithGraphic,
+            previousDrawnStrokes = listOf(listOf(Offset(1f, 1f))),
+        )
 
     AppTheme(themeMode) {
         Column {
@@ -140,21 +155,21 @@ private fun PreviewGraphicPager(
                 drawReference = true,
                 drawHint = true,
                 state = mockState,
-                modifier = Modifier.aspectRatio(1f)
+                modifier = Modifier.aspectRatio(1f),
             )
 
             GraphicSketcher(
                 drawReference = false,
                 drawHint = true,
                 state = mockState,
-                modifier = Modifier.aspectRatio(1f)
+                modifier = Modifier.aspectRatio(1f),
             )
 
             GraphicSketcher(
                 drawReference = false,
                 drawHint = false,
                 state = mockState,
-                modifier = Modifier.aspectRatio(1f)
+                modifier = Modifier.aspectRatio(1f),
             )
         }
     }

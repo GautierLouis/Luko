@@ -25,23 +25,26 @@ internal fun PracticeButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
-    val shape = when (attrs) {
-        PracticeButtonAttrs.SMALL -> FloatingActionButtonDefaults.smallShape
-        PracticeButtonAttrs.LARGE -> CircleShape
-    }
+    val shape =
+        when (attrs) {
+            PracticeButtonAttrs.SMALL -> FloatingActionButtonDefaults.smallShape
+            PracticeButtonAttrs.LARGE -> CircleShape
+        }
 
-    val size = when (attrs) {
-        PracticeButtonAttrs.SMALL -> 56.dp
-        PracticeButtonAttrs.LARGE -> 144.dp
-    }
+    val size =
+        when (attrs) {
+            PracticeButtonAttrs.SMALL -> 56.dp
+            PracticeButtonAttrs.LARGE -> 144.dp
+        }
 
     FloatingActionButton(
         onClick = onClick,
         shape = shape,
-        elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 12.dp,
-            pressedElevation = 6.dp,
-        ),
+        elevation =
+            FloatingActionButtonDefaults.elevation(
+                defaultElevation = 12.dp,
+                pressedElevation = 6.dp,
+            ),
         modifier = modifier.size(size),
         containerColor = Theme.materialColors.primary,
     ) {
@@ -58,7 +61,7 @@ internal fun PracticeButton(
                 Icon(
                     imageVector = AppIcon.PlayArrow,
                     tint = Theme.materialColors.onPrimary,
-                    contentDescription = Theme.strings.practice
+                    contentDescription = Theme.strings.practice,
                 )
             }
         }
@@ -68,7 +71,7 @@ internal fun PracticeButton(
 @Preview
 @Composable
 private fun PreviewPracticeButton(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column {

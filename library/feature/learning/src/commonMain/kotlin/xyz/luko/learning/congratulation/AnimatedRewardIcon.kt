@@ -29,69 +29,78 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 
 @Composable
-internal fun AnimatedRewardIcon(
-    modifier: Modifier = Modifier
-) {
-    val gradientBrush = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFFFACC15),
-            Color(0xFFF97316)
-        ),
-        start = Offset(0f, 0f),
-        end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
-    )
+internal fun AnimatedRewardIcon(modifier: Modifier = Modifier) {
+    val gradientBrush =
+        Brush.linearGradient(
+            colors =
+                listOf(
+                    Color(0xFFFACC15),
+                    Color(0xFFF97316),
+                ),
+            start = Offset(0f, 0f),
+            end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
+        )
 
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
         AnimatedStar(
-            modifier = Modifier
-                .size(40.dp)
-                .align(Alignment.TopEnd)
-                .testTag(TestTags.Misc.STAR1),
-            delay = 0
+            modifier =
+                Modifier
+                    .size(40.dp)
+                    .align(Alignment.TopEnd)
+                    .testTag(TestTags.Misc.STAR1),
+            delay = 0,
         )
 
         AnimatedStar(
-            modifier = Modifier.size(20.dp)
-                .align(Alignment.TopStart)
-                .testTag(TestTags.Misc.STAR2),
+            modifier =
+                Modifier
+                    .size(20.dp)
+                    .align(Alignment.TopStart)
+                    .testTag(TestTags.Misc.STAR2),
             initialOffset = Offset(y = 10f, x = 5f),
-            delay = 5
+            delay = 5,
         )
 
         AnimatedStar(
-            modifier = Modifier.size(25.dp)
-                .align(Alignment.BottomStart)
-                .testTag(TestTags.Misc.STAR3),
+            modifier =
+                Modifier
+                    .size(25.dp)
+                    .align(Alignment.BottomStart)
+                    .testTag(TestTags.Misc.STAR3),
             initialOffset = Offset(y = -15f, x = 5f),
-            delay = 10
+            delay = 10,
         )
 
         Card(
             shape = CircleShape,
-            colors = CardDefaults.cardColors(
-                containerColor = Theme.materialColors.background
-            ),
-            modifier = Modifier
-                .wrapContentSize()
-                .padding(Padding.large)
-                .testTag(TestTags.Misc.REWARD),
-            elevation = CardDefaults.elevatedCardElevation(
-                defaultElevation = 60.dp
-            )
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = Theme.materialColors.background,
+                ),
+            modifier =
+                Modifier
+                    .wrapContentSize()
+                    .padding(Padding.large)
+                    .testTag(TestTags.Misc.REWARD),
+            elevation =
+                CardDefaults.elevatedCardElevation(
+                    defaultElevation = 60.dp,
+                ),
         ) {
             Box(
                 modifier = Modifier.background(brush = gradientBrush),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = AppIcon.RoundedTrophy,
                     contentDescription = null,
                     tint = Theme.materialColors.background,
-                    modifier = Modifier
-                        .size(150.dp)
-                        .padding(Padding.large)
+                    modifier =
+                        Modifier
+                            .size(150.dp)
+                            .padding(Padding.large),
                 )
             }
         }
@@ -101,7 +110,7 @@ internal fun AnimatedRewardIcon(
 @Preview
 @Composable
 private fun PreviewAnimatedRewardIcon(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         AnimatedRewardIcon()

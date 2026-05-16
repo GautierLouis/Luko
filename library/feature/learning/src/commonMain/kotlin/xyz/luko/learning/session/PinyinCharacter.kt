@@ -27,23 +27,26 @@ import xyz.luko.domain.previewDictionary
 @Composable
 internal fun PinyinCharacter(
     char: Dictionary,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        border = BorderStroke(
-            width = 1.dp,
-            color = Theme.materialColors.primary
-        ),
+        border =
+            BorderStroke(
+                width = 1.dp,
+                color = Theme.materialColors.primary,
+            ),
         shape = ShapeDefaults.button(),
-        colors = CardDefaults.cardColors(
-            containerColor = Theme.materialColors.surfaceContainer
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Theme.materialColors.surfaceContainer,
+            ),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = Padding.extraExtraLarge),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = Padding.extraExtraLarge),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Spacing.large,
         ) {
@@ -51,23 +54,25 @@ internal fun PinyinCharacter(
                 text = Theme.strings.sessionHeaderTitle,
                 color = Theme.materialColors.onSecondaryContainer,
                 fontWeight = FontWeight.medium,
-                style = Theme.typography.titleSmall
+                style = Theme.typography.titleSmall,
             )
             Card(
                 shape = ShapeDefaults.card(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Theme.materialColors.primary
-                )
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = Theme.materialColors.primary,
+                    ),
             ) {
                 Text(
                     text = char.pinyin.firstOrNull().orEmpty(),
                     color = Theme.materialColors.onPrimary,
                     style = Theme.typography.headlineLarge,
-                    modifier = Modifier.padding(
-                        horizontal = Padding.large,
-                        vertical = Padding.medium
-                    )
+                    modifier =
+                        Modifier.padding(
+                            horizontal = Padding.large,
+                            vertical = Padding.medium,
+                        ),
                 )
             }
         }
@@ -77,11 +82,11 @@ internal fun PinyinCharacter(
 @Preview
 @Composable
 private fun PreviewPinyinCharacter(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         PinyinCharacter(
-            char = previewDictionary
+            char = previewDictionary,
         )
     }
 }

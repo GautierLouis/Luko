@@ -10,11 +10,13 @@ import xyz.luko.domain.repository.SettingTheme
 import xyz.luko.domain.repository.UserRepository
 
 internal sealed class ProfileScreenEvent {
-    data class OnThemeChanged(val theme: SettingTheme) : ProfileScreenEvent()
+    data class OnThemeChanged(
+        val theme: SettingTheme,
+    ) : ProfileScreenEvent()
 }
 
 internal class ProfileViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     internal data class UiState(
         val selectedTheme: SettingTheme? = null,

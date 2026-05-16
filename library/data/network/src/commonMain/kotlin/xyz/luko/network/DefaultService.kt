@@ -30,43 +30,42 @@ import xyz.luko.utils.Flavor
 internal class DefaultService(
     private val tokenAccessor: TokenAccessor,
     private val appConfig: AppConfig,
-    private val engine: HttpClientEngine = engineFactory.create()
+    private val engine: HttpClientEngine = engineFactory.create(),
 ) {
-
     val unauthedClient = createDefaultClient()
 
     val authedClient = createDefaultClient { installAuth() }
 
     private val baseUrl: String
-        get() = when (appConfig.flavor) {
-            Flavor.DEV -> "http://10.0.2.2:8080"
-            Flavor.STAGING -> "https://staging-api.lukoapp.xyz"
-            Flavor.PROD -> "https://api.lukoapp.xyz"
-        }
+        get() =
+            when (appConfig.flavor) {
+                Flavor.DEV -> "http://10.0.2.2:8080"
+                Flavor.STAGING -> "https://staging-api.lukoapp.xyz"
+                Flavor.PROD -> "https://api.lukoapp.xyz"
+            }
 
-    private fun createDefaultClient(
-        config: HttpClientConfig<*>.() -> Unit = { },
-    ) = HttpClient(engine) {
-        expectSuccess = true
-        install(Resources)
-        install(Logging) {
-            logger = Logger.SIMPLE
-            level = LogLevel.ALL
-        }
-        install(ContentNegotiation) {
-            json(defaultJson)
-        }
+    private fun createDefaultClient(config: HttpClientConfig<*>.() -> Unit = { }) =
+        HttpClient(engine) {
+            expectSuccess = true
+            install(Resources)
+            install(Logging) {
+                logger = Logger.SIMPLE
+                level = LogLevel.ALL
+            }
+            install(ContentNegotiation) {
+                json(defaultJson)
+            }
 
-        defaultRequest {
-            url(urlString = baseUrl)
-            header("X-Platform", appConfig.platform)
-            header("App-Version", appConfig.versionName)
-            header("App-Build", appConfig.versionCode)
-            contentType(ContentType.Application.Json)
-        }
+            defaultRequest {
+                url(urlString = baseUrl)
+                header("X-Platform", appConfig.platform)
+                header("App-Version", appConfig.versionName)
+                header("App-Build", appConfig.versionCode)
+                contentType(ContentType.Application.Json)
+            }
 
-        apply(config)
-    }
+            apply(config)
+        }
 
     private fun HttpClientConfig<*>.installAuth() {
         install(Auth) {

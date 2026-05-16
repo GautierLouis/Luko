@@ -1,4 +1,6 @@
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.extensions.DetektExtension
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -22,12 +24,15 @@ class MultiplatformConvention : Plugin<Project> {
             apply(libs.plugins.serialization.get().pluginId)
             apply(libs.plugins.ktlint.get().pluginId)
             apply(libs.plugins.kover.get().pluginId)
+            apply(libs.plugins.detekt.get().pluginId)
         }
 
         configureKtLint(libs)
         configureKotlinMultiplatform()
         configureAndroid(libs)
         configureBaseSourceSets(libs)
+        configureDetekt(libs)
+        configureKover(libs)
     }
 
     private fun Project.configureKtLint(libs: LibrariesForLibs) {
@@ -48,6 +53,10 @@ class MultiplatformConvention : Plugin<Project> {
 
     private fun Project.configureKotlinMultiplatform() {
         extensions.configure<KotlinMultiplatformExtension> {
+            compilerOptions {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+
             // JVM target with toolchain
             jvmToolchain(17)
             jvm()
@@ -98,6 +107,36 @@ class MultiplatformConvention : Plugin<Project> {
                     implementation(libs.kotlinx.coroutines.test)
                 }
             }
+        }
+    }
+
+    private fun Project.configureDetekt(libs: LibrariesForLibs) {
+        extensions.configure<DetektExtension> {
+            buildUponDefaultConfig.set(true)
+            autoCorrect.set(false)
+            parallel.set(true)
+            source.setFrom(
+                "src/commonMain/kotlin",
+                "src/androidMain/kotlin",
+                "src/iosMain/kotlin",
+                "src/jvmMain/kotlin",
+            )
+        }
+
+        tasks.withType<Detekt>().configureEach {
+            jvmTarget.set(JvmTarget.JVM_17.target)
+            reports {
+                html.required.set(true)
+            }
+            // Exclude generated code
+            exclude("**/build/**")
+            exclude("**/*.Generated.kt")
+        }
+    }
+
+    private fun Project.configureKover(libs: LibrariesForLibs) {
+        dependencies {
+            add("kover", this@configureKover)
         }
     }
 }

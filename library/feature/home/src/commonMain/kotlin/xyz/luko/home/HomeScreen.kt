@@ -35,13 +35,15 @@ fun HomeScreen() {
 }
 
 @Composable
-private fun HomeScreen(
-    state: HomeViewModel.UIState,
-) {
+private fun HomeScreen(state: HomeViewModel.UIState) {
     val windowInfo = rememberAdaptiveWindowInfo()
 
-    val position = if (windowInfo.isPhoneLandscape) FabPosition.End
-    else FabPosition.Center
+    val position =
+        if (windowInfo.isPhoneLandscape) {
+            FabPosition.End
+        } else {
+            FabPosition.Center
+        }
 
     val fabAttrs =
         if (windowInfo.isPhoneLandscape) PracticeButtonAttrs.SMALL else PracticeButtonAttrs.LARGE
@@ -54,18 +56,19 @@ private fun HomeScreen(
                 attrs = fabAttrs,
                 onClick = {
                     AppNavigation.navigate(AppRoute.LearningRoute.NewSessionRoute)
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(Padding.large),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(Padding.large),
         ) {
             AdaptiveLayout(
-                spacing = Padding.large
+                spacing = Padding.large,
             ) {
                 OverallStatisticsCard(
                     streak = state.stats.currentDayStreak.toString(),
@@ -75,7 +78,7 @@ private fun HomeScreen(
 
                 state.lastSession?.let {
                     SessionCard(
-                        model = state.lastSession.toUiModel()
+                        model = state.lastSession.toUiModel(),
                     )
                 }
             }
@@ -86,15 +89,16 @@ private fun HomeScreen(
 @PreviewScreen
 @Composable
 private fun PreviewHomeScreen(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         HomeScreen(
-            state = HomeViewModel.UIState(
-                isLoading = false,
-                lastSession = previewSession,
-                stats = previewStatistics
-            ),
+            state =
+                HomeViewModel.UIState(
+                    isLoading = false,
+                    lastSession = previewSession,
+                    stats = previewStatistics,
+                ),
         )
     }
 }

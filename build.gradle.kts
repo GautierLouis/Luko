@@ -13,17 +13,11 @@ plugins {
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.kover)
+    alias(libs.plugins.detekt)
+//    alias(libs.plugins.dokka)
 
     alias(libs.plugins.multiplatform.convention) apply false
     alias(libs.plugins.compose.convention) apply false
-}
-
-subprojects {
-    pluginManager.withPlugin("org.jetbrains.kotlinx.kover") {
-        rootProject.dependencies {
-            add("kover", this@subprojects)
-        }
-    }
 }
 
 kover {
@@ -43,4 +37,13 @@ kover {
         }
         total { html { } }
     }
+}
+
+tasks.register("detektAll") {
+    group = "verification"
+    description = "Run detekt across all modules"
+
+    dependsOn(subprojects.flatMap { sub ->
+        sub.tasks.matching { it.name == "detekt" }
+    })
 }

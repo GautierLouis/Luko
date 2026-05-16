@@ -16,7 +16,7 @@ import xyz.luko.designsystem.theme.AppTheme
 internal fun CharaFreqLevelGroupPicker(
     modifier: Modifier = Modifier,
     selectedLevels: List<FrequencyLevel> = listOf(),
-    onClick: (FrequencyLevel) -> Unit = {}
+    onClick: (FrequencyLevel) -> Unit = {},
 ) {
     AdaptiveLayout(
         modifier = modifier.fillMaxWidth(),
@@ -25,7 +25,7 @@ internal fun CharaFreqLevelGroupPicker(
             CharaFreqLevelCard(
                 level = it,
                 selected = it in selectedLevels,
-                onClick = { onClick(it) }
+                onClick = { onClick(it) },
             )
         }
     }
@@ -35,15 +35,16 @@ internal fun CharaFreqLevelGroupPicker(
 @Preview(device = Devices.PHONE)
 @Composable
 private fun PreviewCharaFreqLevelGroupPicker(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         CharaFreqLevelGroupPicker(
-            selectedLevels = listOf(
-                FrequencyLevel.COMMON,
-                FrequencyLevel.FREQUENT,
-                FrequencyLevel.STANDARD
-            )
+            selectedLevels =
+                listOf(
+                    FrequencyLevel.COMMON,
+                    FrequencyLevel.FREQUENT,
+                    FrequencyLevel.STANDARD,
+                ),
         )
     }
 }

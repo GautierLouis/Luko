@@ -9,7 +9,6 @@ import kotlin.math.atan2
 import kotlin.math.sqrt
 
 internal class AccuracyCalculatorUseCase {
-
     private companion object {
         private const val TOLERANCE_RADIUS: Float = 50f // Acceptable deviation in pixels
         private const val SAMPLING_POINTS: Int = 20 // Number of points to sample for comparison
@@ -17,14 +16,15 @@ internal class AccuracyCalculatorUseCase {
 
     fun calculate(
         reference: List<List<Offset>>,
-        userStroke: List<List<Offset>>
+        userStroke: List<List<Offset>>,
     ): StrokeComparisonResult {
-
         // Check if stroke counts match
         if (reference.isEmpty()) {
             return StrokeComparisonResult(
-                0f, emptyList(), 0f,
-                ComparisonDetails(0f, 0f, 0f, 0f, 0f)
+                0f,
+                emptyList(),
+                0f,
+                ComparisonDetails(0f, 0f, 0f, 0f, 0f),
             )
         }
 
@@ -32,11 +32,12 @@ internal class AccuracyCalculatorUseCase {
         val userStrokeCount = userStroke.size
 
         // Penalize for wrong number of strokes
-        val countPenalty = if (userStrokeCount != strokeCount) {
-            0.5f // 50% penalty for wrong stroke count
-        } else {
-            1f
-        }
+        val countPenalty =
+            if (userStrokeCount != strokeCount) {
+                0.5f // 50% penalty for wrong stroke count
+            } else {
+                1f
+            }
 
         // Compare each stroke
         val strokeAccuracies = mutableListOf<Float>()
@@ -68,13 +69,14 @@ internal class AccuracyCalculatorUseCase {
         }
 
         val avgCount = strokeCount.toFloat()
-        val details = ComparisonDetails(
-            pathSimilarity = totalPathSimilarity / avgCount,
-            startPointAccuracy = totalStartAccuracy / avgCount,
-            endPointAccuracy = totalEndAccuracy / avgCount,
-            directionAccuracy = totalDirectionAccuracy / avgCount,
-            orderPenalty = totalOrderPenalty / avgCount
-        )
+        val details =
+            ComparisonDetails(
+                pathSimilarity = totalPathSimilarity / avgCount,
+                startPointAccuracy = totalStartAccuracy / avgCount,
+                endPointAccuracy = totalEndAccuracy / avgCount,
+                directionAccuracy = totalDirectionAccuracy / avgCount,
+                orderPenalty = totalOrderPenalty / avgCount,
+            )
 
         // Calculate overall accuracy
         val avgAccuracy = strokeAccuracies.average().toFloat()
@@ -86,7 +88,7 @@ internal class AccuracyCalculatorUseCase {
             overallAccuracy = overallAccuracy,
             strokeAccuracies = strokeAccuracies,
             orderAccuracy = orderAccuracy,
-            details = details
+            details = details,
         )
     }
 
@@ -96,14 +98,13 @@ internal class AccuracyCalculatorUseCase {
         val startPointAccuracy: Float,
         val endPointAccuracy: Float,
         val directionAccuracy: Float,
-        val orderPenalty: Float
+        val orderPenalty: Float,
     )
 
     private fun compareStroke(
         refStroke: List<Offset>,
         userStroke: List<Offset>,
     ): SingleStrokeResult {
-
         if (refStroke.isEmpty() || userStroke.isEmpty()) {
             return SingleStrokeResult(0f, 0f, 0f, 0f, 0f, 1f)
         }
@@ -121,11 +122,12 @@ internal class AccuracyCalculatorUseCase {
         val pathSimilarity = comparePathShape(refStroke, userStroke)
 
         // Calculate weighted accuracy
-        val accuracy = (
+        val accuracy =
+            (
                 startAccuracy * 0.15f +
-                        endAccuracy * 0.15f +
-                        directionAccuracy * 0.20f +
-                        pathSimilarity * 0.50f
+                    endAccuracy * 0.15f +
+                    directionAccuracy * 0.20f +
+                    pathSimilarity * 0.50f
                 ) * 100f
 
         return SingleStrokeResult(
@@ -134,18 +136,22 @@ internal class AccuracyCalculatorUseCase {
             startPointAccuracy = startAccuracy * 100f,
             endPointAccuracy = endAccuracy * 100f,
             directionAccuracy = directionAccuracy * 100f,
-            orderPenalty = 0f
+            orderPenalty = 0f,
         )
     }
 
     /**
      * Compare two points with tolerance
      */
-    private fun comparePoints(ref: Offset, user: Offset): Float {
-        val distance = sqrt(
-            (ref.x - user.x) * (ref.x - user.x) +
-                    (ref.y - user.y) * (ref.y - user.y)
-        )
+    private fun comparePoints(
+        ref: Offset,
+        user: Offset,
+    ): Float {
+        val distance =
+            sqrt(
+                (ref.x - user.x) * (ref.x - user.x) +
+                    (ref.y - user.y) * (ref.y - user.y),
+            )
 
         // Linear decay from 1.0 to 0.0 based on tolerance
         return (1f - (distance / TOLERANCE_RADIUS).coerceIn(0f, 1f))
@@ -154,7 +160,10 @@ internal class AccuracyCalculatorUseCase {
     /**
      * Compare stroke direction (start to end vector)
      */
-    private fun compareDirection(ref: List<Offset>, user: List<Offset>): Float {
+    private fun compareDirection(
+        ref: List<Offset>,
+        user: List<Offset>,
+    ): Float {
         if (ref.size < 2 || user.size < 2) return 0f
 
         // Calculate direction vectors
@@ -176,7 +185,10 @@ internal class AccuracyCalculatorUseCase {
     /**
      * Compare the shape of two strokes paths using Hausdorff distance
      */
-    private fun comparePathShape(ref: List<Offset>, user: List<Offset>): Float {
+    private fun comparePathShape(
+        ref: List<Offset>,
+        user: List<Offset>,
+    ): Float {
         // Normalize both strokes to same number of points
         val refSampled = resampleStroke(ref, SAMPLING_POINTS)
         val userSampled = resampleStroke(user, SAMPLING_POINTS)
@@ -184,10 +196,11 @@ internal class AccuracyCalculatorUseCase {
         // Calculate average point-to-point distance
         var totalDistance = 0f
         for (i in refSampled.indices) {
-            val distance = sqrt(
-                (refSampled[i].x - userSampled[i].x) * (refSampled[i].x - userSampled[i].x) +
-                        (refSampled[i].y - userSampled[i].y) * (refSampled[i].y - userSampled[i].y)
-            )
+            val distance =
+                sqrt(
+                    (refSampled[i].x - userSampled[i].x) * (refSampled[i].x - userSampled[i].x) +
+                        (refSampled[i].y - userSampled[i].y) * (refSampled[i].y - userSampled[i].y),
+                )
             totalDistance += distance
         }
 
@@ -200,7 +213,10 @@ internal class AccuracyCalculatorUseCase {
     /**
      * Resample stroke to fixed number of points
      */
-    private fun resampleStroke(stroke: List<Offset>, pointCount: Int): List<Offset> {
+    private fun resampleStroke(
+        stroke: List<Offset>,
+        pointCount: Int,
+    ): List<Offset> {
         if (stroke.isEmpty()) return emptyList()
         if (stroke.size == 1) return List(pointCount) { stroke.first() }
 
@@ -256,23 +272,27 @@ internal class AccuracyCalculatorUseCase {
         return resampled
     }
 
-    private fun distance(p1: Offset, p2: Offset): Float {
-        return sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y))
-    }
+    private fun distance(
+        p1: Offset,
+        p2: Offset,
+    ): Float = sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y))
 
-    private fun lerp(start: Offset, end: Offset, ratio: Float): Offset {
-        return Offset(
+    private fun lerp(
+        start: Offset,
+        end: Offset,
+        ratio: Float,
+    ): Offset =
+        Offset(
             start.x + (end.x - start.x) * ratio,
-            start.y + (end.y - start.y) * ratio
+            start.y + (end.y - start.y) * ratio,
         )
-    }
 
     /**
      * Calculate how well the user followed the stroke order
      */
     private fun calculateOrderAccuracy(
         referenceStrokes: List<List<Offset>>,
-        userStrokes: List<List<Offset>>
+        userStrokes: List<List<Offset>>,
     ): Float {
         if (referenceStrokes.isEmpty() || userStrokes.isEmpty()) return 0f
 

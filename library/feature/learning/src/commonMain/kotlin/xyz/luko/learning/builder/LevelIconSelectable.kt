@@ -34,13 +34,13 @@ fun LevelIconSelectable(
             .padding(top = 2.dp)
             .size(36.dp)
             .background(containerColor, RoundedCornerShape(8.dp)),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             modifier = Modifier,
-            tint = contentColor
+            tint = contentColor,
         )
     }
 }
@@ -48,12 +48,12 @@ fun LevelIconSelectable(
 @Preview
 @Composable
 private fun PreviewLevelIconSelectable(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             LevelIconSelectable(
-                icon = AppIcon.RoundedBolt
+                icon = AppIcon.RoundedBolt,
             )
         }
     }

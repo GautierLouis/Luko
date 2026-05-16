@@ -16,21 +16,20 @@ import xyz.luko.designsystem.token.dimens.Padding
 internal fun QuestionCountPicker(
     selectedCount: QuestionCount,
     modifier: Modifier = Modifier,
-    onCountClicked: (QuestionCount) -> Unit = {}
+    onClick: (QuestionCount) -> Unit = {},
 ) {
-
     PickerLayout(
         label = Theme.strings.builderPickQuestionCount,
-        modifier = modifier
+        modifier = modifier,
     ) {
         AdaptiveLayout(
-            spacing = Padding.large
+            spacing = Padding.large,
         ) {
             QuestionCount.entries.forEach { item ->
                 QuestionCountItem(
                     count = item,
                     isSelected = item == selectedCount,
-                    onClick = { onCountClicked(item) }
+                    onClick = { onClick(item) },
                 )
             }
         }
@@ -41,7 +40,7 @@ internal fun QuestionCountPicker(
 @Preview(device = Devices.PHONE)
 @Composable
 private fun PreviewQuestionCountPicker(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         QuestionCountPicker(

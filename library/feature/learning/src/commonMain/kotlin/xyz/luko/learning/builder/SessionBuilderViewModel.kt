@@ -17,7 +17,6 @@ import xyz.luko.learning.routing.LearningInternalRoute
 import xyz.luko.navigation.AppNavigation
 
 internal class SessionBuilderViewModel : ViewModel() {
-
     companion object {
         const val PAGE_COUNT = 3
     }
@@ -26,7 +25,7 @@ internal class SessionBuilderViewModel : ViewModel() {
         val levels: List<FrequencyLevel> = listOf(FrequencyLevel.COMMON),
         val difficulty: DifficultyLevel = DifficultyLevel.EASY,
         val questionCount: QuestionCount = QuestionCount.FIVE,
-        val currentPage: Int = 0
+        val currentPage: Int = 0,
     ) {
         val isFinished = currentPage + 1 == PAGE_COUNT
         val showPreviewButton = currentPage > 0
@@ -44,11 +43,12 @@ internal class SessionBuilderViewModel : ViewModel() {
             is OnLevelSelected -> {
                 _state.update {
                     it.copy(
-                        levels = if (event.level in it.levels) {
-                            it.levels - event.level
-                        } else {
-                            it.levels + event.level
-                        }
+                        levels =
+                            if (event.level in it.levels) {
+                                it.levels - event.level
+                            } else {
+                                it.levels + event.level
+                            },
                     )
                 }
             }
@@ -79,12 +79,13 @@ internal class SessionBuilderViewModel : ViewModel() {
 
     private fun onFinish() {
         AppNavigation.navigate(
-            route = LearningInternalRoute.SessionRoute(
-                levels = state.value.levels,
-                difficulty = state.value.difficulty,
-                limit = state.value.questionCount
-            ),
-            clearBackStack = true
+            route =
+                LearningInternalRoute.SessionRoute(
+                    levels = state.value.levels,
+                    difficulty = state.value.difficulty,
+                    limit = state.value.questionCount,
+                ),
+            clearBackStack = true,
         )
     }
 }

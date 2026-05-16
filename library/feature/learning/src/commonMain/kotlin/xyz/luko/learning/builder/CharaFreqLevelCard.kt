@@ -30,14 +30,14 @@ internal fun CharaFreqLevelCard(
         color = level.colorFamily(),
         onClick = onClick,
         modifier = modifier,
-        selected = selected
+        selected = selected,
     )
 }
 
 @Preview
 @Composable
 private fun PreviewCharaFreqLevelCard(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

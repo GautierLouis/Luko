@@ -11,13 +11,16 @@ import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.navigation.AppNavigation
 
 internal class SessionCongratulationViewModel(
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
-
     sealed class UIState {
         data object Loading : UIState()
+
         data object Error : UIState()
-        data class Success(val session: Session) : UIState()
+
+        data class Success(
+            val session: Session,
+        ) : UIState()
     }
 
     private val _state = MutableStateFlow<UIState>(UIState.Loading)
@@ -25,7 +28,9 @@ internal class SessionCongratulationViewModel(
 
     init {
         viewModelScope.launch {
-            sessionRepository.getLastSessions(1).firstOrNull()
+            sessionRepository
+                .getLastSessions(1)
+                .firstOrNull()
                 ?.let { s -> _state.update { UIState.Success(s) } }
                 ?: run {
                     _state.update { UIState.Error }

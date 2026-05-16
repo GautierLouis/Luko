@@ -23,7 +23,7 @@ import xyz.luko.domain.model.SimpleDictionary
 internal fun DictionaryContent(
     items: LazyPagingItems<SimpleDictionary>,
     modifier: Modifier = Modifier,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (Int) -> Unit = {},
 ) {
     val state = rememberLazyGridState()
 

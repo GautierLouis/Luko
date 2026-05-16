@@ -38,65 +38,71 @@ internal fun SettingPicker(
     section: SettingSection,
     selected: SettingTheme,
     modifier: Modifier = Modifier,
-    onClick: (SettingTheme) -> Unit = {}
+    onClick: (SettingTheme) -> Unit = {},
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Spacing.medium
+        verticalArrangement = Spacing.medium,
     ) {
         Text(
-            text = when (section) {
-                is SettingSection.Theme -> "THEME"
-            },
+            text =
+                when (section) {
+                    is SettingSection.Theme -> "THEME"
+                },
             style = Theme.typography.titleMedium,
-            color = Theme.materialColors.outline
+            color = Theme.materialColors.outline,
         )
         Column(
-            modifier = Modifier
-                .background(
-                    color = Theme.materialColors.surfaceContainer,
-                    shape = ShapeDefaults.card(),
-                )
-                .border(
-                    border = BorderStrokeDefaults.minimum(Theme.materialColors.outline),
-                    shape = ShapeDefaults.card()
-                )
+            modifier =
+                Modifier
+                    .background(
+                        color = Theme.materialColors.surfaceContainer,
+                        shape = ShapeDefaults.card(),
+                    ).border(
+                        border = BorderStrokeDefaults.minimum(Theme.materialColors.outline),
+                        shape = ShapeDefaults.card(),
+                    ),
         ) {
             section.items.forEachIndexed { index, item ->
                 if (index > 0) {
                     HorizontalDivider(thickness = 1.dp, color = Theme.materialColors.outline)
                 }
 
-                val shape = when (index) {
-                    0 -> RoundedCornerShape(
-                        topStart = Padding.large,
-                        topEnd = Padding.large
-                    )
+                val shape =
+                    when (index) {
+                        0 ->
+                            RoundedCornerShape(
+                                topStart = Padding.large,
+                                topEnd = Padding.large,
+                            )
 
-                    section.items.lastIndex -> RoundedCornerShape(
-                        bottomStart = Padding.large,
-                        bottomEnd = Padding.large
-                    )
+                        section.items.lastIndex ->
+                            RoundedCornerShape(
+                                bottomStart = Padding.large,
+                                bottomEnd = Padding.large,
+                            )
 
-                    else -> RoundedCornerShape(0.dp)
-                }
+                        else -> RoundedCornerShape(0.dp)
+                    }
 
-                val label = when (item) {
-                    SettingTheme.Default -> "Default"
-                    SettingTheme.Night -> "Night"
-                    SettingTheme.Day -> "Day"
-                }
+                val label =
+                    when (item) {
+                        SettingTheme.Default -> "Default"
+                        SettingTheme.Night -> "Night"
+                        SettingTheme.Day -> "Day"
+                    }
 
                 Item(
                     label = label,
                     selected = selected == item,
-                    modifier = Modifier
-                        .clip(shape)
-                        .clickable(
-                            onClick = { onClick(item) },
-                            onClickLabel = label,
-                            role = Role.RadioButton
-                        ),
+                    modifier =
+                        Modifier
+                            .clip(shape)
+                            .clickable(
+                                onClick = { onClick(item) },
+                                onClickLabel = label,
+                                role = Role.RadioButton,
+                            ),
                 )
             }
         }
@@ -110,11 +116,12 @@ private fun Item(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(Padding.large),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(Padding.large),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = label,
@@ -125,7 +132,7 @@ private fun Item(
             Icon(
                 imageVector = AppIcon.Check,
                 contentDescription = null,
-                tint = Theme.materialColors.primary
+                tint = Theme.materialColors.primary,
             )
         }
     }
@@ -134,18 +141,20 @@ private fun Item(
 @Preview
 @Composable
 private fun PreviewSettingPicker(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         SettingPicker(
             selected = SettingTheme.Default,
-            section = SettingSection.Theme(
-                items = persistentListOf(
-                    SettingTheme.Default,
-                    SettingTheme.Night,
-                    SettingTheme.Day
-                )
-            )
+            section =
+                SettingSection.Theme(
+                    items =
+                        persistentListOf(
+                            SettingTheme.Default,
+                            SettingTheme.Night,
+                            SettingTheme.Day,
+                        ),
+                ),
         )
     }
 }

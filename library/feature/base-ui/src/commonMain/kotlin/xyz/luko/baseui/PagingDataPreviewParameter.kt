@@ -50,11 +50,13 @@ abstract class PagingDataPreviewParameter<T : Any>(
                 // Append — Success
                 PagingData.from(
                     data = data,
-                    sourceLoadStates = loadStates(
-                        append = LoadState.NotLoading(
-                            endOfPaginationReached = true
-                        )
-                    ),
+                    sourceLoadStates =
+                        loadStates(
+                            append =
+                                LoadState.NotLoading(
+                                    endOfPaginationReached = true,
+                                ),
+                        ),
                 ),
             )
 }

@@ -45,7 +45,7 @@ internal fun SessionScreen() {
 
     SessionScreen(
         state = state,
-        onEvent = viewModel::onEvent
+        onEvent = viewModel::onEvent,
     )
 }
 
@@ -77,11 +77,11 @@ private fun SessionScreen(
     state: SessionViewModel.SessionState.Success,
     onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
-
-    val pagerState = rememberPagerState(
-        initialPage = state.currentPage,
-        pageCount = { state.questionsState.size }
-    )
+    val pagerState =
+        rememberPagerState(
+            initialPage = state.currentPage,
+            pageCount = { state.questionsState.size },
+        )
 
     if (state.showLeaveDialog) {
         LeaveSessionDialog(
@@ -89,7 +89,7 @@ private fun SessionScreen(
             onConfirmation = {
                 onEvent(ToggleLeaveDialog)
                 AppNavigation.navigateHome()
-            }
+            },
         )
     }
 
@@ -101,52 +101,56 @@ private fun SessionScreen(
         }
     }
 
-    val backState = rememberNavigationEventState(
-        currentInfo = NavigationEventInfo.None
-    )
+    val backState =
+        rememberNavigationEventState(
+            currentInfo = NavigationEventInfo.None,
+        )
 
     NavigationBackHandler(
         state = backState,
         isBackEnabled = !state.showLeaveDialog,
-        onBackCompleted = { onEvent(ToggleLeaveDialog) }
+        onBackCompleted = { onEvent(ToggleLeaveDialog) },
     )
 
     BaseScaffold(
         topBar = {
             SessionHeader(
                 pager = pagerState,
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(top = Padding.extraLarge)
+                modifier =
+                    Modifier
+                        .statusBarsPadding()
+                        .padding(top = Padding.extraLarge),
             )
         },
         content = { paddingValues ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(Padding.large),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(Padding.large),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 if (device.isPhoneLandscape) {
                     Row(
-                        horizontalArrangement = Spacing.large
+                        horizontalArrangement = Spacing.large,
                     ) {
                         Column(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .weight(1f),
-                            verticalArrangement = Arrangement.SpaceBetween
+                            modifier =
+                                Modifier
+                                    .fillMaxHeight()
+                                    .weight(1f),
+                            verticalArrangement = Arrangement.SpaceBetween,
                         ) {
                             PinyinCharacter(
                                 char = state.currentQuestion.question.dictionary,
-                                modifier = Modifier.wrapContentHeight()
+                                modifier = Modifier.wrapContentHeight(),
                             )
                             FooterAction(
                                 isLastQuestion = state.isLastQuestion,
                                 isAnswered = state.currentQuestion.isAnswered,
-                                onEvent = onEvent
+                                onEvent = onEvent,
                             )
                         }
 
@@ -154,62 +158,64 @@ private fun SessionScreen(
                             pagerState = pagerState,
                             state = state,
                             onEvent = onEvent,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                     }
-
                 } else {
                     Column(
                         verticalArrangement = Spacing.large,
                     ) {
                         PinyinCharacter(
                             char = state.currentQuestion.question.dictionary,
-                            modifier = Modifier.wrapContentHeight()
+                            modifier = Modifier.wrapContentHeight(),
                         )
                         Pager(
                             pagerState = pagerState,
                             state = state,
                             onEvent = onEvent,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         FooterAction(
                             isLastQuestion = state.isLastQuestion,
                             isAnswered = state.currentQuestion.isAnswered,
-                            onEvent = onEvent
+                            onEvent = onEvent,
                         )
                     }
                 }
             }
-        }
+        },
     )
 }
 
-private val previewSuccessState = SessionViewModel.SessionState.Success(
-    startTime = Clock.System.now(),
-    currentPage = 0,
-    questionsState = listOf(
-        SessionViewModel.QuestionState(
-            question = previewDictionaryWithGraphic,
-            previousDrawnStrokes = emptyList(),
-        )
-    ),
-    drawReference = false,
-    drawHint = false,
-    showLeaveDialog = false,
-)
+private val previewSuccessState =
+    SessionViewModel.SessionState.Success(
+        startTime = Clock.System.now(),
+        currentPage = 0,
+        questionsState =
+            listOf(
+                SessionViewModel.QuestionState(
+                    question = previewDictionaryWithGraphic,
+                    previousDrawnStrokes = emptyList(),
+                ),
+            ),
+        drawReference = false,
+        drawHint = false,
+        showLeaveDialog = false,
+    )
 
 @Preview
 @Composable
 private fun PreviewSessionScreenDay(
-    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
+    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
 ) {
     AppTheme(ThemeMode.Day) {
         SessionScreen(
-            state = when (mode) {
-                LoadingMode.ERROR -> SessionViewModel.SessionState.Error
-                LoadingMode.SUCCESS -> previewSuccessState
-                LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
-            }
+            state =
+                when (mode) {
+                    LoadingMode.ERROR -> SessionViewModel.SessionState.Error
+                    LoadingMode.SUCCESS -> previewSuccessState
+                    LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
+                },
         )
     }
 }
@@ -217,17 +223,16 @@ private fun PreviewSessionScreenDay(
 @PreviewScreen
 @Composable
 private fun PreviewSessionScreenNight(
-    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode
+    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
 ) {
     AppTheme(ThemeMode.Night) {
         SessionScreen(
-            state = when (mode) {
-                LoadingMode.ERROR -> SessionViewModel.SessionState.Error
-                LoadingMode.SUCCESS -> previewSuccessState
-                LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
-            }
+            state =
+                when (mode) {
+                    LoadingMode.ERROR -> SessionViewModel.SessionState.Error
+                    LoadingMode.SUCCESS -> previewSuccessState
+                    LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
+                },
         )
     }
 }
-
-

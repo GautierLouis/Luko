@@ -14,20 +14,17 @@ import androidx.compose.ui.graphics.drawscope.Stroke as AndroidStroke
  */
 @Composable
 internal fun DrawableArea(
+    modifier: Modifier = Modifier,
     referenceStrokes: List<List<Offset>> = emptyList(),
     referenceHint: List<Offset> = emptyList(),
     previousDrawnStrokes: List<List<Offset>> = emptyList(),
     ongoingStroke: List<Offset> = emptyList(),
-    modifier: Modifier = Modifier,
 ) {
-
     val color = Theme.materialColors.inverseSurface
     val referenceColor = Theme.materialColors.outlineVariant
     val indicationColor = Theme.materialColors.primary
 
-
     Canvas(modifier = modifier) {
-
         // Grey-out result as reference
         referenceStrokes.forEach { drawStroke(stroke = it, strokeColor = referenceColor) }
 
@@ -35,7 +32,7 @@ internal fun DrawableArea(
         if (referenceHint.isNotEmpty()) {
             drawDashedLineWithFilledArrow(
                 points = referenceHint,
-                color = indicationColor
+                color = indicationColor,
             )
         }
 
@@ -45,10 +42,11 @@ internal fun DrawableArea(
             drawPath(
                 path = path,
                 color = color,
-                style = AndroidStroke(
-                    width = DrawableAreaDefault.STROKE_WIDTH,
-                    cap = StrokeCap.Round
-                )
+                style =
+                    AndroidStroke(
+                        width = DrawableAreaDefault.STROKE_WIDTH,
+                        cap = StrokeCap.Round,
+                    ),
             )
         }
 
@@ -57,10 +55,11 @@ internal fun DrawableArea(
         drawPath(
             path = livePath,
             color = color,
-            style = AndroidStroke(
-                width = DrawableAreaDefault.STROKE_WIDTH,
-                cap = StrokeCap.Round
-            )
+            style =
+                AndroidStroke(
+                    width = DrawableAreaDefault.STROKE_WIDTH,
+                    cap = StrokeCap.Round,
+                ),
         )
     }
 }

@@ -19,7 +19,7 @@ class AndroidPermissionsManager(
             shouldRationale(permission.toAndroidPermission()) -> {
                 AppLogger.w(
                     tag = "[PERMISSION]",
-                    message = "A rationale must be asked for this permission ($permission)"
+                    message = "A rationale must be asked for this permission ($permission)",
                 )
                 PermissionResult.DENIED
             }

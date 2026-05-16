@@ -5,7 +5,6 @@ import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
 
 internal class CalculateScoreUseCase {
-
     object ScoreDefault {
         const val MULTIPLIER_EASY = 1f
         const val MULTIPLIER_MEDIUM = 1.5f
@@ -28,49 +27,53 @@ internal class CalculateScoreUseCase {
         const val TIME_MAX_POINT = 1000
     }
 
-    private val basePointsPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
-        when (it) {
-            CharacterFrequencyLevel.COMMON -> ScoreDefault.LEVEL_COMMON_BASE_POINT
-            CharacterFrequencyLevel.FREQUENT -> ScoreDefault.LEVEL_FREQUENT_BASE_POINT
-            CharacterFrequencyLevel.STANDARD -> ScoreDefault.LEVEL_STANDARD_BASE_POINT
-            CharacterFrequencyLevel.EXTENDED -> ScoreDefault.LEVEL_EXTENDED_BASE_POINT
-            else -> null
+    private val basePointsPerLevel =
+        CharacterFrequencyLevel.validEntry.associateWith {
+            when (it) {
+                CharacterFrequencyLevel.COMMON -> ScoreDefault.LEVEL_COMMON_BASE_POINT
+                CharacterFrequencyLevel.FREQUENT -> ScoreDefault.LEVEL_FREQUENT_BASE_POINT
+                CharacterFrequencyLevel.STANDARD -> ScoreDefault.LEVEL_STANDARD_BASE_POINT
+                CharacterFrequencyLevel.EXTENDED -> ScoreDefault.LEVEL_EXTENDED_BASE_POINT
+                else -> null
+            }
         }
-    }
 
-    private val timePointPerLevel = CharacterFrequencyLevel.validEntry.associateWith {
-        when (it) {
-            CharacterFrequencyLevel.COMMON -> ScoreDefault.MAX_TIME_FOR_COMMON
-            CharacterFrequencyLevel.FREQUENT -> ScoreDefault.MAX_TIME_FOR_FREQUENT
-            CharacterFrequencyLevel.STANDARD -> ScoreDefault.MAX_TIME_FOR_STANDARD
-            CharacterFrequencyLevel.EXTENDED -> ScoreDefault.MAX_TIME_FOR_EXTENDED
-            else -> 0
+    private val timePointPerLevel =
+        CharacterFrequencyLevel.validEntry.associateWith {
+            when (it) {
+                CharacterFrequencyLevel.COMMON -> ScoreDefault.MAX_TIME_FOR_COMMON
+                CharacterFrequencyLevel.FREQUENT -> ScoreDefault.MAX_TIME_FOR_FREQUENT
+                CharacterFrequencyLevel.STANDARD -> ScoreDefault.MAX_TIME_FOR_STANDARD
+                CharacterFrequencyLevel.EXTENDED -> ScoreDefault.MAX_TIME_FOR_EXTENDED
+                else -> 0
+            }
         }
-    }
 
     fun calculate(
         questions: List<Dictionary>,
         difficulty: DifficultyLevel,
-        timeElapsed: Long
+        timeElapsed: Long,
     ): Int {
+        val difficultyMultiplier =
+            when (difficulty) {
+                DifficultyLevel.EASY -> ScoreDefault.MULTIPLIER_EASY
+                DifficultyLevel.MEDIUM -> ScoreDefault.MULTIPLIER_MEDIUM
+                DifficultyLevel.HARD -> ScoreDefault.MULTIPLIER_HARD
+            }
 
-        val difficultyMultiplier = when (difficulty) {
-            DifficultyLevel.EASY -> ScoreDefault.MULTIPLIER_EASY
-            DifficultyLevel.MEDIUM -> ScoreDefault.MULTIPLIER_MEDIUM
-            DifficultyLevel.HARD -> ScoreDefault.MULTIPLIER_HARD
-        }
+        val baseSum =
+            questions.sumOf {
+                val basePointsPerLevel = basePointsPerLevel[it.level]!!
+                val basePoint = basePointsPerLevel * difficultyMultiplier
+                basePoint.toInt()
+            }
 
-        val baseSum = questions.sumOf {
-            val basePointsPerLevel = basePointsPerLevel[it.level]!!
-            val basePoint = basePointsPerLevel * difficultyMultiplier
-            basePoint.toInt()
-        }
-
-        val maxTime = questions.sumOf {
-            val timePointPerLevel = timePointPerLevel[it.level]!!
-            val timePoint = timePointPerLevel * difficultyMultiplier
-            timePoint.toInt() * 1_000
-        }
+        val maxTime =
+            questions.sumOf {
+                val timePointPerLevel = timePointPerLevel[it.level]!!
+                val timePoint = timePointPerLevel * difficultyMultiplier
+                timePoint.toInt() * 1_000
+            }
 
         val timePoint = calculateTimeScore(timeElapsed, maxTime.toLong())
 
@@ -81,7 +84,6 @@ internal class CalculateScoreUseCase {
         actualTimeSpent: Long,
         maxTimeForSession: Long,
     ): Int {
-
         // Calculate time efficiency ratio
         // If actual time <= expected time: full points
         // If actual time > expected time: decreasing points
@@ -92,13 +94,14 @@ internal class CalculateScoreUseCase {
         // - 1.5x expected time: 500 points
         // - 2x expected time: 250 points
         // - 3x+ expected time: 0 points
-        val timeScore = when {
-            timeRatio >= 1.0f -> ScoreDefault.TIME_MAX_POINT
-            timeRatio >= 0.67f -> (ScoreDefault.TIME_MAX_POINT * (timeRatio * 1.5f - 0.5f)).toInt()
-            timeRatio >= 0.5f -> (ScoreDefault.TIME_MAX_POINT * (timeRatio * 2f - 1f) * 0.5f).toInt()
-            timeRatio >= 0.33f -> (ScoreDefault.TIME_MAX_POINT * (timeRatio * 3f - 1f) * 0.25f).toInt()
-            else -> 0
-        }
+        val timeScore =
+            when {
+                timeRatio >= 1.0f -> ScoreDefault.TIME_MAX_POINT
+                timeRatio >= 0.67f -> (ScoreDefault.TIME_MAX_POINT * (timeRatio * 1.5f - 0.5f)).toInt()
+                timeRatio >= 0.5f -> (ScoreDefault.TIME_MAX_POINT * (timeRatio * 2f - 1f) * 0.5f).toInt()
+                timeRatio >= 0.33f -> (ScoreDefault.TIME_MAX_POINT * (timeRatio * 3f - 1f) * 0.25f).toInt()
+                else -> 0
+            }
 
         return timeScore.coerceIn(0, ScoreDefault.TIME_MAX_POINT)
     }

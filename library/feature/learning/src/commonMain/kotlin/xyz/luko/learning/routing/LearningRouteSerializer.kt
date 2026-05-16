@@ -6,8 +6,9 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
 @OptIn(ExperimentalSerializationApi::class)
-val learningInternalRouteSerializer = SerializersModule {
-    polymorphic(NavKey::class) {
-        subclassesOfSealed<LearningInternalRoute>()
+val learningInternalRouteSerializer =
+    SerializersModule {
+        polymorphic(NavKey::class) {
+            subclassesOfSealed<LearningInternalRoute>()
+        }
     }
-}

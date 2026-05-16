@@ -26,18 +26,18 @@ internal suspend inline fun <reified T> call(request: suspend () -> HttpResponse
         Result.failure(e.toAppAppErrorCode())
     }
 
-internal fun Throwable.toAppAppErrorCode() = when (this) {
-    is CancellationException -> AppErrorCode.AppError()
-    is ClientRequestException -> {
-        when (response.status.value) {
-            401, 403 -> AppErrorCode.InvalidCredentials()
-            else -> AppErrorCode.ServerError()
+internal fun Throwable.toAppAppErrorCode() =
+    when (this) {
+        is CancellationException -> AppErrorCode.AppError()
+        is ClientRequestException -> {
+            when (response.status.value) {
+                401, 403 -> AppErrorCode.InvalidCredentials()
+                else -> AppErrorCode.ServerError()
+            }
         }
+
+        is RedirectResponseException, is ServerResponseException -> AppErrorCode.ServerError()
+
+        is IOException -> AppErrorCode.NetworkError() // no internet, timeouts, etc.
+        else -> AppErrorCode.UnknownError()
     }
-
-    is RedirectResponseException,
-    is ServerResponseException /*5xx*/ -> AppErrorCode.ServerError()
-
-    is IOException -> AppErrorCode.NetworkError() // no internet, timeouts, etc.
-    else -> AppErrorCode.UnknownError()
-}

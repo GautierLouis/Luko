@@ -24,20 +24,22 @@ internal fun SessionHeader(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = Padding.large),
-        verticalArrangement = Spacing.extraExtraLarge
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = Padding.large),
+        verticalArrangement = Spacing.extraExtraLarge,
     ) {
         LinearProgressIndicator(
             progress = { pager.currentPage.toFloat() / pager.pageCount.toFloat() },
             color = Theme.materialColors.tertiary,
             trackColor = Theme.materialColors.tertiaryContainer,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(Padding.medium),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(Padding.medium),
             gapSize = (-10).dp,
-            drawStopIndicator = {}
+            drawStopIndicator = {},
         )
     }
 }
@@ -45,7 +47,7 @@ internal fun SessionHeader(
 @Preview
 @Composable
 private fun PreviewSessionHeader(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         SessionHeader(

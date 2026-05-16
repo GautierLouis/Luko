@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:max-line-length")
+
 package xyz.luko.designsystem.token.string
 
 internal fun provideStringsFR(): Strings =

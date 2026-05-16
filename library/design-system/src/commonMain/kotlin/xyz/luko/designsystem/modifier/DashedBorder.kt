@@ -187,7 +187,7 @@ private class DashedBorderNode(
 
         val isSimpleRoundRect =
             insetOutline is Outline.Rounded &&
-                    insetOutline.roundRect.isSimple
+                insetOutline.roundRect.isSimple
 
         withTransform({
             clipPath(outerPath)

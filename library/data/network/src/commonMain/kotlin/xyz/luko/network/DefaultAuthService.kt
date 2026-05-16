@@ -10,20 +10,17 @@ import xyz.luko.network.interfaces.AuthService
 internal class DefaultAuthService(
     private val client: HttpClient,
 ) : AuthService {
-
-    override suspend fun registerDevice(body: RegisterDeviceRequestDto): Result<Unit> {
-        return call {
+    override suspend fun registerDevice(body: RegisterDeviceRequestDto): Result<Unit> =
+        call {
             client.post(EndPoint.RegisterAnonymously()) {
                 setBody(body)
             }
         }
-    }
 
-    override suspend fun updateFcm(body: RegisterDeviceRequestDto): Result<Unit> {
-        return call {
+    override suspend fun updateFcm(body: RegisterDeviceRequestDto): Result<Unit> =
+        call {
             client.post(EndPoint.UpdateFcm()) {
                 setBody(body)
             }
         }
-    }
 }

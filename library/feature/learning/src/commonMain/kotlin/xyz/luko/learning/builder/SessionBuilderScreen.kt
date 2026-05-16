@@ -52,32 +52,32 @@ internal fun SessionBuilderScreen() {
     SessionBuilderScreen(
         state = state,
         pager = pager,
-        onEvent = viewModel::onEventReceived
+        onEvent = viewModel::onEventReceived,
     )
 }
-
 
 @Composable
 private fun SessionBuilderScreen(
     state: SessionBuilderViewModel.UiState,
     pager: PagerState,
-    onEvent: (SessionBuilderScreenEvent) -> Unit = {}
+    onEvent: (SessionBuilderScreenEvent) -> Unit = {},
 ) {
-
     BaseScaffold { paddingValues ->
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
         ) {
             HorizontalPager(
                 state = pager,
                 userScrollEnabled = false,
                 pageSpacing = Padding.large,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(horizontal = Padding.large),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = Padding.large),
             ) { page ->
                 when (page) {
                     0 -> {
@@ -85,25 +85,25 @@ private fun SessionBuilderScreen(
                             selectedLevels = state.levels,
                             onClick = { level ->
                                 onEvent(OnLevelSelected(level))
-                            }
+                            },
                         )
                     }
 
                     1 -> {
                         DifficultyPicker(
                             difficulty = state.difficulty,
-                            onDifficultySelected = {
+                            onClick = {
                                 onEvent(OnDifficultySelected(it))
-                            }
+                            },
                         )
                     }
 
                     2 -> {
                         QuestionCountPicker(
                             selectedCount = state.questionCount,
-                            onCountClicked = {
+                            onClick = {
                                 onEvent(OnQuestionCountSelected(it))
-                            }
+                            },
                         )
                     }
                 }
@@ -112,14 +112,15 @@ private fun SessionBuilderScreen(
             Row(
                 modifier = Modifier.padding(Padding.large),
                 horizontalArrangement = Spacing.medium,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 AnimatedVisibility(
                     visible = state.showPreviewButton,
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier =
+                        Modifier
+                            .weight(1f),
                     enter = slideInHorizontally(),
-                    exit = slideOutHorizontally()
+                    exit = slideOutHorizontally(),
                 ) {
                     AppButton(
                         text = Theme.strings.previous,
@@ -127,34 +128,34 @@ private fun SessionBuilderScreen(
                         size = ButtonSize.Large,
                         onClick = {
                             onEvent(OnPreviousPage(pager.currentPage, pager.pageCount))
-                        }
+                        },
                     )
                 }
 
                 AppButton(
                     text = if (state.isFinished) Theme.strings.start else Theme.strings.next,
                     size = ButtonSize.Large,
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier =
+                        Modifier
+                            .weight(1f),
                     onClick = {
                         onEvent(OnNextPage(pager.currentPage, pager.pageCount))
-                    }
+                    },
                 )
             }
         }
     }
 }
 
-
 @PreviewScreen
 @Composable
 private fun PreviewSessionBuilderScreen(
-    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         SessionBuilderScreen(
             state = SessionBuilderViewModel.UiState(),
-            pager = rememberPagerState(initialPage = 0) { PAGE_COUNT }
+            pager = rememberPagerState(initialPage = 0) { PAGE_COUNT },
         )
     }
 }

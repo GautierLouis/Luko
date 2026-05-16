@@ -43,11 +43,10 @@ internal fun DictionaryTopBar(
 
     Column(
         modifier =
-            Modifier
+            modifier
                 .background(containerColor),
     ) {
         CenterAlignedTopAppBar(
-            modifier = modifier,
             title = {
                 Text(
                     text = Theme.strings.dictionary,
