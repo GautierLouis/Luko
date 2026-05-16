@@ -60,7 +60,7 @@ class ApplePermissionsManager : PermissionsManager {
             }
 
             else -> {
-                AppLogger.e("unknown gallery status $status")
+                AppLogger.e(tag = "Permission Manager", "unknown gallery status $status")
                 PermissionResult.DENIED
             }
         }

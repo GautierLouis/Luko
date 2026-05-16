@@ -25,6 +25,7 @@ class MultiplatformConvention : Plugin<Project> {
             apply(libs.plugins.ktlint.get().pluginId)
             apply(libs.plugins.kover.get().pluginId)
             apply(libs.plugins.detekt.get().pluginId)
+            apply(libs.plugins.dokka.get().pluginId)
         }
 
         configureKtLint(libs)
