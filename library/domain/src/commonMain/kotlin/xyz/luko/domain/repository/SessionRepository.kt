@@ -12,11 +12,11 @@ interface SessionRepository {
         responses: List<SessionResponse>,
     )
 
-    suspend fun getLastSessions(limit: Int): List<Session>
+    fun getLastSessions(limit: Int): Flow<List<Session>>
 
     fun getSessions(): Flow<PagingData<Session>>
 
     suspend fun getLastSessionsFor(code: Int): List<Session>
 
-    suspend fun getStatistics(): Statistics
+    fun getStatistics(): Flow<Statistics>
 }

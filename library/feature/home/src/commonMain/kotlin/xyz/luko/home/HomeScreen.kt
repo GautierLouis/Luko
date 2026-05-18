@@ -95,7 +95,6 @@ private fun PreviewHomeScreen(
         HomeScreen(
             state =
                 HomeViewModel.UIState(
-                    isLoading = false,
                     lastSession = previewSession,
                     stats = previewStatistics,
                 ),

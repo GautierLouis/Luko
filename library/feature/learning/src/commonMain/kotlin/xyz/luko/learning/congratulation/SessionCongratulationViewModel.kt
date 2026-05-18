@@ -4,14 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.navigation.AppNavigation
 
 internal class SessionCongratulationViewModel(
-    private val sessionRepository: SessionRepository,
+    sessionRepository: SessionRepository,
 ) : ViewModel() {
     sealed class UIState {
         data object Loading : UIState()
@@ -27,15 +29,17 @@ internal class SessionCongratulationViewModel(
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            sessionRepository
-                .getLastSessions(1)
-                .firstOrNull()
-                ?.let { s -> _state.update { UIState.Success(s) } }
-                ?: run {
+        sessionRepository
+            .getLastSessions(1)
+            .distinctUntilChanged()
+            .onEach { lastSession ->
+                val session = lastSession.firstOrNull()
+                if (session != null) {
+                    _state.update { UIState.Success(session) }
+                } else {
                     _state.update { UIState.Error }
                     AppNavigation.navigateHome()
                 }
-        }
+            }.launchIn(viewModelScope)
     }
 }

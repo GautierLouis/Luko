@@ -30,7 +30,6 @@ class ComposeConvention : Plugin<Project> {
                     implementation(libs.compose.material3)
                     implementation(libs.compose.material3.adaptive)
                     implementation(libs.compose.ui)
-                    implementation(libs.compose.components.resources)
                     implementation(libs.compose.components.ui.tooling.preview)
 
                     implementation(libs.compose.lifecycle.viewmodelNavigation3)

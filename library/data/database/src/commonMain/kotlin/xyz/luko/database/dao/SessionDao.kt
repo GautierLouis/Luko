@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
 import xyz.luko.database.entity.BasicStatistics
 import xyz.luko.database.entity.EmbeddedResponse
@@ -41,20 +42,20 @@ interface SessionDao {
     suspend fun getAll(): List<SessionEntity>
 
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT :limit")
-    suspend fun getLast(limit: Int): List<SessionEntity>
+    fun getLast(limit: Int): Flow<List<SessionEntity>>
 
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
     fun getAllPaged(): PagingSource<Int, SessionEntity>
 
     @Query(
         """
-        SELECT 
-            s.* 
-        FROM SessionEntity s 
-        INNER JOIN ResponseEntity r 
-            ON r.sessionId = s.id 
-        WHERE r.code = :code 
-        ORDER BY s.date 
+        SELECT
+            s.*
+        FROM SessionEntity s
+        INNER JOIN ResponseEntity r
+            ON r.sessionId = s.id
+        WHERE r.code = :code
+        ORDER BY s.date
         DESC LIMIT 3
     """,
     )
@@ -65,7 +66,7 @@ interface SessionDao {
 
     @Query(
         """
-        SELECT 
+        SELECT
             COALESCE(SUM(score), 0) AS totalScore,
             COALESCE(AVG(duration), 0) AS averageTime,
             COALESCE(COUNT(*), 0) AS sessionCount,
@@ -74,5 +75,5 @@ interface SessionDao {
         FROM SessionEntity
     """,
     )
-    suspend fun getBasicStatistics(): BasicStatistics
+    fun getBasicStatistics(): Flow<BasicStatistics>
 }

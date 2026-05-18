@@ -33,8 +33,8 @@ internal class DefaultSessionRepository(
         dao.insertSessionWithResponses(sessionEntity, responseEntity)
     }
 
-    override suspend fun getLastSessions(limit: Int): List<Session> =
-        dao.getLast(limit).map { it.toDto() }
+    override fun getLastSessions(limit: Int): Flow<List<Session>> =
+        dao.getLast(limit).map { list -> list.map { it.toDto() } }
 
     override fun getSessions(): Flow<PagingData<Session>> =
         Pager(
@@ -52,18 +52,19 @@ internal class DefaultSessionRepository(
     override suspend fun getLastSessionsFor(code: Int): List<Session> =
         dao.getLastFor(code).map { it.toDto() }
 
-    override suspend fun getStatistics(): Statistics {
-        val basic = dao.getBasicStatistics()
-        val dates =
-            basic.uniqueDates
-                ?.map { it.toUTCDate() }
-                .orEmpty()
-        return Statistics(
-            totalScore = basic.totalScore,
-            averageTime = basic.averageTime.toDuration(DurationUnit.SECONDS),
-            averageDifficulty = difficultyComputer.average(basic.difficulties.orEmpty()),
-            currentDayStreak = dayStreakComputer.calculateCurrentDayStreak(dates),
-            sessionCount = basic.sessionCount,
-        )
+    override fun getStatistics(): Flow<Statistics> {
+        return dao.getBasicStatistics().map { basic ->
+            val dates =
+                basic.uniqueDates
+                    ?.map { it.toUTCDate() }
+                    .orEmpty()
+            Statistics(
+                totalScore = basic.totalScore,
+                averageTime = basic.averageTime.toDuration(DurationUnit.SECONDS),
+                averageDifficulty = difficultyComputer.average(basic.difficulties.orEmpty()),
+                currentDayStreak = dayStreakComputer.calculateCurrentDayStreak(dates),
+                sessionCount = basic.sessionCount,
+            )
+        }
     }
 }
