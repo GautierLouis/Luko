@@ -8,9 +8,9 @@ import io.ktor.server.testing.testApplication
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.mp.KoinPlatform.stopKoin
-import xyz.luko.server.database.entity.DictionaryTable
-import xyz.luko.server.database.entity.GraphicTable
-import xyz.luko.server.database.entity.UserTable
+import xyz.luko.server.database.table.DictionaryTable
+import xyz.luko.server.database.table.GraphicTable
+import xyz.luko.server.database.table.UserTable
 import xyz.luko.server.mock.testModule
 import kotlin.test.AfterTest
 import kotlin.test.Test

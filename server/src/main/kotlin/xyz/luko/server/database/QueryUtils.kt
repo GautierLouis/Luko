@@ -13,11 +13,11 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import xyz.luko.server.database.entity.DictionaryTable
-import xyz.luko.server.database.entity.DictionaryTable.decompositionList
-import xyz.luko.server.database.entity.DictionaryTable.level
-import xyz.luko.server.database.entity.DictionaryTable.pinyin
-import xyz.luko.server.database.entity.GraphicTable
+import xyz.luko.server.database.table.DictionaryTable
+import xyz.luko.server.database.table.DictionaryTable.decompositionList
+import xyz.luko.server.database.table.DictionaryTable.level
+import xyz.luko.server.database.table.DictionaryTable.pinyin
+import xyz.luko.server.database.table.GraphicTable
 import xyz.luko.server.domain.model.CharacterFrequencyLevelEntity
 import xyz.luko.server.domain.repo.implem.toneVariants
 

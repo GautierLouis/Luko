@@ -1,34 +1,28 @@
 package xyz.luko.server.domain.repo.implem
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import xyz.luko.apicontracts.dto.CharacterFrequencyLevelDto
 import xyz.luko.apicontracts.dto.DictionaryDto
 import xyz.luko.apicontracts.dto.GraphicDto
-import xyz.luko.apicontracts.dto.PointDto
-import xyz.luko.apicontracts.dto.StrokeDto
 import xyz.luko.server.database.source.FileDataSource
-import xyz.luko.server.domain.repo.CompositionUseCase
+import xyz.luko.server.domain.mapper.toDomain
 import xyz.luko.server.domain.repo.FileRepository
+import xyz.luko.server.domain.usecase.parser.CompositionUseCase
+import xyz.luko.server.domain.usecase.parser.SmotherMediansUseCase
+import java.awt.Font
 
 class DefaultFileRepository(
     private val source: FileDataSource,
-    private val compositionUseCase: CompositionUseCase
+    private val compositionUseCase: CompositionUseCase,
+    private val smootherMediansUseCase: SmotherMediansUseCase
 ) : FileRepository {
 
     override suspend fun loadGraphicFile(): List<GraphicDto> {
         return source.loadGraphicFile()
-            .map { g ->
-                GraphicDto(
-                    code = g.character.toString().codePointAt(0),
-                    strokes = g.strokes,
-                    medians = g.medians.map { s ->
-                        StrokeDto(s.map { p ->
-                            PointDto(p[0], p[1])
-                        })
-                    }
-                )
-            }
+            .map { it.toDomain(smootherMediansUseCase.smoothen(it.medians)) }
     }
 
     override suspend fun loadDictionaryFile(): List<DictionaryDto> {
@@ -67,5 +61,11 @@ class DefaultFileRepository(
     private suspend fun parseHanzi(): List<Pair<Char, Int?>> {
         return source.loadHanziFile().filter { it.simplified != null }
             .map { it.simplified!!.first() to it.rank_rsh }
+    }
+
+    override suspend fun loadFont(): Font {
+        return withContext(Dispatchers.IO) {
+            Font.createFont(Font.TRUETYPE_FONT, source.loadFont().inputStream())
+        }
     }
 }

@@ -7,11 +7,11 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.selectAll
 import xyz.luko.server.database.defaultWhere
-import xyz.luko.server.database.entity.DictionaryTable
 import xyz.luko.server.database.joinGraphic
 import xyz.luko.server.database.matchesPinyin
 import xyz.luko.server.database.paginated
 import xyz.luko.server.database.suspendTransaction
+import xyz.luko.server.database.table.DictionaryTable
 import xyz.luko.server.domain.model.CharacterFrequencyLevelEntity
 import xyz.luko.server.domain.model.DictionaryEntity
 import kotlin.random.Random

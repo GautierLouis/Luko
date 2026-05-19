@@ -1,6 +1,9 @@
 package xyz.luko.server.domain.usecase.parser
 
-class IdeographicParser(input: String) {
+import xyz.luko.server.domain.mapper.parsing.IdeographicChar
+import xyz.luko.server.domain.mapper.parsing.IdeographicNode
+
+class IdeographicParserUseCase(input: String) {
     private val cps: IntArray = input.codePoints().toArray()
     private var i = 0
 

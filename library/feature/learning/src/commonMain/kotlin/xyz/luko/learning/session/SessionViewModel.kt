@@ -21,7 +21,6 @@ import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Stroke
 import xyz.luko.domain.repository.CharacterRepository
 import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.learning.builder.QuestionCount
 import xyz.luko.learning.routing.LearningInternalRoute
 import xyz.luko.learning.session.SessionScreenEvent.Finish
 import xyz.luko.learning.session.SessionScreenEvent.Next
@@ -36,29 +35,12 @@ import kotlin.time.Clock
 import kotlin.time.Instant
 
 internal class SessionViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val repository: CharacterRepository,
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
 ) : ViewModel() {
-    private val descriptor = LearningInternalRoute.SessionRoute.serializer().descriptor
-
-    private val levels: List<FrequencyLevel> =
-        (savedStateHandle[descriptor.getElementName(0)] as? String)
-            ?.split(",")
-            ?.map { FrequencyLevel.valueOf(it.trim()) }
-            ?: FrequencyLevel.entries
-
-    private val difficulty: DifficultyLevel =
-        (savedStateHandle[descriptor.getElementName(1)] as? String)
-            ?.let { DifficultyLevel.valueOf(it) }
-            ?: DifficultyLevel.EASY
-
-    private val limit: QuestionCount =
-        (savedStateHandle[descriptor.getElementName(2)] as? String)
-            ?.let { QuestionCount.valueOf(it) }
-            ?: QuestionCount.FIVE
 
     sealed class SessionState {
         data object Error : SessionState()
@@ -85,7 +67,7 @@ internal class SessionViewModel(
         val previousDrawnStrokes: List<List<Offset>> = emptyList(),
     ) {
         val nbStrokeToDraw
-            get() = question.graphics.medians.size
+            get() = question.graphics.smoothMedians.size
 
         val isAnswered
             get() = previousDrawnStrokes.size == nbStrokeToDraw
@@ -124,6 +106,8 @@ internal class SessionViewModel(
     }
 
     private fun loadQuestions() {
+        val (levels, difficulty, limit) = savedStateHandle.getParams()
+
         viewModelScope.launch {
             repository
                 .generateSession(levels.toDomain(), limit.value)
@@ -216,6 +200,8 @@ internal class SessionViewModel(
         val timeElapsed = endTime - s.startTime
 
         val dictionary = s.questionsState.map { it.question.dictionary }
+
+        val (_, difficulty, _) = savedStateHandle.getParams()
 
         val score =
             scoreCalculator.calculate(

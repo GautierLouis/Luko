@@ -6,9 +6,9 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.toListOf
 import org.jetbrains.kotlinx.dataframe.io.readCsv
-import xyz.luko.server.domain.usecase.parser.CsvRow
-import xyz.luko.server.domain.usecase.parser.DictionaryParsed
-import xyz.luko.server.domain.usecase.parser.GraphicParser
+import xyz.luko.server.domain.mapper.parsing.CsvRow
+import xyz.luko.server.domain.mapper.parsing.DictionaryParsed
+import xyz.luko.server.domain.mapper.parsing.GraphicParser
 
 class DefaultFileDataSource(
     private val supabase: SupabaseClient
@@ -19,6 +19,7 @@ class DefaultFileDataSource(
         private const val DICTIONARY_FILE: String = "dictionary.txt"
         private const val GRAPHIC_FILE: String = "graphics.txt"
         private const val HANZI_FILE: String = "hanzi.csv"
+        private const val OPEN_HUNINN_FILE: String = "openhuninn.ttf"
     }
 
     override suspend fun loadGraphicFile(): List<GraphicParser> {
@@ -35,6 +36,10 @@ class DefaultFileDataSource(
         val bytes = loadBytes(HANZI_FILE)
         val df = DataFrame.readCsv(bytes.inputStream())
         return df.toListOf()
+    }
+
+    override suspend fun loadFont(): ByteArray {
+        return loadBytes(OPEN_HUNINN_FILE)
     }
 
     private suspend fun loadFile(fileName: String): String {

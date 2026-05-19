@@ -9,7 +9,7 @@ import xyz.luko.apicontracts.dto.DictionaryWithGraphicDto
 import xyz.luko.apicontracts.dto.EtymologyDto
 import xyz.luko.apicontracts.dto.EtymologyTypeDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
-import xyz.luko.server.database.entity.DictionaryTable
+import xyz.luko.server.database.table.DictionaryTable
 import xyz.luko.server.domain.model.CharacterFrequencyLevelEntity
 import xyz.luko.server.domain.model.DictionaryEntity
 import xyz.luko.server.domain.model.EtymologyTypeEntity

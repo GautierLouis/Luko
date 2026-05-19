@@ -1,7 +1,6 @@
 package xyz.luko.server.domain.repo
 
 import xyz.luko.apicontracts.dto.DictionaryDto
-import xyz.luko.apicontracts.dto.DictionaryWithGraphicDto
 import xyz.luko.apicontracts.dto.LevelCountDto
 import xyz.luko.apicontracts.dto.ResponseListDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
@@ -11,10 +10,6 @@ interface DictionaryRepository {
     suspend fun exist(): Boolean
 
     suspend fun getLevelCount(): List<LevelCountDto>
-
-    suspend fun getRandomCharacters(
-        params: EndPoint.GenerateSession
-    ): List<DictionaryWithGraphicDto>
 
     suspend fun getByLevel(
         params: EndPoint.Characters.ByLevel

@@ -1,4 +1,4 @@
-package xyz.luko.server.database.entity
+package xyz.luko.server.database.table
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import xyz.luko.server.domain.model.CharacterFrequencyLevelEntity

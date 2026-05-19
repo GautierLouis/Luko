@@ -7,6 +7,7 @@ data class GraphicDto(
     val code: Int,
     val strokes: List<String>,
     val medians: List<StrokeDto>,
+    val smootherMedians: List<String>
 )
 
 @Serializable

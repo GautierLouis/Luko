@@ -3,8 +3,8 @@ package xyz.luko.server.domain.repo.implem
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
-import xyz.luko.server.database.entity.UserTable
 import xyz.luko.server.database.suspendTransaction
+import xyz.luko.server.database.table.UserTable
 import xyz.luko.server.domain.mapper.toUserEntity
 import xyz.luko.server.domain.model.UserEntity
 import xyz.luko.server.domain.repo.UserRepository

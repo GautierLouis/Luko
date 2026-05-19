@@ -57,7 +57,12 @@ class EndPoint {
             @Resource("graphic")
             class Graphic(
                 val parent: ByName,
-            )
+            ) {
+                @Resource("render")
+                class Render(
+                    val parent: Graphic,
+                )
+            }
         }
 
         @Resource("by_level")

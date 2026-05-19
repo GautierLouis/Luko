@@ -1,18 +1,23 @@
 package xyz.luko.server.router.route
 
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.resources.get
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
+import xyz.luko.apicontracts.dto.StrokeDto
 import xyz.luko.apicontracts.routing.EndPoint
 import xyz.luko.server.domain.repo.DictionaryRepository
 import xyz.luko.server.domain.repo.GraphicRepository
+import xyz.luko.server.domain.repo.SessionRepository
 import xyz.luko.server.domain.usecase.GetFullDictionaryUseCase
 import xyz.luko.server.error.graphicNotFound
 import xyz.luko.server.router.RouteController
 
 class CharacterRouteController(
+    private val sessionRepository: SessionRepository,
     private val dictionaryRepository: DictionaryRepository,
     private val graphicRepository: GraphicRepository,
     private val getFullDictionary: GetFullDictionaryUseCase
@@ -29,7 +34,7 @@ class CharacterRouteController(
         }
 
         get<EndPoint.GenerateSession> { resources ->
-            dictionaryRepository.getRandomCharacters(resources).let {
+            sessionRepository.generateSession(resources).let {
                 call.respondOk(it)
             }
         }
@@ -56,6 +61,84 @@ class CharacterRouteController(
             graphicRepository.get(resource.parent)
                 ?.let { call.respondOk(it) }
                 ?: throw graphicNotFound(resource.parent.code)
+        }
+
+        get<EndPoint.Characters.ByName.Graphic.Render> { resource ->
+            val graphic = graphicRepository.get(resource.parent.parent)
+                ?: throw graphicNotFound(resource.parent.parent.code)
+
+            val colors = listOf(
+                "#378ADD", "#1D9E75", "#D85A30", "#D4537E", "#7F77DD",
+                "#639922", "#BA7517", "#E24B4A", "#EF9F27", "#AFA9EC", "#5DCAA5"
+            )
+
+            fun List<String>.toPaths() = mapIndexed { i, path ->
+                val color = colors[i % colors.size]
+                """<path d="$path" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
+            }.joinToString("\n        ")
+
+            fun List<StrokeDto>.toMedianPaths() = mapIndexed { i, stroke ->
+                val color = colors[i % colors.size]
+                val d = stroke.points.mapIndexed { j, p ->
+                    if (j == 0) "M ${p.x} ${p.y}" else "L ${p.x} ${p.y}"
+                }.joinToString(" ")
+                """<path d="$d" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
+            }.joinToString("\n        ")
+
+            val html = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>&#${graphic.code}; — Graphic</title>
+            <style>
+                * { box-sizing: border-box; margin: 0; padding: 0; }
+                body { font-family: sans-serif; background: #111; color: #eee; display: flex; flex-direction: column; align-items: center; padding: 2rem; gap: 1.5rem; }
+                h1 { font-size: 3rem; }
+                .controls { display: flex; gap: 0.75rem; }
+                button { padding: 0.5rem 1.25rem; border-radius: 8px; border: 1px solid #444; background: #222; color: #eee; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+                button:hover { background: #333; }
+                button.active { background: #378ADD; border-color: #378ADD; color: #fff; }
+                svg { border: 1px solid #333; border-radius: 8px; background: #1a1a1a; width: 100%; max-width: 600px; height: auto; }
+            </style>
+        </head>
+        <body>
+            <h1>&#${graphic.code};</h1>
+            <div class="controls">
+                <button class="active" onclick="show('original')">Original</button>
+                <button onclick="show('medians')">Medians</button>
+                <button onclick="show('smoothed')">Smooth Medians</button>
+            </div>
+            <svg viewBox="-30 -80 1100 1000" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(0, 920) scale(1, -1)">
+                    <g id="original">
+                        ${graphic.strokes.toPaths()}
+                    </g>
+                    <g id="medians" style="display:none">
+                        ${graphic.medians.toMedianPaths()}
+                    </g>
+                    <g id="smoothed" style="display:none">
+                        ${graphic.smootherMedians.toPaths()}
+                    </g>
+                </g>
+            </svg>
+            <script>
+                const layers = ['original', 'medians', 'smoothed'];
+                function show(id) {
+                    layers.forEach(l => {
+                        document.getElementById(l).style.display = l === id ? '' : 'none';
+                    });
+                    document.querySelectorAll('button').forEach((b, i) => {
+                        b.classList.toggle('active', layers[i] === id);
+                    });
+                }
+            </script>
+        </body>
+        </html>
+    """.trimIndent()
+
+            call.respondText(html, ContentType.Text.Html)
         }
     }
 }

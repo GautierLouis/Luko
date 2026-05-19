@@ -134,6 +134,10 @@ val previewGraphic =
                 ),
                 listOf(listOf(615, 189), listOf(626, 202), listOf(750, 224), listOf(812, 214)),
             ).map { s -> Stroke(s.map { p -> Point(p[0].toFloat(), p[1].toFloat()) }) },
+        smoothMedians = listOf(
+            "M 328.13 687.50 C 349.41 679.30 513.87 619.73 541.02 605.47 C 568.16 591.21 593.75 550.98 599.61 544.92",
+            "M 309.57 535.16 C 331.64 526.17 502.44 460.25 530.27 445.31 C 558.11 430.37 582.13 391.70 587.89 385.74"
+        )
     )
 
 val previewDictionaryWithGraphic =

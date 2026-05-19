@@ -8,9 +8,9 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import xyz.luko.server.ServerConfig
-import xyz.luko.server.database.entity.DictionaryTable
-import xyz.luko.server.database.entity.GraphicTable
-import xyz.luko.server.database.entity.UserTable
+import xyz.luko.server.database.table.DictionaryTable
+import xyz.luko.server.database.table.GraphicTable
+import xyz.luko.server.database.table.UserTable
 import xyz.luko.server.domain.usecase.PrepopulateDatabaseUseCase
 
 class DefaultDatabase(

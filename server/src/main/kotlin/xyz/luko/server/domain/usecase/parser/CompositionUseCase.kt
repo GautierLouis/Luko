@@ -1,13 +1,12 @@
-package xyz.luko.server.domain.repo
+package xyz.luko.server.domain.usecase.parser
 
 import xyz.luko.apicontracts.dto.DecompositionDto
-import xyz.luko.server.domain.usecase.parser.IdeographicNode
-import xyz.luko.server.domain.usecase.parser.IdeographicParser
+import xyz.luko.server.domain.mapper.parsing.IdeographicNode
 
 class CompositionUseCase {
     fun decompose(original: String): List<DecompositionDto> {
         return try {
-            val parser = IdeographicParser(original)
+            val parser = IdeographicParserUseCase(original)
             val tree = parser.parse()
             decompositionOrderedJsonFromIds(tree)
         } catch (_: Throwable) {

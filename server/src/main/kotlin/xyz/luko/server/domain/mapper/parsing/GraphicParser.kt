@@ -1,4 +1,4 @@
-package xyz.luko.server.domain.usecase.parser
+package xyz.luko.server.domain.mapper.parsing
 
 import kotlinx.serialization.Serializable
 

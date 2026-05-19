@@ -60,6 +60,10 @@ internal fun GraphicSketcher(
             }
         }
 
+//    val referenceStrokes = remember(graphic.code, canvasSize) {
+//        TransformStroke.projectToCanvas(graphic.smoothMedians, canvasSize)
+//    }
+
     val previousDrawnScaled =
         remember(state.previousDrawnStrokes, canvasSize) {
             state.previousDrawnStrokes.map { stroke ->

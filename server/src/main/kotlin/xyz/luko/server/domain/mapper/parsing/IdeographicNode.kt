@@ -1,4 +1,4 @@
-package xyz.luko.server.domain.usecase.parser
+package xyz.luko.server.domain.mapper.parsing
 
 sealed class IdeographicNode {
     data class Operator(val op: IdeographicChar, val children: List<IdeographicNode>) : IdeographicNode()

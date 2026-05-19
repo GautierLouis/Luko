@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class GraphicEntity(
     val code: Int,
     val strokes: String,
-    val medians: String
+    val medians: String,
+    val smootherMedians: String
 )

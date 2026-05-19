@@ -52,6 +52,7 @@ internal fun GraphicDto.toDomain() =
         code = code,
         strokes = strokes,
         medians = medians.map { it.toDomain() },
+        smoothMedians = smootherMedians
     )
 
 internal fun StrokeDto.toDomain() =

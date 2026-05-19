@@ -7,6 +7,7 @@ data class Graphic(
     val code: Int,
     val strokes: List<String>,
     val medians: List<Stroke>,
+    val smoothMedians: List<String>,
 ) {
     val character: Char
         get() = Char(code)

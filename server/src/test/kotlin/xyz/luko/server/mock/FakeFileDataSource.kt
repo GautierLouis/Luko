@@ -1,9 +1,9 @@
 package xyz.luko.server.mock
 
 import xyz.luko.server.database.source.FileDataSource
-import xyz.luko.server.domain.usecase.parser.CsvRow
-import xyz.luko.server.domain.usecase.parser.DictionaryParsed
-import xyz.luko.server.domain.usecase.parser.GraphicParser
+import xyz.luko.server.domain.mapper.parsing.CsvRow
+import xyz.luko.server.domain.mapper.parsing.DictionaryParsed
+import xyz.luko.server.domain.mapper.parsing.GraphicParser
 
 class FakeFileDataSource : FileDataSource {
     override suspend fun loadGraphicFile(): List<GraphicParser> {
@@ -16,5 +16,9 @@ class FakeFileDataSource : FileDataSource {
 
     override suspend fun loadHanziFile(): List<CsvRow> {
         return emptyList()
+    }
+
+    override suspend fun loadFont(): ByteArray {
+        return byteArrayOf()
     }
 }

@@ -1,4 +1,4 @@
-package xyz.luko.server.domain.usecase.parser
+package xyz.luko.server.domain.mapper.parsing
 
 
 enum class IdeographicChar(val symbol: Int, val codepoint: Int, val arity: Int) {
