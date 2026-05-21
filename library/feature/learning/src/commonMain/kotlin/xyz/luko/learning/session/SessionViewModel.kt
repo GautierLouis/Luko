@@ -31,9 +31,14 @@ import xyz.luko.learning.session.model.getParams
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 import xyz.luko.navigation.AppNavigation
+import xyz.luko.tracking.Tracker
+import xyz.luko.tracking.TrackingEvent
 import kotlin.time.Clock
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
+@OptIn(ExperimentalUuidApi::class)
 internal class SessionViewModel(
     savedStateHandle: SavedStateHandle,
     private val repository: CharacterRepository,
@@ -48,6 +53,8 @@ internal class SessionViewModel(
 
     // No need to pass this to the view: out of state
     private val responses = mutableListOf<SessionResponse>()
+
+    private val trackingSessionID = Uuid.random().toString()
 
     private val _state: MutableStateFlow<SessionState> = MutableStateFlow(SessionState.Loading)
     val state = _state.asStateFlow()
@@ -71,9 +78,19 @@ internal class SessionViewModel(
             repository
                 .generateSession(params.levels.toDomain(), params.limit.value)
                 .onSuccess { data ->
+                    val now = Clock.System.now()
+
+                    TrackingEvent.CreateSession(
+                        trackingSessionID,
+                        startDate = now.toString(),
+                        difficulty = params.difficulty.name,
+                        levels = params.levels.joinToString(),
+                        questions = data.map { it.dictionary.code },
+                    ).run { Tracker.track(this) }
+
                     _state.update {
                         SessionState.Success(
-                            startTime = Clock.System.now(),
+                            startTime = now,
                             questions = data,
                             drawingPageState = data.toInitialPageState(),
                         )
@@ -103,19 +120,30 @@ internal class SessionViewModel(
         val success = _state.value as? SessionState.Success ?: return
         val endTime = Clock.System.now()
         val duration = endTime - success.startTime
+        val score = scoreCalculator.calculate(
+            questions = success.questions.map { it.dictionary },
+            difficulty = params.difficulty,
+            timeElapsed = duration.inWholeMilliseconds,
+        )
 
         viewModelScope.launch {
+            TrackingEvent.SessionFinish(
+                trackingId = trackingSessionID,
+                endDate = endTime.toString(),
+                duration = duration.inWholeMilliseconds,
+                difficulty = params.difficulty.name,
+                levels = params.levels.joinToString(),
+                score = score,
+                responses = responses.associate { it.code to it.statistics.overallAccuracy }
+            ).run { Tracker.track(this) }
+
             sessionRepository.save(
                 session = Session(
                     date = endTime,
                     duration = duration,
                     difficulty = params.difficulty,
                     questionsCount = responses.count(),
-                    score = scoreCalculator.calculate(
-                        questions = success.questions.map { it.dictionary },
-                        difficulty = params.difficulty,
-                        timeElapsed = duration.inWholeMilliseconds,
-                    ),
+                    score = score,
                 ),
                 responses = responses,
             )

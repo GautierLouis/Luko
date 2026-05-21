@@ -33,6 +33,7 @@ import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
 import xyz.luko.learning.session.model.SessionScreenEvent.Reload
@@ -48,7 +49,7 @@ import kotlin.time.Clock
 
 @Composable
 internal fun SessionScreen() {
-    val viewModel = koinViewModel<xyz.luko.learning.session.SessionViewModel>()
+    val viewModel = koinViewModel<SessionViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     SessionScreen(
