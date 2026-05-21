@@ -166,6 +166,7 @@ private fun SessionScreen(
                             pagerState = pagerState,
                             state = state,
                             modifier = Modifier.weight(1f),
+                            onEvent = onEvent
                         )
                     }
                 } else {
@@ -180,6 +181,7 @@ private fun SessionScreen(
                             pagerState = pagerState,
                             state = state,
                             modifier = Modifier.weight(1f),
+                            onEvent = onEvent
                         )
                         FooterAction(
                             isLastQuestion = state.isLastQuestion,

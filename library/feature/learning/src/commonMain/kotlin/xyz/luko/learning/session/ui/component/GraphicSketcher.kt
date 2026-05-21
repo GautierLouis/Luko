@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.zIndex
 import xyz.luko.baseui.drawing.StrokeTransformer
 import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.preview.ThemeMode
@@ -100,7 +101,8 @@ internal fun GraphicSketcher(
                 modifier =
                     Modifier
                         .align(Alignment.TopEnd)
-                        .padding(Padding.large),
+                        .padding(Padding.large)
+                        .zIndex(1f),
             ) {
                 ResetButton(onClick = { onEvent(SessionScreenEvent.Reset) })
             }
