@@ -16,9 +16,9 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index("sessionId"), Index("code")],
 )
-data class ResponseEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val sessionId: Int,
+data class SessionResponseEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val sessionId: Long,
     val code: Int,
     val overallAccuracy: Float,
     val response: String,

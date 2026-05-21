@@ -1,17 +1,17 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import xyz.luko.learning.session.model.SessionState
 
 @Composable
 internal fun Pager(
     pagerState: PagerState,
-    state: SessionViewModel.SessionState.Success,
+    state: SessionState.Success,
     modifier: Modifier = Modifier,
-    onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
     HorizontalPager(
         modifier = modifier,
@@ -19,13 +19,8 @@ internal fun Pager(
         state = pagerState,
     ) {
         GraphicSketcher(
-            state = state.currentQuestion,
-            drawReference = state.drawReference,
-            drawHint = state.drawHint,
-            onEvent = onEvent,
-            modifier =
-                Modifier
-                    .fillMaxSize(),
+            state = state.currentDrawingPageState,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

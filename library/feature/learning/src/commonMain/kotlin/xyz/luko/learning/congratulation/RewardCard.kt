@@ -35,11 +35,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import xyz.luko.baseui.AdaptiveLayout
-import xyz.luko.baseui.AdaptiveLayoutOrientation
-import xyz.luko.baseui.AdaptiveLayoutOrientation.COLUMN
-import xyz.luko.baseui.AdaptiveLayoutOrientation.ROW
-import xyz.luko.baseui.TestTags
+import xyz.luko.baseui.adaptive.AdaptiveLayout
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.COLUMN
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.ROW
+import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.metrics.attrs.MetricItem
 import xyz.luko.designsystem.components.metrics.attrs.SessionStatistic
 import xyz.luko.designsystem.preview.ThemeMode
@@ -49,6 +49,7 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun RewardCard(
@@ -64,7 +65,7 @@ internal fun RewardCard(
     val animatedScore = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
-        delay(300)
+        delay(300.milliseconds)
         animatedProgress.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000),

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "74a5ea248df7dd8d445caa73e478260f",
+      "identityHash": "d944ecebf86791e49dc631d0f3bebb1c",
     "entities": [
       {
         "tableName": "SessionEntity",
@@ -53,7 +53,7 @@
         }
       },
       {
-        "tableName": "ResponseEntity",
+          "tableName": "SessionResponseEntity",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sessionId` INTEGER NOT NULL, `code` INTEGER NOT NULL, `overallAccuracy` REAL NOT NULL, `response` TEXT NOT NULL, FOREIGN KEY(`sessionId`) REFERENCES `SessionEntity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
@@ -95,22 +95,22 @@
         },
         "indices": [
           {
-            "name": "index_ResponseEntity_sessionId",
+              "name": "index_SessionResponseEntity_sessionId",
             "unique": false,
             "columnNames": [
               "sessionId"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_ResponseEntity_sessionId` ON `${TABLE_NAME}` (`sessionId`)"
+              "createSql": "CREATE INDEX IF NOT EXISTS `index_SessionResponseEntity_sessionId` ON `${TABLE_NAME}` (`sessionId`)"
           },
           {
-            "name": "index_ResponseEntity_code",
+              "name": "index_SessionResponseEntity_code",
             "unique": false,
             "columnNames": [
               "code"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_ResponseEntity_code` ON `${TABLE_NAME}` (`code`)"
+              "createSql": "CREATE INDEX IF NOT EXISTS `index_SessionResponseEntity_code` ON `${TABLE_NAME}` (`code`)"
           }
         ],
         "foreignKeys": [
@@ -130,7 +130,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '74a5ea248df7dd8d445caa73e478260f')"
+        "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd944ecebf86791e49dc631d0f3bebb1c')"
     ]
   }
 }

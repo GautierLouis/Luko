@@ -26,10 +26,6 @@ internal class DefaultCharacterRepository(
     ) = characterService
         .generateSession(level.map { it.toDto() }, limit)
         .map { it.map { dto -> dto.toDomain() } }
-        .mapCatching { list ->
-            check(list.isNotEmpty()) { "Session is empty" }
-            list
-        }
 
     override suspend fun getByLevel(
         level: CharacterFrequencyLevel,

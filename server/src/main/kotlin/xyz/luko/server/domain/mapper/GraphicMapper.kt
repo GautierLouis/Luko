@@ -23,7 +23,7 @@ fun GraphicDto.toEntity() = GraphicEntity(
     smootherMedians = Json.encodeToString(this.smootherMedians)
 )
 
-fun GraphicParser.toDomain(smootherMedian: List<String>) = GraphicDto(
+fun GraphicParser.toDomain(smootherMedian: List<StrokeDto>) = GraphicDto(
     code = character.toString().codePointAt(0),
     strokes = strokes,
     medians = medians.toStroke(),
@@ -32,6 +32,6 @@ fun GraphicParser.toDomain(smootherMedian: List<String>) = GraphicDto(
 
 fun List<List<List<Float>>>.toStroke() = map { s ->
     StrokeDto(s.map { p ->
-        PointDto(p[0], p[1])
+        PointDto.Straight(p[0], p[1])
     })
 }

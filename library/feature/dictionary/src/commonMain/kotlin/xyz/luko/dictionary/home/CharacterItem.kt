@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -27,7 +28,6 @@ import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
 import xyz.luko.domain.model.SimpleDictionary
-import xyz.luko.domain.previewSimpleDictionary
 
 @Composable
 internal fun CharacterItem(
@@ -82,7 +82,7 @@ private fun PreviewCharacterItem(
 ) {
     AppTheme(themeMode) {
         CharacterItem(
-            previewSimpleDictionary,
+            PreviewProvider.simpleDictionary,
             modifier = Modifier.width(CharacterItemDefault.MINIMUM_WIDTH.dp),
         )
     }

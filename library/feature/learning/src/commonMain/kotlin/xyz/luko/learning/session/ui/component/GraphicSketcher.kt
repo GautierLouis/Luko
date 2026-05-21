@@ -1,4 +1,4 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -25,7 +25,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
-import xyz.luko.designsystem.drawing.TransformStroke
+import xyz.luko.baseui.drawing.StrokeTransformer
+import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -33,61 +34,46 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
-import xyz.luko.domain.previewDictionaryWithGraphic
 import xyz.luko.learning.session.drawing.DrawableArea
 import xyz.luko.learning.session.drawing.drawingDetector
+import xyz.luko.learning.session.model.DrawingPageState
+import xyz.luko.learning.session.model.SessionScreenEvent
 
 @Composable
 internal fun GraphicSketcher(
-    state: SessionViewModel.QuestionState,
+    state: DrawingPageState,
     modifier: Modifier = Modifier,
-    drawReference: Boolean = false,
-    drawHint: Boolean = false,
     onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
-    val graphic = state.question.graphics
-
-    var canvasSize by remember { mutableStateOf(IntSize(0, 0)) }
+    var canvasSize by remember { mutableStateOf(IntSize.Zero) }
     val drawnStroke = remember { mutableStateListOf<Offset>() }
+    val transformer = remember { StrokeTransformer() }
 
-    val referenceStrokes =
-        remember(graphic.code, canvasSize) {
-            graphic.medians.map { stroke ->
-                TransformStroke.projectToCanvas(
-                    stroke.points.map { Offset(it.x, it.y) },
-                    canvasSize
-                )
-            }
+    val referencePaths = remember(state.referenceStrokes, canvasSize) {
+        state.referenceStrokes.map { transformer.toCanvasPath(it, canvasSize) }
+    }
+
+    val referenceHint = remember(state.referenceHint, canvasSize) {
+        state.referenceHint?.let { transformer.toCanvasHint(it, canvasSize) }
+    }
+
+    val previousUserDraw = remember(state.userPreviousOffsets, canvasSize) {
+        state.userPreviousOffsets.map { offsets ->
+            transformer.toCanvasOffsets(offsets, canvasSize)
         }
+    }
 
-//    val referenceStrokes = remember(graphic.code, canvasSize) {
-//        TransformStroke.projectToCanvas(graphic.smoothMedians, canvasSize)
-//    }
-
-    val previousDrawnScaled =
-        remember(state.previousDrawnStrokes, canvasSize) {
-            state.previousDrawnStrokes.map { stroke ->
-                TransformStroke.projectToCanvas(stroke, canvasSize)
-            }
-        }
-
-    val referenceHint = referenceStrokes.getOrNull(state.previousDrawnStrokes.size)
-
-    val isComplete = state.previousDrawnStrokes.size == referenceStrokes.size
 
     val drawingModifier =
-        if (isComplete) {
+        if (state.isComplete) {
             Modifier
         } else {
             Modifier.drawingDetector(
                 points = drawnStroke,
                 onGestureComplete = {
-                    onEvent(
-                        SessionScreenEvent.StrokeCompleted(
-                            TransformStroke.unprojectFromCanvas(drawnStroke.toList(), canvasSize),
-                            referenceStrokes,
-                        ),
-                    )
+                    val raw =
+                        transformer.fromCanvasOffsets(drawnStroke.toList(), canvasSize)
+                    onEvent(SessionScreenEvent.StrokeCompleted(raw))
                     drawnStroke.clear()
                 },
             )
@@ -110,7 +96,7 @@ internal fun GraphicSketcher(
     ) {
         Box {
             this@Card.AnimatedVisibility(
-                visible = state.previousDrawnStrokes.isNotEmpty(),
+                visible = state.userPreviousOffsets.isNotEmpty(),
                 modifier =
                     Modifier
                         .align(Alignment.TopEnd)
@@ -120,23 +106,16 @@ internal fun GraphicSketcher(
             }
 
             DrawableArea(
-                referenceStrokes =
-                    referenceStrokes
-                        .takeIf { drawReference }
-                        .orEmpty(),
-                referenceHint =
-                    referenceHint
-                        ?.takeIf { drawHint }
-                        .orEmpty(),
-                previousDrawnStrokes = previousDrawnScaled,
+                referencePath = referencePaths,
+                referenceHint = referenceHint,
+                previousDrawnStrokes = previousUserDraw,
                 ongoingStroke = drawnStroke,
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .align(Alignment.Center)
-                        .onGloballyPositioned { coordinates -> canvasSize = coordinates.size }
-                        .then(drawingModifier),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .align(Alignment.Center)
+                    .onGloballyPositioned { canvasSize = it.size }
+                    .then(drawingModifier),
             )
         }
     }
@@ -147,31 +126,27 @@ internal fun GraphicSketcher(
 private fun PreviewGraphicPager(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
+
     val mockState =
-        SessionViewModel.QuestionState(
-            question = previewDictionaryWithGraphic,
-            previousDrawnStrokes = listOf(listOf(Offset(1f, 1f))),
+        DrawingPageState(
+            referenceStrokes = PreviewProvider.graphic.smoothMedians,
+            referenceHint = PreviewProvider.graphic.smoothMedians.firstOrNull(),
+            userPreviousOffsets = emptyList()
         )
 
     AppTheme(themeMode) {
         Column {
             GraphicSketcher(
-                drawReference = true,
-                drawHint = true,
                 state = mockState,
                 modifier = Modifier.aspectRatio(1f),
             )
 
             GraphicSketcher(
-                drawReference = false,
-                drawHint = true,
                 state = mockState,
                 modifier = Modifier.aspectRatio(1f),
             )
 
             GraphicSketcher(
-                drawReference = false,
-                drawHint = false,
                 state = mockState,
                 modifier = Modifier.aspectRatio(1f),
             )

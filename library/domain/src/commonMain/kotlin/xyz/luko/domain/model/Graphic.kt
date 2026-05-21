@@ -1,25 +1,32 @@
 package xyz.luko.domain.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Graphic(
     val code: Int,
     val strokes: List<String>,
     val medians: List<Stroke>,
-    val smoothMedians: List<String>,
-) {
-    val character: Char
-        get() = Char(code)
-}
+    val smoothMedians: List<Stroke>,
+)
 
-@Serializable
 data class Stroke(
     val points: List<Point>,
 )
 
-@Serializable
-data class Point(
-    val x: Float,
-    val y: Float,
-)
+sealed class Point {
+
+    abstract val x: Float
+    abstract val y: Float
+
+    data class Straight(
+        override val x: Float,
+        override val y: Float
+    ) : Point()
+
+    data class Curved(
+        override val x: Float,
+        override val y: Float,
+        val cp1x: Float,
+        val cp1y: Float,
+        val cp2x: Float,
+        val cp2y: Float
+    ) : Point()
+}

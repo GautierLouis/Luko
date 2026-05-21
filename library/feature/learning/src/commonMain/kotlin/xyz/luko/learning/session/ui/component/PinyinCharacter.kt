@@ -1,4 +1,4 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -21,12 +22,10 @@ import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.designsystem.token.typo.FontWeight
-import xyz.luko.domain.model.Dictionary
-import xyz.luko.domain.previewDictionary
 
 @Composable
 internal fun PinyinCharacter(
-    char: Dictionary,
+    pinyin: String,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -65,7 +64,7 @@ internal fun PinyinCharacter(
                     ),
             ) {
                 Text(
-                    text = char.pinyin.firstOrNull().orEmpty(),
+                    text = pinyin,
                     color = Theme.materialColors.onPrimary,
                     style = Theme.typography.headlineLarge,
                     modifier =
@@ -86,7 +85,7 @@ private fun PreviewPinyinCharacter(
 ) {
     AppTheme(themeMode) {
         PinyinCharacter(
-            char = previewDictionary,
+            pinyin = PreviewProvider.dictionary.pinyin.firstOrNull().orEmpty(),
         )
     }
 }

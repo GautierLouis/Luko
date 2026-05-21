@@ -77,12 +77,9 @@ class CharacterRouteController(
                 """<path d="$path" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
             }.joinToString("\n        ")
 
-            fun List<StrokeDto>.toMedianPaths() = mapIndexed { i, stroke ->
+            fun List<StrokeDto>.toSmoothPaths() = mapIndexed { i, path ->
                 val color = colors[i % colors.size]
-                val d = stroke.points.mapIndexed { j, p ->
-                    if (j == 0) "M ${p.x} ${p.y}" else "L ${p.x} ${p.y}"
-                }.joinToString(" ")
-                """<path d="$d" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
+                """<path d="$path" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
             }.joinToString("\n        ")
 
             val html = """
@@ -107,19 +104,15 @@ class CharacterRouteController(
             <h1>&#${graphic.code};</h1>
             <div class="controls">
                 <button class="active" onclick="show('original')">Original</button>
-                <button onclick="show('medians')">Medians</button>
-                <button onclick="show('smoothed')">Smooth Medians</button>
+                <button onclick="show('smoothed')">Medians</button>
             </div>
             <svg viewBox="-30 -80 1100 1000" xmlns="http://www.w3.org/2000/svg">
                 <g transform="translate(0, 920) scale(1, -1)">
                     <g id="original">
                         ${graphic.strokes.toPaths()}
                     </g>
-                    <g id="medians" style="display:none">
-                        ${graphic.medians.toMedianPaths()}
-                    </g>
                     <g id="smoothed" style="display:none">
-                        ${graphic.smootherMedians.toPaths()}
+                        ${graphic.smootherMedians.toSmoothPaths()}
                     </g>
                 </g>
             </svg>

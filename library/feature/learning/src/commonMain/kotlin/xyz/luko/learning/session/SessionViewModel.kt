@@ -10,11 +10,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import xyz.luko.designsystem.components.attrs.FrequencyLevel
-import xyz.luko.domain.model.CharacterFrequencyLevel
+import xyz.luko.baseui.session.toDomain
 import xyz.luko.domain.model.DictionaryWithGraphic
 import xyz.luko.domain.model.DifficultyLevel
-import xyz.luko.domain.model.Graphic
 import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
@@ -22,56 +20,31 @@ import xyz.luko.domain.model.Stroke
 import xyz.luko.domain.repository.CharacterRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.learning.routing.LearningInternalRoute
-import xyz.luko.learning.session.SessionScreenEvent.Finish
-import xyz.luko.learning.session.SessionScreenEvent.Next
-import xyz.luko.learning.session.SessionScreenEvent.Reload
-import xyz.luko.learning.session.SessionScreenEvent.Reset
-import xyz.luko.learning.session.SessionScreenEvent.StrokeCompleted
-import xyz.luko.learning.session.SessionScreenEvent.ToggleLeaveDialog
+import xyz.luko.learning.session.model.DrawingPageState
+import xyz.luko.learning.session.model.SessionScreenEvent
+import xyz.luko.learning.session.model.SessionScreenEvent.Finish
+import xyz.luko.learning.session.model.SessionScreenEvent.Next
+import xyz.luko.learning.session.model.SessionScreenEvent.Reload
+import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
+import xyz.luko.learning.session.model.SessionState
+import xyz.luko.learning.session.model.getParams
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 import xyz.luko.navigation.AppNavigation
 import kotlin.time.Clock
-import kotlin.time.Instant
+
 
 internal class SessionViewModel(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val repository: CharacterRepository,
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
 ) : ViewModel() {
 
-    sealed class SessionState {
-        data object Error : SessionState()
-
-        data object Loading : SessionState()
-
-        data class Success(
-            val startTime: Instant,
-            val currentPage: Int = 0,
-            val questionsState: List<QuestionState> = emptyList(),
-            val drawReference: Boolean = false,
-            val drawHint: Boolean = false,
-            val showLeaveDialog: Boolean = false,
-        ) : SessionState() {
-            val currentQuestion: QuestionState
-                get() = questionsState[currentPage]
-            val isLastQuestion: Boolean
-                get() = currentPage + 1 == questionsState.size
-        }
-    }
-
-    data class QuestionState(
-        val question: DictionaryWithGraphic,
-        val previousDrawnStrokes: List<List<Offset>> = emptyList(),
-    ) {
-        val nbStrokeToDraw
-            get() = question.graphics.smoothMedians.size
-
-        val isAnswered
-            get() = previousDrawnStrokes.size == nbStrokeToDraw
-    }
+    val params = savedStateHandle.getParams()
+    val drawHint get() = params.difficulty == DifficultyLevel.EASY
+    val drawReference get() = params.difficulty != DifficultyLevel.HARD
 
     // No need to pass this to the view: out of state
     private val responses = mutableListOf<SessionResponse>()
@@ -83,41 +56,26 @@ internal class SessionViewModel(
         loadQuestions()
     }
 
-    fun onEvent(event: SessionScreenEvent) {
-        when (event) {
-            Next -> next()
-            Reload -> loadQuestions()
-            ToggleLeaveDialog -> toggleLeaveDialog()
-            Finish -> finishSession()
-            Reset -> resetDrawing()
-            is StrokeCompleted ->
-                strokeCompleted(
-                    stroke = event.stroke,
-                    referenceStrokes = event.referenceStrokes,
-                )
-        }
+    fun onEvent(event: SessionScreenEvent) = when (event) {
+        Reload -> loadQuestions()
+        Next -> next()
+        ToggleLeaveDialog -> toggleLeaveDialog()
+        Finish -> finishSession()
+        is SessionScreenEvent.StrokeCompleted -> onStrokeCompleted(event.stroke)
+        SessionScreenEvent.Reset -> resetPage()
     }
 
-    private fun next() {
-        _state.update {
-            if (it !is SessionState.Success) return
-            it.copy(currentPage = it.currentPage + 1)
-        }
-    }
-
+    // --- Session ---
     private fun loadQuestions() {
-        val (levels, difficulty, limit) = savedStateHandle.getParams()
-
         viewModelScope.launch {
             repository
-                .generateSession(levels.toDomain(), limit.value)
+                .generateSession(params.levels.toDomain(), params.limit.value)
                 .onSuccess { data ->
                     _state.update {
                         SessionState.Success(
-                            questionsState = data.map { q -> QuestionState(q) },
-                            drawReference = difficulty != DifficultyLevel.HARD,
-                            drawHint = difficulty == DifficultyLevel.EASY,
                             startTime = Clock.System.now(),
+                            questions = data,
+                            drawingPageState = data.toInitialPageState(),
                         )
                     }
                 }.onFailure {
@@ -126,112 +84,111 @@ internal class SessionViewModel(
         }
     }
 
-    private fun toggleLeaveDialog() {
-        _state.update {
-            if (it !is SessionState.Success) return
-            it.copy(showLeaveDialog = !it.showLeaveDialog)
-        }
+    private fun List<DictionaryWithGraphic>.toInitialPageState() = associate {
+        it.dictionary.code to DrawingPageState(
+            referenceStrokes = if (drawReference) it.graphics.smoothMedians else emptyList(),
+            referenceHint = if (drawHint) it.graphics.smoothMedians.firstOrNull() else null,
+        )
     }
 
-    private fun resetDrawing() {
-        updateDrawing(strokes = emptyList())
+    private fun toggleLeaveDialog() = _state.updateSuccess {
+        it.copy(showLeaveDialog = !it.showLeaveDialog)
     }
 
-    private fun strokeCompleted(
-        stroke: List<Offset>,
-        referenceStrokes: List<List<Offset>>,
-    ) {
-        if (state.value !is SessionState.Success) return
-        val s = _state.value as SessionState.Success
-
-        val currentQuestion = s.currentQuestion
-        val previousDrawnStrokes = currentQuestion.previousDrawnStrokes
-
-        val newStrokes = previousDrawnStrokes + listOf(stroke)
-
-        if (newStrokes.size == currentQuestion.nbStrokeToDraw) {
-            analyzeAndReport(
-                graphic = currentQuestion.question.graphics,
-                referenceStrokes = referenceStrokes,
-                drawnStrokes = newStrokes,
-            )
-        }
-
-        updateDrawing(newStrokes)
-    }
-
-    private fun analyzeAndReport(
-        graphic: Graphic,
-        referenceStrokes: List<List<Offset>>,
-        drawnStrokes: List<List<Offset>>,
-    ) {
-        viewModelScope.launch {
-            val output = analyzeUserDrawing.calculate(referenceStrokes, drawnStrokes)
-            val parsed = drawnStrokes.map { s -> Stroke(s.map { Point(it.x, it.y) }) }
-            val sessionResponse = SessionResponse(graphic.code, output, parsed)
-            responses.add(sessionResponse)
-        }
-    }
-
-    private fun updateDrawing(strokes: List<List<Offset>>) {
-        _state.update { state ->
-            if (state !is SessionState.Success) return
-            val s = state
-            s.copy(
-                questionsState =
-                    state.questionsState.mapIndexed { index, questionState ->
-                        if (index == state.currentPage) {
-                            questionState.copy(
-                                previousDrawnStrokes = strokes,
-                            )
-                        } else {
-                            questionState
-                        }
-                    },
-            )
-        }
+    private fun next() = _state.updateSuccess {
+        it.copy(currentPageIndex = it.currentPageIndex + 1)
     }
 
     private fun finishSession() {
-        if (state.value !is SessionState.Success) return
-        val s = _state.value as SessionState.Success
-
+        val success = _state.value as? SessionState.Success ?: return
         val endTime = Clock.System.now()
-        val timeElapsed = endTime - s.startTime
+        val duration = endTime - success.startTime
 
-        val dictionary = s.questionsState.map { it.question.dictionary }
-
-        val (_, difficulty, _) = savedStateHandle.getParams()
-
-        val score =
-            scoreCalculator.calculate(
-                questions = dictionary,
-                difficulty = difficulty,
-                timeElapsed = timeElapsed.inWholeMilliseconds,
-            )
         viewModelScope.launch {
-            val session =
-                Session(
+            sessionRepository.save(
+                session = Session(
                     date = endTime,
-                    duration = timeElapsed,
-                    difficulty = difficulty,
+                    duration = duration,
+                    difficulty = params.difficulty,
                     questionsCount = responses.count(),
-                    score = score,
-                )
-            sessionRepository.save(session, responses)
-
+                    score = scoreCalculator.calculate(
+                        questions = success.questions.map { it.dictionary },
+                        difficulty = params.difficulty,
+                        timeElapsed = duration.inWholeMilliseconds,
+                    ),
+                ),
+                responses = responses,
+            )
             withContext(Dispatchers.Main) {
                 AppNavigation.navigate(LearningInternalRoute.CongratulationRoute, true)
             }
         }
     }
 
-    private fun List<FrequencyLevel>.toDomain(): List<CharacterFrequencyLevel> =
-        map {
-            when (it) {
-                FrequencyLevel.COMMON -> CharacterFrequencyLevel.COMMON
-                FrequencyLevel.FREQUENT -> CharacterFrequencyLevel.FREQUENT
-                FrequencyLevel.STANDARD -> CharacterFrequencyLevel.STANDARD
-            }
+    // --- Page ---
+    private fun onStrokeCompleted(userStroke: List<Offset>) = _state.updateSuccess { current ->
+        val newPageState = current.currentDrawingPageState.addStroke(userStroke)
+        if (newPageState.isComplete) analyzeAndReport()
+        current.withUpdatedPageState(newPageState)
+    }
+
+    private fun resetPage() = _state.updateSuccess { current ->
+        current.withUpdatedPageState(current.currentDrawingPageState.reset())
+    }
+
+    private fun analyzeAndReport() {
+        viewModelScope.launch {
+            val success = _state.value as? SessionState.Success ?: return@launch
+            val graphic = success.currentQuestion.graphics
+            val drawnStrokes = success.currentDrawingPageState.userPreviousOffsets
+            val reference = graphic.smoothMedians.map { s -> s.points.map { Offset(it.x, it.y) } }
+
+            val statistics = analyzeUserDrawing.calculate(
+                reference = reference,
+                userStroke = drawnStrokes,
+            )
+
+            responses.add(
+                SessionResponse(
+                    code = graphic.code,
+                    statistics = statistics,
+                    strokes = drawnStrokes.map { s ->
+                        Stroke(s.map {
+                            Point.Straight(
+                                it.x,
+                                it.y
+                            )
+                        })
+                    },
+                )
+            )
         }
+    }
+
+    // -- Utils ---
+    private fun DrawingPageState.addStroke(stroke: List<Offset>): DrawingPageState {
+        val newOffsets = userPreviousOffsets + listOf(stroke)
+        return copy(
+            userPreviousOffsets = newOffsets,
+            referenceHint = if (drawHint) referenceStrokes.getOrNull(newOffsets.size) else null,
+        )
+    }
+
+    private fun DrawingPageState.reset() = copy(
+        userPreviousOffsets = emptyList(),
+        referenceHint = if (drawHint) referenceStrokes.firstOrNull() else null,
+    )
+
+    private fun SessionState.Success.withUpdatedPageState(newPageState: DrawingPageState) =
+        copy(drawingPageState = drawingPageState + (currentPageCode to newPageState))
+
+
+    private inline fun MutableStateFlow<SessionState>.updateSuccess(
+        function: (SessionState.Success) -> SessionState,
+    ) {
+        update { current ->
+            val success = current as? SessionState.Success ?: return@update current
+            function(success)
+        }
+    }
 }

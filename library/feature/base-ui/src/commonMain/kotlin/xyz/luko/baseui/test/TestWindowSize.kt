@@ -1,4 +1,4 @@
-package xyz.luko.baseui
+package xyz.luko.baseui.test
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp

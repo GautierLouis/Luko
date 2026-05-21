@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import xyz.luko.baseui.AdaptiveLayout
+import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.components.page.BaseScaffold
 import xyz.luko.designsystem.components.page.ErrorContent
 import xyz.luko.designsystem.components.page.LoadingContent
@@ -24,8 +25,6 @@ import xyz.luko.designsystem.token.dimens.ShapeDefaults
 import xyz.luko.dictionary.details.ModalCharacterDetailsEvent.OnPractice
 import xyz.luko.dictionary.details.ModalCharacterDetailsEvent.OnRetry
 import xyz.luko.dictionary.details.ModalCharacterDetailsViewModel.UIState
-import xyz.luko.domain.previewDictionaryWithGraphic
-import xyz.luko.domain.previewSession
 
 @Composable
 internal fun ModalCharacterDetails(
@@ -110,6 +109,11 @@ internal fun ModalCharacterDetails(
     )
 }
 
+private val successState = UIState.Success(
+    selectedDictionary = PreviewProvider.dictionaryGraphic,
+    lastSession = listOf(PreviewProvider.session, PreviewProvider.session),
+)
+
 @Preview
 @Composable
 private fun PreviewModalCharacterDetailsDay(
@@ -121,12 +125,7 @@ private fun PreviewModalCharacterDetailsDay(
                 when (mode) {
                     LoadingMode.LOADING -> UIState.Loading
                     LoadingMode.ERROR -> UIState.Error
-                    LoadingMode.SUCCESS -> {
-                        UIState.Success(
-                            selectedDictionary = previewDictionaryWithGraphic,
-                            lastSession = listOf(previewSession, previewSession),
-                        )
-                    }
+                    LoadingMode.SUCCESS -> successState
                 },
         )
     }
@@ -143,12 +142,7 @@ private fun PreviewModalCharacterDetailsNight(
                 when (mode) {
                     LoadingMode.LOADING -> UIState.Loading
                     LoadingMode.ERROR -> UIState.Error
-                    LoadingMode.SUCCESS -> {
-                        UIState.Success(
-                            selectedDictionary = previewDictionaryWithGraphic,
-                            lastSession = listOf(previewSession, previewSession),
-                        )
-                    }
+                    LoadingMode.SUCCESS -> successState
                 },
         )
     }

@@ -30,12 +30,6 @@ internal fun LevelCountDto.toDomain() =
         count = count,
     )
 
-internal fun LevelCount.toDto() =
-    LevelCountDto(
-        level = level.toDto(),
-        count = count,
-    )
-
 internal fun SimpleDictionaryDto.toDomain() =
     SimpleDictionary(
         code = code,
@@ -52,7 +46,7 @@ internal fun GraphicDto.toDomain() =
         code = code,
         strokes = strokes,
         medians = medians.map { it.toDomain() },
-        smoothMedians = smootherMedians
+        smoothMedians = smootherMedians.map { it.toDomain() }
     )
 
 internal fun StrokeDto.toDomain() =
@@ -60,11 +54,10 @@ internal fun StrokeDto.toDomain() =
         points = this.points.map { it.toDomain() },
     )
 
-internal fun PointDto.toDomain() =
-    Point(
-        x = this.x,
-        y = this.y,
-    )
+internal fun PointDto.toDomain() = when (this) {
+    is PointDto.Curved -> Point.Curved(x, y, cp1x, cp1y, cp2x, cp2y)
+    is PointDto.Straight -> Point.Straight(x, y)
+}
 
 internal fun <T, U> ResponseListDto<T>.toDomain(converter: (T) -> U) =
     ResponseList(hasNextPage, data.map { converter(it) })

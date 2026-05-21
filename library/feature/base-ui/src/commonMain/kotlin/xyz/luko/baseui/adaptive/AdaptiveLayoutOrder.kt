@@ -1,4 +1,4 @@
-package xyz.luko.baseui
+package xyz.luko.baseui.adaptive
 
 enum class AdaptiveLayoutOrder {
     NATURAL,

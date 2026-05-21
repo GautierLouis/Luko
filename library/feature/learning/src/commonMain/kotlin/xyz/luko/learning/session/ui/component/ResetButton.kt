@@ -1,4 +1,4 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.ui.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size

@@ -1,4 +1,4 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.model
 
 import androidx.lifecycle.SavedStateHandle
 import xyz.luko.designsystem.components.attrs.FrequencyLevel
@@ -6,7 +6,7 @@ import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.learning.builder.QuestionCount
 import xyz.luko.learning.routing.LearningInternalRoute
 
-internal fun SavedStateHandle.getParams(): Triple<List<FrequencyLevel>, DifficultyLevel, QuestionCount> {
+internal fun SavedStateHandle.getParams(): SessionViewModelParams {
     val descriptor = LearningInternalRoute.SessionRoute.serializer().descriptor
     val levels = (this[descriptor.getElementName(0)] as? String)
         ?.split(",")
@@ -22,5 +22,5 @@ internal fun SavedStateHandle.getParams(): Triple<List<FrequencyLevel>, Difficul
             ?.let { QuestionCount.valueOf(it) }
             ?: QuestionCount.FIVE
 
-    return Triple(levels, difficulty, limit)
+    return SessionViewModelParams(levels, difficulty, limit)
 }

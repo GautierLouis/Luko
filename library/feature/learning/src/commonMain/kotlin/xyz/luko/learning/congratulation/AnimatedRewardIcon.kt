@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import xyz.luko.baseui.TestTags
+import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.icon.AppIcon
 import xyz.luko.designsystem.icon.RoundedTrophy
 import xyz.luko.designsystem.preview.ThemeMode

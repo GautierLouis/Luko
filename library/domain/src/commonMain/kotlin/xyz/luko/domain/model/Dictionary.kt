@@ -10,7 +10,4 @@ data class Dictionary(
     val etymology: Etymology? = null,
     val radical: String? = null,
     val matches: List<List<Int>?> = emptyList(),
-) {
-    val character: Char
-        get() = Char(code)
-}
+)

@@ -17,12 +17,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.baseui.AdaptiveLayout
-import xyz.luko.baseui.AdaptiveLayoutOrder
-import xyz.luko.baseui.AdaptiveLayoutOrientation.COLUMN
-import xyz.luko.baseui.AdaptiveLayoutOrientation.ROW
-import xyz.luko.baseui.TestTags
+import xyz.luko.baseui.adaptive.AdaptiveLayout
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrder
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.COLUMN
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.ROW
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
+import xyz.luko.baseui.preview.PreviewProvider
+import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
@@ -37,7 +38,6 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.Session
-import xyz.luko.domain.previewSession
 import xyz.luko.learning.congratulation.SessionCongratulationViewModel.UIState
 import xyz.luko.navigation.AppNavigation
 import xyz.luko.navigation.AppRoute
@@ -162,7 +162,7 @@ private fun PreviewSessionCongratulationScreen(
 ) {
     AppTheme(themeMode) {
         SessionCongratulationScreen(
-            session = previewSession,
+            session = PreviewProvider.session,
         )
     }
 }

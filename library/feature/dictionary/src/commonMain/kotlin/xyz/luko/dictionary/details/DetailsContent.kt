@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.designsystem.preview.ThemeMode
@@ -25,8 +26,6 @@ import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.DictionaryWithGraphic
 import xyz.luko.domain.model.Session
-import xyz.luko.domain.previewDictionaryWithGraphic
-import xyz.luko.domain.previewSession
 
 @Composable
 internal fun DetailsContent(
@@ -91,8 +90,8 @@ private fun PreviewDetailsContent(
 ) {
     AppTheme(themeMode) {
         DetailsContent(
-            dictionaryWithGraphic = previewDictionaryWithGraphic,
-            lastSession = listOf(previewSession, previewSession),
+            dictionaryWithGraphic = PreviewProvider.dictionaryGraphic,
+            lastSession = listOf(PreviewProvider.session, PreviewProvider.session),
         )
     }
 }

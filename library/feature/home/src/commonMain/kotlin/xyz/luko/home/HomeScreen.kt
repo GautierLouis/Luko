@@ -10,10 +10,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.baseui.AdaptiveLayout
-import xyz.luko.baseui.TestTags
+import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
+import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.baseui.session.toUiModel
+import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.metrics.OverallStatisticsCard
 import xyz.luko.designsystem.components.metrics.SessionCard
 import xyz.luko.designsystem.components.page.BaseScaffold
@@ -22,8 +23,6 @@ import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.domain.previewSession
-import xyz.luko.domain.previewStatistics
 import xyz.luko.navigation.AppNavigation
 import xyz.luko.navigation.AppRoute
 
@@ -95,8 +94,8 @@ private fun PreviewHomeScreen(
         HomeScreen(
             state =
                 HomeViewModel.UIState(
-                    lastSession = previewSession,
-                    stats = previewStatistics,
+                    lastSession = PreviewProvider.session,
+                    stats = PreviewProvider.statistics,
                 ),
         )
     }

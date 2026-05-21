@@ -1,4 +1,4 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,7 @@ import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
+import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.components.page.BaseScaffold
 import xyz.luko.designsystem.components.page.ErrorScreen
 import xyz.luko.designsystem.components.page.LoadingScreen
@@ -32,15 +33,22 @@ import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
-import xyz.luko.domain.previewDictionaryWithGraphic
-import xyz.luko.learning.session.SessionScreenEvent.Reload
-import xyz.luko.learning.session.SessionScreenEvent.ToggleLeaveDialog
+import xyz.luko.learning.session.model.DrawingPageState
+import xyz.luko.learning.session.model.SessionScreenEvent
+import xyz.luko.learning.session.model.SessionScreenEvent.Reload
+import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
+import xyz.luko.learning.session.model.SessionState
+import xyz.luko.learning.session.ui.component.FooterAction
+import xyz.luko.learning.session.ui.component.LeaveSessionDialog
+import xyz.luko.learning.session.ui.component.Pager
+import xyz.luko.learning.session.ui.component.PinyinCharacter
+import xyz.luko.learning.session.ui.component.SessionHeader
 import xyz.luko.navigation.AppNavigation
 import kotlin.time.Clock
 
 @Composable
 internal fun SessionScreen() {
-    val viewModel = koinViewModel<SessionViewModel>()
+    val viewModel = koinViewModel<xyz.luko.learning.session.SessionViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     SessionScreen(
@@ -51,19 +59,19 @@ internal fun SessionScreen() {
 
 @Composable
 private fun SessionScreen(
-    state: SessionViewModel.SessionState,
+    state: SessionState,
     onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
     when (state) {
-        SessionViewModel.SessionState.Error -> {
+        SessionState.Error -> {
             ErrorScreen { onEvent(Reload) }
         }
 
-        SessionViewModel.SessionState.Loading -> {
+        SessionState.Loading -> {
             LoadingScreen()
         }
 
-        is SessionViewModel.SessionState.Success -> {
+        is SessionState.Success -> {
             SessionScreen(
                 state = state,
                 onEvent = onEvent,
@@ -74,13 +82,13 @@ private fun SessionScreen(
 
 @Composable
 private fun SessionScreen(
-    state: SessionViewModel.SessionState.Success,
+    state: SessionState.Success,
     onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
     val pagerState =
         rememberPagerState(
-            initialPage = state.currentPage,
-            pageCount = { state.questionsState.size },
+            initialPage = state.currentPageIndex,
+            pageCount = { state.drawingPageState.size },
         )
 
     if (state.showLeaveDialog) {
@@ -95,9 +103,9 @@ private fun SessionScreen(
 
     val device = rememberAdaptiveWindowInfo()
 
-    LaunchedEffect(state.currentPage) {
-        if (pagerState.currentPage != state.currentPage) {
-            pagerState.animateScrollToPage(state.currentPage)
+    LaunchedEffect(state.currentPageIndex) {
+        if (pagerState.currentPage != state.currentPageIndex) {
+            pagerState.animateScrollToPage(state.currentPageIndex)
         }
     }
 
@@ -144,12 +152,12 @@ private fun SessionScreen(
                             verticalArrangement = Arrangement.SpaceBetween,
                         ) {
                             PinyinCharacter(
-                                char = state.currentQuestion.question.dictionary,
+                                pinyin = state.pinyin,
                                 modifier = Modifier.wrapContentHeight(),
                             )
                             FooterAction(
                                 isLastQuestion = state.isLastQuestion,
-                                isAnswered = state.currentQuestion.isAnswered,
+                                isAnswered = state.isPageCompleted,
                                 onEvent = onEvent,
                             )
                         }
@@ -157,7 +165,6 @@ private fun SessionScreen(
                         Pager(
                             pagerState = pagerState,
                             state = state,
-                            onEvent = onEvent,
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -166,18 +173,17 @@ private fun SessionScreen(
                         verticalArrangement = Spacing.large,
                     ) {
                         PinyinCharacter(
-                            char = state.currentQuestion.question.dictionary,
+                            pinyin = state.pinyin,
                             modifier = Modifier.wrapContentHeight(),
                         )
                         Pager(
                             pagerState = pagerState,
                             state = state,
-                            onEvent = onEvent,
                             modifier = Modifier.weight(1f),
                         )
                         FooterAction(
                             isLastQuestion = state.isLastQuestion,
-                            isAnswered = state.currentQuestion.isAnswered,
+                            isAnswered = state.isPageCompleted,
                             onEvent = onEvent,
                         )
                     }
@@ -187,21 +193,21 @@ private fun SessionScreen(
     )
 }
 
-private val previewSuccessState =
-    SessionViewModel.SessionState.Success(
+private fun previewSuccessState(): SessionState.Success {
+    val data = PreviewProvider.dictionaryGraphic
+
+    return SessionState.Success(
         startTime = Clock.System.now(),
-        currentPage = 0,
-        questionsState =
-            listOf(
-                SessionViewModel.QuestionState(
-                    question = previewDictionaryWithGraphic,
-                    previousDrawnStrokes = emptyList(),
-                ),
-            ),
-        drawReference = false,
-        drawHint = false,
+        currentPageIndex = 0,
+        questions = listOf(data),
+        drawingPageState = mapOf(
+            data.dictionary.code to DrawingPageState(
+                data.graphics.smoothMedians
+            )
+        ),
         showLeaveDialog = false,
     )
+}
 
 @Preview
 @Composable
@@ -212,9 +218,9 @@ private fun PreviewSessionScreenDay(
         SessionScreen(
             state =
                 when (mode) {
-                    LoadingMode.ERROR -> SessionViewModel.SessionState.Error
-                    LoadingMode.SUCCESS -> previewSuccessState
-                    LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
+                    LoadingMode.ERROR -> SessionState.Error
+                    LoadingMode.SUCCESS -> previewSuccessState()
+                    LoadingMode.LOADING -> SessionState.Loading
                 },
         )
     }
@@ -229,9 +235,9 @@ private fun PreviewSessionScreenNight(
         SessionScreen(
             state =
                 when (mode) {
-                    LoadingMode.ERROR -> SessionViewModel.SessionState.Error
-                    LoadingMode.SUCCESS -> previewSuccessState
-                    LoadingMode.LOADING -> SessionViewModel.SessionState.Loading
+                    LoadingMode.ERROR -> SessionState.Error
+                    LoadingMode.SUCCESS -> previewSuccessState()
+                    LoadingMode.LOADING -> SessionState.Loading
                 },
         )
     }

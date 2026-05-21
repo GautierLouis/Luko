@@ -1,4 +1,4 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,6 +16,7 @@ import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.learning.session.model.SessionScreenEvent
 
 @Composable
 internal fun FooterAction(

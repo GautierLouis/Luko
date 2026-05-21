@@ -6,37 +6,26 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.json.Json
 import xyz.luko.database.entity.BasicStatistics
-import xyz.luko.database.entity.EmbeddedResponse
-import xyz.luko.database.entity.ResponseEntity
 import xyz.luko.database.entity.SessionEntity
+import xyz.luko.database.entity.SessionResponseEntity
 
 @Dao
 interface SessionDao {
+    @Transaction
+    suspend fun insertSessionWithResponses(
+        session: SessionEntity,
+        responses: List<SessionResponseEntity>,
+    ) {
+        val sessionId = insertSession(session)
+        insertResponses(responses.map { it.copy(sessionId = sessionId) })
+    }
+
     @Insert
     suspend fun insertSession(session: SessionEntity): Long
 
     @Insert
-    suspend fun insertResponses(responses: List<ResponseEntity>)
-
-    @Transaction
-    suspend fun insertSessionWithResponses(
-        session: SessionEntity,
-        responses: List<EmbeddedResponse>,
-    ) {
-        val sessionId = insertSession(session)
-        val responseEntities =
-            responses.map { response ->
-                ResponseEntity(
-                    sessionId = sessionId.toInt(),
-                    code = response.code,
-                    overallAccuracy = response.statistics.overallAccuracy,
-                    response = Json.encodeToString(response),
-                )
-            }
-        insertResponses(responseEntities)
-    }
+    suspend fun insertResponses(responses: List<SessionResponseEntity>)
 
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
     suspend fun getAll(): List<SessionEntity>
@@ -52,7 +41,7 @@ interface SessionDao {
         SELECT
             s.*
         FROM SessionEntity s
-        INNER JOIN ResponseEntity r
+        INNER JOIN SessionResponseEntity r
             ON r.sessionId = s.id
         WHERE r.code = :code
         ORDER BY s.date
@@ -61,7 +50,7 @@ interface SessionDao {
     )
     suspend fun getLastFor(code: Int): List<SessionEntity>
 
-    @Query("SELECT AVG(overallAccuracy) FROM ResponseEntity WHERE code = :code")
+    @Query("SELECT AVG(overallAccuracy) FROM SessionResponseEntity WHERE code = :code")
     suspend fun getAverageAccuracy(code: Int): Float?
 
     @Query(

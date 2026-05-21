@@ -1,4 +1,4 @@
-package xyz.luko.designsystem.drawing
+package xyz.luko.baseui.drawing
 
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.unit.IntSize

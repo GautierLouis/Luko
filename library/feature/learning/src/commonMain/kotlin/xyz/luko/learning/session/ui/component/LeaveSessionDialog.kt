@@ -1,4 +1,4 @@
-package xyz.luko.learning.session
+package xyz.luko.learning.session.ui.component
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults

@@ -20,7 +20,7 @@ import xyz.luko.server.domain.repo.implem.DefaultUserRepository
 import xyz.luko.server.domain.usecase.GetFullDictionaryUseCase
 import xyz.luko.server.domain.usecase.PrepopulateDatabaseUseCase
 import xyz.luko.server.domain.usecase.parser.CompositionUseCase
-import xyz.luko.server.domain.usecase.parser.SmotherMediansUseCase
+import xyz.luko.server.domain.usecase.parser.SmootherMediansUseCase
 import xyz.luko.server.supabase.SupabaseClientMode
 
 val domainModule = module {
@@ -40,5 +40,5 @@ val domainModule = module {
     factoryOf(::PrepopulateDatabaseUseCase)
     factoryOf(::GetFullDictionaryUseCase)
     factoryOf(::CompositionUseCase)
-    factoryOf(::SmotherMediansUseCase)
+    factoryOf(::SmootherMediansUseCase)
 }

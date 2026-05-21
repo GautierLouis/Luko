@@ -1,4 +1,4 @@
-package xyz.luko.baseui
+package xyz.luko.baseui.adaptive
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -6,9 +6,9 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import xyz.luko.baseui.AdaptiveLayoutOrder.Companion.sort
-import xyz.luko.baseui.AdaptiveLayoutOrientation.COLUMN
-import xyz.luko.baseui.AdaptiveLayoutOrientation.ROW
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrder.Companion.sort
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.COLUMN
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.ROW
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 
 @Composable

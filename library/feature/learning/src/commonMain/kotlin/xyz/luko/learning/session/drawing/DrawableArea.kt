@@ -4,10 +4,13 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
-import xyz.luko.designsystem.drawing.pointsToPath
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import xyz.luko.baseui.drawing.TransformedHint
+import xyz.luko.baseui.drawing.pointsToPath
 import xyz.luko.designsystem.theme.Theme
-import androidx.compose.ui.graphics.drawscope.Stroke as AndroidStroke
 
 /**
  * Preview in Parent
@@ -15,8 +18,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke as AndroidStroke
 @Composable
 internal fun DrawableArea(
     modifier: Modifier = Modifier,
-    referenceStrokes: List<List<Offset>> = emptyList(),
-    referenceHint: List<Offset> = emptyList(),
+    referencePath: List<Path> = emptyList(),
+    referenceHint: TransformedHint? = null,
     previousDrawnStrokes: List<List<Offset>> = emptyList(),
     ongoingStroke: List<Offset> = emptyList(),
 ) {
@@ -24,42 +27,43 @@ internal fun DrawableArea(
     val referenceColor = Theme.materialColors.outlineVariant
     val indicationColor = Theme.materialColors.primary
 
-    Canvas(modifier = modifier) {
-        // Grey-out result as reference
-        referenceStrokes.forEach { drawStroke(stroke = it, strokeColor = referenceColor) }
+    val style = Stroke(
+        width = DrawableAreaDefault.STROKE_WIDTH,
+        cap = StrokeCap.Round,
+        join = StrokeJoin.Round
+    )
 
-        // Current dashed-stroke to be drawn
-        if (referenceHint.isNotEmpty()) {
-            drawDashedLineWithFilledArrow(
-                points = referenceHint,
-                color = indicationColor,
+    Canvas(modifier = modifier) {
+        referencePath.forEach { path ->
+            drawPath(
+                path = path,
+                color = referenceColor,
+                style = style,
             )
         }
 
-        // Previous drawn strokes from user
+        if (referenceHint != null) {
+            drawHint(
+                path = referenceHint.strokePath,
+                arrowHead = referenceHint.arrowHead,
+                color = indicationColor
+            )
+        }
+
         previousDrawnStrokes.forEach {
             val path = it.pointsToPath()
             drawPath(
                 path = path,
                 color = color,
-                style =
-                    AndroidStroke(
-                        width = DrawableAreaDefault.STROKE_WIDTH,
-                        cap = StrokeCap.Round,
-                    ),
+                style = style,
             )
         }
 
-        // Ongoing path
         val livePath = ongoingStroke.pointsToPath()
         drawPath(
             path = livePath,
             color = color,
-            style =
-                AndroidStroke(
-                    width = DrawableAreaDefault.STROKE_WIDTH,
-                    cap = StrokeCap.Round,
-                ),
+            style = style,
         )
     }
 }

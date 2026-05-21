@@ -6,13 +6,13 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
 import xyz.luko.database.dao.SessionDao
-import xyz.luko.database.entity.ResponseEntity
 import xyz.luko.database.entity.SessionEntity
+import xyz.luko.database.entity.SessionResponseEntity
 
 @Database(
     entities = [
         SessionEntity::class,
-        ResponseEntity::class,
+        SessionResponseEntity::class,
     ],
     version = 1,
 )

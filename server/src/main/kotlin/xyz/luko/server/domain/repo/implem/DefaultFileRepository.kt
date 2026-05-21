@@ -11,13 +11,13 @@ import xyz.luko.server.database.source.FileDataSource
 import xyz.luko.server.domain.mapper.toDomain
 import xyz.luko.server.domain.repo.FileRepository
 import xyz.luko.server.domain.usecase.parser.CompositionUseCase
-import xyz.luko.server.domain.usecase.parser.SmotherMediansUseCase
+import xyz.luko.server.domain.usecase.parser.SmootherMediansUseCase
 import java.awt.Font
 
 class DefaultFileRepository(
     private val source: FileDataSource,
     private val compositionUseCase: CompositionUseCase,
-    private val smootherMediansUseCase: SmotherMediansUseCase
+    private val smootherMediansUseCase: SmootherMediansUseCase
 ) : FileRepository {
 
     override suspend fun loadGraphicFile(): List<GraphicDto> {
