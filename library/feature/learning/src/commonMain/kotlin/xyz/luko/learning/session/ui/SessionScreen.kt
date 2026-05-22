@@ -214,7 +214,7 @@ private fun previewSuccessState(): SessionState.Success {
 
 @Preview
 @Composable
-private fun PreviewSessionScreenDay(
+private fun PreviewSessionScreen(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
 ) {
     AppTheme(ThemeMode.Day) {
@@ -231,17 +231,10 @@ private fun PreviewSessionScreenDay(
 
 @PreviewScreen
 @Composable
-private fun PreviewSessionScreenNight(
-    @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
-) {
+private fun PreviewSessionScreenDevices() {
     AppTheme(ThemeMode.Night) {
         SessionScreen(
-            state =
-                when (mode) {
-                    LoadingMode.ERROR -> SessionState.Error
-                    LoadingMode.SUCCESS -> previewSuccessState()
-                    LoadingMode.LOADING -> SessionState.Loading
-                },
+            state = previewSuccessState()
         )
     }
 }
