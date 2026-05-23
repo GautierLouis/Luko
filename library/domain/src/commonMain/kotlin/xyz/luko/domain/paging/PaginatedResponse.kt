@@ -4,10 +4,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import xyz.luko.domain.model.CharacterFrequencyLevel
 import xyz.luko.domain.model.SimpleDictionary
-import xyz.luko.domain.repository.CharacterRepository
+import xyz.luko.domain.repository.DictionaryRepository
 
 class PaginatedResponse(
-    private val repository: CharacterRepository,
+    private val repository: DictionaryRepository,
     private val levels: List<CharacterFrequencyLevel>,
     private val query: String,
 ) : PagingSource<Int, SimpleDictionary>() {
@@ -26,10 +26,7 @@ class PaginatedResponse(
         }
 
         val data = response.getOrNull()
-
-        if (data == null) {
-            return LoadResult.Error(Throwable("No data from getAll() at page: $page"))
-        }
+            ?: return LoadResult.Error(Throwable("No data from getAll() at page: $page"))
 
         return LoadResult.Page(
             data = data.data,

@@ -8,14 +8,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.Session
-import xyz.luko.domain.repository.CharacterRepository
+import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.navigation.AppNavigation
 import xyz.luko.navigation.AppRoute.LearningRoute
 
 internal class ModalCharacterDetailsViewModel(
     private val characterCode: Int,
-    private val characterRepository: CharacterRepository,
+    private val dictionaryRepository: DictionaryRepository,
     private val sessionRepository: SessionRepository,
 ) : ViewModel() {
     sealed class UIState {
@@ -38,7 +38,7 @@ internal class ModalCharacterDetailsViewModel(
 
     private fun loadCharacter() {
         viewModelScope.launch {
-            val dictionary = characterRepository.getByName(characterCode)
+            val dictionary = dictionaryRepository.getByName(characterCode)
 
             dictionary
                 .onSuccess { dictionary ->

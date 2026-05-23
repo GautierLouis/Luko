@@ -6,9 +6,9 @@ import xyz.luko.domain.model.CharacterFrequencyLevel
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.network.interfaces.CharacterService
 
-internal class DefaultCharacterRepository(
+internal class DefaultDictionaryRepository(
     private val characterService: CharacterService,
-) : CharacterRepository {
+) : DictionaryRepository {
 
     override suspend fun generateSession(
         level: List<CharacterFrequencyLevel>,

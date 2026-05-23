@@ -20,11 +20,11 @@ import kotlinx.coroutines.flow.update
 import xyz.luko.domain.model.CharacterFrequencyLevel
 import xyz.luko.domain.model.SimpleDictionary
 import xyz.luko.domain.paging.PaginatedResponse
-import xyz.luko.domain.repository.CharacterRepository
+import xyz.luko.domain.repository.DictionaryRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class DictionaryListViewModel(
-    private val characterRepository: CharacterRepository,
+    private val dictionaryRepository: DictionaryRepository,
 ) : ViewModel() {
     internal data class UIState(
         val selectedCharacter: Int? = null,
@@ -63,7 +63,7 @@ internal class DictionaryListViewModel(
             }
 
         return Pager(PagingConfig(pageSize = 100)) {
-            PaginatedResponse(characterRepository, levels, query)
+            PaginatedResponse(dictionaryRepository, levels, query)
         }.flow.cachedIn(viewModelScope)
     }
 

@@ -17,7 +17,7 @@ import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Stroke
-import xyz.luko.domain.repository.CharacterRepository
+import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.learning.routing.LearningInternalRoute
 import xyz.luko.learning.session.model.DrawingPageState
@@ -41,7 +41,7 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 internal class SessionViewModel(
     savedStateHandle: SavedStateHandle,
-    private val repository: CharacterRepository,
+    private val repository: DictionaryRepository,
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
