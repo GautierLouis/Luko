@@ -8,9 +8,9 @@ import io.ktor.server.testing.testApplication
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.mp.KoinPlatform.stopKoin
-import xyz.luko.server.database.table.DictionaryTable
-import xyz.luko.server.database.table.GraphicTable
-import xyz.luko.server.database.table.UserTable
+import xyz.luko.server.data.database.table.CharacterTable
+import xyz.luko.server.data.database.table.GraphicTable
+import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.mock.testModule
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -22,7 +22,7 @@ class ApplicationTest {
     fun after() {
         stopKoin()
         transaction {
-            SchemaUtils.drop(DictionaryTable, GraphicTable, UserTable)
+            SchemaUtils.drop(CharacterTable, GraphicTable, UserTable)
         }
     }
 

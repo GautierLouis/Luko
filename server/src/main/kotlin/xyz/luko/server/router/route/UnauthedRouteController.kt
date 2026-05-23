@@ -8,7 +8,7 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import xyz.luko.apicontracts.dto.RegisterDeviceRequestDto
-import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.domain.repo.AuthenticationRepository
 import xyz.luko.server.router.RouteController
 
@@ -20,7 +20,7 @@ class UnauthedRouteController(
             call.respondText("Ktor")
         }
 
-        post<EndPoint.RegisterAnonymously> {
+        post<Destination.RegisterAnonymously> {
             val creds = call.receive<RegisterDeviceRequestDto>()
 
             authenticationRepository.registerAnonymously(creds)
@@ -32,7 +32,7 @@ class UnauthedRouteController(
                 }
         }
 
-        post<EndPoint.UpdateFcm> {
+        post<Destination.UpdateFcm> {
             val creds = call.receive<RegisterDeviceRequestDto>()
 
             authenticationRepository.updateFcm(creds)

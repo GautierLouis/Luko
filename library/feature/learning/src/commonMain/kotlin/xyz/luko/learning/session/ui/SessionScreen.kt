@@ -197,17 +197,13 @@ private fun SessionScreen(
 }
 
 private fun previewSuccessState(): SessionState.Success {
-    val data = PreviewProvider.dictionaryGraphic
+    val data = PreviewProvider.dictionary
 
     return SessionState.Success(
         startTime = Clock.System.now(),
         currentPageIndex = 0,
         questions = listOf(data),
-        drawingPageState = mapOf(
-            data.dictionary.code to DrawingPageState(
-                data.graphics.smoothMedians
-            )
-        ),
+        drawingPageState = mapOf(data.code to DrawingPageState(data.medians)),
         showLeaveDialog = false,
     )
 }

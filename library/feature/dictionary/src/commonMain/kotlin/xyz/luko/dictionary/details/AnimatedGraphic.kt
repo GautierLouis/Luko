@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -34,24 +33,26 @@ import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
-import xyz.luko.domain.model.Graphic
+import xyz.luko.domain.model.Stroke
 import kotlin.time.Duration.Companion.milliseconds
+import androidx.compose.ui.graphics.drawscope.Stroke as ComposeStroke
 
 @Composable
 internal fun AnimatedGraphic(
-    graphic: Graphic,
+    strokes: List<String>,
+    medians: List<Stroke>,
     modifier: Modifier = Modifier,
 ) {
     var canvasSize by remember { mutableStateOf(IntSize(0, 0)) }
     val transformer = remember { StrokeTransformer() }
     val strokeColor = Theme.materialColors.onBackground
 
-    val strokePaths = remember(graphic.strokes, canvasSize) {
-        transformer.toCanvasPaths(graphic.strokes, canvasSize)
+    val strokePaths = remember(strokes, canvasSize) {
+        transformer.toCanvasPaths(strokes, canvasSize)
     }
 
-    val medianPaths = remember(graphic.smoothMedians, canvasSize) {
-        graphic.smoothMedians.map { transformer.toCanvasPath(it, canvasSize) }
+    val medianPaths = remember(medians, canvasSize) {
+        medians.map { transformer.toCanvasPath(it, canvasSize) }
     }
 
     // true in preview, false at runtime
@@ -99,7 +100,7 @@ internal fun AnimatedGraphic(
                     drawPath(
                         path = segmentPath,
                         color = strokeColor,
-                        style = Stroke(width = 100f, cap = StrokeCap.Round),
+                        style = ComposeStroke(width = 100f, cap = StrokeCap.Round),
                     )
                 }
             }
@@ -114,7 +115,8 @@ private fun PreviewAnimatedGraphic(
 ) {
     AppTheme(themeMode) {
         AnimatedGraphic(
-            graphic = PreviewProvider.graphic,
+            strokes = PreviewProvider.dictionary.strokes,
+            medians = PreviewProvider.dictionary.medians,
         )
     }
 }

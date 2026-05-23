@@ -24,12 +24,12 @@ import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
-import xyz.luko.domain.model.DictionaryWithGraphic
+import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.Session
 
 @Composable
 internal fun DetailsContent(
-    dictionaryWithGraphic: DictionaryWithGraphic,
+    dictionary: Dictionary,
     lastSession: List<Session> = emptyList(),
     onPractice: () -> Unit = {},
 ) {
@@ -43,8 +43,7 @@ internal fun DetailsContent(
     ) {
         Text(
             text =
-                dictionaryWithGraphic
-                    .dictionary
+                dictionary
                     .pinyin
                     .firstOrNull()
                     .orEmpty(),
@@ -53,7 +52,7 @@ internal fun DetailsContent(
             textAlign = TextAlign.Center,
         )
 
-        AnimatedGraphic(dictionaryWithGraphic.graphics)
+        AnimatedGraphic(dictionary.strokes, dictionary.medians)
 
         Spacer(Modifier.height(32.dp))
 
@@ -90,7 +89,7 @@ private fun PreviewDetailsContent(
 ) {
     AppTheme(themeMode) {
         DetailsContent(
-            dictionaryWithGraphic = PreviewProvider.dictionaryGraphic,
+            dictionary = PreviewProvider.dictionary,
             lastSession = listOf(PreviewProvider.session, PreviewProvider.session),
         )
     }

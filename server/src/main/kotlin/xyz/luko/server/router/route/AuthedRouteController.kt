@@ -10,7 +10,7 @@ import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import xyz.luko.apicontracts.dto.UserRefreshTokenJson
-import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.auth.JwtProvider.Constants.JWT_NAME
 import xyz.luko.server.domain.repo.AuthenticationRepository
 import xyz.luko.server.router.RouteController
@@ -20,13 +20,13 @@ class AuthedRouteController(
 ) : RouteController {
     override fun Route.register() {
         authenticate(JWT_NAME) {
-            get<EndPoint.Me> {
+            get<Destination.Me> {
                 val principal = call.principal<JWTPrincipal>()!!
                 val supabaseUserId = principal.payload.getClaim("sub").asString()
                 call.respond(mapOf("user_id" to supabaseUserId))
             }
 
-            post<EndPoint.RefreshToken> {
+            post<Destination.RefreshToken> {
                 val creds = call.receive<UserRefreshTokenJson>()
                 authenticationRepository.refreshSession(creds.refreshToken)
                     .onSuccess { data ->

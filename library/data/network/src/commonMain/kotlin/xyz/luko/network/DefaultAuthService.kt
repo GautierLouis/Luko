@@ -4,7 +4,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.setBody
 import xyz.luko.apicontracts.dto.RegisterDeviceRequestDto
-import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.network.interfaces.AuthService
 
 internal class DefaultAuthService(
@@ -12,14 +12,14 @@ internal class DefaultAuthService(
 ) : AuthService {
     override suspend fun registerDevice(body: RegisterDeviceRequestDto): Result<Unit> =
         call {
-            client.post(EndPoint.RegisterAnonymously()) {
+            client.post(Destination.RegisterAnonymously()) {
                 setBody(body)
             }
         }
 
     override suspend fun updateFcm(body: RegisterDeviceRequestDto): Result<Unit> =
         call {
-            client.post(EndPoint.UpdateFcm()) {
+            client.post(Destination.UpdateFcm()) {
                 setBody(body)
             }
         }

@@ -8,64 +8,50 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import xyz.luko.apicontracts.dto.StrokeDto
-import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.domain.repo.DictionaryRepository
-import xyz.luko.server.domain.repo.GraphicRepository
 import xyz.luko.server.domain.repo.SessionRepository
-import xyz.luko.server.domain.usecase.GetFullDictionaryUseCase
+import xyz.luko.server.error.dictionaryNotFound
 import xyz.luko.server.error.graphicNotFound
 import xyz.luko.server.router.RouteController
 
 class CharacterRouteController(
     private val sessionRepository: SessionRepository,
     private val dictionaryRepository: DictionaryRepository,
-    private val graphicRepository: GraphicRepository,
-    private val getFullDictionary: GetFullDictionaryUseCase
 ) : RouteController {
 
     private suspend inline fun <reified T : Any> ApplicationCall.respondOk(body: T) =
         this.respond(status = HttpStatusCode.OK, message = body)
 
     override fun Route.register() {
-        get<EndPoint.Level> {
-            dictionaryRepository.getLevelCount().let {
-                call.respondOk(it)
-            }
-        }
 
-        get<EndPoint.GenerateSession> { resources ->
+        get<Destination.GenerateSession> { resources ->
             sessionRepository.generateSession(resources).let {
                 call.respondOk(it)
             }
         }
 
-        get<EndPoint.Characters.ByLevel> { resources ->
+        get<Destination.Characters.ByLevel> { resources ->
             dictionaryRepository.getByLevel(resources).let {
                 call.respondOk(it)
             }
         }
 
-        get<EndPoint.Characters.Search> { resources ->
+        get<Destination.Characters.Search> { resources ->
             dictionaryRepository.search(resources).let {
                 call.respondOk(it)
             }
         }
 
-        get<EndPoint.Characters.ByName> { resource ->
-            getFullDictionary.get(resource).let {
+        get<Destination.Characters.ByName> { resource ->
+            dictionaryRepository.get(resource)?.let {
                 call.respondOk(it)
-            }
+            } ?: throw dictionaryNotFound(resource.code)
         }
 
-        get<EndPoint.Characters.ByName.Graphic> { resource ->
-            graphicRepository.get(resource.parent)
-                ?.let { call.respondOk(it) }
+        get<Destination.Characters.ByName.Render> { resource ->
+            val graphic = dictionaryRepository.get(resource.parent)
                 ?: throw graphicNotFound(resource.parent.code)
-        }
-
-        get<EndPoint.Characters.ByName.Graphic.Render> { resource ->
-            val graphic = graphicRepository.get(resource.parent.parent)
-                ?: throw graphicNotFound(resource.parent.parent.code)
 
             val colors = listOf(
                 "#378ADD", "#1D9E75", "#D85A30", "#D4537E", "#7F77DD",
@@ -112,7 +98,7 @@ class CharacterRouteController(
                         ${graphic.strokes.toPaths()}
                     </g>
                     <g id="smoothed" style="display:none">
-                        ${graphic.smootherMedians.toSmoothPaths()}
+                        ${graphic.medians.toSmoothPaths()}
                     </g>
                 </g>
             </svg>

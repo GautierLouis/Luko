@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import xyz.luko.domain.model.DictionaryWithGraphic
+import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.repository.CharacterRepository
 import xyz.luko.domain.repository.SessionRepository
@@ -20,7 +20,7 @@ internal class ModalCharacterDetailsViewModel(
 ) : ViewModel() {
     sealed class UIState {
         data class Success(
-            val selectedDictionary: DictionaryWithGraphic,
+            val selectedDictionary: Dictionary,
             val lastSession: List<Session> = emptyList(),
         ) : UIState()
 
@@ -44,7 +44,7 @@ internal class ModalCharacterDetailsViewModel(
                 .onSuccess { dictionary ->
                     val sessions = sessionRepository.getLastSessionsFor(characterCode)
 
-                    _state.update { current ->
+                    _state.update {
                         UIState.Success(
                             selectedDictionary = dictionary,
                             lastSession = sessions,

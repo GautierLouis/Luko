@@ -97,7 +97,7 @@ internal fun ModalCharacterDetails(
 
                     is UIState.Success ->
                         DetailsContent(
-                            dictionaryWithGraphic = state.selectedDictionary,
+                            dictionary = state.selectedDictionary,
                             lastSession = state.lastSession,
                             onPractice = {
                                 onEvent(OnPractice)
@@ -110,7 +110,7 @@ internal fun ModalCharacterDetails(
 }
 
 private val successState = UIState.Success(
-    selectedDictionary = PreviewProvider.dictionaryGraphic,
+    selectedDictionary = PreviewProvider.dictionary,
     lastSession = listOf(PreviewProvider.session, PreviewProvider.session),
 )
 

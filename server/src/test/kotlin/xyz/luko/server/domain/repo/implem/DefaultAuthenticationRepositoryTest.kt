@@ -17,7 +17,9 @@ import org.junit.Before
 import org.junit.Test
 import xyz.luko.apicontracts.dto.RegisterDeviceRequestDto
 import xyz.luko.server.ServerConfig
-import xyz.luko.server.domain.model.UserEntity
+import xyz.luko.server.domain.model.UserRow
+import xyz.luko.server.domain.repo.DefaultAuthenticationRepository
+import xyz.luko.server.domain.repo.DefaultUserRepository
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -45,7 +47,7 @@ class DefaultAuthenticationRepositoryTest {
     @Test
     fun `registerAnonymously should refresh session if user exists`() = runBlocking {
         val device = RegisterDeviceRequestDto("inst-id", "fcm-token")
-        val existingUser = UserEntity(
+        val existingUser = UserRow(
             installationId = "inst-id",
             supabaseUserId = "sup-id",
             supabaseRefreshToken = "ref-token",
@@ -79,7 +81,7 @@ class DefaultAuthenticationRepositoryTest {
     fun `registerAnonymously should return failure if refreshSession fails for existing user`() =
         runBlocking {
             val device = RegisterDeviceRequestDto("inst-id", "fcm-token")
-            val existingUser = UserEntity(
+            val existingUser = UserRow(
                 installationId = "inst-id",
                 supabaseUserId = "sup-id",
                 supabaseRefreshToken = "ref-token",
@@ -107,7 +109,7 @@ class DefaultAuthenticationRepositoryTest {
         every { session.refreshToken } returns "new-ref"
         every { session.expiresIn } returns 3600L
 
-        val existingUser = UserEntity(
+        val existingUser = UserRow(
             installationId = "inst-id",
             supabaseUserId = "sup-id",
             supabaseRefreshToken = "old-ref",

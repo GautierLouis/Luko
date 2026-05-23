@@ -9,7 +9,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.openapi.OpenApiDocSource
 import io.ktor.server.routing.routingRoot
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
-import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.router.RouteController
 
 class AdminRouteController(
@@ -23,7 +23,7 @@ class AdminRouteController(
                 routingRoot.descendants()
             }
         }
-        get<EndPoint.Admin.Metrics> {
+        get<Destination.Admin.Metrics> {
             call.respond(metricsRegistry.scrape())
         }
     }

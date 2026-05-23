@@ -12,7 +12,8 @@ import org.koin.logger.slf4jLogger
 import xyz.luko.server.ServerConfig
 import xyz.luko.server.ServerRegistry
 import xyz.luko.server.auth.authModule
-import xyz.luko.server.database.databaseModule
+import xyz.luko.server.data.database.databaseModule
+import xyz.luko.server.data.storage.storageModule
 import xyz.luko.server.domain.domainModule
 import xyz.luko.server.plugin.pluginModule
 import xyz.luko.server.router.routerModule
@@ -35,13 +36,14 @@ fun Application.initKoin(
     }
 }
 
-fun provideServerModule() = module {
+fun providesModule() = module {
     includes(infraModule, serverModule)
 }
 
 private val infraModule = module {
     includes(
         databaseModule,
+        storageModule,
         supabaseModule,
     )
 }

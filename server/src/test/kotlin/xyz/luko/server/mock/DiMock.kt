@@ -8,21 +8,18 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import xyz.luko.server.database.Database
-import xyz.luko.server.database.source.DefaultDictionaryDataSource
-import xyz.luko.server.database.source.DefaultGraphicDataSource
-import xyz.luko.server.database.source.DictionaryDataSource
-import xyz.luko.server.database.source.FileDataSource
-import xyz.luko.server.database.source.GraphicDataSource
+import xyz.luko.server.data.database.Database
+import xyz.luko.server.data.database.dao.DefaultDictionaryDao
+import xyz.luko.server.data.database.dao.DictionaryDao
+import xyz.luko.server.data.storage.StorageSource
 import xyz.luko.server.di.serverModule
 import xyz.luko.server.domain.repo.AuthenticationRepository
 import xyz.luko.server.supabase.SupabaseClientMode
 
 private val testDatabaseModule = module {
     single<Database> { FakeDatabase() }
-    singleOf(::DefaultDictionaryDataSource) bind DictionaryDataSource::class
-    singleOf(::DefaultGraphicDataSource) bind GraphicDataSource::class
-    single<FileDataSource> { FakeFileDataSource() }
+    singleOf(::DefaultDictionaryDao) bind DictionaryDao::class
+    single<StorageSource> { FakeStorageSource() }
 }
 
 private val testSupabaseModule = module {

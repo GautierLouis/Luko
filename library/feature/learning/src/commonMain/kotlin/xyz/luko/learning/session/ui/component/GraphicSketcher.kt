@@ -131,8 +131,8 @@ private fun PreviewGraphicPager(
 
     val mockState =
         DrawingPageState(
-            referenceStrokes = PreviewProvider.graphic.smoothMedians,
-            referenceHint = PreviewProvider.graphic.smoothMedians.firstOrNull(),
+            referenceStrokes = PreviewProvider.dictionary.medians,
+            referenceHint = PreviewProvider.dictionary.medians.firstOrNull(),
             userPreviousOffsets = emptyList()
         )
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.luko.baseui.session.toDomain
-import xyz.luko.domain.model.DictionaryWithGraphic
+import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Session
@@ -85,7 +85,7 @@ internal class SessionViewModel(
                         startDate = now.toString(),
                         difficulty = params.difficulty.name,
                         levels = params.levels.joinToString(),
-                        questions = data.map { it.dictionary.code },
+                        questions = data.map { it.code },
                     ).run { Tracker.track(this) }
 
                     _state.update {
@@ -101,10 +101,10 @@ internal class SessionViewModel(
         }
     }
 
-    private fun List<DictionaryWithGraphic>.toInitialPageState() = associate {
-        it.dictionary.code to DrawingPageState(
-            referenceStrokes = if (drawReference) it.graphics.smoothMedians else emptyList(),
-            referenceHint = if (drawHint) it.graphics.smoothMedians.firstOrNull() else null,
+    private fun List<Dictionary>.toInitialPageState() = associate {
+        it.code to DrawingPageState(
+            referenceStrokes = if (drawReference) it.medians else emptyList(),
+            referenceHint = if (drawHint) it.medians.firstOrNull() else null,
         )
     }
 
@@ -121,7 +121,7 @@ internal class SessionViewModel(
         val endTime = Clock.System.now()
         val duration = endTime - success.startTime
         val score = scoreCalculator.calculate(
-            questions = success.questions.map { it.dictionary },
+            questions = success.questions,
             difficulty = params.difficulty,
             timeElapsed = duration.inWholeMilliseconds,
         )
@@ -167,9 +167,9 @@ internal class SessionViewModel(
     private fun analyzeAndReport() {
         viewModelScope.launch {
             val success = _state.value as? SessionState.Success ?: return@launch
-            val graphic = success.currentQuestion.graphics
+            val medians = success.currentQuestion.medians
             val drawnStrokes = success.currentDrawingPageState.userPreviousOffsets
-            val reference = graphic.smoothMedians.map { s -> s.points.map { Offset(it.x, it.y) } }
+            val reference = medians.map { s -> s.points.map { Offset(it.x, it.y) } }
 
             val statistics = analyzeUserDrawing.calculate(
                 reference = reference,
@@ -178,7 +178,7 @@ internal class SessionViewModel(
 
             responses.add(
                 SessionResponse(
-                    code = graphic.code,
+                    code = success.currentQuestion.code,
                     statistics = statistics,
                     strokes = drawnStrokes.map { s ->
                         Stroke(s.map {

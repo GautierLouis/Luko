@@ -1,6 +1,6 @@
 package xyz.luko.learning.session.model
 
-import xyz.luko.domain.model.DictionaryWithGraphic
+import xyz.luko.domain.model.Dictionary
 import kotlin.time.Instant
 
 sealed class SessionState {
@@ -11,7 +11,7 @@ sealed class SessionState {
     data class Success(
         val startTime: Instant,
         val currentPageIndex: Int = 0,
-        val questions: List<DictionaryWithGraphic> = emptyList(),
+        val questions: List<Dictionary> = emptyList(),
         val drawingPageState: Map<Int, DrawingPageState> = emptyMap(),
         val showLeaveDialog: Boolean = false,
     ) : SessionState() {
@@ -19,10 +19,10 @@ sealed class SessionState {
         val currentQuestion = questions[currentPageIndex]
 
         // Get current pinyin for this question
-        val pinyin = currentQuestion.dictionary.pinyin.firstOrNull().orEmpty()
+        val pinyin = currentQuestion.pinyin.firstOrNull().orEmpty()
 
         // Get current question Char code. Unique per session
-        val currentPageCode = currentQuestion.dictionary.code
+        val currentPageCode = currentQuestion.code
 
         // Get current question drawing information.
         val currentDrawingPageState = drawingPageState[currentPageCode]!!

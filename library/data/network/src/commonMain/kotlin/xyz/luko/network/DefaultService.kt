@@ -22,7 +22,7 @@ import io.ktor.serialization.kotlinx.json.json
 import xyz.luko.apicontracts.defaultJson
 import xyz.luko.apicontracts.dto.UserRefreshTokenJson
 import xyz.luko.apicontracts.dto.UserTokenJson
-import xyz.luko.apicontracts.routing.EndPoint
+import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.network.interfaces.TokenAccessor
 import xyz.luko.utils.AppConfig
 import xyz.luko.utils.Flavor
@@ -86,7 +86,7 @@ internal class DefaultService(
 
                     val newTokens =
                         call<UserTokenJson> {
-                            unauthedClient.post(EndPoint.RefreshToken()) {
+                            unauthedClient.post(Destination.RefreshToken()) {
                                 setBody(oldRefreshToken)
                             }
                         }
