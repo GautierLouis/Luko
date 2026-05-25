@@ -16,12 +16,13 @@ import platform.UserNotifications.UNAuthorizationOptionSound
 import platform.UserNotifications.UNUserNotificationCenter
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRAnalytics
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRApp
-import swiftPMImport.Luko.library.core.library.core.firebase.FIRInstallations
+import swiftPMImport.Luko.library.core.library.core.firebase.FIRAuth
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRMessaging
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRRemoteConfig
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRRemoteConfigFetchAndActivateStatus
 import xyz.luko.logger.AppLogger
 import xyz.luko.tracking.TrackingEvent
+import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalForeignApi::class)
@@ -31,6 +32,43 @@ class AppleFirebaseManager : FirebaseManager {
     override fun initialize() {
         FIRApp.configure()
         requestNotificationPermissionAndRegister()
+    }
+
+    override suspend fun registerAnonymously(): Result<String> {
+        val user = suspendCancellableCoroutine { continuation ->
+            FIRAuth.auth().signInAnonymouslyWithCompletion { result, error ->
+                when {
+                    error != null -> continuation.resumeWithException(
+                        Exception(error.localizedDescription)
+                    )
+
+                    result?.user == null -> continuation.resumeWithException(
+                        IllegalStateException("Firebase user null after signIn")
+                    )
+
+                    else -> continuation.resume(result.user)
+                }
+            }
+        }
+        return Result.success(user.uid)
+    }
+
+    override suspend fun getIdToken(forceRefresh: Boolean): Result<String> {
+        val token = suspendCancellableCoroutine { continuation ->
+            val user = FIRAuth.auth().currentUser
+                ?: return@suspendCancellableCoroutine continuation.resumeWithException(
+                    IllegalStateException("No Firebase user signed in")
+                )
+            user.getIDTokenForcingRefresh(false) { token, error ->
+                when {
+                    error != null -> continuation.resumeWithException(Exception(error.localizedDescription))
+                    token == null -> continuation.resumeWithException(IllegalStateException("idToken null"))
+                    else -> continuation.resume(token)
+                }
+            }
+        }
+
+        return Result.success(token)
     }
 
     fun onApnsTokenReceived(token: NSData) {
@@ -60,28 +98,23 @@ class AppleFirebaseManager : FirebaseManager {
             }
     }
 
-    override suspend fun getFCMToken(): String {
+    override suspend fun getFCMToken(): Result<String> {
         apnsTokenFlow.first { it != null }
 
-        return suspendCancellableCoroutine { continuation ->
+        val token = suspendCancellableCoroutine { continuation ->
             FIRMessaging.messaging().tokenWithCompletion { token, error ->
                 when {
                     error != null -> {
-                        println("error is not null")
                         continuation.resumeWithException(
                             Exception(error.localizedDescription),
                         )
                     }
 
                     token != null -> {
-                        println("has token")
-                        continuation.resume(token) { cause, _, _ ->
-                            continuation.resumeWithException(cause)
-                        }
+                        continuation.resume(token)
                     }
 
                     else -> {
-                        println("error else")
                         continuation.resumeWithException(
                             Exception("FCM token is null"),
                         )
@@ -89,29 +122,9 @@ class AppleFirebaseManager : FirebaseManager {
                 }
             }
         }
+
+        return Result.success(token)
     }
-
-    override suspend fun getInstallationId(): String =
-        suspendCancellableCoroutine { continuation ->
-            FIRInstallations.installations().installationIDWithCompletion { id, error ->
-                when {
-                    error != null ->
-                        continuation.resumeWithException(
-                            Exception(error.localizedDescription),
-                        )
-
-                    id != null ->
-                        continuation.resume(id) { cause, _, _ ->
-                            continuation.resumeWithException(cause)
-                        }
-
-                    else ->
-                        continuation.resumeWithException(
-                            Exception("Installation ID is null"),
-                        )
-                }
-            }
-        }
 
     override fun logEvent(event: TrackingEvent) {
         FIRAnalytics.logEventWithName(

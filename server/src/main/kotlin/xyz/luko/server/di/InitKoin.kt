@@ -11,7 +11,6 @@ import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 import xyz.luko.server.ServerConfig
 import xyz.luko.server.ServerRegistry
-import xyz.luko.server.auth.authModule
 import xyz.luko.server.data.database.databaseModule
 import xyz.luko.server.data.storage.storageModule
 import xyz.luko.server.domain.domainModule
@@ -52,7 +51,6 @@ val serverModule = module {
     includes(
         domainModule,
         routerModule,
-        authModule,
         pluginModule
     )
     singleOf(::ServerRegistry)

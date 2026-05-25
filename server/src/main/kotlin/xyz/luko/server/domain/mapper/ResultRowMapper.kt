@@ -30,9 +30,7 @@ internal object ResultRowMapping {
     )
 
     fun ResultRow.toDto() = UserRow(
-        installationId = this[UserTable.installationId],
-        supabaseUserId = this[UserTable.supabaseUserId],
-        supabaseRefreshToken = this[UserTable.supabaseRefreshToken],
+        id = this[UserTable.firebaseUid],
         fcmToken = this[UserTable.fcmToken],
         createdAt = this[UserTable.createdAt],
         updatedAt = this[UserTable.updatedAt]

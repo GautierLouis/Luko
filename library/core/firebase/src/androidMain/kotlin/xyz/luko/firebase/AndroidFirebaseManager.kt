@@ -8,7 +8,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.messaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -35,8 +34,6 @@ class AndroidFirebaseManager(
         analytics = Firebase.analytics
         messaging = Firebase.messaging
 
-        auth.signInAnonymously()
-
         remoteConfig =
             Firebase.remoteConfig.apply {
                 val configSettings =
@@ -46,15 +43,22 @@ class AndroidFirebaseManager(
                 setConfigSettingsAsync(configSettings)
             }
 
-        messaging = Firebase.messaging
-
         fetchRemoteConfig()
     }
 
-    override suspend fun getFCMToken(): String = messaging.token.await()
+    override suspend fun getFCMToken(): Result<String> = runCatching {
+        messaging.token.await() ?: throw IllegalStateException("Token is null")
+    }
 
-    override suspend fun getInstallationId(): String =
-        FirebaseInstallations.getInstance().id.await()
+    override suspend fun registerAnonymously(): Result<String> = runCatching {
+        Firebase.auth.signInAnonymously().await()?.user?.uid
+            ?: throw IllegalStateException("User is null")
+    }
+
+    override suspend fun getIdToken(forceRefresh: Boolean): Result<String> = runCatching {
+        Firebase.auth.currentUser?.getIdToken(forceRefresh)?.await()?.token
+            ?: throw IllegalStateException("Unable to get token")
+    }
 
     override fun logEvent(event: TrackingEvent) {
         val bundle =

@@ -22,7 +22,7 @@ val networkModule: Module =
         single(named(UNAUTHED_CLIENT)) { get<DefaultService>().unauthedClient }
         single(named(AUTHED_CLIENT)) { get<DefaultService>().authedClient }
 
-        single { DefaultAuthService(get(named(UNAUTHED_CLIENT))) } bind AuthService::class
+        single { DefaultAuthService(get(named(AUTHED_CLIENT))) } bind AuthService::class
         single { DefaultUserService(get(named(AUTHED_CLIENT))) } bind UserService::class
         single { DefaultCharacterService(get(named(UNAUTHED_CLIENT))) } bind CharacterService::class
     }

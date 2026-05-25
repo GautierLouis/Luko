@@ -13,7 +13,7 @@ import xyz.luko.server.data.database.dao.DefaultDictionaryDao
 import xyz.luko.server.data.database.dao.DictionaryDao
 import xyz.luko.server.data.storage.StorageSource
 import xyz.luko.server.di.serverModule
-import xyz.luko.server.domain.repo.AuthenticationRepository
+import xyz.luko.server.domain.repo.UserRepository
 import xyz.luko.server.supabase.SupabaseClientMode
 
 private val testDatabaseModule = module {
@@ -33,5 +33,5 @@ private val testSupabaseModule = module {
 
 val testModule = module {
     includes(serverModule, testSupabaseModule, testDatabaseModule)
-    single<AuthenticationRepository> { FakeAuthRepo() }
+    single<UserRepository> { FakeAuthRepo() }
 }

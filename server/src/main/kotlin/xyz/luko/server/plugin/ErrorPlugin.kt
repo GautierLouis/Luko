@@ -24,6 +24,16 @@ class ErrorPlugin : Plugin {
 
     override fun Application.register() {
         install(StatusPages) {
+            status(HttpStatusCode.Unauthorized) { call, status ->
+                call.respond(
+                    status,
+                    ResponseError(
+                        code = "UNAUTHORIZED",
+                        message = "Invalid or missing token"
+                    )
+                )
+            }
+
             exception<ParameterExtractionException> { call, cause ->
                 logException(cause)
                 call.respond(

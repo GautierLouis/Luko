@@ -5,15 +5,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import xyz.luko.server.ServerConfig
-import xyz.luko.server.data.database.table.CharacterTable
-import xyz.luko.server.data.database.table.DictionaryTable
-import xyz.luko.server.data.database.table.GraphicTable
-import xyz.luko.server.data.database.table.HanziTable
-import xyz.luko.server.data.database.table.HskEntryCharacterTable
-import xyz.luko.server.data.database.table.HskEntryLevelTable
-import xyz.luko.server.data.database.table.HskEntryTable
-import xyz.luko.server.data.database.table.HskFormTable
-import xyz.luko.server.data.database.table.UserTable
+import xyz.luko.server.data.database.table.TableList
 import xyz.luko.server.domain.usecase.PrepopulateDatabaseUseCase
 
 class DefaultDatabase(
@@ -34,17 +26,7 @@ class DefaultDatabase(
     private fun migrate() {
         transaction {
             addLogger(config.sqlLogger)
-            SchemaUtils.create(
-                HanziTable,
-                HskEntryTable,
-                HskFormTable,
-                HskEntryCharacterTable,
-                HskEntryLevelTable,
-                DictionaryTable,
-                CharacterTable,
-                GraphicTable,
-                UserTable,
-            )
+            SchemaUtils.create(*TableList.get())
         }
     }
 

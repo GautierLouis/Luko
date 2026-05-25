@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
-import xyz.luko.server.data.database.BatchInsertMapping.add
+import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.defaultWhere
 import xyz.luko.server.data.database.insertAll
 import xyz.luko.server.data.database.matchesPinyin

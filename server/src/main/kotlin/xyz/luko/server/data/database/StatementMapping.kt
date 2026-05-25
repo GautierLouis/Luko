@@ -1,7 +1,7 @@
 package xyz.luko.server.data.database
 
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.statements.BatchInsertStatement
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.data.database.table.GraphicTable
@@ -10,22 +10,24 @@ import xyz.luko.server.data.database.table.HskEntryCharacterTable
 import xyz.luko.server.data.database.table.HskEntryLevelTable
 import xyz.luko.server.data.database.table.HskEntryTable
 import xyz.luko.server.data.database.table.HskFormTable
+import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.domain.model.CharacterRow
 import xyz.luko.server.domain.model.DictionaryRow
 import xyz.luko.server.domain.model.GraphicRow
 import xyz.luko.server.domain.model.HanziRow
 import xyz.luko.server.domain.model.HskEntryRow
 import xyz.luko.server.domain.model.HskFormRow
+import xyz.luko.server.domain.model.UserRow
 
-internal object BatchInsertMapping {
+internal object StatementMapping {
 
-    fun BatchInsertStatement.add(entity: GraphicRow) {
+    fun UpdateBuilder<*>.add(entity: GraphicRow) {
         this[GraphicTable.code] = entity.code
         this[GraphicTable.strokes] = entity.strokes
         this[GraphicTable.medians] = entity.medians
     }
 
-    fun BatchInsertStatement.add(entity: CharacterRow) {
+    fun UpdateBuilder<*>.add(entity: CharacterRow) {
         this[CharacterTable.code] = entity.code
         this[CharacterTable.definition] = entity.definition
         this[CharacterTable.pinyin] = entity.pinyin
@@ -38,7 +40,7 @@ internal object BatchInsertMapping {
         this[CharacterTable.matches] = entity.matches
     }
 
-    fun BatchInsertStatement.add(entity: HanziRow) {
+    fun UpdateBuilder<*>.add(entity: HanziRow) {
         this[HanziTable.id] = entity.thisTable
         this[HanziTable.code] = entity.code
         this[HanziTable.traditional] = entity.traditional
@@ -63,7 +65,7 @@ internal object BatchInsertMapping {
         this[HanziTable.ccCedictDefinitions] = entity.ccCedictDefinitions
     }
 
-    fun BatchInsertStatement.add(entity: HskEntryRow) {
+    fun UpdateBuilder<*>.add(entity: HskEntryRow) {
         this[HskEntryTable.simplified] = entity.simplified
         this[HskEntryTable.radical] = entity.radical
         this[HskEntryTable.frequency] = entity.frequency
@@ -71,7 +73,7 @@ internal object BatchInsertMapping {
         this[HskEntryTable.pos] = entity.pos
     }
 
-    fun BatchInsertStatement.add(
+    fun UpdateBuilder<*>.add(
         entryId: Int,
         entity: HskFormRow
     ) {
@@ -86,7 +88,7 @@ internal object BatchInsertMapping {
         this[HskFormTable.classifiers] = entity.classifiers
     }
 
-    fun BatchInsertStatement.add(
+    fun UpdateBuilder<*>.add(
         entryId: Int,
         codePoint: Int,
     ) {
@@ -94,7 +96,7 @@ internal object BatchInsertMapping {
         this[HskEntryCharacterTable.codePoint] = codePoint
     }
 
-    fun BatchInsertStatement.add(
+    fun UpdateBuilder<*>.add(
         entryId: Int,
         level: String,
     ) {
@@ -102,12 +104,24 @@ internal object BatchInsertMapping {
         this[HskEntryLevelTable.level] = level
     }
 
-    fun BatchInsertStatement.add(entity: DictionaryRow) {
+    fun UpdateBuilder<*>.add(entity: DictionaryRow) {
         this[DictionaryTable.code] = entity.code
         this[DictionaryTable.char] = entity.char
         this[DictionaryTable.decomposition] = entity.decomposition
         this[DictionaryTable.medians] = entity.medians
         this[DictionaryTable.level] = entity.frequency
         this[DictionaryTable.hskLevel] = entity.hskLevel
+    }
+
+    fun UpdateBuilder<*>.add(entity: UserRow) {
+        this[UserTable.firebaseUid] = entity.id
+        this[UserTable.fcmToken] = entity.fcmToken
+        this[UserTable.createdAt] = entity.createdAt
+        this[UserTable.updatedAt] = entity.updatedAt
+    }
+
+    fun UpdateBuilder<*>.update(entity: UserRow) {
+        this[UserTable.fcmToken] = entity.fcmToken
+        this[UserTable.updatedAt] = entity.updatedAt
     }
 }

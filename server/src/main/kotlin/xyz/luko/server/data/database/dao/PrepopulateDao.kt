@@ -2,7 +2,7 @@ package xyz.luko.server.data.database.dao
 
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.JoinType
-import xyz.luko.server.data.database.BatchInsertMapping.add
+import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.exist
 import xyz.luko.server.data.database.insertAll
 import xyz.luko.server.data.database.suspendTransaction

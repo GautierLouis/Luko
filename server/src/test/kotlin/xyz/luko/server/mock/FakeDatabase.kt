@@ -3,9 +3,7 @@ package xyz.luko.server.mock
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import xyz.luko.server.data.database.Database
-import xyz.luko.server.data.database.table.CharacterTable
-import xyz.luko.server.data.database.table.GraphicTable
-import xyz.luko.server.data.database.table.UserTable
+import xyz.luko.server.data.database.table.TableList
 
 class FakeDatabase : Database {
     override suspend fun init() {
@@ -17,7 +15,7 @@ class FakeDatabase : Database {
         )
 
         transaction {
-            SchemaUtils.create(CharacterTable, GraphicTable, UserTable)
+            SchemaUtils.create(*TableList.get())
         }
     }
 }

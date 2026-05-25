@@ -8,9 +8,7 @@ import io.ktor.server.testing.testApplication
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.mp.KoinPlatform.stopKoin
-import xyz.luko.server.data.database.table.CharacterTable
-import xyz.luko.server.data.database.table.GraphicTable
-import xyz.luko.server.data.database.table.UserTable
+import xyz.luko.server.data.database.table.TableList
 import xyz.luko.server.mock.testModule
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -22,7 +20,7 @@ class ApplicationTest {
     fun after() {
         stopKoin()
         transaction {
-            SchemaUtils.drop(CharacterTable, GraphicTable, UserTable)
+            SchemaUtils.drop(*TableList.get())
         }
     }
 
@@ -38,5 +36,10 @@ class ApplicationTest {
         val response = client.get(urlString = "/")
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals("Ktor", response.bodyAsText())
+    }
+
+    @Test
+    fun endPointsAreProtected() {
+        //TODO()
     }
 }

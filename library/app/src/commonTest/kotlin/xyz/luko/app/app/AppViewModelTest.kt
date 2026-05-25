@@ -40,10 +40,16 @@ class AppViewModelTest {
 
     class FakeFirebaseManager : FirebaseManager {
         override fun initialize() {}
+        override suspend fun registerAnonymously(): Result<String> {
+            return Result.success("")
+        }
 
-        override suspend fun getFCMToken() = ""
+        override suspend fun getIdToken(forceRefresh: Boolean): Result<String> {
+            return Result.success("")
+        }
 
-        override suspend fun getInstallationId() = ""
+        override suspend fun getFCMToken() = Result.success("")
+
 
         override fun logEvent(event: TrackingEvent) {}
 
@@ -61,7 +67,7 @@ class AppViewModelTest {
     class FakeAuthRepository : AuthRepository {
         override suspend fun registerAnonymously(): Result<Unit> = Result.success(Unit)
 
-        override suspend fun registerNewToken(token: String): Result<Unit> = Result.success(Unit)
+        override suspend fun onNewFcmToken(token: String): Result<Unit> = Result.success(Unit)
     }
 
     class FakeRemoteConfigManager : RemoteConfigManager {

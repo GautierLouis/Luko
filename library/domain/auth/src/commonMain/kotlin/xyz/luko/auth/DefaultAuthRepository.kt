@@ -1,8 +1,8 @@
 package xyz.luko.auth
 
-import xyz.luko.apicontracts.dto.RegisterDeviceRequestDto
+import xyz.luko.apicontracts.dto.AuthRegistrationDto
+import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.firebase.FirebaseManager
-import xyz.luko.logger.AppLogger
 import xyz.luko.network.interfaces.AuthService
 import xyz.luko.preferences.AppPreferences
 
@@ -11,26 +11,36 @@ internal class DefaultAuthRepository(
     private val preferences: AppPreferences,
     private val firebaseManager: FirebaseManager,
 ) : AuthRepository {
-    override suspend fun registerAnonymously(): Result<Unit> {
-        val installationId = firebaseManager.getInstallationId()
-        val fcmToken = firebaseManager.getFCMToken()
 
-        AppLogger.i(
-            tag = "Registration",
-            message = "Register anonymously with FCM $fcmToken for installation $installationId",
-        )
+    override suspend fun registerAnonymously(): Result<Unit> = runCatching {
+        val fcmToken = firebaseManager.getFCMToken().getOrNull()
+        val cached = preferences.getUserId()
 
-        preferences.setInstallationId(installationId)
-        preferences.setFcmToken(fcmToken)
-
-        return client.registerDevice(RegisterDeviceRequestDto(installationId, fcmToken))
+        if (cached == null) {
+            // First launch — Firebase + create user
+            val uid = firebaseManager.registerAnonymously().getOrThrow()
+            preferences.setUserId(uid)
+            client.registerAnonymously(AuthRegistrationDto(fcmToken = fcmToken))
+        } else {
+            // Already registered — update FCM only if changed
+            val cachedFcm = preferences.getFcmToken()
+            if (fcmToken != null && fcmToken != cachedFcm) {
+                client.updateFcm(FcmUpdateDto(fcmToken = fcmToken))
+                preferences.setFcmToken(fcmToken)
+            }
+            // else — nothing to do, skip network call entirely
+        }
     }
 
-    override suspend fun registerNewToken(token: String): Result<Unit> {
-        val installationId = firebaseManager.getInstallationId()
-
+    // As of now, called only from Android Worker if token change.
+    // TODO Test it and do the same of iOS
+    override suspend fun onNewFcmToken(token: String): Result<Unit> = runCatching {
         preferences.setFcmToken(token)
 
-        return client.updateFcm(RegisterDeviceRequestDto(installationId, token))
+        if (!preferences.hasUserId()) {
+            return@runCatching
+        }
+
+        client.updateFcm(FcmUpdateDto(fcmToken = token)).getOrThrow()
     }
 }

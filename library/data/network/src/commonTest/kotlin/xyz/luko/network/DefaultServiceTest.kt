@@ -10,7 +10,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLProtocol
 import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.test.runTest
-import xyz.luko.network.interfaces.TokenAccessor
+import xyz.luko.network.interfaces.TokenProvider
 import xyz.luko.utils.AppConfig
 import xyz.luko.utils.Flavor
 import kotlin.test.AfterTest
@@ -21,20 +21,12 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class DefaultServiceTest {
-    private val mockTokenAccessor =
-        object : TokenAccessor {
-            override suspend fun getUserToken() = "access-token"
-
-            override suspend fun getUserRefreshToken() = "refresh-token"
-
-            override suspend fun setUserToken(token: String) {}
-
-            override suspend fun setUserRefreshToken(refreshToken: String) {}
-
-            override suspend fun removeUserToken() {}
+    private val mockTokenProvider =
+        object : TokenProvider {
+            override suspend fun getToken(forceRefresh: Boolean): String {
+                return "access-token"
+            }
         }
-
-    private val mockBaseUrl = "https://api.mock.com"
 
     private val mockAppConfig =
         AppConfig(
@@ -42,6 +34,7 @@ class DefaultServiceTest {
             flavor = Flavor.DEV,
             versionName = "1.0.0",
             versionCode = "100",
+            baseUrl = "https://api.mock.com"
         )
 
     private var engine: MockEngine? = null
@@ -58,7 +51,7 @@ class DefaultServiceTest {
                     status = HttpStatusCode.OK,
                 )
             }
-        service = DefaultService(engine!!, mockTokenAccessor, mockBaseUrl, mockAppConfig)
+        service = DefaultService(mockTokenProvider, mockAppConfig, engine!!)
     }
 
     @AfterTest

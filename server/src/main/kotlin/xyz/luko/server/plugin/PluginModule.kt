@@ -6,6 +6,7 @@ import org.koin.dsl.module
 val pluginModule = module {
     singleOf(::BasePlugin)
     singleOf(::AuthenticationPlugin)
+    singleOf(::FirebasePlugin)
     singleOf(::MetricsPlugin)
     singleOf(::ErrorPlugin)
     single { RouterPlugin(getAll()) }

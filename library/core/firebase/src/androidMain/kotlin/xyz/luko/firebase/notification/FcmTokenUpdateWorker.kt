@@ -12,7 +12,6 @@ import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import org.koin.core.context.GlobalContext
-import xyz.luko.logger.AppLogger
 import java.util.concurrent.TimeUnit
 
 class FcmTokenUpdateWorker(
@@ -24,13 +23,11 @@ class FcmTokenUpdateWorker(
             inputData.getString(KEY_FCM_TOKEN)
                 ?: return Result.failure()
 
-        AppLogger.d(tag = "FCM Worker", message = "New token received: $token")
-
         // Koin might not be initialized - retry until app launch
         return GlobalContext
             .getOrNull()
             ?.getOrNull<FcmAccessor>()
-            ?.registerNewToken(token)
+            ?.onNewFcmToken(token)
             ?.fold(
                 onSuccess = { Result.success() },
                 onFailure = { Result.retry() },

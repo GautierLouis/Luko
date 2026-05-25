@@ -1,12 +1,8 @@
 package xyz.luko.server.domain.model
 
 data class UserRow(
-    val installationId: String,
-    val supabaseUserId: String,
-    val supabaseRefreshToken: String,
-    val fcmToken: String,
-    val createdAt: String,
-    val updatedAt: String,
-) {
-    companion object
-}
+    val id: String,
+    val fcmToken: String?,
+    val createdAt: Long,
+    val updatedAt: Long,
+)

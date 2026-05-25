@@ -13,36 +13,22 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.plugins.resources.Resources
-import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.header
-import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import xyz.luko.apicontracts.defaultJson
-import xyz.luko.apicontracts.dto.UserRefreshTokenJson
-import xyz.luko.apicontracts.dto.UserTokenJson
-import xyz.luko.apicontracts.routing.Destination
-import xyz.luko.network.interfaces.TokenAccessor
+import xyz.luko.network.interfaces.TokenProvider
 import xyz.luko.utils.AppConfig
-import xyz.luko.utils.Flavor
 
 internal class DefaultService(
-    private val tokenAccessor: TokenAccessor,
+    private val tokenProvider: TokenProvider,
     private val appConfig: AppConfig,
     private val engine: HttpClientEngine = engineFactory.create(),
 ) {
     val unauthedClient = createDefaultClient()
 
     val authedClient = createDefaultClient { installAuth() }
-
-    private val baseUrl: String
-        get() =
-            when (appConfig.flavor) {
-                Flavor.DEV -> "https://unethical-thing-gush.ngrok-free.dev"
-                Flavor.STAGING -> "https://staging-api.lukoapp.xyz"
-                Flavor.PROD -> "https://api.lukoapp.xyz"
-            }
 
     private fun createDefaultClient(config: HttpClientConfig<*>.() -> Unit = { }) =
         HttpClient(engine) {
@@ -57,7 +43,7 @@ internal class DefaultService(
             }
 
             defaultRequest {
-                url(urlString = baseUrl)
+                url(urlString = appConfig.baseUrl)
                 header("X-Platform", appConfig.platform)
                 header("App-Version", appConfig.versionName)
                 header("App-Build", appConfig.versionCode)
@@ -71,38 +57,21 @@ internal class DefaultService(
         install(Auth) {
             bearer {
                 loadTokens {
-                    val accessToken = tokenAccessor.getUserToken()
-                    val refreshToken = tokenAccessor.getUserRefreshToken()
-                    if (accessToken.isNullOrEmpty() || refreshToken.isNullOrEmpty()) {
-                        null // No tokens available
-                    } else {
-                        BearerTokens(accessToken, refreshToken)
-                    }
+                    val token =
+                        tokenProvider.getToken(forceRefresh = false) ?: return@loadTokens null
+                    BearerTokens(
+                        accessToken = token,
+                        refreshToken = "" // unused — Firebase owns refresh
+                    )
                 }
 
                 refreshTokens {
-                    val oldRefreshToken =
-                        UserRefreshTokenJson(tokenAccessor.getUserRefreshToken().orEmpty())
-
-                    val newTokens =
-                        call<UserTokenJson> {
-                            unauthedClient.post(Destination.RefreshToken()) {
-                                setBody(oldRefreshToken)
-                            }
-                        }
-
-                    if (newTokens.isSuccess) {
-                        tokenAccessor.setUserToken(newTokens.getOrNull()!!.accessToken)
-                        tokenAccessor.setUserRefreshToken(newTokens.getOrNull()!!.refreshToken)
-                        BearerTokens(
-                            newTokens.getOrNull()!!.accessToken,
-                            newTokens.getOrNull()!!.refreshToken,
-                        )
-                    } else {
-                        // Failed to refresh, clear tokens or trigger logout
-                        tokenAccessor.removeUserToken()
-                        null
-                    }
+                    val token =
+                        tokenProvider.getToken(forceRefresh = true) ?: return@refreshTokens null
+                    BearerTokens(
+                        accessToken = token,
+                        refreshToken = "" // same
+                    )
                 }
             }
         }

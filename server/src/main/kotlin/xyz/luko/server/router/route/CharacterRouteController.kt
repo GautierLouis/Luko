@@ -3,6 +3,7 @@ package xyz.luko.server.router.route
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.authenticate
 import io.ktor.server.resources.get
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
@@ -13,6 +14,7 @@ import xyz.luko.server.domain.repo.DictionaryRepository
 import xyz.luko.server.domain.repo.SessionRepository
 import xyz.luko.server.error.dictionaryNotFound
 import xyz.luko.server.error.graphicNotFound
+import xyz.luko.server.plugin.BEARER
 import xyz.luko.server.router.RouteController
 
 class CharacterRouteController(
@@ -24,51 +26,51 @@ class CharacterRouteController(
         this.respond(status = HttpStatusCode.OK, message = body)
 
     override fun Route.register() {
-
-        get<Destination.GenerateSession> { resources ->
-            sessionRepository.generateSession(resources).let {
-                call.respondOk(it)
+        authenticate(BEARER) {
+            get<Destination.GenerateSession> { resources ->
+                sessionRepository.generateSession(resources).let {
+                    call.respondOk(it)
+                }
             }
-        }
 
-        get<Destination.Characters.ByLevel> { resources ->
-            dictionaryRepository.getByLevel(resources).let {
-                call.respondOk(it)
+            get<Destination.Characters.ByLevel> { resources ->
+                dictionaryRepository.getByLevel(resources).let {
+                    call.respondOk(it)
+                }
             }
-        }
 
-        get<Destination.Characters.Search> { resources ->
-            dictionaryRepository.search(resources).let {
-                call.respondOk(it)
+            get<Destination.Characters.Search> { resources ->
+                dictionaryRepository.search(resources).let {
+                    call.respondOk(it)
+                }
             }
-        }
 
-        get<Destination.Characters.ByName> { resource ->
-            dictionaryRepository.get(resource)?.let {
-                call.respondOk(it)
-            } ?: throw dictionaryNotFound(resource.code)
-        }
+            get<Destination.Characters.ByName> { resource ->
+                dictionaryRepository.get(resource)?.let {
+                    call.respondOk(it)
+                } ?: throw dictionaryNotFound(resource.code)
+            }
 
-        get<Destination.Characters.ByName.Render> { resource ->
-            val graphic = dictionaryRepository.get(resource.parent)
-                ?: throw graphicNotFound(resource.parent.code)
+            get<Destination.Characters.ByName.Render> { resource ->
+                val graphic = dictionaryRepository.get(resource.parent)
+                    ?: throw graphicNotFound(resource.parent.code)
 
-            val colors = listOf(
-                "#378ADD", "#1D9E75", "#D85A30", "#D4537E", "#7F77DD",
-                "#639922", "#BA7517", "#E24B4A", "#EF9F27", "#AFA9EC", "#5DCAA5"
-            )
+                val colors = listOf(
+                    "#378ADD", "#1D9E75", "#D85A30", "#D4537E", "#7F77DD",
+                    "#639922", "#BA7517", "#E24B4A", "#EF9F27", "#AFA9EC", "#5DCAA5"
+                )
 
-            fun List<String>.toPaths() = mapIndexed { i, path ->
-                val color = colors[i % colors.size]
-                """<path d="$path" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
-            }.joinToString("\n        ")
+                fun List<String>.toPaths() = mapIndexed { i, path ->
+                    val color = colors[i % colors.size]
+                    """<path d="$path" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
+                }.joinToString("\n        ")
 
-            fun List<StrokeDto>.toSmoothPaths() = mapIndexed { i, path ->
-                val color = colors[i % colors.size]
-                """<path d="$path" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
-            }.joinToString("\n        ")
+                fun List<StrokeDto>.toSmoothPaths() = mapIndexed { i, path ->
+                    val color = colors[i % colors.size]
+                    """<path d="$path" fill="none" stroke="$color" stroke-width="8" stroke-linecap="round"/>"""
+                }.joinToString("\n        ")
 
-            val html = """
+                val html = """
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -117,7 +119,8 @@ class CharacterRouteController(
         </html>
     """.trimIndent()
 
-            call.respondText(html, ContentType.Text.Html)
+                call.respondText(html, ContentType.Text.Html)
+            }
         }
     }
 }

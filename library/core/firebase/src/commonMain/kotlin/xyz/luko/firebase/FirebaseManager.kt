@@ -4,21 +4,11 @@ import xyz.luko.tracking.TrackingEvent
 
 interface FirebaseManager {
     fun initialize()
-
-    suspend fun getFCMToken(): String
-
-    suspend fun getInstallationId(): String
-
+    suspend fun registerAnonymously(): Result<String>
+    suspend fun getIdToken(forceRefresh: Boolean = false): Result<String>
+    suspend fun getFCMToken(): Result<String>
     fun logEvent(event: TrackingEvent)
-
     fun setUserId(userId: String)
-
-    fun setUserProperty(
-        name: String,
-        value: String,
-    )
-
+    fun setUserProperty(name: String, value: String)
     fun fetchRemoteConfig()
 }
-
-const val DEFAULT_MIN_FETCH_INTERVAL: Long = 3600L // 1 hour default

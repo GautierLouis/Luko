@@ -13,62 +13,35 @@ internal class DefaultAppPreferences(
     private val store: DataStore<Preferences>,
 ) : AppPreferences {
     companion object {
-        private val USER_TOKEN = stringPreferencesKey("user_token")
-        private val USER_REFRESH_TOKEN = stringPreferencesKey("user_refresh_token")
-        private val KEY_INSTALLATION_ID = stringPreferencesKey("installation_id")
+        private val USER_ID = stringPreferencesKey("user_id")
         private val KEY_FCM_TOKEN = stringPreferencesKey("fcm_token")
         private val KEY_USER_THEME = stringPreferencesKey("theme")
     }
 
-    //region ================  SET  =======================
-
-    override suspend fun setUserToken(token: String) {
-        store.edit { it[USER_TOKEN] = token }
-    }
-
-    override suspend fun setUserRefreshToken(token: String) {
-        store.edit { it[USER_REFRESH_TOKEN] = token }
-    }
-
-    override suspend fun setInstallationId(id: String) {
-        store.edit { it[KEY_INSTALLATION_ID] = id }
+    override suspend fun setUserId(id: String) {
+        store.edit { it[USER_ID] = id }
     }
 
     override suspend fun setFcmToken(token: String) {
         store.edit { it[KEY_FCM_TOKEN] = token }
     }
 
-    override suspend fun setTheme(theme: String) {
-        store.edit { it[KEY_USER_THEME] = theme }
+    override suspend fun getUserId(): String? = store.data.first()[USER_ID]
+
+    override suspend fun hasUserId(): Boolean = store.data.first()[USER_ID] != null
+
+    override suspend fun getFcmToken(): String? = store.data.first()[KEY_FCM_TOKEN]
+
+    override suspend fun deleteUser() {
+        store.edit { settings -> settings.remove(USER_ID) }
     }
-    //endregion
-
-    //region ================  GET  =======================
-    override fun getUserTokenAsFlow() = store.data.map { preferences -> preferences[USER_TOKEN] }
-
-    override fun getUserRefreshTokenAsFlow() =
-        store.data.map { preferences -> preferences[USER_REFRESH_TOKEN] }
 
     override fun observeTheme(): Flow<String?> =
         store.data.map { preferences -> preferences[KEY_USER_THEME] }
 
-    override suspend fun getUserToken() = getUserTokenAsFlow().firstOrNull()
-
-    override suspend fun getUserRefreshToken() = getUserRefreshTokenAsFlow().firstOrNull()
-
-    override suspend fun getInstallationId(): String? = store.data.first()[KEY_INSTALLATION_ID]
-
-    override suspend fun getFcmToken(): String? = store.data.first()[KEY_FCM_TOKEN]
+    override suspend fun setTheme(theme: String) {
+        store.edit { it[KEY_USER_THEME] = theme }
+    }
 
     override suspend fun getTheme(): String? = observeTheme().firstOrNull()
-    //endregion
-
-    //region ================  REMOVE  =======================
-
-    override suspend fun removeUserToken() {
-        store.edit { settings ->
-            settings.remove(USER_TOKEN)
-            settings.remove(USER_REFRESH_TOKEN)
-        }
-    }
 }
