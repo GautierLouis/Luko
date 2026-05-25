@@ -1,5 +1,6 @@
 package xyz.luko.network
 
+import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.request.HttpRequestData
@@ -18,7 +19,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 class DefaultServiceTest {
     private val mockTokenProvider =
@@ -38,7 +38,7 @@ class DefaultServiceTest {
         )
 
     private var engine: MockEngine? = null
-    private var service: DefaultService? = null
+    private var client: HttpClient? = null
     private val request: HttpRequestData
         get() = engine!!.requestHistory.first()
 
@@ -51,13 +51,13 @@ class DefaultServiceTest {
                     status = HttpStatusCode.OK,
                 )
             }
-        service = DefaultService(mockTokenProvider, mockAppConfig, engine!!)
+        client = buildHttpClient(mockTokenProvider, mockAppConfig, engine!!)
     }
 
     @AfterTest
     fun after() {
         engine = null
-        service = null
+        client = null
     }
 
     // --- Default headers ---
@@ -65,42 +65,42 @@ class DefaultServiceTest {
     @Test
     fun `default request contains X-Platform header`() =
         runTest {
-            runCatching { service!!.unauthedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertEquals("android", request.headers["X-Platform"])
         }
 
     @Test
     fun `default request contains App-Version header`() =
         runTest {
-            runCatching { service!!.unauthedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertEquals("1.0.0", request.headers["App-Version"])
         }
 
     @Test
     fun `default request contains App-Build header`() =
         runTest {
-            runCatching { service!!.unauthedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertEquals("100", request.headers["App-Build"])
         }
 
     @Test
     fun `default request uses correct host from environment`() =
         runTest {
-            runCatching { service!!.unauthedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertEquals("api.mock.com", request.url.host)
         }
 
     @Test
     fun `default request uses https scheme from environment`() =
         runTest {
-            runCatching { service!!.unauthedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertEquals(URLProtocol.HTTPS, request.url.protocol)
         }
 
     @Test
     fun `default request has json content type`() =
         runTest {
-            runCatching { service!!.unauthedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertEquals(
                 ContentType.Application.Json.toString(),
                 request.headers[HttpHeaders.ContentType],
@@ -110,23 +110,16 @@ class DefaultServiceTest {
     // --- Auth header ---
 
     @Test
-    fun `unauthedClient does not send Authorization header`() =
+    fun `http client sends Authorization header`() =
         runTest {
-            runCatching { service!!.unauthedClient.get("/test") }
-            assertNull(request.headers[HttpHeaders.Authorization])
-        }
-
-    @Test
-    fun `authedClient sends Authorization header`() =
-        runTest {
-            runCatching { service!!.authedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertNotNull(request.headers[HttpHeaders.Authorization])
         }
 
     @Test
-    fun `authedClient Authorization header is a Bearer token`() =
+    fun `http client Authorization header is a Bearer token`() =
         runTest {
-            runCatching { service!!.authedClient.get("/test") }
+            runCatching { client!!.get("/test") }
             assertEquals(request.headers[HttpHeaders.Authorization]?.startsWith("Bearer "), true)
         }
 }

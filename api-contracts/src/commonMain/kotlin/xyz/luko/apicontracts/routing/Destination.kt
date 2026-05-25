@@ -41,11 +41,6 @@ class Destination {
         val parent: Destination = Destination(),
     )
 
-    @Resource("/refresh_token")
-    class RefreshToken(
-        val parent: Destination = Destination(),
-    )
-
     @Resource("characters")
     class Characters(
         val parent: Destination = Destination(),

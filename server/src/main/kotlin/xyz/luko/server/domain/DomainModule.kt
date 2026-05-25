@@ -4,6 +4,8 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import xyz.luko.server.domain.auth.DefaultTokenVerifier
+import xyz.luko.server.domain.auth.TokenVerifier
 import xyz.luko.server.domain.repo.DefaultDictionaryRepository
 import xyz.luko.server.domain.repo.DefaultSessionRepository
 import xyz.luko.server.domain.repo.DefaultUserRepository
@@ -18,6 +20,8 @@ val domainModule = module {
     singleOf(::DefaultUserRepository) bind UserRepository::class
     singleOf(::DefaultSessionRepository) bind SessionRepository::class
     singleOf(::DefaultDictionaryRepository) bind DictionaryRepository::class
+
+    singleOf(::DefaultTokenVerifier) bind TokenVerifier::class
 
     factoryOf(::PrepopulateDatabaseUseCase)
     factoryOf(::CompositionUseCase)

@@ -37,9 +37,4 @@ class ApplicationTest {
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals("Ktor", response.bodyAsText())
     }
-
-    @Test
-    fun endPointsAreProtected() {
-        //TODO()
-    }
 }
