@@ -11,5 +11,6 @@ object TableList {
         CharacterTable,
         GraphicTable,
         UserTable,
+        SeedTable
     ).toTypedArray()
 }

@@ -74,10 +74,22 @@ class Destination {
         )
     }
 
-    @Resource("createSession")
-    class GenerateSession(
+    @Resource("session")
+    class Session(
         val parent: Destination = Destination(),
-        val levels: List<CharacterFrequencyLevelDto>? = null,
-        val limit: Int,
-    )
+    ) {
+        @Resource("new")
+        class New(
+            val parent: Session = Session(),
+            val levels: List<CharacterFrequencyLevelDto>? = null,
+            val limit: Int,
+        )
+
+        @Resource("replay")
+        class Replay(
+            val parent: Session = Session(),
+            val seed: Long,
+        )
+    }
+
 }

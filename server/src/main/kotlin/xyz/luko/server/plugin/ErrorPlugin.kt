@@ -16,8 +16,8 @@ import kotlin.coroutines.cancellation.CancellationException
 class ErrorPlugin : Plugin {
     private fun logException(cause: Throwable, message: String? = null) {
         ServerLogger.i(
-            "Status Page",
-            cause,
+            tag = "Status Page",
+            cause = cause,
             message = message ?: cause.message ?: ErrorCode.DEFAULT_INTERNAL_MESSAGE
         )
     }

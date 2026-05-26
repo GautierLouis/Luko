@@ -1,6 +1,7 @@
 package xyz.luko.server.data.database.dao
 
 import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.Random
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
@@ -14,21 +15,13 @@ import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.data.database.table.GraphicTable
 import xyz.luko.server.domain.model.DictionaryRow
-import kotlin.random.Random
+import xyz.luko.server.domain.model.PaginatedRow
 
 interface DictionaryDao {
     suspend fun batchInsert(data: List<DictionaryRow>)
-    suspend fun generateSession(levels: List<Int>, limit: Int): List<ResultRow>
-
-    //TODO Remove Pair<>
-    suspend fun getByLevel(page: Int, limit: Int, level: Int): Pair<Boolean, List<ResultRow>>
-    suspend fun search(
-        levels: List<Int>,
-        query: String,
-        page: Int,
-        limit: Int
-    ): Pair<Boolean, List<ResultRow>>
-
+    suspend fun createSession(levels: List<Int>, limit: Int, seed: Long): List<ResultRow>
+    suspend fun getByLevel(page: Int, limit: Int, level: Int): PaginatedRow
+    suspend fun search(levels: List<Int>, query: String, page: Int, limit: Int): PaginatedRow
     suspend fun get(code: Int): ResultRow?
 }
 
@@ -36,22 +29,21 @@ interface DictionaryDao {
 
 internal class DefaultDictionaryDao : DictionaryDao {
 
-    override suspend fun generateSession(
+    override suspend fun createSession(
         levels: List<Int>,
-        limit: Int
+        limit: Int,
+        seed: Long
     ): List<ResultRow> {
         return suspendTransaction {
+
+            exec("SELECT setseed(${seed.toPostgresSeed()})")
             DictionaryTable
                 .join(CharacterTable, JoinType.INNER, DictionaryTable.code, CharacterTable.code)
                 .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
                 .selectAll()
-                .defaultWhere { DictionaryTable.level inList levels }
-                .let { query ->
-                    val total = query.count()
-                    val offset =
-                        if (total > limit) Random.nextLong(0, total - limit) else 0L
-                    query.limit(limit).offset(offset)
-                }
+                .where { DictionaryTable.level inList levels }
+                .orderBy(Random())
+                .limit(limit)
                 .toList()
         }
     }
@@ -60,7 +52,7 @@ internal class DefaultDictionaryDao : DictionaryDao {
         page: Int,
         limit: Int,
         level: Int
-    ): Pair<Boolean, List<ResultRow>> {
+    ): PaginatedRow {
         return suspendTransaction {
             DictionaryTable.selectAll()
                 .defaultWhere { DictionaryTable.level eq level }
@@ -73,7 +65,7 @@ internal class DefaultDictionaryDao : DictionaryDao {
         query: String,
         page: Int,
         limit: Int
-    ): Pair<Boolean, List<ResultRow>> {
+    ): PaginatedRow {
         return suspendTransaction {
             DictionaryTable
                 .join(CharacterTable, JoinType.INNER, DictionaryTable.code, CharacterTable.code)
@@ -105,4 +97,7 @@ internal class DefaultDictionaryDao : DictionaryDao {
     override suspend fun batchInsert(data: List<DictionaryRow>) {
         DictionaryTable.insertAll(data) { dictionary -> this.add(dictionary) }
     }
+
+    // seed must be between -1.0 and 1.0 for Postgres setseed()
+    private fun Long.toPostgresSeed(): Double = (this % 1_000_000) / 1_000_000.0
 }

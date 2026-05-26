@@ -10,6 +10,7 @@ import xyz.luko.server.data.database.table.HskEntryCharacterTable
 import xyz.luko.server.data.database.table.HskEntryLevelTable
 import xyz.luko.server.data.database.table.HskEntryTable
 import xyz.luko.server.data.database.table.HskFormTable
+import xyz.luko.server.data.database.table.SeedTable
 import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.domain.model.CharacterRow
 import xyz.luko.server.domain.model.DictionaryRow
@@ -17,6 +18,7 @@ import xyz.luko.server.domain.model.GraphicRow
 import xyz.luko.server.domain.model.HanziRow
 import xyz.luko.server.domain.model.HskEntryRow
 import xyz.luko.server.domain.model.HskFormRow
+import xyz.luko.server.domain.model.SeedRow
 import xyz.luko.server.domain.model.UserRow
 
 internal object StatementMapping {
@@ -123,5 +125,11 @@ internal object StatementMapping {
     fun UpdateBuilder<*>.update(entity: UserRow) {
         this[UserTable.fcmToken] = entity.fcmToken
         this[UserTable.updatedAt] = entity.updatedAt
+    }
+
+    fun UpdateBuilder<*>.add(entity: SeedRow) {
+        this[SeedTable.seed] = entity.seed
+        this[SeedTable.levels] = entity.levels
+        this[SeedTable.limit] = entity.limit
     }
 }

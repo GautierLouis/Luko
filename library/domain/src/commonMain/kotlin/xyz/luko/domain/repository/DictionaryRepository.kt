@@ -6,7 +6,7 @@ import xyz.luko.domain.model.ResponseList
 import xyz.luko.domain.model.SimpleDictionary
 
 interface DictionaryRepository {
-    suspend fun generateSession(
+    suspend fun createSession(
         level: List<CharacterFrequencyLevel>,
         limit: Int,
     ): Result<List<Dictionary>>

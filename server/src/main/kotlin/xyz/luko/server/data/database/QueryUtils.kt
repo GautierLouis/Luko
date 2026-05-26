@@ -5,7 +5,6 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
 import org.jetbrains.exposed.sql.Table
@@ -19,6 +18,7 @@ import org.jetbrains.exposed.sql.statements.BatchInsertStatement
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
+import xyz.luko.server.domain.model.PaginatedRow
 
 suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
     newSuspendedTransaction(Dispatchers.IO, statement = block)
@@ -42,11 +42,11 @@ fun Query.defaultWhere(clause: SqlExpressionBuilder.() -> Op<Boolean>) =
  * Paginates the query and returns whether a next page exists alongside the raw rows.
  * Fetches [limit]+1 rows — the extra row is used as a next-page probe and is not included in the result.
  */
-internal fun Query.paginated(page: Int, limit: Int): Pair<Boolean, List<ResultRow>> {
+internal fun Query.paginated(page: Int, limit: Int): PaginatedRow {
     val rows = limit(limit + 1)
         .offset(page * limit.toLong())
         .toList()
-    return (rows.size > limit) to rows.take(limit)
+    return PaginatedRow(rows.take(limit), rows.size > limit)
 }
 
 /**

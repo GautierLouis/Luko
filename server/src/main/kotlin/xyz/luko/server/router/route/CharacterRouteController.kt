@@ -13,7 +13,6 @@ import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.domain.repo.DictionaryRepository
 import xyz.luko.server.domain.repo.SessionRepository
 import xyz.luko.server.error.dictionaryNotFound
-import xyz.luko.server.error.graphicNotFound
 import xyz.luko.server.plugin.BEARER
 import xyz.luko.server.router.RouteController
 
@@ -27,8 +26,14 @@ class CharacterRouteController(
 
     override fun Route.register() {
         authenticate(BEARER) {
-            get<Destination.GenerateSession> { resources ->
-                sessionRepository.generateSession(resources).let {
+            get<Destination.Session.New> { resources ->
+                sessionRepository.createNewSession(resources).let {
+                    call.respondOk(it)
+                }
+            }
+
+            get<Destination.Session.Replay> { resources ->
+                sessionRepository.replaySession(resources).let {
                     call.respondOk(it)
                 }
             }
@@ -53,7 +58,7 @@ class CharacterRouteController(
 
             get<Destination.Characters.ByName.Render> { resource ->
                 val graphic = dictionaryRepository.get(resource.parent)
-                    ?: throw graphicNotFound(resource.parent.code)
+                    ?: throw dictionaryNotFound(resource.parent.code)
 
                 val colors = listOf(
                     "#378ADD", "#1D9E75", "#D85A30", "#D4537E", "#7F77DD",

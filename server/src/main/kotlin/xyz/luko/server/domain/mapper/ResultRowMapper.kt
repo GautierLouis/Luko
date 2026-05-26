@@ -9,7 +9,9 @@ import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.data.database.table.GraphicTable
+import xyz.luko.server.data.database.table.SeedTable
 import xyz.luko.server.data.database.table.UserTable
+import xyz.luko.server.domain.model.SeedRow
 import xyz.luko.server.domain.model.UserRow
 
 internal object ResultRowMapping {
@@ -34,5 +36,11 @@ internal object ResultRowMapping {
         fcmToken = this[UserTable.fcmToken],
         createdAt = this[UserTable.createdAt],
         updatedAt = this[UserTable.updatedAt]
+    )
+
+    fun ResultRow.toSeedRow() = SeedRow(
+        seed = this[SeedTable.seed],
+        levels = this[SeedTable.levels],
+        limit = this[SeedTable.limit]
     )
 }

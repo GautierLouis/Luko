@@ -4,10 +4,10 @@ import co.touchlab.kermit.Logger
 
 object ServerLogger {
     fun i(
-        tag: String,
-        cause: Throwable,
-        message: String
+        message: String,
+        cause: Throwable? = null,
+        tag: String? = null,
     ) {
-        Logger.i(tag = tag, throwable = cause, messageString = message)
+        Logger.i(tag = tag ?: "[Server Logger]", throwable = cause, messageString = message)
     }
 }

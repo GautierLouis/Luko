@@ -3,13 +3,14 @@ package xyz.luko.network.interfaces
 import xyz.luko.apicontracts.dto.CharacterFrequencyLevelDto
 import xyz.luko.apicontracts.dto.DictionaryDto
 import xyz.luko.apicontracts.dto.ResponseListDto
+import xyz.luko.apicontracts.dto.ResponseSessionDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 
 interface CharacterService {
-    suspend fun generateSession(
+    suspend fun createSession(
         level: List<CharacterFrequencyLevelDto>,
         limit: Int,
-    ): Result<List<DictionaryDto>>
+    ): Result<ResponseSessionDto<DictionaryDto>>
 
     suspend fun getByLevel(
         level: CharacterFrequencyLevelDto,

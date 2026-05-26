@@ -1,9 +1,11 @@
 package xyz.luko.server.domain.mapper
 
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.ResultRow
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.DecompositionDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
+import xyz.luko.apicontracts.dto.ResponseListDto
 import xyz.luko.apicontracts.dto.StrokeDto
 import xyz.luko.server.domain.model.CharacterRow
 import xyz.luko.server.domain.model.DictionaryRow
@@ -12,6 +14,7 @@ import xyz.luko.server.domain.model.HanziRow
 import xyz.luko.server.domain.model.HskEntryRow
 import xyz.luko.server.domain.model.HskFormRow
 import xyz.luko.server.domain.model.HskTranscriptionsRow
+import xyz.luko.server.domain.model.PaginatedRow
 import xyz.luko.server.domain.model.PrepopulateRow
 import xyz.luko.server.domain.model.UserRow
 import xyz.luko.server.domain.model.source.CharacterSource
@@ -133,6 +136,8 @@ internal object DomainMapping {
         createdAt = updatedAt.epochSeconds, //is ignored
         updatedAt = updatedAt.epochSeconds
     )
+
+    fun <T> PaginatedRow.map(map: (ResultRow) -> T) = ResponseListDto(hasNextPage, data.map(map))
 
     private fun rankToLevel(rank: Int?): Int {
         if (rank == null) return CharacterFrequencyLevel.OBSOLETE.value

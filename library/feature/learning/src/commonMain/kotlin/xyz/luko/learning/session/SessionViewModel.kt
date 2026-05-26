@@ -76,7 +76,7 @@ internal class SessionViewModel(
     private fun loadQuestions() {
         viewModelScope.launch {
             repository
-                .generateSession(params.levels.toDomain(), params.limit.value)
+                .createSession(params.levels.toDomain(), params.limit.value)
                 .onSuccess { data ->
                     val now = Clock.System.now()
 

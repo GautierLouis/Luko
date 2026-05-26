@@ -10,12 +10,12 @@ internal class DefaultDictionaryRepository(
     private val characterService: CharacterService,
 ) : DictionaryRepository {
 
-    override suspend fun generateSession(
+    override suspend fun createSession(
         level: List<CharacterFrequencyLevel>,
         limit: Int,
     ) = characterService
-        .generateSession(level.map { it.toDto() }, limit)
-        .map { it.map { dto -> dto.toDomain() } }
+        .createSession(level.map { it.toDto() }, limit)
+        .map { it.data.map { dto -> dto.toDomain() } }
 
     override suspend fun getByLevel(
         level: CharacterFrequencyLevel,

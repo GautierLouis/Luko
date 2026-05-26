@@ -5,6 +5,7 @@ import io.ktor.client.plugins.resources.get
 import xyz.luko.apicontracts.dto.CharacterFrequencyLevelDto
 import xyz.luko.apicontracts.dto.DictionaryDto
 import xyz.luko.apicontracts.dto.ResponseListDto
+import xyz.luko.apicontracts.dto.ResponseSessionDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.network.interfaces.CharacterService
@@ -13,12 +14,12 @@ class DefaultCharacterService(
     private val client: HttpClient,
 ) : CharacterService {
 
-    override suspend fun generateSession(
+    override suspend fun createSession(
         level: List<CharacterFrequencyLevelDto>,
         limit: Int,
-    ): Result<List<DictionaryDto>> =
+    ): Result<ResponseSessionDto<DictionaryDto>> =
         call {
-            client.get(Destination.GenerateSession(levels = level, limit = limit))
+            client.get(Destination.Session.New(levels = level, limit = limit))
         }
 
     override suspend fun getByLevel(
