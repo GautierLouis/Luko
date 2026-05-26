@@ -28,7 +28,7 @@ data class ServerConfig(
     }
 
     // One source of truth for all log levels
-    private val isDev get() = env == Env.DEV
+    val isDev get() = env == Env.DEV
     val koinLogLevel: Level get() = if (isDev) Level.DEBUG else Level.INFO
     val ktorLogLevel: LogLevel get() = if (isDev) LogLevel.DEBUG else LogLevel.INFO
     val sqlLogger: SqlLogger get() = if (isDev) Slf4jSqlDebugLogger else StdOutSqlLogger

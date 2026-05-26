@@ -6,46 +6,65 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.delay
 import org.koin.core.context.startKoin
 import xyz.luko.app.app.App
 import xyz.luko.app.libraryModule
+import java.awt.Toolkit
 import kotlin.time.Duration.Companion.seconds
 
-fun main() =
+fun main() {
+
+    val enableCycling = System.getProperty("enableCycling") == "true"
+
+    startKoin {
+        modules(libraryModule)
+    }
+
     application {
-        startKoin {
-            modules(libraryModule)
-        }
 
         val sizes = TestWindowSize.entries
         var currentIndex by remember { mutableStateOf(0) }
-        val currentSize = sizes[currentIndex]
+
+        val windowState = rememberWindowState(
+            width = sizes[0].width,
+            height = sizes[0].height
+        )
 
         LaunchedEffect(Unit) {
-            while (true) {
+            while (enableCycling) {
                 delay(3.seconds)
                 currentIndex = (currentIndex + 1) % sizes.size
+                val newSize = sizes[currentIndex]
+                windowState.size = DpSize(newSize.width, newSize.height)
+
+                // Clamp position so window stays on screen
+                val screenSize = Toolkit.getDefaultToolkit().screenSize
+                val maxX = (screenSize.width - newSize.width.value).coerceAtLeast(0f)
+                val maxY = (screenSize.height - newSize.height.value).coerceAtLeast(0f)
+                windowState.position = WindowPosition(
+                    x = windowState.position.x.value.coerceIn(0f, maxX).dp,
+                    y = windowState.position.y.value.coerceIn(0f, maxY).dp
+                )
             }
         }
-
 
         Window(
             onCloseRequest = ::exitApplication,
             title = "Luko",
-            state = rememberWindowState(
-                width = currentSize.width,
-                height = currentSize.height
-            )
+            state = windowState
         ) {
             App()
         }
     }
 
+}
 
 enum class TestWindowSize(
     val width: Dp,

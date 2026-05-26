@@ -7,7 +7,7 @@ import org.koin.dsl.module
 actual val libraryPlatformModule: Module =
     module {
         single(named(Environment.FLAVOR)) {
-            Environment.STAGING
+            Environment.DEV
         }
 
         single(named(Environment.PLATFORM)) {

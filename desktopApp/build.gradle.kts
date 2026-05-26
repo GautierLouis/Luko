@@ -13,5 +13,8 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "xyz.luko.desktopApp.MainKt"
+
+        jvmArgs += listOf("-DenableCycling=${project.hasProperty("enableCycling")}")
+
     }
 }

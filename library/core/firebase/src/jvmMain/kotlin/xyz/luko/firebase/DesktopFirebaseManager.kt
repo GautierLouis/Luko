@@ -27,12 +27,12 @@ class DesktopFirebaseManager : FirebaseManager {
 //            uid = body.localId,
 //            idToken = body.idToken
 //        )
-        return Result.success("")
+        return Result.success("fake-user")
     }
 
-    override suspend fun getIdToken(forceRefresh: Boolean) = Result.success("")
+    override suspend fun getIdToken(forceRefresh: Boolean) = Result.success("fake-token")
 
-    override suspend fun getFCMToken(): Result<String> = Result.success("")
+    override suspend fun getFCMToken(): Result<String> = Result.success("fake-fcm")
 
 
     override fun logEvent(event: TrackingEvent) {}

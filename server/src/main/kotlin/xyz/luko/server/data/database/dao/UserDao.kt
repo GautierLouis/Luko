@@ -1,10 +1,10 @@
 package xyz.luko.server.data.database.dao
 
-import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.StatementMapping.update
+import xyz.luko.server.data.database.insertAll
 import xyz.luko.server.data.database.suspendTransaction
 import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.domain.mapper.ResultRowMapping.toDto
@@ -21,7 +21,7 @@ interface UserDao {
 
 internal class DefaultUserDao : UserDao {
     override suspend fun insertUser(user: UserRow) {
-        UserTable.batchInsert(listOf(user)) { user -> this.add(user) }
+        UserTable.insertAll(listOf(user)) { user -> this.add(user) }
     }
 
     override suspend fun updateUser(user: UserRow) {

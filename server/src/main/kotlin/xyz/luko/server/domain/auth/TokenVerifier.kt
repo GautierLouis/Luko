@@ -13,7 +13,7 @@ internal class DefaultTokenVerifier(
     private val serverConfig: ServerConfig,
 ) : TokenVerifier {
     override suspend fun verify(token: String): Result<String> {
-        if (serverConfig.env == ServerConfig.Env.DEV) return Result.success("dev-user")
+        if (serverConfig.isDev) return Result.success("fake-user")
 
         return runCatching {
             withContext(Dispatchers.IO) {

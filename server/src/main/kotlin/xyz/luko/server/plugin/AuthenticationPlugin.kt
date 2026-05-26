@@ -17,9 +17,10 @@ class AuthenticationPlugin(
         install(Authentication) {
             bearer(BEARER) {
                 authenticate { credential ->
-                    tokenVerifier.verify(credential.token)
-                        .onFailure { return@authenticate null }
-                        .onSuccess { UserIdPrincipal(it) }
+                    tokenVerifier
+                        .verify(credential.token)
+                        .getOrNull()
+                        ?.let { UserIdPrincipal(it) }
                 }
             }
         }
