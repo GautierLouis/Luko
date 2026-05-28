@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.library.core.utils)
+                implementation(projects.library.core.logger)
                 implementation(projects.library.data.network)
                 implementation(projects.library.data.database)
                 implementation(projects.library.data.preferences)

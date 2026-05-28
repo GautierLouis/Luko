@@ -13,21 +13,17 @@ class DebugFirebaseManager : FirebaseManager {
         FIRApp.configure()
     }
 
-    override suspend fun getFCMToken(): String = "mock-token"
+    override suspend fun registerAnonymously() = Result.success("fake-user")
 
-    override suspend fun getInstallationId(): String = "mock-installation-id"
+    override suspend fun getIdToken(forceRefresh: Boolean) = Result.success("fake-token")
 
-    override fun logEvent(event: TrackingEvent) {
-    }
+    override suspend fun getFCMToken(): Result<String> = Result.success("fake-fcm")
 
-    override fun setUserId(userId: String) {
-    }
+    override fun logEvent(event: TrackingEvent) {}
 
-    override fun setUserProperty(
-        name: String,
-        value: String,
-    ) {
-    }
+    override fun setUserId(userId: String) {}
+
+    override fun setUserProperty(name: String, value: String) {}
 
     override fun fetchRemoteConfig() {
         val remoteConfig = FIRRemoteConfig.remoteConfig()

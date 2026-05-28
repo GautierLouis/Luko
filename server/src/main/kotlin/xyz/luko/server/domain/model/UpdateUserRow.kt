@@ -1,9 +1,7 @@
 package xyz.luko.server.domain.model
 
-data class UserRow(
+data class UpdateUserRow(
     val id: String,
     val fcmToken: String?,
-    val platform: String,
-    val createdAt: Long,
     val updatedAt: Long,
 )

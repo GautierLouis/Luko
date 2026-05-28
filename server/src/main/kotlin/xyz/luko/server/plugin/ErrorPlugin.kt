@@ -8,6 +8,7 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import xyz.luko.apicontracts.dto.ResponseError
 import xyz.luko.server.error.ErrorCode
+import xyz.luko.server.error.HeaderExtractionException
 import xyz.luko.server.error.NotResultException
 import xyz.luko.server.error.ParameterExtractionException
 import xyz.luko.server.logger.ServerLogger
@@ -31,6 +32,14 @@ class ErrorPlugin : Plugin {
                         code = "UNAUTHORIZED",
                         message = "Invalid or missing token"
                     )
+                )
+            }
+
+            exception<HeaderExtractionException> { call, cause ->
+                logException(cause)
+                call.respond(
+                    status = HttpStatusCode.BadRequest,
+                    message = ResponseError(cause.code, cause.message.orEmpty())
                 )
             }
 

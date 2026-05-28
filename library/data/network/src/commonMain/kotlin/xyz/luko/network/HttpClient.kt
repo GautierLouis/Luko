@@ -17,6 +17,9 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import xyz.luko.apicontracts.defaultJson
+import xyz.luko.apicontracts.dto.AppHeader.APP_BUILD
+import xyz.luko.apicontracts.dto.AppHeader.APP_PLATFORM
+import xyz.luko.apicontracts.dto.AppHeader.APP_VERSION
 import xyz.luko.network.interfaces.TokenProvider
 import xyz.luko.utils.AppConfig
 
@@ -37,9 +40,9 @@ internal fun buildHttpClient(
 
     defaultRequest {
         url(urlString = appConfig.baseUrl)
-        header("X-Platform", appConfig.platform)
-        header("App-Version", appConfig.versionName)
-        header("App-Build", appConfig.versionCode)
+        header(APP_PLATFORM, appConfig.platform)
+        header(APP_VERSION, appConfig.versionName)
+        header(APP_BUILD, appConfig.versionCode)
         contentType(ContentType.Application.Json)
     }
 

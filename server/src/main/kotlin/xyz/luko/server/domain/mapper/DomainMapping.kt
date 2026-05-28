@@ -16,6 +16,7 @@ import xyz.luko.server.domain.model.HskFormRow
 import xyz.luko.server.domain.model.HskTranscriptionsRow
 import xyz.luko.server.domain.model.PaginatedRow
 import xyz.luko.server.domain.model.PrepopulateRow
+import xyz.luko.server.domain.model.UpdateUserRow
 import xyz.luko.server.domain.model.UserRow
 import xyz.luko.server.domain.model.source.CharacterSource
 import xyz.luko.server.domain.model.source.GraphicSource
@@ -120,20 +121,21 @@ internal object DomainMapping {
     )
 
     fun AuthRegistrationDto.toRow(
-        id: String
+        id: String,
+        deviceType: String,
     ) = UserRow(
         id = id,
         fcmToken = fcmToken,
+        platform = deviceType,
         createdAt = createdAt.epochSeconds,
-        updatedAt = createdAt.epochSeconds
+        updatedAt = createdAt.epochSeconds,
     )
 
     fun FcmUpdateDto.toRow(
-        id: String
-    ) = UserRow(
+        id: String,
+    ) = UpdateUserRow(
         id = id,
         fcmToken = fcmToken,
-        createdAt = updatedAt.epochSeconds, //is ignored
         updatedAt = updatedAt.epochSeconds
     )
 

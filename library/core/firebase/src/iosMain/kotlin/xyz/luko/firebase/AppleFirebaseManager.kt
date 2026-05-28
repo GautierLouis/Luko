@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import platform.Foundation.NSData
 import platform.UIKit.UIApplication
 import platform.UIKit.registerForRemoteNotifications
@@ -24,12 +25,14 @@ import xyz.luko.logger.AppLogger
 import xyz.luko.tracking.TrackingEvent
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalForeignApi::class)
 class AppleFirebaseManager : FirebaseManager {
     private val apnsTokenFlow = MutableStateFlow<NSData?>(null)
 
     override fun initialize() {
+        AppLogger.d(message = "Initializing Firebase")
         FIRApp.configure()
         requestNotificationPermissionAndRegister()
     }
@@ -99,7 +102,10 @@ class AppleFirebaseManager : FirebaseManager {
     }
 
     override suspend fun getFCMToken(): Result<String> {
-        apnsTokenFlow.first { it != null }
+        withTimeoutOrNull(3.seconds) {
+            apnsTokenFlow.first { it != null }
+        } ?: return Result.failure(IllegalStateException("APNs token timeout — simulator?"))
+
 
         val token = suspendCancellableCoroutine { continuation ->
             FIRMessaging.messaging().tokenWithCompletion { token, error ->

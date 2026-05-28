@@ -9,6 +9,7 @@ import io.ktor.server.resources.get
 import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import xyz.luko.apicontracts.dto.AppHeader.APP_PLATFORM
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.apicontracts.routing.Destination
@@ -24,9 +25,11 @@ class AuthedRouteController(
             post<Destination.RegisterAnonymously> {
                 val principal = call.principal<UserIdPrincipal>()!!
                 val body = call.receive<AuthRegistrationDto>()
+                val platform = call.request.headers[APP_PLATFORM]!!
 
                 userRepository.registerAnonymously(
                     uid = principal.name,
+                    platform = platform,
                     body = body
                 )
 
@@ -35,12 +38,11 @@ class AuthedRouteController(
 
             post<Destination.UpdateFcm> {
                 val principal = call.principal<UserIdPrincipal>()!!
-
                 val body = call.receive<FcmUpdateDto>()
 
                 userRepository.updateFcm(principal.name, body)
 
-                call.respond(HttpStatusCode.OK)
+                call.respond(HttpStatusCode.NoContent)
             }
 
             get<Destination.Me> {

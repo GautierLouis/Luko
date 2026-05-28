@@ -9,6 +9,7 @@ import xyz.luko.server.domain.mapper.DomainMapping.toRow
 interface UserRepository {
     suspend fun registerAnonymously(
         uid: String,
+        platform: String,
         body: AuthRegistrationDto
     )
 
@@ -27,9 +28,10 @@ internal class DefaultUserRepository(
 
     override suspend fun registerAnonymously(
         uid: String,
+        platform: String,
         body: AuthRegistrationDto
     ) {
-        dao.insertUser(body.toRow(uid))
+        dao.insertUser(body.toRow(uid, platform))
     }
 
     override suspend fun updateFcm(

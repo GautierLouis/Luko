@@ -19,6 +19,7 @@ import xyz.luko.server.domain.model.HanziRow
 import xyz.luko.server.domain.model.HskEntryRow
 import xyz.luko.server.domain.model.HskFormRow
 import xyz.luko.server.domain.model.SeedRow
+import xyz.luko.server.domain.model.UpdateUserRow
 import xyz.luko.server.domain.model.UserRow
 
 internal object StatementMapping {
@@ -118,11 +119,12 @@ internal object StatementMapping {
     fun UpdateBuilder<*>.add(entity: UserRow) {
         this[UserTable.firebaseUid] = entity.id
         this[UserTable.fcmToken] = entity.fcmToken
+        this[UserTable.platform] = entity.platform
         this[UserTable.createdAt] = entity.createdAt
         this[UserTable.updatedAt] = entity.updatedAt
     }
 
-    fun UpdateBuilder<*>.update(entity: UserRow) {
+    fun UpdateBuilder<*>.update(entity: UpdateUserRow) {
         this[UserTable.fcmToken] = entity.fcmToken
         this[UserTable.updatedAt] = entity.updatedAt
     }

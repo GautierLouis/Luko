@@ -2,17 +2,18 @@ package xyz.luko.server.data.database.dao
 
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.upsert
 import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.StatementMapping.update
-import xyz.luko.server.data.database.insertAll
 import xyz.luko.server.data.database.suspendTransaction
 import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.domain.mapper.ResultRowMapping.toDto
+import xyz.luko.server.domain.model.UpdateUserRow
 import xyz.luko.server.domain.model.UserRow
 
 interface UserDao {
     suspend fun insertUser(user: UserRow)
-    suspend fun updateUser(user: UserRow)
+    suspend fun updateUser(user: UpdateUserRow)
     suspend fun getById(id: String): UserRow?
     suspend fun getByFcm(fcm: String): UserRow?
 }
@@ -21,13 +22,13 @@ interface UserDao {
 
 internal class DefaultUserDao : UserDao {
     override suspend fun insertUser(user: UserRow) {
-        UserTable.insertAll(listOf(user)) { user -> this.add(user) }
+        suspendTransaction { UserTable.upsert { it.add(user) } }
     }
 
-    override suspend fun updateUser(user: UserRow) {
+    override suspend fun updateUser(user: UpdateUserRow) {
         suspendTransaction {
             UserTable.update(
-                where = { UserTable.firebaseUid eq id }
+                where = { UserTable.firebaseUid eq user.id }
             ) { statements -> statements.update(user) }
         }
     }

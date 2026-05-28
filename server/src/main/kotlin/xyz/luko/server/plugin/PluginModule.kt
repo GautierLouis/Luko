@@ -9,5 +9,6 @@ val pluginModule = module {
     singleOf(::FirebasePlugin)
     singleOf(::MetricsPlugin)
     singleOf(::ErrorPlugin)
+    singleOf(::HeaderValidatorPlugin)
     single { RouterPlugin(getAll()) }
 }
