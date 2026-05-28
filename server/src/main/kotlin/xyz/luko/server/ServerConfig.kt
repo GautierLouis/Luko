@@ -21,6 +21,7 @@ data class ServerConfig(
     val supabaseIssuer: String,
     val supabaseJwks: String,
     val supabaseAudience: String,
+    val superToken: String,
     val env: Env
 ) {
     enum class Env {
@@ -50,6 +51,7 @@ data class ServerConfig(
                 supabaseIssuer = property("supabase.issuer").getString(),
                 supabaseJwks = property("supabase.jwks").getString(),
                 supabaseAudience = property("supabase.audience").getString(),
+                superToken = property("app.superToken").getString(),
                 env = Env.valueOf(property("app.env").getString())
             )
         }

@@ -10,7 +10,7 @@ import xyz.luko.server.domain.auth.TokenVerifier
 const val BEARER = "firebase"
 
 class AuthenticationPlugin(
-    private val tokenVerifier: TokenVerifier
+    private val tokenVerifier: TokenVerifier,
 ) : Plugin {
 
     override fun Application.register() {

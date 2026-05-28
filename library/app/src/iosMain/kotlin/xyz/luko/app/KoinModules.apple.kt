@@ -8,7 +8,7 @@ import platform.Foundation.NSBundle
 actual val libraryPlatformModule: Module =
     module {
         single(named(Environment.FLAVOR)) {
-            Environment.DEV
+            Environment.STAGING
         }
 
         single(named(Environment.PLATFORM)) {

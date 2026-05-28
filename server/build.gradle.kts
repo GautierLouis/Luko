@@ -10,7 +10,7 @@ version = "1.0.0"
 
 application {
     mainClass.set("xyz.luko.server.ApplicationKt")
-    
+
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
