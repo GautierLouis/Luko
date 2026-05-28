@@ -1,5 +1,5 @@
 package xyz.luko.firebase.notification
 
-interface FcmAccessor {
+interface FcmProvider {
     suspend fun onNewFcmToken(token: String): Result<Unit>
 }

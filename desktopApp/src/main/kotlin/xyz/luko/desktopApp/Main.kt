@@ -1,23 +1,16 @@
 package xyz.luko.desktopApp
 
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.ImageComposeScene
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
-import kotlinx.coroutines.delay
 import org.koin.core.context.startKoin
 import xyz.luko.app.app.App
 import xyz.luko.app.libraryModule
-import java.awt.Toolkit
-import kotlin.time.Duration.Companion.seconds
+import java.io.File
 
 fun main() {
 
@@ -28,37 +21,19 @@ fun main() {
     }
 
     application {
-
         val sizes = TestWindowSize.entries
-        var currentIndex by remember { mutableStateOf(0) }
-
-        val windowState = rememberWindowState(
-            width = sizes[0].width,
-            height = sizes[0].height
-        )
-
         LaunchedEffect(Unit) {
-            while (enableCycling) {
-                delay(3.seconds)
-                currentIndex = (currentIndex + 1) % sizes.size
-                val newSize = sizes[currentIndex]
-                windowState.size = DpSize(newSize.width, newSize.height)
-
-                // Clamp position so window stays on screen
-                val screenSize = Toolkit.getDefaultToolkit().screenSize
-                val maxX = (screenSize.width - newSize.width.value).coerceAtLeast(0f)
-                val maxY = (screenSize.height - newSize.height.value).coerceAtLeast(0f)
-                windowState.position = WindowPosition(
-                    x = windowState.position.x.value.coerceIn(0f, maxX).dp,
-                    y = windowState.position.y.value.coerceIn(0f, maxY).dp
-                )
+            if (enableCycling) {
+                for (index in sizes.indices) {
+                    takeScreenshot2(sizes[index])
+                }
+                exitApplication()
             }
         }
 
         Window(
             onCloseRequest = ::exitApplication,
             title = "Luko",
-            state = windowState
         ) {
             App()
         }
@@ -66,7 +41,29 @@ fun main() {
 
 }
 
-enum class TestWindowSize(
+private fun takeScreenshot2(size: TestWindowSize) {
+    val screenshotDir = File("screenshots/manual").also { it.mkdirs() }
+    val filename = "${size.name}_${size.width.value.toInt()}x${size.height.value.toInt()}.png"
+
+    val width = size.width.value.toInt()
+    val height = size.height.value.toInt()
+
+    val scene = ImageComposeScene(
+        width = width,
+        height = height,
+        density = Density(1f)
+    ) {
+        App()
+    }
+
+    val image = scene.render()
+    val bytes = image.encodeToData()!!.bytes
+
+    File(screenshotDir, filename).writeBytes(bytes)
+    scene.close()
+}
+
+private enum class TestWindowSize(
     val width: Dp,
     val height: Dp,
 ) {

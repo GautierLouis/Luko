@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import xyz.luko.auth.AuthRepository
+import xyz.luko.domain.repository.AuthRepository
 import xyz.luko.domain.repository.SettingTheme
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager

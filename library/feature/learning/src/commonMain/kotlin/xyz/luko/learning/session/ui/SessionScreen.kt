@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,6 +24,7 @@ import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.baseui.preview.PreviewProvider
+import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.page.BaseScaffold
 import xyz.luko.designsystem.components.page.ErrorScreen
 import xyz.luko.designsystem.components.page.LoadingScreen
@@ -135,6 +137,7 @@ private fun SessionScreen(
             Column(
                 modifier =
                     Modifier
+                        .testTag(TestTags.Screen.SESSION)
                         .fillMaxSize()
                         .padding(paddingValues)
                         .padding(Padding.large),

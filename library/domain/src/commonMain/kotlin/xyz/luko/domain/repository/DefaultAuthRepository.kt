@@ -1,4 +1,4 @@
-package xyz.luko.auth
+package xyz.luko.domain.repository
 
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto

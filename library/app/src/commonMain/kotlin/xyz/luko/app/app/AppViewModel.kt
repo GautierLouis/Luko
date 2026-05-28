@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import xyz.luko.auth.AuthRepository
+import xyz.luko.domain.repository.AuthRepository
 import xyz.luko.domain.repository.SettingTheme
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager

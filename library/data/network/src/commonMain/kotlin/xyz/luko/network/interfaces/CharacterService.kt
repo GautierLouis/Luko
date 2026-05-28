@@ -7,6 +7,7 @@ import xyz.luko.apicontracts.dto.ResponseSessionDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 
 interface CharacterService {
+    // TODO SessionService
     suspend fun createSession(
         level: List<CharacterFrequencyLevelDto>,
         limit: Int,

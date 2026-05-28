@@ -16,9 +16,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
+import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
@@ -66,6 +68,7 @@ private fun SessionBuilderScreen(
         Column(
             modifier =
                 Modifier
+                    .testTag(TestTags.Screen.SESSION_BUILDER)
                     .padding(paddingValues)
                     .fillMaxSize(),
         ) {
@@ -137,6 +140,7 @@ private fun SessionBuilderScreen(
                     size = ButtonSize.Large,
                     modifier =
                         Modifier
+                            .testTag(TestTags.Action.PRIMARY)
                             .weight(1f),
                     onClick = {
                         onEvent(OnNextPage(pager.currentPage, pager.pageCount))

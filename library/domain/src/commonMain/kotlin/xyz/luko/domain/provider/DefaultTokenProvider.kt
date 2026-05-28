@@ -1,4 +1,4 @@
-package xyz.luko.auth
+package xyz.luko.domain.provider
 
 import xyz.luko.firebase.FirebaseManager
 import xyz.luko.network.interfaces.TokenProvider

@@ -53,6 +53,7 @@ private fun HomeScreen(state: HomeViewModel.UIState) {
         floatingActionButton = {
             PracticeButton(
                 attrs = fabAttrs,
+                modifier = Modifier.testTag(TestTags.Action.PRIMARY),
                 onClick = {
                     AppNavigation.navigate(AppRoute.LearningRoute.NewSessionRoute)
                 },

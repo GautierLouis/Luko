@@ -26,7 +26,7 @@ class FcmTokenUpdateWorker(
         // Koin might not be initialized - retry until app launch
         return GlobalContext
             .getOrNull()
-            ?.getOrNull<FcmAccessor>()
+            ?.getOrNull<FcmProvider>()
             ?.onNewFcmToken(token)
             ?.fold(
                 onSuccess = { Result.success() },

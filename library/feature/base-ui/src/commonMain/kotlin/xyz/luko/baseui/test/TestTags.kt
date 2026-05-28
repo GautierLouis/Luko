@@ -3,6 +3,8 @@ package xyz.luko.baseui.test
 object TestTags {
     object Screen {
         const val HOME = "home_screen"
+        const val SESSION_BUILDER = "session_builder_screen"
+        const val SESSION = "session_screen"
         const val CONGRATS = "congrats_screen"
     }
 

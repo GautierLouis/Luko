@@ -27,7 +27,6 @@ kotlin {
             implementation(projects.library.core.tracking)
 
             implementation(projects.library.domain)
-            implementation(projects.library.domain.auth)
 
             implementation(projects.library.feature.home)
             implementation(projects.library.feature.feed)

@@ -51,7 +51,6 @@ include(":library:feature:learning")
 include(":library:feature:dictionary")
 //Domain
 include(":library:domain")
-include(":library:domain:auth")
 //Data
 include(":library:data:network")
 include(":library:data:database")

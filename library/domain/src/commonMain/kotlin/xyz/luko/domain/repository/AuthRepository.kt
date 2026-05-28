@@ -1,4 +1,4 @@
-package xyz.luko.auth
+package xyz.luko.domain.repository
 
 interface AuthRepository {
     suspend fun registerAnonymously(): Result<Unit>

@@ -26,6 +26,12 @@ object PreviewProvider {
         )
     }
 
+    val dictionaryList by lazy {
+        getCharacterList().map { (code, pinyin) ->
+            dictionary.copy(code = code, pinyin = listOf(pinyin))
+        }
+    }
+
     val simpleDictionaryList by lazy {
         getCharacterList().map { (code, pinyin) ->
             SimpleDictionary(
