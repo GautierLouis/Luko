@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme LastUpgradeVersion="2610" version="1.7">
+    <BuildAction buildArchitectures="Automatic" buildImplicitDependencies="YES"
+        parallelizeBuildables="YES">
+        <BuildActionEntries>
+            <BuildActionEntry buildForAnalyzing="YES" buildForArchiving="YES" buildForProfiling="YES"
+                buildForRunning="YES" buildForTesting="YES">
+                <BuildableReference BlueprintIdentifier="FD13087191A5B6AA4136C035"
+                    BlueprintName="iosApp" BuildableIdentifier="primary"
+                    BuildableName="Luko.app"
+                    ReferencedContainer="container:iosApp.xcodeproj"></BuildableReference>
+            </BuildActionEntry>
+        </BuildActionEntries>
+    </BuildAction>
+    <TestAction buildConfiguration="Debug staging"
+        selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB"
+        selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB"
+        shouldAutocreateTestPlan="YES" shouldUseLaunchSchemeArgsEnv="YES"></TestAction>
+    <LaunchAction allowLocationSimulation="YES"
+        buildConfiguration="Debug staging"
+        debugDocumentVersioning="YES" debugServiceExtension="internal"
+        ignoresPersistentStateOnLaunch="NO" launchStyle="0"
+        selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB"
+        useCustomWorkingDirectory="NO">
+        <BuildableProductRunnable runnableDebuggingMode="0">
+            <BuildableReference BlueprintIdentifier="FD13087191A5B6AA4136C035"
+                BlueprintName="iosApp" BuildableIdentifier="primary"
+                BuildableName="Luko.app"
+                ReferencedContainer="container:iosApp.xcodeproj"></BuildableReference>
+        </BuildableProductRunnable>
+    </LaunchAction>
+    <ProfileAction buildConfiguration="Release" debugDocumentVersioning="YES"
+        savedToolIdentifier="" shouldUseLaunchSchemeArgsEnv="YES" useCustomWorkingDirectory="NO">
+        <BuildableProductRunnable runnableDebuggingMode="0">
+            <BuildableReference BlueprintIdentifier="FD13087191A5B6AA4136C035"
+                BlueprintName="iosApp" BuildableIdentifier="primary"
+                BuildableName="Luko.app"
+                ReferencedContainer="container:iosApp.xcodeproj"></BuildableReference>
+        </BuildableProductRunnable>
+    </ProfileAction>
+    <AnalyzeAction buildConfiguration="Debug staging"></AnalyzeAction>
+    <ArchiveAction buildConfiguration="Release" revealArchiveInOrganizer="YES"></ArchiveAction>
+</Scheme>

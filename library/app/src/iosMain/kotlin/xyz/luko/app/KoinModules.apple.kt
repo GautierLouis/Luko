@@ -7,8 +7,14 @@ import platform.Foundation.NSBundle
 
 actual val libraryPlatformModule: Module =
     module {
+        //Managed by MainViewController
         single(named(Environment.FLAVOR)) {
-            Environment.STAGING
+            val flavorStr = NSBundle.mainBundle.infoDictionary?.get("APP_FLAVOR") as? String
+            when (flavorStr) {
+                "dev" -> Environment.DEV
+                "staging" -> Environment.STAGING
+                else -> Environment.PROD
+            }
         }
 
         single(named(Environment.PLATFORM)) {

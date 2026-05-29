@@ -1,11 +1,15 @@
 package xyz.luko.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SessionResponse(
     val code: Int,
     val statistics: StrokeComparisonResult,
     val strokes: List<Stroke>,
 )
 
+@Serializable
 data class StrokeComparisonResult(
     val overallAccuracy: Float, // 0-100
     val strokeAccuracies: List<Float>,
@@ -13,6 +17,7 @@ data class StrokeComparisonResult(
     val details: ComparisonDetails,
 )
 
+@Serializable
 data class ComparisonDetails(
     val pathSimilarity: Float,
     val startPointAccuracy: Float,
