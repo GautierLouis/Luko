@@ -173,7 +173,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"CONFIGURATION: ${CONFIGURATION}\"\necho \"SRCROOT: ${SRCROOT}\"\n\nif [ \"${CONFIGURATION}\" == \"Debug dev\" ]; then\n    cp \"${SRCROOT}/iosApp/GoogleService-Info-dev.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nelif [ \"${CONFIGURATION}\" == \"Debug staging\" ]; then\n    cp \"${SRCROOT}/iosApp/GoogleService-Info-staging.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nelse\n    cp \"${SRCROOT}/iosApp/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nfi\n";
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug dev\" ]; then\n    cp \"${SRCROOT}/iosApp/GoogleService-Info-dev.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nelif [ \"${CONFIGURATION}\" == \"Debug staging\" ]; then\n    cp \"${SRCROOT}/iosApp/GoogleService-Info-staging.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nelse\n    cp \"${SRCROOT}/iosApp/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nfi\n";
 		};
 		99A4C3962F1613D2006CB46A /* Compile Kotlin Framework */ = {
 			isa = PBXShellScriptBuildPhase;

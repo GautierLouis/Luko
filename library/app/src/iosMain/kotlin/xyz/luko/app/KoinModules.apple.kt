@@ -7,7 +7,6 @@ import platform.Foundation.NSBundle
 
 actual val libraryPlatformModule: Module =
     module {
-        //Managed by MainViewController
         single(named(Environment.FLAVOR)) {
             val flavorStr = NSBundle.mainBundle.infoDictionary?.get("APP_FLAVOR") as? String
             when (flavorStr) {
