@@ -17,7 +17,7 @@ import xyz.luko.baseui.session.toUiModel
 import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.metrics.OverallStatisticsCard
 import xyz.luko.designsystem.components.metrics.SessionCard
-import xyz.luko.designsystem.components.page.BaseScaffold
+import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
@@ -47,7 +47,7 @@ private fun HomeScreen(state: HomeViewModel.UIState) {
     val fabAttrs =
         if (windowInfo.isPhoneLandscape) PracticeButtonAttrs.SMALL else PracticeButtonAttrs.LARGE
 
-    BaseScaffold(
+    NestedScaffold(
         modifier = Modifier.testTag(TestTags.Screen.HOME),
         floatingActionButtonPosition = position,
         floatingActionButton = {

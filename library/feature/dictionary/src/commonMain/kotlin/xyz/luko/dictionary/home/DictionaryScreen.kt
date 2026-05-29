@@ -20,9 +20,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import xyz.luko.baseui.preview.PagingDataPreviewParameter
 import xyz.luko.baseui.preview.PreviewProvider
-import xyz.luko.designsystem.components.page.BaseScaffold
 import xyz.luko.designsystem.components.page.ErrorContent
 import xyz.luko.designsystem.components.page.LoadingContent
+import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
@@ -75,7 +75,7 @@ private fun DictionaryScreen(
             Padding.none
         }
 
-    BaseScaffold(
+    NestedScaffold(
         topBar = {
             DictionaryTopBar(
                 textFieldState = state.textFieldState,

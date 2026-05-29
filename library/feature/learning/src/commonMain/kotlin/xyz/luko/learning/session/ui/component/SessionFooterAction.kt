@@ -26,7 +26,7 @@ internal fun FooterAction(
     onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
     Column(
-        modifier = modifier.padding(Padding.large),
+        modifier = modifier.padding(vertical = Padding.large),
         verticalArrangement = Spacing.medium,
     ) {
         AppButton(

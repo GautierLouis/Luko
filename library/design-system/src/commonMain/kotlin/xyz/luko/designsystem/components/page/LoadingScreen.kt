@@ -12,7 +12,7 @@ import xyz.luko.designsystem.theme.AppTheme
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    BaseScaffold(
+    NestedScaffold(
         modifier = modifier,
     ) { paddingValues ->
         LoadingContent(Modifier.padding(paddingValues).fillMaxHeight())

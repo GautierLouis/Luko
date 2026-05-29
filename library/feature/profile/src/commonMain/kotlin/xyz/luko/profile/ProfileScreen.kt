@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toPersistentList
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.designsystem.components.page.BaseScaffold
+import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.components.topbar.AppTopbar
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
@@ -36,7 +36,7 @@ private fun ProfileScreen(
     state: ProfileViewModel.UiState,
     onEvent: (ProfileScreenEvent) -> Unit = {},
 ) {
-    BaseScaffold(
+    NestedScaffold(
         topBar = {
             ProfileTopbar()
         },

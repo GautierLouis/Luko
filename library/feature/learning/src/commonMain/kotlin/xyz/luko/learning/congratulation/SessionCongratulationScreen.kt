@@ -28,8 +28,8 @@ import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
-import xyz.luko.designsystem.components.page.BaseScaffold
 import xyz.luko.designsystem.components.page.LoadingScreen
+import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
@@ -68,7 +68,7 @@ internal fun SessionCongratulationScreen(session: Session) {
     val orientation =
         if (device.isPhoneLandscape) ROW else COLUMN
 
-    BaseScaffold { paddingValues ->
+    NestedScaffold { paddingValues ->
         Column(
             modifier =
                 Modifier

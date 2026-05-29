@@ -12,7 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.app.main.MainScaffoldEvent.OnBottomItemClicked
 import xyz.luko.app.main.MainViewModel.UiState
-import xyz.luko.designsystem.components.page.BaseScaffold
+import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -44,7 +44,7 @@ private fun MainScaffold(
     screenContent: @Composable () -> Unit = {},
     onEvent: (MainScaffoldEvent) -> Unit = {},
 ) {
-    BaseScaffold(
+    NestedScaffold(
         bottomBar = {
             if (state.enableBottomBar) {
                 BottomBar(

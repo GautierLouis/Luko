@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -25,9 +24,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.baseui.test.TestTags
-import xyz.luko.designsystem.components.page.BaseScaffold
 import xyz.luko.designsystem.components.page.ErrorScreen
 import xyz.luko.designsystem.components.page.LoadingScreen
+import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.preview.LoadingMode
 import xyz.luko.designsystem.preview.LoadingModeProvider
 import xyz.luko.designsystem.preview.PreviewScreen
@@ -123,14 +122,12 @@ private fun SessionScreen(
         onBackCompleted = { onEvent(ToggleLeaveDialog) },
     )
 
-    BaseScaffold(
+    NestedScaffold(
         topBar = {
             SessionHeader(
                 pager = pagerState,
-                modifier =
-                    Modifier
-                        .statusBarsPadding()
-                        .padding(top = Padding.extraLarge),
+                modifier = Modifier
+                    .padding(top = Padding.extraLarge),
             )
         },
         content = { paddingValues ->

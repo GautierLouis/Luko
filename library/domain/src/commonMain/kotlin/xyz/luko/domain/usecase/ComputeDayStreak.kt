@@ -14,7 +14,7 @@ internal class ComputeDayStreak {
 
         // Check if the most recent session is today or yesterday
         val daysBetween = today.daysUntil(sortedDates.first())
-        if (daysBetween <= 0) return 0
+        if (daysBetween <= 0) return 1
 
         var streak = 0
         var expectedDate = today

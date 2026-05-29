@@ -17,7 +17,7 @@ fun ErrorScreen(
     modifier: Modifier = Modifier,
     action: () -> Unit = {},
 ) {
-    BaseScaffold(
+    NestedScaffold(
         modifier = modifier,
         topBar = {
             AppTopbar(

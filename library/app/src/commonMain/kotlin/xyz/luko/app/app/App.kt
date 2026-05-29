@@ -1,6 +1,7 @@
 package xyz.luko.app.app
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -14,7 +15,6 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.app.main.MainScaffold
-import xyz.luko.designsystem.components.page.BaseScaffold
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.learning.routing.learningScreens
 import xyz.luko.navigation.AppRoute
@@ -34,7 +34,7 @@ fun App() {
     }
 
     AppTheme(themeMode) {
-        BaseScaffold(
+        Scaffold(
             topBar = {
                 if (state.showFlavorBanner) {
                     FlavorComponent(state.flavor)

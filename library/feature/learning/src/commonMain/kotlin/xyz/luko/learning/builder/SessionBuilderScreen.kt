@@ -24,7 +24,7 @@ import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
-import xyz.luko.designsystem.components.page.BaseScaffold
+import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
@@ -64,7 +64,7 @@ private fun SessionBuilderScreen(
     pager: PagerState,
     onEvent: (SessionBuilderScreenEvent) -> Unit = {},
 ) {
-    BaseScaffold { paddingValues ->
+    NestedScaffold { paddingValues ->
         Column(
             modifier =
                 Modifier
