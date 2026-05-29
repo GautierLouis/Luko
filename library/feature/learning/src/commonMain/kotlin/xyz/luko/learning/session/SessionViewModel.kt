@@ -1,7 +1,6 @@
 package xyz.luko.learning.session
 
 import androidx.compose.ui.geometry.Offset
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +26,6 @@ import xyz.luko.learning.session.model.SessionScreenEvent.Next
 import xyz.luko.learning.session.model.SessionScreenEvent.Reload
 import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
 import xyz.luko.learning.session.model.SessionState
-import xyz.luko.learning.session.model.getParams
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 import xyz.luko.navigation.AppNavigation
@@ -40,14 +38,13 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 internal class SessionViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val params: LearningInternalRoute.SessionRoute,
     private val repository: DictionaryRepository,
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
 ) : ViewModel() {
 
-    val params = savedStateHandle.getParams()
     val drawHint get() = params.difficulty == DifficultyLevel.EASY
     val drawReference get() = params.difficulty != DifficultyLevel.HARD
 
@@ -103,6 +100,7 @@ internal class SessionViewModel(
 
     private fun List<Dictionary>.toInitialPageState() = associate {
         it.code to DrawingPageState(
+            totalStrokes = it.medians.size,
             referenceStrokes = if (drawReference) it.medians else emptyList(),
             referenceHint = if (drawHint) it.medians.firstOrNull() else null,
         )

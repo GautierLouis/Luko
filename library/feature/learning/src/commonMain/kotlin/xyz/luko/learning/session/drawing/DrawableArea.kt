@@ -5,9 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.drawscope.Stroke
 import xyz.luko.baseui.drawing.TransformedHint
 import xyz.luko.baseui.drawing.pointsToPath
 import xyz.luko.designsystem.theme.Theme
@@ -27,18 +24,11 @@ internal fun DrawableArea(
     val referenceColor = Theme.materialColors.outlineVariant
     val indicationColor = Theme.materialColors.primary
 
-    val style = Stroke(
-        width = DrawableAreaDefault.STROKE_WIDTH,
-        cap = StrokeCap.Round,
-        join = StrokeJoin.Round
-    )
-
     Canvas(modifier = modifier) {
         referencePath.forEach { path ->
-            drawPath(
+            drawStroke(
                 path = path,
                 color = referenceColor,
-                style = style,
             )
         }
 
@@ -52,18 +42,16 @@ internal fun DrawableArea(
 
         previousDrawnStrokes.forEach {
             val path = it.pointsToPath()
-            drawPath(
+            drawStroke(
                 path = path,
                 color = color,
-                style = style,
             )
         }
 
         val livePath = ongoingStroke.pointsToPath()
-        drawPath(
+        drawStroke(
             path = livePath,
             color = color,
-            style = style,
         )
     }
 }

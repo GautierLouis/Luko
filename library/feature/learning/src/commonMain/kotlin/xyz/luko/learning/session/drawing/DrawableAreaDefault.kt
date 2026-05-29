@@ -1,9 +1,12 @@
 package xyz.luko.learning.session.drawing
 
+import androidx.compose.ui.unit.dp
+
 internal object DrawableAreaDefault {
-    const val STROKE_WIDTH = 25f
-    const val STROKE_HINT_DASH_WIDTH = 30f
-    const val STROKE_HINT_DASH_GAP = 30f
-    const val STROKE_HINT_ARROW_HEAD_SIZE = 10f
-    const val STROKE_HINT_WIDTH = 15f
+    val STROKE_WIDTH = 12.dp
+    val STROKE_DASH_WIDTH = 9.dp
+    val DASH_WIDTH = STROKE_WIDTH * 1.5f   // 18.dp — dash slightly longer than stroke
+    val DASH_GAP = STROKE_WIDTH * 2f       // 24.dp — gap twice the stroke width
+    val DASH_PHASE = STROKE_WIDTH * 0.5f   // 6.dp
+    val ARROW_SIZE = 8.dp
 }

@@ -2,6 +2,7 @@ package xyz.luko.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
@@ -53,7 +54,7 @@ private fun HomeScreen(state: HomeViewModel.UIState) {
         floatingActionButton = {
             PracticeButton(
                 attrs = fabAttrs,
-                modifier = Modifier.testTag(TestTags.Action.PRIMARY),
+                modifier = Modifier.testTag(TestTags.Action.PRIMARY).navigationBarsPadding(),
                 onClick = {
                     AppNavigation.navigate(AppRoute.LearningRoute.NewSessionRoute)
                 },

@@ -21,6 +21,7 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.baseui.test.TestTags
@@ -34,6 +35,7 @@ import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.learning.routing.LearningInternalRoute
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
@@ -49,8 +51,10 @@ import xyz.luko.navigation.AppNavigation
 import kotlin.time.Clock
 
 @Composable
-internal fun SessionScreen() {
-    val viewModel = koinViewModel<SessionViewModel>()
+internal fun SessionScreen(route: LearningInternalRoute.SessionRoute) {
+    val viewModel = koinViewModel<SessionViewModel> {
+        parametersOf(route)
+    }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     SessionScreen(
@@ -203,7 +207,12 @@ private fun previewSuccessState(): SessionState.Success {
         startTime = Clock.System.now(),
         currentPageIndex = 0,
         questions = listOf(data),
-        drawingPageState = mapOf(data.code to DrawingPageState(data.medians)),
+        drawingPageState = mapOf(
+            data.code to DrawingPageState(
+                totalStrokes = data.medians.size,
+                referenceStrokes = data.medians
+            )
+        ),
         showLeaveDialog = false,
     )
 }

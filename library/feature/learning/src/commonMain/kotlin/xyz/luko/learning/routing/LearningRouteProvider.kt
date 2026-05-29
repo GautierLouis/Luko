@@ -12,6 +12,6 @@ fun EntryProviderScope<NavKey>.learningScreens() {
     entry<AppRoute.LearningRoute.NewSessionRoute> { SessionBuilderScreen() }
     entry<AppRoute.LearningRoute.PracticeCharacterRoute> { TODO() }
     // Private route
-    entry<LearningInternalRoute.SessionRoute> { SessionScreen() }
+    entry<LearningInternalRoute.SessionRoute> { SessionScreen(it) }
     entry<LearningInternalRoute.CongratulationRoute> { SessionCongratulationScreen() }
 }
