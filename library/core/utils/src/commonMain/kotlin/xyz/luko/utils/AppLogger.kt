@@ -1,4 +1,4 @@
-package xyz.luko.logger
+package xyz.luko.utils
 
 import co.touchlab.kermit.Logger
 

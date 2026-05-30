@@ -58,7 +58,6 @@ include(":library:data:preferences")
 //Core
 include(":library:core:ads")
 include(":library:core:tracking")
-include(":library:core:logger")
 include(":library:core:utils")
 include(":library:core:permission")
 include(":library:core:firebase")

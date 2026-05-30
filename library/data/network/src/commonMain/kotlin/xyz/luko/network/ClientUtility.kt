@@ -7,7 +7,7 @@ import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.HttpResponse
 import kotlinx.io.IOException
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 import xyz.luko.utils.AppErrorCode
 import kotlin.coroutines.cancellation.CancellationException
 

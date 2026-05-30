@@ -3,7 +3,7 @@ package xyz.luko.domain.repository
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.firebase.FirebaseManager
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 import xyz.luko.network.interfaces.AuthService
 import xyz.luko.preferences.AppPreferences
 

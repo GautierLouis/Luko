@@ -7,7 +7,6 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.library.core.logger)
             implementation(projects.library.core.utils)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.room.paging)

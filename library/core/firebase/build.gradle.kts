@@ -35,7 +35,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.library.core.logger)
             implementation(projects.library.core.utils)
             implementation(projects.library.core.tracking)
             implementation(projects.library.core.permission)

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 
 class DefaultRemoteConfigManager : RemoteConfigManager {
     private val _flags = MutableStateFlow(RemoteConfigFlags())

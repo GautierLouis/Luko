@@ -15,7 +15,7 @@ import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import kotlinx.coroutines.tasks.await
 import xyz.luko.firebase.remoteconfig.FeatureFlagKey
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 import xyz.luko.tracking.TrackingEvent
 
 class AndroidFirebaseManager(

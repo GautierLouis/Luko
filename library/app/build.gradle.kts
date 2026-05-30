@@ -19,7 +19,6 @@ kotlin {
 
         commonMain.dependencies {
             implementation(projects.library.core.utils)
-            implementation(projects.library.core.logger)
             implementation(projects.library.core.firebase)
             implementation(projects.library.core.permission)
             implementation(projects.library.core.navigation)

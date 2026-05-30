@@ -5,7 +5,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 
 class AppFirebaseMessagingService :
     FirebaseMessagingService(),

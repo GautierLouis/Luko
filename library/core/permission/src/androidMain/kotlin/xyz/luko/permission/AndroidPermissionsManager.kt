@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 
 class AndroidPermissionsManager(
     private val context: Context,

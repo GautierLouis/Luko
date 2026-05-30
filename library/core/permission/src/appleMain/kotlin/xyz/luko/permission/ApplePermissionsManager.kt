@@ -5,7 +5,7 @@ import platform.Photos.PHAuthorizationStatusAuthorized
 import platform.Photos.PHAuthorizationStatusDenied
 import platform.Photos.PHAuthorizationStatusNotDetermined
 import platform.Photos.PHPhotoLibrary
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 
 class ApplePermissionsManager : PermissionsManager {
     override fun isPermissionGranted(permission: PermissionType): PermissionResult =

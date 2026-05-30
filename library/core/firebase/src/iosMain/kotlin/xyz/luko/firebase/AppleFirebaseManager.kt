@@ -21,7 +21,7 @@ import swiftPMImport.Luko.library.core.library.core.firebase.FIRAuth
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRMessaging
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRRemoteConfig
 import swiftPMImport.Luko.library.core.library.core.firebase.FIRRemoteConfigFetchAndActivateStatus
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 import xyz.luko.tracking.TrackingEvent
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
