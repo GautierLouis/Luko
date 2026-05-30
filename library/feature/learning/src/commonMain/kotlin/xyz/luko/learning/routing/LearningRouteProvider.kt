@@ -4,13 +4,17 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import xyz.luko.learning.builder.SessionBuilderScreen
 import xyz.luko.learning.congratulation.SessionCongratulationScreen
+import xyz.luko.learning.list.SessionListScreen
 import xyz.luko.learning.session.ui.SessionScreen
+import xyz.luko.learning.session_details.SessionDetailsScreen
 import xyz.luko.navigation.AppRoute
 
 fun EntryProviderScope<NavKey>.learningScreens() {
     // Public route
     entry<AppRoute.LearningRoute.NewSessionRoute> { SessionBuilderScreen() }
     entry<AppRoute.LearningRoute.PracticeCharacterRoute> { TODO() }
+    entry<AppRoute.LearningRoute.SessionListRoute> { SessionListScreen() }
+    entry<AppRoute.LearningRoute.SessionDetailsRoute> { SessionDetailsScreen(it) }
     // Private route
     entry<LearningInternalRoute.SessionRoute> { SessionScreen(it) }
     entry<LearningInternalRoute.CongratulationRoute> { SessionCongratulationScreen() }

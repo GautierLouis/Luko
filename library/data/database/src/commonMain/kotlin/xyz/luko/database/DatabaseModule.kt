@@ -8,6 +8,7 @@ val databaseModule =
         includes(databasePlatformModule)
         single { DatabaseProvider(get()).getDatabase() }
         single { get<AppDatabase>().getSessionDao() }
+        single { get<AppDatabase>().getSessionResponseDao() }
     }
 
 internal expect val databasePlatformModule: Module

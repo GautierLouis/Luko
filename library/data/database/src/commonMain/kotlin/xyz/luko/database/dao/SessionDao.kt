@@ -30,6 +30,9 @@ interface SessionDao {
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
     suspend fun getAll(): List<SessionEntity>
 
+    @Query("SELECT * FROM SessionEntity WHERE id = :id")
+    suspend fun get(id: Long): SessionEntity
+
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT :limit")
     fun getLast(limit: Int): Flow<List<SessionEntity>>
 

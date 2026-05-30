@@ -152,10 +152,13 @@ internal class SessionViewModel(
     }
 
     // --- Page ---
-    private fun onStrokeCompleted(userStroke: List<Offset>) = _state.updateSuccess { current ->
-        val newPageState = current.currentDrawingPageState.addStroke(userStroke)
-        if (newPageState.isComplete) analyzeAndReport()
-        current.withUpdatedPageState(newPageState)
+    private fun onStrokeCompleted(userStroke: List<Offset>) {
+        _state.updateSuccess { current ->
+            val newPageState = current.currentDrawingPageState.addStroke(userStroke)
+            current.withUpdatedPageState(newPageState)
+        }
+        val isComplete = (_state.value as SessionState.Success).currentDrawingPageState.isComplete
+        if (isComplete) analyzeAndReport()
     }
 
     private fun resetPage() = _state.updateSuccess { current ->
@@ -177,7 +180,9 @@ internal class SessionViewModel(
             responses.add(
                 SessionResponse(
                     code = success.currentQuestion.code,
+                    pinyin = success.pinyin,
                     statistics = statistics,
+                    references = medians,
                     strokes = drawnStrokes.map { s ->
                         Stroke(s.map {
                             Point.Straight(

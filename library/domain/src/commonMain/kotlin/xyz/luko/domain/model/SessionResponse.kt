@@ -5,8 +5,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SessionResponse(
     val code: Int,
+    val pinyin: String,
     val statistics: StrokeComparisonResult,
     val strokes: List<Stroke>,
+    val references: List<Stroke>
 )
 
 @Serializable

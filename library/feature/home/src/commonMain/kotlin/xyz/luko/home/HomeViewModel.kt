@@ -19,6 +19,7 @@ internal class HomeViewModel(
 ) : ViewModel() {
     data class UIState(
         val lastSession: Session? = null,
+        val hasMore: Boolean = false,
         val stats: Statistics =
             Statistics(
                 totalScore = 0,
@@ -37,10 +38,15 @@ internal class HomeViewModel(
     }
 
     private fun lastSessionFlow() = sessionRepository
-        .getLastSessions(1)
+        .getLastSessions(2)
         .distinctUntilChanged()
-        .onEach { lastSession ->
-            _state.update { it.copy(lastSession = lastSession.firstOrNull()) }
+        .onEach { lastSessions ->
+            _state.update {
+                it.copy(
+                    hasMore = lastSessions.size == 2,
+                    lastSession = lastSessions.firstOrNull()
+                )
+            }
         }
 
     private fun statisticsFlow() = sessionRepository.getStatistics()

@@ -6,6 +6,7 @@ import xyz.luko.designsystem.components.metrics.SessionUiModel
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Session
+import xyz.luko.utils.toAccessibilityDate
 import xyz.luko.utils.toHHMMSS
 import xyz.luko.utils.toISODateString
 
@@ -13,6 +14,7 @@ import xyz.luko.utils.toISODateString
 fun Session.toUiModel(): SessionUiModel =
     SessionUiModel(
         date = remember(date) { date.toISODateString() },
+        accessibilityDate = remember(date) { date.toAccessibilityDate() },
         duration = remember(duration) { duration.toHHMMSS() },
         difficulty =
             when (difficulty) {

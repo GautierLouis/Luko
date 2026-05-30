@@ -7,6 +7,7 @@ import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import xyz.luko.database.dao.SessionDao
+import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.domain.mapper.SessionMapper.toDto
 import xyz.luko.domain.mapper.SessionMapper.toEntity
 import xyz.luko.domain.model.Session
@@ -19,7 +20,8 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 internal class DefaultSessionRepository(
-    private val dao: SessionDao,
+    private val sessionDao: SessionDao,
+    private val responseDao: SessionResponseDao
 ) : SessionRepository {
     val dayStreakComputer = ComputeDayStreak()
     val difficultyComputer = ComputeDifficulty()
@@ -30,11 +32,21 @@ internal class DefaultSessionRepository(
     ) {
         val sessionEntity = session.toEntity()
         val responseEntity = responses.map { it.toEntity() }
-        dao.insertSessionWithResponses(sessionEntity, responseEntity)
+        sessionDao.insertSessionWithResponses(sessionEntity, responseEntity)
     }
 
     override fun getLastSessions(limit: Int): Flow<List<Session>> =
-        dao.getLast(limit).map { list -> list.map { it.toDto() } }
+        sessionDao.getLast(limit).map { list -> list.map { it.toDto() } }
+
+    override suspend fun getLastSessions(): List<Session> =
+        sessionDao.getAll().map { it.toDto() }
+
+    override suspend fun getSession(id: Long): Session =
+        sessionDao.get(id).toDto()
+
+    override suspend fun getResponses(sessionId: Long): List<SessionResponse> =
+        responseDao.get(sessionId).map { it.toDto() }
+
 
     override fun getSessions(): Flow<PagingData<Session>> =
         Pager(
@@ -44,16 +56,16 @@ internal class DefaultSessionRepository(
                     prefetchDistance = 5,
                     enablePlaceholders = false,
                 ),
-            pagingSourceFactory = { dao.getAllPaged() },
+            pagingSourceFactory = { sessionDao.getAllPaged() },
         ).flow.map { pagingData ->
             pagingData.map { it.toDto() }
         }
 
     override suspend fun getLastSessionsFor(code: Int): List<Session> =
-        dao.getLastFor(code).map { it.toDto() }
+        sessionDao.getLastFor(code).map { it.toDto() }
 
     override fun getStatistics(): Flow<Statistics> {
-        return dao.getBasicStatistics().map { basic ->
+        return sessionDao.getBasicStatistics().map { basic ->
             val dates =
                 basic.uniqueDates
                     ?.map { it.toUTCDate() }

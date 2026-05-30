@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
 import xyz.luko.database.dao.SessionDao
+import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.database.entity.SessionEntity
 import xyz.luko.database.entity.SessionResponseEntity
 
@@ -20,6 +21,7 @@ import xyz.luko.database.entity.SessionResponseEntity
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getSessionDao(): SessionDao
+    abstract fun getSessionResponseDao(): SessionResponseDao
 }
 
 // The Room compiler generates the `actual` implementations.

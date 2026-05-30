@@ -17,6 +17,9 @@ fun Instant.toISODateString(): String {
     }-${localDateTime.day.toString().padStart(2, '0')}"
 }
 
+expect fun Instant.toAccessibilityDate(): String
+
+
 fun Duration.toHHMMSS(): String {
     val totalSeconds = this.inWholeSeconds
     val absSeconds = abs(totalSeconds)

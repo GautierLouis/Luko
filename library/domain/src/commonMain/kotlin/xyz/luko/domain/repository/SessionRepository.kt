@@ -14,6 +14,12 @@ interface SessionRepository {
 
     fun getLastSessions(limit: Int): Flow<List<Session>>
 
+    suspend fun getLastSessions(): List<Session>
+
+    suspend fun getSession(id: Long): Session
+
+    suspend fun getResponses(sessionId: Long): List<SessionResponse>
+
     fun getSessions(): Flow<PagingData<Session>>
 
     suspend fun getLastSessionsFor(code: Int): List<Session>

@@ -1,14 +1,17 @@
 package xyz.luko.baseui.preview
 
 import xyz.luko.domain.model.CharacterFrequencyLevel
+import xyz.luko.domain.model.ComparisonDetails
 import xyz.luko.domain.model.Decomposition
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Session
+import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.SimpleDictionary
 import xyz.luko.domain.model.Statistics
 import xyz.luko.domain.model.Stroke
+import xyz.luko.domain.model.StrokeComparisonResult
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
@@ -50,6 +53,33 @@ object PreviewProvider {
             questionsCount = 5,
             score = 250,
         )
+    }
+
+    val sessionList by lazy {
+        List(50) { session.copy(id = it.toLong()) }
+    }
+
+    val sessionResponse by lazy {
+        dictionaryList.map {
+            SessionResponse(
+                code = it.code,
+                pinyin = it.pinyin.first(),
+                statistics = StrokeComparisonResult(
+                    overallAccuracy = 0.0f,
+                    strokeAccuracies = emptyList(),
+                    orderAccuracy = 0.0f,
+                    details = ComparisonDetails(
+                        pathSimilarity = 0.0f,
+                        startPointAccuracy = 0.0f,
+                        endPointAccuracy = 0.0f,
+                        directionAccuracy = 0.0f,
+                        orderPenalty = 0.0f,
+                    )
+                ),
+                strokes = it.medians,
+                references = it.medians,
+            )
+        }
     }
 
     val statistics by lazy {

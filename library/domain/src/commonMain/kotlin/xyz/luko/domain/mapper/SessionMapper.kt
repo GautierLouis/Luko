@@ -36,4 +36,7 @@ object SessionMapper {
             overallAccuracy = statistics.overallAccuracy,
             response = Json.encodeToString(this),
         )
+
+    fun SessionResponseEntity.toDto(): SessionResponse =
+        Json.decodeFromString(response)
 }

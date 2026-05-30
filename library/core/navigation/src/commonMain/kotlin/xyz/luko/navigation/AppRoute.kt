@@ -22,6 +22,13 @@ sealed interface AppRoute : NavKey {
         data class PracticeCharacterRoute(
             val characterCode: Int,
         ) : LearningRoute
+
+
+        @Serializable
+        data object SessionListRoute : LearningRoute
+
+        @Serializable
+        data class SessionDetailsRoute(val id: Long) : LearningRoute
     }
 }
 
