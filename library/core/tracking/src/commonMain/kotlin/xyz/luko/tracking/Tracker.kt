@@ -2,7 +2,7 @@ package xyz.luko.tracking
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 
 object Tracker {
     private val _events = Channel<TrackingEvent>(capacity = Channel.UNLIMITED)

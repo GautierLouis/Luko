@@ -4,7 +4,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import xyz.luko.logger.AppLogger
+import xyz.luko.utils.AppLogger
 
 object AppNavigation {
     private val _navigationEvents =
