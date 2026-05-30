@@ -1,4 +1,4 @@
-package xyz.luko.learning.session.drawing
+package xyz.luko.learning.drawing
 
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.Composable

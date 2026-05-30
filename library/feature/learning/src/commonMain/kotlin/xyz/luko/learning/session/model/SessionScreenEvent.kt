@@ -1,6 +1,6 @@
 package xyz.luko.learning.session.model
 
-import androidx.compose.ui.geometry.Offset
+import xyz.luko.domain.model.Stroke
 
 internal sealed class SessionScreenEvent {
 
@@ -13,7 +13,7 @@ internal sealed class SessionScreenEvent {
     data object Next : SessionScreenEvent()
 
     data class StrokeCompleted(
-        val stroke: List<Offset>,
+        val stroke: Stroke,
     ) : SessionScreenEvent()
 
     data object Reset : SessionScreenEvent()

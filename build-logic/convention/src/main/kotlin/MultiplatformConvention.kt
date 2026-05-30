@@ -64,7 +64,6 @@ class MultiplatformConvention : Plugin<Project> {
 
             // iOS targets
             listOf(
-                iosX64(),
                 iosArm64(),
                 iosSimulatorArm64()
             ).forEach { iosTarget ->
@@ -81,7 +80,7 @@ class MultiplatformConvention : Plugin<Project> {
             extensions.configure<KotlinMultiplatformExtension> {
                 targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
                     namespace = "xyz.luko.${project.name.replace(":", ".").trim('.')}"
-                    compileSdk = libs.versions.android.target.sdk.get().toInt()
+                    compileSdk = libs.versions.android.compile.sdk.get().toInt()
                     minSdk = libs.versions.android.min.sdk.get().toInt()
                     compilerOptions {
                         jvmTarget.set(JvmTarget.JVM_17)

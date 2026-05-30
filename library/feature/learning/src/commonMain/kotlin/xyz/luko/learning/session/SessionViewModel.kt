@@ -12,7 +12,6 @@ import kotlinx.coroutines.withContext
 import xyz.luko.baseui.session.toDomain
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
-import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Stroke
@@ -152,7 +151,7 @@ internal class SessionViewModel(
     }
 
     // --- Page ---
-    private fun onStrokeCompleted(userStroke: List<Offset>) {
+    private fun onStrokeCompleted(userStroke: Stroke) {
         _state.updateSuccess { current ->
             val newPageState = current.currentDrawingPageState.addStroke(userStroke)
             current.withUpdatedPageState(newPageState)
@@ -171,10 +170,11 @@ internal class SessionViewModel(
             val medians = success.currentQuestion.medians
             val drawnStrokes = success.currentDrawingPageState.userPreviousOffsets
             val reference = medians.map { s -> s.points.map { Offset(it.x, it.y) } }
+            val drawing = drawnStrokes.map { s -> s.points.map { Offset(it.x, it.y) } }
 
             val statistics = analyzeUserDrawing.calculate(
                 reference = reference,
-                userStroke = drawnStrokes,
+                userStroke = drawing,
             )
 
             responses.add(
@@ -183,21 +183,14 @@ internal class SessionViewModel(
                     pinyin = success.pinyin,
                     statistics = statistics,
                     references = medians,
-                    strokes = drawnStrokes.map { s ->
-                        Stroke(s.map {
-                            Point.Straight(
-                                it.x,
-                                it.y
-                            )
-                        })
-                    },
+                    strokes = drawnStrokes,
                 )
             )
         }
     }
 
     // -- Utils ---
-    private fun DrawingPageState.addStroke(stroke: List<Offset>): DrawingPageState {
+    private fun DrawingPageState.addStroke(stroke: Stroke): DrawingPageState {
         val newOffsets = userPreviousOffsets + listOf(stroke)
         return copy(
             userPreviousOffsets = newOffsets,

@@ -75,6 +75,10 @@ internal class AppViewModel(
                         is NavigationCommand.Navigate -> {
                             Tracker.track(TrackingEvent.NavigateTo(event.route.toString()))
 
+                            if (!event.clearBackStack) {
+                                stack.removeAll { it::class == event.route::class }
+                            }
+
                             if (event.clearBackStack) {
                                 stack.clear()
                                 stack += AppRoute.MainRoute()

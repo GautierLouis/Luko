@@ -2,15 +2,16 @@ package xyz.luko.learning.list
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
+import xyz.luko.baseui.device.DeviceOrientation
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.baseui.session.toUiModel
@@ -29,28 +30,33 @@ import xyz.luko.navigation.AppRoute
 fun SessionListScreen() {
     val viewModel = koinViewModel<SessionListViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val windowInfo = rememberAdaptiveWindowInfo()
+    val isSideBySide = windowInfo.orientation == DeviceOrientation.LANDSCAPE
+
+    LaunchedEffect(isSideBySide, state.sessions) {
+        if (isSideBySide && state.sessions.isNotEmpty()) {
+            AppNavigation.navigate(
+                AppRoute.LearningRoute.SessionDetailsRoute(state.sessions.first().id)
+            )
+        }
+    }
+
     SessionListScreen(state)
 }
 
 @Composable
 private fun SessionListScreen(
-    state: SessionListViewModel.UiState
+    state: SessionListViewModel.UiState,
 ) {
-
-    val windowState = rememberAdaptiveWindowInfo()
-
     NestedScaffold { paddingValues ->
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(
-                if (windowState.isLandscape) 2 else 1
-            ),
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(top = Padding.large)
                 .padding(horizontal = Padding.large),
             verticalArrangement = Spacing.large,
-            horizontalArrangement = Spacing.large,
         ) {
             items(
                 items = state.sessions,

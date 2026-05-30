@@ -72,10 +72,15 @@ class StrokeTransformer(
     fun fromCanvasOffsets(
         offsets: List<Offset>,
         canvasSize: IntSize,
-    ): List<Offset> {
+    ): Stroke {
         val invertedCenter = matrixProvider.centerMatrix(canvasSize).apply { invert() }
         val invertedBase = matrixProvider.baseMatrix().apply { invert() }
-        return offsets.map { invertedBase.map(invertedCenter.map(it)) }
+        return Stroke(
+            points = offsets.map {
+                val mapped = invertedBase.map(invertedCenter.map(it))
+                Point.Straight(mapped.x, mapped.y)
+            }
+        )
     }
 
     private fun Stroke.toPath(base: Matrix, center: Matrix): Path = Path().apply {

@@ -14,25 +14,20 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.luko.baseui.drawing.StrokeTransformer
+import xyz.luko.baseui.device.DeviceOrientation
+import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.baseui.session.toUiModel
 import xyz.luko.designsystem.components.metrics.SessionCard
 import xyz.luko.designsystem.components.page.LoadingScreen
 import xyz.luko.designsystem.components.page.NestedScaffold
+import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -41,7 +36,7 @@ import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.SessionResponse
-import xyz.luko.learning.session.drawing.DrawableArea
+import xyz.luko.learning.drawing.DrawableArea
 import xyz.luko.navigation.AppRoute
 import kotlin.math.roundToInt
 
@@ -66,19 +61,25 @@ private fun SessionDetailsScreen(state: SessionDetailsViewModel.UiState) {
 private fun SessionDetailsScreen(
     state: SessionDetailsViewModel.UiState.Success
 ) {
+    val windowInfo = rememberAdaptiveWindowInfo()
+    val isSideBySide = windowInfo.orientation == DeviceOrientation.LANDSCAPE
+
     NestedScaffold { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .padding(top = Padding.large)
                 .padding(horizontal = Padding.large),
             verticalArrangement = Spacing.large,
         ) {
-            item {
-                SessionCard(
-                    model = state.session.toUiModel(),
-                    clickable = false,
-                )
+            if (!isSideBySide) {
+                item {
+                    SessionCard(
+                        model = state.session.toUiModel(),
+                        clickable = false,
+                    )
+                }
             }
 
             items(
@@ -95,20 +96,6 @@ private fun SessionDetailsScreen(
 private fun StrokesComparator(
     response: SessionResponse
 ) {
-    var canvasSize by remember { mutableStateOf(IntSize.Zero) }
-    val transformer = remember { StrokeTransformer() }
-
-    val referencePaths = remember(response.references, canvasSize) {
-        response.references.map { transformer.toCanvasPath(it, canvasSize) }
-    }
-
-    val previousUserDraw = remember(response.strokes, canvasSize) {
-        response.strokes.map { stroke ->
-            val offsets = stroke.points.map { Offset(it.x, it.y) }
-            transformer.toCanvasOffsets(offsets, canvasSize)
-        }
-    }
-
     fun Float.toPercent(): String = "${roundToInt()}%"
 
     Card(
@@ -137,20 +124,20 @@ private fun StrokesComparator(
             }
 
             DrawableArea(
+                enableDrawing = false,
+                reference = response.references,
+                userStroke = response.strokes,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
                     .clipToBounds()
-                    .onGloballyPositioned { canvasSize = it.size },
-                referencePath = referencePaths,
-                previousDrawnStrokes = previousUserDraw,
             )
         }
     }
 }
 
 
-@Preview
+@PreviewScreen
 @Composable
 private fun PreviewSessionDetailsScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
