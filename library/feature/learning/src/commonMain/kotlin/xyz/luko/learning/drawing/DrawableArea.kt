@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import xyz.luko.baseui.drawing.StrokeTransformer
 import xyz.luko.baseui.drawing.TransformedHint
@@ -25,6 +26,7 @@ import xyz.luko.learning.session.model.SessionScreenEvent
 @Composable
 internal fun DrawableArea(
     modifier: Modifier = Modifier,
+    strokeWidth: Dp = DrawableAreaDefault.STROKE_WIDTH,
     enableDrawing: Boolean = true,
     reference: List<Stroke> = emptyList(),
     hint: Stroke? = null,
@@ -60,6 +62,7 @@ internal fun DrawableArea(
     } else Modifier
 
     DrawableArea(
+        strokeWidth = strokeWidth,
         referencePath = referencePaths,
         referenceHint = referenceHint,
         previousDrawnStrokes = previousUserDraw,
@@ -73,6 +76,7 @@ internal fun DrawableArea(
 
 @Composable
 private fun DrawableArea(
+    strokeWidth: Dp,
     modifier: Modifier = Modifier,
     referencePath: List<Path> = emptyList(),
     referenceHint: TransformedHint? = null,
@@ -89,6 +93,7 @@ private fun DrawableArea(
             drawStroke(
                 path = path,
                 color = referenceColor,
+                width = strokeWidth
             )
         }
 
@@ -104,6 +109,7 @@ private fun DrawableArea(
             drawStroke(
                 path = it,
                 color = color,
+                width = strokeWidth,
             )
         }
 
@@ -111,6 +117,7 @@ private fun DrawableArea(
         drawStroke(
             path = livePath,
             color = color,
+            width = strokeWidth
         )
     }
 }

@@ -10,7 +10,6 @@ import xyz.luko.learning.list.SessionListViewModel
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
-import xyz.luko.learning.session_details.SessionDetailsViewModel
 
 val learningModule =
     module {
@@ -18,7 +17,6 @@ val learningModule =
         viewModel { params -> SessionViewModel(params.get(), get(), get(), get(), get()) }
         viewModelOf(::SessionCongratulationViewModel)
         viewModelOf(::SessionListViewModel)
-        viewModel { params -> SessionDetailsViewModel(params.get(), get()) }
         factoryOf(::CalculateScoreUseCase)
         factoryOf(::AccuracyCalculatorUseCase)
     }

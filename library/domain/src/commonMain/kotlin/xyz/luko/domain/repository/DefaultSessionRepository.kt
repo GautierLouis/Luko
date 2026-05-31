@@ -47,6 +47,8 @@ internal class DefaultSessionRepository(
     override suspend fun getResponses(sessionId: Long): List<SessionResponse> =
         responseDao.get(sessionId).map { it.toDto() }
 
+    override suspend fun getSimilarResponse(code: Int): List<SessionResponse> =
+        responseDao.getSimilar(code).map { it.toDto() }
 
     override fun getSessions(): Flow<PagingData<Session>> =
         Pager(

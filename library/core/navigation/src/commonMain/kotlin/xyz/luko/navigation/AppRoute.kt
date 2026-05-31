@@ -25,10 +25,8 @@ sealed interface AppRoute : NavKey {
 
 
         @Serializable
-        data object SessionListRoute : LearningRoute
+        data class SessionListRoute(val id: Long? = null) : LearningRoute
 
-        @Serializable
-        data class SessionDetailsRoute(val id: Long) : LearningRoute
     }
 }
 

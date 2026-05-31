@@ -1,14 +1,12 @@
 package xyz.luko.learning.routing
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import xyz.luko.learning.builder.SessionBuilderScreen
 import xyz.luko.learning.congratulation.SessionCongratulationScreen
 import xyz.luko.learning.list.SessionListScreen
 import xyz.luko.learning.session.ui.SessionScreen
-import xyz.luko.learning.session_details.SessionDetailsScreen
 import xyz.luko.navigation.AppRoute
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -19,15 +17,8 @@ fun EntryProviderScope<NavKey>.learningScreens() {
 
     entry<AppRoute.LearningRoute.PracticeCharacterRoute> { TODO() }
 
-    entry<AppRoute.LearningRoute.SessionListRoute>(
-        metadata = ListDetailSceneStrategy.listPane()
-    ) { SessionListScreen() }
+    entry<AppRoute.LearningRoute.SessionListRoute> { SessionListScreen(it) }
 
-    entry<AppRoute.LearningRoute.SessionDetailsRoute>(
-        metadata = ListDetailSceneStrategy.detailPane()
-    ) {
-        SessionDetailsScreen(it)
-    }
     // Private route
     entry<LearningInternalRoute.SessionRoute> { SessionScreen(it) }
 

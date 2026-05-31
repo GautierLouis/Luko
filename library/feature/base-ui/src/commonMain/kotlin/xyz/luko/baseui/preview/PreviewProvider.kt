@@ -65,8 +65,8 @@ object PreviewProvider {
                 code = it.code,
                 pinyin = it.pinyin.first(),
                 statistics = StrokeComparisonResult(
-                    overallAccuracy = 0.0f,
-                    strokeAccuracies = emptyList(),
+                    overallAccuracy = 100.0f,
+                    strokeAccuracies = List(it.medians.size) { 100f },
                     orderAccuracy = 0.0f,
                     details = ComparisonDetails(
                         pathSimilarity = 0.0f,

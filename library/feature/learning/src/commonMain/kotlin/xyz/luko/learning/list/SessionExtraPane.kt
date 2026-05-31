@@ -1,0 +1,144 @@
+package xyz.luko.learning.list
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import xyz.luko.baseui.preview.PreviewProvider
+import xyz.luko.designsystem.components.page.NestedScaffold
+import xyz.luko.designsystem.preview.ThemeMode
+import xyz.luko.designsystem.preview.ThemeModeProvider
+import xyz.luko.designsystem.theme.AppTheme
+import xyz.luko.designsystem.theme.Theme
+import xyz.luko.designsystem.token.dimens.Padding
+import xyz.luko.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.domain.model.SessionResponse
+import kotlin.math.roundToInt
+
+@Composable
+internal fun SessionExtraPane(
+    response: SessionResponse,
+    similarResponse: List<SessionResponse>
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = Padding.large)
+            .padding(horizontal = Padding.large),
+        verticalArrangement = Spacing.large,
+    ) {
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Spacing.large
+            ) {
+                DrawableWrapper(data = response.strokes, Type.USER)
+                DrawableWrapper(data = response.references, Type.REFERENCE)
+            }
+        }
+
+        item {
+            HorizontalDivider(thickness = 1.dp)
+        }
+
+        item {
+            Text(
+                text = "STROKE BY STROKE",
+                style = Theme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = Padding.medium)
+            )
+
+            response.statistics.strokeAccuracies.forEachIndexed { index, value ->
+                StrokeItem(index, value)
+            }
+        }
+
+        item {
+            HorizontalDivider(thickness = 1.dp)
+        }
+
+        item {
+            Text(
+                text = "HISTORIC",
+                style = Theme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = Padding.medium)
+            )
+
+            Text(
+                text = "ALL TIME",
+                style = Theme.typography.titleSmall,
+                modifier = Modifier.padding(bottom = Padding.medium)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Spacing.medium
+            ) {
+                val avgAccuracy = similarResponse
+                    .map { it.statistics.overallAccuracy }
+                    .average()
+                    .toFloat()
+
+                val progress =
+                    similarResponse.lastOrNull()?.statistics?.overallAccuracy?.let { last ->
+                        last - similarResponse.first().statistics.overallAccuracy
+                    }
+
+                HistoricAllTime(
+                    value = "${similarResponse.size}",
+                    label = "times seen"
+                )
+                HistoricAllTime(
+                    value = "${avgAccuracy.roundToInt()}%",
+                    label = "avg accuracy"
+                )
+
+                HistoricAllTime(
+                    value = progress?.let { "${if (it >= 0) "+" else ""}${it.roundToInt()}%" }
+                        ?: "-",
+                    label = "progress"
+                )
+            }
+
+            Text(
+                text = "ACCURACY OVER TIME",
+                style = Theme.typography.titleSmall,
+                modifier = Modifier.padding(vertical = Padding.medium)
+            )
+
+            AccuracyChart(
+                accuracies = similarResponse.map { it.statistics.overallAccuracy },
+                modifier = Modifier.background(
+                    color = Theme.materialColors.surfaceContainer,
+                    shape = ShapeDefaults.card(),
+                ).padding(Padding.large)
+            )
+
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSessionExtraPane(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode
+) {
+    AppTheme(themeMode) {
+        NestedScaffold {
+            SessionExtraPane(
+                response = PreviewProvider.sessionResponse.first(),
+                similarResponse = PreviewProvider.sessionResponse
+            )
+        }
+    }
+}
+

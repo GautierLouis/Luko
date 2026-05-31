@@ -63,6 +63,8 @@ data class Strings(
     val congratulationButtonHome: String,
     val sessionCardLabel: String,
     val sessionCardAccessibleDate: (String) -> String,
+    val sessionDetailClickLabel : (String) -> String,
+    val sessionDetailTotalStrokes : (Int, Int) -> String,
     // Dictionary
     val searchPlaceholder: String,
     val filterFrequencyGroup: String,

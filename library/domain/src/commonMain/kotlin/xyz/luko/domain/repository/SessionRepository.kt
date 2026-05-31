@@ -20,6 +20,8 @@ interface SessionRepository {
 
     suspend fun getResponses(sessionId: Long): List<SessionResponse>
 
+    suspend fun getSimilarResponse(code: Int): List<SessionResponse>
+
     fun getSessions(): Flow<PagingData<Session>>
 
     suspend fun getLastSessionsFor(code: Int): List<Session>

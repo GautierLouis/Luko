@@ -58,8 +58,6 @@ private fun HomeScreen(
     val fabAttrs =
         if (windowInfo.isPhoneLandscape) PracticeButtonAttrs.SMALL else PracticeButtonAttrs.LARGE
 
-    val animatedVisibilityScope = LocalNavAnimatedContentScope.current
-
     NestedScaffold(
         modifier = Modifier.testTag(TestTags.Screen.HOME),
         floatingActionButtonPosition = position,
@@ -101,7 +99,7 @@ private fun HomeScreen(
                             model = state.lastSession.toUiModel(),
                             onClick = {
                                 AppNavigation.navigate(
-                                    AppRoute.LearningRoute.SessionDetailsRoute(it.id)
+                                    AppRoute.LearningRoute.SessionListRoute(it.id)
                                 )
                             }
                         )
@@ -114,7 +112,7 @@ private fun HomeScreen(
                         modifier = Modifier.testTag(TestTags.Action.SECONDARY),
                         role = ButtonRole.Secondary,
                         onClick = {
-                            AppNavigation.navigate(AppRoute.LearningRoute.SessionListRoute)
+                            AppNavigation.navigate(AppRoute.LearningRoute.SessionListRoute())
                         },
                     )
                 }
