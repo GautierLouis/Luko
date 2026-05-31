@@ -1,9 +1,22 @@
 package xyz.luko.designsystem.theme
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SharedTransitionDefaults
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.intl.Locale
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.token.color.AppLevelColorsDay
@@ -23,13 +36,16 @@ fun AppTheme(
     val materialColors = remember(themeMode) { themeMode.toMaterialColors() }
     val appLevelColors = remember(themeMode) { themeMode.toLevelColors() }
 
-    CompositionLocalProvider(
-        LocalMaterialColors provides materialColors,
-        LocalAppLevelColors provides appLevelColors,
-        LocalAppStrings provides strings,
-        LocalTypography provides AppTypography,
-    ) {
-        content()
+    SharedTransitionLayout {
+        CompositionLocalProvider(
+            LocalMaterialColors provides materialColors,
+            LocalAppLevelColors provides appLevelColors,
+            LocalAppStrings provides strings,
+            LocalTypography provides AppTypography,
+            LocalSharedTransitionScope provides this@SharedTransitionLayout
+        ) {
+            content()
+        }
     }
 }
 
@@ -37,3 +53,10 @@ internal val LocalMaterialColors = staticCompositionLocalOf { materialColorsDay(
 internal val LocalAppLevelColors = staticCompositionLocalOf { AppLevelColorsDay }
 internal val LocalAppStrings = staticCompositionLocalOf { provideStringsEN() }
 internal val LocalTypography = staticCompositionLocalOf { AppTypography }
+internal val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope> {
+    error("No SharedTransitionScope provided")
+}
+
+val LocalAnimatedContentScope = compositionLocalOf<AnimatedContentScope> {
+    error("No AnimatedContentScope provided")
+}

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
@@ -24,6 +25,7 @@ import xyz.luko.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.designsystem.components.metrics.OverallStatisticsCard
 import xyz.luko.designsystem.components.metrics.SessionCard
 import xyz.luko.designsystem.components.page.NestedScaffold
+import xyz.luko.designsystem.modifier.sharedBounds
 import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
@@ -41,7 +43,9 @@ fun HomeScreen() {
 }
 
 @Composable
-private fun HomeScreen(state: HomeViewModel.UIState) {
+private fun HomeScreen(
+    state: HomeViewModel.UIState,
+) {
     val windowInfo = rememberAdaptiveWindowInfo()
 
     val position =
@@ -54,13 +58,18 @@ private fun HomeScreen(state: HomeViewModel.UIState) {
     val fabAttrs =
         if (windowInfo.isPhoneLandscape) PracticeButtonAttrs.SMALL else PracticeButtonAttrs.LARGE
 
+    val animatedVisibilityScope = LocalNavAnimatedContentScope.current
+
     NestedScaffold(
         modifier = Modifier.testTag(TestTags.Screen.HOME),
         floatingActionButtonPosition = position,
         floatingActionButton = {
             PracticeButton(
                 attrs = fabAttrs,
-                modifier = Modifier.testTag(TestTags.Action.PRIMARY).navigationBarsPadding(),
+                modifier = Modifier
+                    .testTag(TestTags.Action.PRIMARY)
+                    .navigationBarsPadding()
+                    .sharedBounds(key = "start_session"),
                 onClick = {
                     AppNavigation.navigate(AppRoute.LearningRoute.NewSessionRoute)
                 },
