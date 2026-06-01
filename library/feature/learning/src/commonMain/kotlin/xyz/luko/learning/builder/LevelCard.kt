@@ -50,6 +50,7 @@ internal fun LevelCard(
     Box(
         modifier =
             modifier
+                .fillMaxWidth()
                 .clip(ShapeDefaults.card())
                 .background(
                     color = cardContainerColor,
@@ -94,7 +95,6 @@ internal fun LevelCard(
                         fontWeight = FontWeight.bold,
                         style = Theme.typography.bodyLarge,
                         color = Theme.materialColors.onSurface,
-                        modifier = Modifier.weight(1f),
                     )
                     tagLabel?.let {
                         LabelTag(
@@ -108,6 +108,8 @@ internal fun LevelCard(
                     text = caption,
                     style = Theme.typography.bodySmall,
                     color = textColor,
+                    maxLines = 2,
+                    minLines = 2
                 )
             }
         }

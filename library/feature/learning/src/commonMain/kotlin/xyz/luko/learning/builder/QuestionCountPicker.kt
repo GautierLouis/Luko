@@ -5,12 +5,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
 
 @Composable
 internal fun QuestionCountPicker(
@@ -22,16 +20,15 @@ internal fun QuestionCountPicker(
         label = Theme.strings.builderPickQuestionCount,
         modifier = modifier,
     ) {
-        AdaptiveLayout(
-            spacing = Padding.large,
-        ) {
-            QuestionCount.entries.forEach { item ->
-                QuestionCountItem(
-                    count = item,
-                    isSelected = item == selectedCount,
-                    onClick = { onClick(item) },
-                )
-            }
+        OrientationGrid(
+            data = QuestionCount.entries,
+            key = { item -> item.ordinal }
+        ) { item ->
+            QuestionCountItem(
+                count = item,
+                isSelected = item == selectedCount,
+                onClick = { onClick(item) },
+            )
         }
     }
 }

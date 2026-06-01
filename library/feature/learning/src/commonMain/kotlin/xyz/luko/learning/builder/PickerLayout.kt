@@ -54,9 +54,7 @@ internal fun PickerLayout(
                 color = Theme.materialColors.onBackground,
                 fontWeight = FontWeight.Medium,
             )
-            AdaptiveLayout {
-                content()
-            }
+            content()
         }
     }
 }

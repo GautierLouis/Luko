@@ -1,12 +1,10 @@
 package xyz.luko.learning.builder
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
@@ -18,16 +16,18 @@ internal fun CharaFreqLevelGroupPicker(
     selectedLevels: List<FrequencyLevel> = listOf(),
     onClick: (FrequencyLevel) -> Unit = {},
 ) {
-    AdaptiveLayout(
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        FrequencyLevel.entries.forEach {
-            CharaFreqLevelCard(
-                level = it,
-                selected = it in selectedLevels,
-                onClick = { onClick(it) },
-            )
-        }
+
+    OrientationGrid(
+        data = FrequencyLevel.entries,
+        modifier = modifier,
+        key = { level -> level.ordinal }
+    ) { level ->
+        CharaFreqLevelCard(
+            level = level,
+            modifier = Modifier,
+            selected = level in selectedLevels,
+            onClick = { onClick(level) },
+        )
     }
 }
 

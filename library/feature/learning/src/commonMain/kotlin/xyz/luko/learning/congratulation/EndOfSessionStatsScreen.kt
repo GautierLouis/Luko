@@ -25,7 +25,6 @@ import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.designsystem.components.page.NestedScaffold
-import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -136,7 +135,7 @@ internal fun EndOfSessionStatsScreen(session: Session) {
     }
 }
 
-@PreviewScreen
+//@PreviewScreen
 @Composable
 private fun PreviewEndOfStatsScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,

@@ -21,7 +21,10 @@ internal fun DifficultyPicker(
         label = Theme.strings.builderSelectDifficulty,
         modifier = modifier,
     ) {
-        DifficultyLevel.entries.forEach { item ->
+        OrientationGrid(
+            data = DifficultyLevel.entries,
+            key = { item -> item.ordinal }
+        ) { item ->
             DifficultyCard(
                 difficulty = item,
                 selected = difficulty == item,
