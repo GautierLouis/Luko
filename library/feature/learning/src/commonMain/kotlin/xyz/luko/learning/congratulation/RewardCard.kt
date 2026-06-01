@@ -151,18 +151,18 @@ private fun AccumulatedXp(
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
-            modifier =
-                Modifier
-                    .heightIn(max = 150.dp)
-                    .widthIn(max = 150.dp)
-                    .aspectRatio(1f)
-                    .onGloballyPositioned {
-                        progressSize = it.size
-                    },
+            modifier = Modifier
+                .heightIn(max = 150.dp)
+                .widthIn(max = 150.dp)
+                .aspectRatio(1f)
+                .onGloballyPositioned {
+                    progressSize = it.size
+                },
             strokeWidth = size * 0.1f,
             trackColor = Theme.materialColors.tertiaryContainer,
             color = Theme.materialColors.tertiary,
             strokeCap = StrokeCap.Round,
+            gapSize = (-10).dp,
             progress = { animatedProgress.value },
         )
         Column(

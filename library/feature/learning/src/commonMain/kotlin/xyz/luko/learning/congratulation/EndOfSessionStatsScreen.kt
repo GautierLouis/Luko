@@ -10,17 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.baseui.adaptive.AdaptiveLayoutOrder
-import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.COLUMN
-import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.ROW
+import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.baseui.test.TestTags
@@ -28,7 +24,6 @@ import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
-import xyz.luko.designsystem.components.page.LoadingScreen
 import xyz.luko.designsystem.components.page.NestedScaffold
 import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
@@ -38,35 +33,16 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.Session
-import xyz.luko.learning.congratulation.SessionCongratulationViewModel.UIState
 import xyz.luko.navigation.AppNavigation
 import xyz.luko.navigation.AppRoute
 import xyz.luko.utils.toHHMMSS
 
 @Composable
-internal fun SessionCongratulationScreen() {
-    val viewModel: SessionCongratulationViewModel = koinViewModel()
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    SessionCongratulationScreen(state)
-}
-
-@Composable
-private fun SessionCongratulationScreen(state: UIState) {
-    when (state) {
-        UIState.Loading -> LoadingScreen()
-        is UIState.Success -> SessionCongratulationScreen(state.session)
-        else -> {
-            // VM navigate back automatically
-        }
-    }
-}
-
-@Composable
-internal fun SessionCongratulationScreen(session: Session) {
+internal fun EndOfSessionStatsScreen(session: Session) {
     val device = rememberAdaptiveWindowInfo()
 
     val orientation =
-        if (device.isPhoneLandscape) ROW else COLUMN
+        if (device.isPhoneLandscape) AdaptiveLayoutOrientation.ROW else AdaptiveLayoutOrientation.COLUMN
 
     NestedScaffold { paddingValues ->
         Column(
@@ -79,10 +55,9 @@ internal fun SessionCongratulationScreen(session: Session) {
         ) {
             AdaptiveLayout(
                 orientation = orientation,
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .wrapContentHeight(),
+                modifier = Modifier
+                    .weight(1f)
+                    .wrapContentHeight(),
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -117,35 +92,41 @@ internal fun SessionCongratulationScreen(session: Session) {
             }
 
             AdaptiveLayout(
+                modifier = Modifier.padding(bottom = Padding.large),
                 orientation =
                     if (device.isPhoneLandscape || device.isTabletLandscape) {
-                        ROW
+                        AdaptiveLayoutOrientation.ROW
                     } else {
-                        COLUMN
+                        AdaptiveLayoutOrientation.COLUMN
                     },
                 order =
                     if (device.isPhoneLandscape || device.isTabletLandscape) {
-                        AdaptiveLayoutOrder.NATURAL
-                    } else {
                         AdaptiveLayoutOrder.REVERSED
+                    } else {
+                        AdaptiveLayoutOrder.NATURAL
                     },
             ) {
+
                 AppButton(
                     text = Theme.strings.congratulationButtonHome,
                     size = ButtonSize.Large,
-                    modifier = Modifier.testTag(TestTags.Action.PRIMARY),
-                    role = ButtonRole.Secondary,
-                    shape = ButtonShape.Ghost,
+                    modifier = Modifier
+                        .testTag(TestTags.Action.PRIMARY),
+                    role = ButtonRole.Primary,
+                    shape = ButtonShape.Filled,
                     onClick = { AppNavigation.navigateHome() },
                 )
 
                 AppButton(
-                    text = Theme.strings.congratulationButtonRestart,
+                    text = Theme.strings.congratulationButtonSeeMore,
                     size = ButtonSize.Large,
-                    modifier = Modifier.testTag(TestTags.Action.SECONDARY),
+                    role = ButtonRole.Secondary,
+                    shape = ButtonShape.Outlined,
+                    modifier = Modifier
+                        .testTag(TestTags.Action.SECONDARY),
                     onClick = {
                         AppNavigation.navigate(
-                            AppRoute.LearningRoute.NewSessionRoute,
+                            AppRoute.LearningRoute.SessionListRoute(session.id),
                             true,
                         )
                     },
@@ -157,11 +138,11 @@ internal fun SessionCongratulationScreen(session: Session) {
 
 @PreviewScreen
 @Composable
-private fun PreviewSessionCongratulationScreen(
+private fun PreviewEndOfStatsScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
-        SessionCongratulationScreen(
+        EndOfSessionStatsScreen(
             session = PreviewProvider.session,
         )
     }

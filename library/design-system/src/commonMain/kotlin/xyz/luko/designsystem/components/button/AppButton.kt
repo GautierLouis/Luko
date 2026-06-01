@@ -46,7 +46,11 @@ fun AppButton(
     val shape =
         when (shape) {
             ButtonShape.Filled -> ShapeDefaults.button()
-            ButtonShape.Outlined -> ShapeDefaults.roundButton()
+            ButtonShape.Outlined -> when (role) {
+                ButtonRole.Primary,
+                ButtonRole.Secondary -> ShapeDefaults.button()
+                ButtonRole.Error -> ShapeDefaults.roundButton()
+            }
             ButtonShape.Ghost -> ShapeDefaults.roundButton()
         }
 

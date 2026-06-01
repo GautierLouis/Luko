@@ -19,7 +19,7 @@ enum class SessionStatistic {
         fun SessionStatistic.label() =
             when (this) {
                 QuestionCount -> Theme.strings.questions
-                Time -> Theme.strings.totalScore
+                Time -> Theme.strings.time
                 Score -> Theme.strings.sessions
                 Difficulty -> Theme.strings.difficulty
             }

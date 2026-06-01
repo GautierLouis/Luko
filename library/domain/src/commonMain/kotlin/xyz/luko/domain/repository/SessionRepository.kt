@@ -27,4 +27,6 @@ interface SessionRepository {
     suspend fun getLastSessionsFor(code: Int): List<Session>
 
     fun getStatistics(): Flow<Statistics>
+
+    suspend fun getEndOfSessionStats(): EndOfSessionStats
 }

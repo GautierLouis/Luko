@@ -36,6 +36,9 @@ interface SessionDao {
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT :limit")
     fun getLast(limit: Int): Flow<List<SessionEntity>>
 
+    @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT 1")
+    suspend fun getLastSession(): SessionEntity?
+
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
     fun getAllPaged(): PagingSource<Int, SessionEntity>
 
@@ -68,4 +71,13 @@ interface SessionDao {
     """,
     )
     fun getBasicStatistics(): Flow<BasicStatistics>
+
+    @Query(
+        """
+        SELECT
+            GROUP_CONCAT(DISTINCT date) AS uniqueDates
+        FROM SessionEntity
+    """,
+    )
+    suspend fun getUniqueDates(): List<String>
 }

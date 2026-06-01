@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.LocalDate
 import xyz.luko.database.dao.SessionDao
 import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.domain.mapper.SessionMapper.toDto
@@ -81,4 +82,24 @@ internal class DefaultSessionRepository(
             )
         }
     }
+
+    override suspend fun getEndOfSessionStats(): EndOfSessionStats {
+        val lastSession = sessionDao.getLastSession()!!
+
+        val allDates = sessionDao.getUniqueDates().map { it.toUTCDate() }
+
+        val oldStreak = allDates
+            .filter { it != lastSession.date.toUTCDate() }
+            .let { dayStreakComputer.calculateCurrentDayStreak(it) }
+
+        val newStreak = dayStreakComputer.calculateCurrentDayStreak(allDates)
+
+        return EndOfSessionStats(lastSession.toDto(), oldStreak, newStreak)
+    }
 }
+
+data class EndOfSessionStats(
+    val lastSession: Session,
+    val oldStreak: Int,
+    val newStreak: Int
+)
