@@ -1,9 +1,13 @@
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import kotlin.text.toInt
 
 
 @Suppress("unused")
@@ -19,6 +23,19 @@ class ComposeConvention : Plugin<Project> {
         }
 
         configureComposeMultiplatform(libs)
+        configureAndroid()
+    }
+
+    private fun Project.configureAndroid() {
+        pluginManager.withPlugin("com.android.kotlin.multiplatform.library") {
+            extensions.configure<KotlinMultiplatformExtension> {
+                targets.withType<KotlinMultiplatformAndroidLibraryTarget>().configureEach {
+                    androidResources {
+                        enable = true
+                    }
+                }
+            }
+        }
     }
 
     private fun Project.configureComposeMultiplatform(libs: LibrariesForLibs) {

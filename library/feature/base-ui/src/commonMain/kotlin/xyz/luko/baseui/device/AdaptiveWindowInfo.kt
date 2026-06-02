@@ -1,8 +1,12 @@
 package xyz.luko.baseui.device
 
+import androidx.compose.ui.unit.Dp
+
 data class AdaptiveWindowInfo(
     val deviceType: DeviceType,
     val orientation: DeviceOrientation,
+    val width: Dp,
+    val height: Dp
 ) {
     val isPhone = deviceType == DeviceType.PHONE
     val isTablet = deviceType == DeviceType.TABLET

@@ -20,11 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.test.TestTags
@@ -82,17 +82,6 @@ private fun StreakRefreshScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Spacing.extraExtraLarge,
             ) {
-
-                Text(
-                    text = "🔥",
-                    style = Theme.typography.displayLarge,
-                    modifier = Modifier
-                        .graphicsLayer {
-                            scaleX = if (state.showNew) scale else 1f; scaleY =
-                            if (state.showNew) scale else 1f
-                        }
-                )
-
                 Box(
                     modifier = Modifier.height(80.dp),
                     contentAlignment = Alignment.Center
@@ -107,6 +96,7 @@ private fun StreakRefreshScreen(
                         Text(
                             text = "${newStreak.dec()}",
                             style = Theme.typography.displayLarge,
+                            fontSize = 64.sp,
                             fontWeight = FontWeight.Medium,
                         )
                     }
@@ -122,6 +112,7 @@ private fun StreakRefreshScreen(
                             text = "$newStreak",
                             style = Theme.typography.displayLarge,
                             fontWeight = FontWeight.Medium,
+                            fontSize = 64.sp,
                             color = Theme.appLevelColors.easy.primary
                         )
                     }

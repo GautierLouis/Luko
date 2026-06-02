@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 
+@Deprecated("use windowSizeClass")
 @Composable
 fun rememberAdaptiveWindowInfo(): AdaptiveWindowInfo {
     val density = LocalDensity.current
@@ -20,6 +21,6 @@ fun rememberAdaptiveWindowInfo(): AdaptiveWindowInfo {
         if (screenWidth > screenHeight) DeviceOrientation.LANDSCAPE else DeviceOrientation.PORTRAIT
 
     return remember(windowInfo.containerSize) {
-        AdaptiveWindowInfo(deviceType, orientation)
+        AdaptiveWindowInfo(deviceType, orientation, screenWidth, screenHeight)
     }
 }
