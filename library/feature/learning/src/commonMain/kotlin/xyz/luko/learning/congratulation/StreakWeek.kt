@@ -1,8 +1,5 @@
 package xyz.luko.learning.congratulation
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -10,17 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -45,8 +37,6 @@ internal fun StreakWeek(
     modifier: Modifier = Modifier
 ) {
     val days = Theme.strings.dayOfWeekName
-
-    val todayIndex = week.days.indexOfFirst { it.isToday }
 
     val animatedIndex = remember(week) {
         week.days.indexOfLast { it.isCompleted }
@@ -96,55 +86,20 @@ internal fun StreakWeek(
 
                     val shouldAnimate = index == animatedIndex
 
-                    var animate by remember(week) {
-                        mutableStateOf(!shouldAnimate)
-                    }
-
-                    LaunchedEffect(shouldAnimate) {
-                        if (shouldAnimate) {
-                            animate = true
-                        }
-                    }
-
-                    val progress by animateFloatAsState(
-                        targetValue = when {
-                            !week.days[index].isCompleted -> 0f
-                            animate -> 1f
-                            else -> 0f
-                        },
-                        animationSpec = tween(
-                            durationMillis = 800,
-                            easing = FastOutSlowInEasing
-                        ),
-                        label = "streak-progress"
+                    StreakDayItem(
+                        shouldAnimate = shouldAnimate,
+                        day = week.days[index],
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = { calculateShape(index, prev, next, it) }
                     )
 
-                    Box(
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(progress)
-                                .height(36.dp)
-                                .background(
-                                    color = Theme.materialColors.primary.copy(alpha = .4f),
-                                    shape = calculateShape(index, prev, next, progress)
-                                )
-                        )
-
-                        StreakDayItem(
-                            progress = progress,
-                            day = week.days[index],
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
                 }
             }
         }
     }
 }
 
-private fun calculateShape(
+internal fun calculateShape(
     index: Int,
     prev: StreakDay? = null,
     next: StreakDay? = null,
