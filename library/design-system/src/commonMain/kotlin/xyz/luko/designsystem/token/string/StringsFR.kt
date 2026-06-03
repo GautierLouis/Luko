@@ -66,6 +66,7 @@ internal fun provideStringsFR(): Strings =
         yesterday = "Hier",
         lastWeek = "La semaine dernière",
         lastMonth = "Le mois dernier",
+        dayOfWeekName = listOf("Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"),
         error = "Erreur de chargement",
         retry = "Réessayer",
         actionSearch = "Rechercher",

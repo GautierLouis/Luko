@@ -74,6 +74,7 @@ data class Strings(
     val yesterday: String,
     val lastWeek: String,
     val lastMonth: String,
+    val dayOfWeekName: List<String>,
     // Error
     val error: String,
     val retry: String,
