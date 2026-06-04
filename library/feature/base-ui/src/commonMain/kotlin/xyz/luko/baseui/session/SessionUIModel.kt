@@ -11,9 +11,10 @@ import xyz.luko.utils.toHHMMSS
 import xyz.luko.utils.toISODateString
 
 @Composable
-fun Session.toUiModel(): SessionUiModel =
-    SessionUiModel(
-        date = remember(date) { date.toISODateString() },
+fun Session.toUiModel(): SessionUiModel {
+    val pattern = Theme.strings.datePattern
+    return SessionUiModel(
+        date = remember(date) { date.toISODateString(pattern) },
         accessibilityDate = remember(date) { date.toAccessibilityDate() },
         duration = remember(duration) { duration.toHHMMSS() },
         difficulty =
@@ -25,3 +26,4 @@ fun Session.toUiModel(): SessionUiModel =
         questionsCount = questionsCount.toString(),
         score = score.toString(),
     )
+}

@@ -10,11 +10,12 @@ import kotlin.time.Duration
 import kotlin.time.Instant
 
 // TODO actual/expect
-fun Instant.toISODateString(): String {
+fun Instant.toISODateString(pattern: String): String {
     val localDateTime = this.toLocalDateTime(TimeZone.currentSystemDefault())
-    return "${localDateTime.year}-${
-        localDateTime.month.number.toString().padStart(2, '0')
-    }-${localDateTime.day.toString().padStart(2, '0')}"
+    return pattern
+        .replace("yyyy", localDateTime.year.toString())
+        .replace("dd", localDateTime.day.toString().padStart(2, '0'))
+        .replace("MM", localDateTime.month.number.toString().padStart(2, '0'))
 }
 
 expect fun Instant.toAccessibilityDate(): String
