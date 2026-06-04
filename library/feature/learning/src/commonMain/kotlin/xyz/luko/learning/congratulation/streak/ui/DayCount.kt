@@ -1,4 +1,4 @@
-package xyz.luko.learning.congratulation
+package xyz.luko.learning.congratulation.streak.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -15,15 +15,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import xyz.luko.designsystem.preview.PreviewScreen
+import xyz.luko.designsystem.preview.ThemeMode
+import xyz.luko.designsystem.preview.ThemeModeProvider
+import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
 
 @Composable
 internal fun DayCount(
-    state: StreakRefreshViewModel.UIState,
-    newStreak: Int
+    showNew: Boolean,
+    newStreak: Int,
+    modifier: Modifier = Modifier
 ) {
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
@@ -31,7 +39,7 @@ internal fun DayCount(
             contentAlignment = Alignment.Center
         ) {
             this@Column.AnimatedVisibility(
-                visible = !state.showNew,
+                visible = !showNew,
                 exit = slideOutVertically(
                     targetOffsetY = { it },
                     animationSpec = tween(350)
@@ -45,7 +53,7 @@ internal fun DayCount(
             }
 
             this@Column.AnimatedVisibility(
-                visible = state.showNew,
+                visible = showNew,
                 enter = slideInVertically(
                     initialOffsetY = { -it },
                     animationSpec = tween(350, easing = FastOutSlowInEasing)
@@ -67,3 +75,17 @@ internal fun DayCount(
         )
     }
 }
+
+@Preview
+@Composable
+private fun PreviewDayCount(
+    @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
+) {
+    AppTheme(themeMode) {
+        DayCount(
+            showNew = true,
+            newStreak = 2
+        )
+    }
+}
+

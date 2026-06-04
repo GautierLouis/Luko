@@ -1,4 +1,4 @@
-package xyz.luko.learning.congratulation
+package xyz.luko.learning.congratulation.stats
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode

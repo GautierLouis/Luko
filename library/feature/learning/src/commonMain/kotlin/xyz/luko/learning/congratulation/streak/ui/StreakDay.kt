@@ -1,4 +1,4 @@
-package xyz.luko.learning.congratulation
+package xyz.luko.learning.congratulation.streak.ui
 
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.DayOfWeek

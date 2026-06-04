@@ -6,6 +6,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.designsystem.components.page.LoadingScreen
 import xyz.luko.learning.congratulation.EndOfSessionViewModel.UIState
+import xyz.luko.learning.congratulation.stats.EndOfSessionStatsScreen
+import xyz.luko.learning.congratulation.streak.StreakRefreshScreen
 
 @Composable
 internal fun EndOfSessionRouterScreen() {

@@ -80,4 +80,18 @@ interface SessionDao {
     """,
     )
     suspend fun getUniqueDates(): List<String>
+
+    @Query(
+        """
+    SELECT DISTINCT date
+    FROM SessionEntity
+    WHERE date >= :weekStart
+      AND date < :weekEnd
+    ORDER BY date ASC
+    """
+    )
+    suspend fun getSessionDatesForWeek(
+        weekStart: String,
+        weekEnd: String,
+    ): List<String>
 }

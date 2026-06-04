@@ -1,4 +1,4 @@
-package xyz.luko.learning.congratulation
+package xyz.luko.learning.congratulation.streak.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -19,8 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,10 +35,10 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
 import kotlinx.coroutines.delay
 import xyz.luko.designsystem.icon.AppIcon
 import xyz.luko.designsystem.icon.RoundedBolt
@@ -47,10 +48,44 @@ import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
+import xyz.luko.designsystem.token.dimens.Spacing
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun StreakDayItem(
+    title: String,
+    day: StreakDay,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Spacing.small,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = Padding.medium, bottom = Padding.large)
+    ) {
+        Text(
+            text = title.first().toString(),
+            style = Theme.typography.bodyMedium,
+            color = Theme.materialColors.onBackground,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = Theme.typography.bodyLarge.fontSize,
+                maxFontSize = Theme.typography.titleLarge.fontSize
+            )
+        )
+
+        StreakDayContent(
+            day = day,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Composable
+private fun StreakDayContent(
     day: StreakDay,
     modifier: Modifier = Modifier,
 ) {
@@ -60,7 +95,7 @@ internal fun StreakDayItem(
         else -> Theme.materialColors.error
     }
 
-    val borderColor = when(day.segment)  {
+    val borderColor = when (day.segment) {
         SegmentPosition.None -> Theme.materialColors.outline
         else -> streakColor
     }
@@ -97,22 +132,7 @@ internal fun StreakDayItem(
             modifier = Modifier
                 .fillMaxWidth(progress)
                 .height(36.dp)
-                .drawBehind {
-                    if (!day.currentStreak) {
-                        drawLine(
-                            color = streakColor,
-                            start = Offset(
-                                x = 0f,
-                                y = size.height / 2
-                            ),
-                            end = Offset(
-                                x = size.width,
-                                y = size.height / 2
-                            ),
-                            strokeWidth = 2.dp.toPx()
-                        )
-                    }
-                }
+                .stroke(!day.currentStreak, streakColor)
                 .background(
                     color = streakColor.copy(alpha = .4f),
                     shape = day.shape(progress)
@@ -160,43 +180,6 @@ internal fun StreakDayItem(
     }
 }
 
-private fun StreakDay.shape(
-    progress: Float
-): RoundedCornerShape {
-
-    val radius = 50.dp
-    val lerpRight = lerp(radius, 0.dp, progress)
-    val lerpLeft = lerp(0.dp, radius, progress)
-
-    return when (this.segment) {
-
-        SegmentPosition.None ->
-            RoundedCornerShape(radius)
-
-        SegmentPosition.Single ->
-            RoundedCornerShape(radius)
-
-        SegmentPosition.Middle ->
-            RoundedCornerShape(0.dp)
-
-        SegmentPosition.First ->
-            RoundedCornerShape(
-                topStart = radius,
-                bottomStart = radius,
-                topEnd = if (isSunday) lerpRight else 0.dp,
-                bottomEnd = if (isSunday) lerpRight else 0.dp
-            )
-
-        SegmentPosition.Last ->
-            RoundedCornerShape(
-                topStart = 0.dp,
-                bottomStart = 0.dp,
-                topEnd = if (isMonday) lerpLeft else radius,
-                bottomEnd = if (isMonday) lerpLeft else radius
-            )
-    }
-}
-
 
 @Preview
 @Composable
@@ -210,6 +193,7 @@ private fun PreviewStreakDayItem(
     AppTheme(themeMode) {
         Column {
             StreakDayItem(
+                title = "M",
                 day = item,
                 modifier = Modifier.size(50.dp)
             )

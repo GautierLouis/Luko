@@ -1,4 +1,4 @@
-package xyz.luko.learning.congratulation
+package xyz.luko.learning.congratulation.stats
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

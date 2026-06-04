@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDate
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Statistics
+import kotlin.time.Instant
 
 interface SessionRepository {
     suspend fun save(
@@ -31,5 +32,5 @@ interface SessionRepository {
 
     suspend fun getEndOfSessionStats(): EndOfSessionStats
 
-    suspend fun getLastSessionsDates(): List<LocalDate>
+    suspend fun getSessionDatesForWeek(start: Instant, end: Instant): List<LocalDate>
 }

@@ -1,4 +1,4 @@
-package xyz.luko.learning.congratulation
+package xyz.luko.learning.congratulation.streak
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -27,6 +27,9 @@ import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.learning.congratulation.streak.ui.DayCount
+import xyz.luko.learning.congratulation.streak.ui.StreakWeek
+import xyz.luko.learning.congratulation.streak.ui.previewStreakDays
 
 @Composable
 fun StreakRefreshScreen(
@@ -64,14 +67,16 @@ private fun StreakRefreshScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Spacing.extraExtraLarge,
             ) {
-                DayCount(state, newStreak)
+                DayCount(
+                    showNew = state.showNew,
+                    newStreak = newStreak
+                )
                 StreakWeek(
                     days = state.streakDays,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = Padding.extraLarge)
                 )
-
             }
 
             AnimatedVisibility(

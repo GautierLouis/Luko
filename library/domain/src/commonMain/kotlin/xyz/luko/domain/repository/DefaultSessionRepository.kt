@@ -7,7 +7,6 @@ import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toLocalDate
 import xyz.luko.database.dao.SessionDao
 import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.domain.mapper.SessionMapper.toDto
@@ -19,6 +18,7 @@ import xyz.luko.domain.usecase.ComputeDayStreak
 import xyz.luko.domain.usecase.ComputeDifficulty
 import xyz.luko.utils.toUTCDate
 import kotlin.time.DurationUnit
+import kotlin.time.Instant
 import kotlin.time.toDuration
 
 internal class DefaultSessionRepository(
@@ -98,15 +98,9 @@ internal class DefaultSessionRepository(
         return EndOfSessionStats(lastSession.toDto(), oldStreak, newStreak)
     }
 
-    override suspend fun getLastSessionsDates(): List<LocalDate> {
-        return listOf(
-            "2026-06-01",
-            "2026-06-03",
-            "2026-06-04",
-            "2026-06-05",
-            "2026-06-07",
-        ).map { LocalDate.parse(it) }
-    }
+    override suspend fun getSessionDatesForWeek(start: Instant, end: Instant): List<LocalDate> =
+        sessionDao.getSessionDatesForWeek(start.toString(), end.toString())
+            .map { LocalDate.parse(it) }
 }
 
 data class EndOfSessionStats(

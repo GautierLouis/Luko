@@ -6,7 +6,8 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import xyz.luko.learning.builder.SessionBuilderViewModel
 import xyz.luko.learning.congratulation.EndOfSessionViewModel
-import xyz.luko.learning.congratulation.StreakRefreshViewModel
+import xyz.luko.learning.congratulation.streak.StreakListUseCase
+import xyz.luko.learning.congratulation.streak.StreakRefreshViewModel
 import xyz.luko.learning.list.SessionListViewModel
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
@@ -21,4 +22,5 @@ val learningModule =
         viewModelOf(::SessionListViewModel)
         factoryOf(::CalculateScoreUseCase)
         factoryOf(::AccuracyCalculatorUseCase)
+        factoryOf(::StreakListUseCase)
     }

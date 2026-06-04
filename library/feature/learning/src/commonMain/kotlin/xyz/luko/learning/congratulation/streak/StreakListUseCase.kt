@@ -1,15 +1,7 @@
-package xyz.luko.learning.congratulation
+package xyz.luko.learning.congratulation.streak
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -17,33 +9,13 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
+import xyz.luko.learning.congratulation.streak.ui.SegmentPosition
+import xyz.luko.learning.congratulation.streak.ui.StreakDay
 import kotlin.time.Clock
-import kotlin.time.Duration.Companion.milliseconds
 
-internal class StreakRefreshViewModel : ViewModel() {
+internal class StreakListUseCase {
 
-    data class UIState(
-        val showNew: Boolean = false,
-        val showBtn: Boolean = false,
-        val streakDays: ImmutableList<StreakDay> = persistentListOf(),
-    )
-
-    private val _state = MutableStateFlow<UIState>(UIState())
-    val state = _state.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            val dates = getDates()
-            _state.update { it.copy(streakDays = buildList(dates)) }
-            delay(600.milliseconds)
-            _state.update { it.copy(showNew = true) }
-            delay(600.milliseconds)
-            _state.update { it.copy(showBtn = true) }
-        }
-    }
-
-
-    private fun buildList(
+    fun build(
         completedDates: List<LocalDate>,
     ): ImmutableList<StreakDay> {
 
@@ -103,15 +75,5 @@ internal class StreakRefreshViewModel : ViewModel() {
         }
 
         return days.toImmutableList()
-    }
-
-    private suspend fun getDates(): List<LocalDate> {
-        return listOf(
-            "2026-06-01",
-            "2026-06-03",
-            "2026-06-04",
-            "2026-06-05",
-            "2026-06-07",
-        ).map { LocalDate.parse(it) }
     }
 }

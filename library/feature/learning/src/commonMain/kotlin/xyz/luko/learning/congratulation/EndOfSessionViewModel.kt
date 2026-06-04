@@ -9,10 +9,6 @@ import kotlinx.coroutines.launch
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.repository.SessionRepository
 
-internal enum class EndOfSessionScreens {
-    STREAK, STATS
-}
-
 internal class EndOfSessionViewModel(
     sessionRepository: SessionRepository,
 ) : ViewModel() {
