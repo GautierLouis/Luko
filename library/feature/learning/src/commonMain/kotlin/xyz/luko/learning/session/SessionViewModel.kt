@@ -17,6 +17,7 @@ import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Stroke
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
+import xyz.luko.learning.congratulation.EndOfSessionUseCase
 import xyz.luko.learning.routing.LearningInternalRoute
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
@@ -42,6 +43,7 @@ internal class SessionViewModel(
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
+    private val endOfSessionUseCase: EndOfSessionUseCase
 ) : ViewModel() {
 
     val drawHint get() = params.difficulty == DifficultyLevel.EASY
@@ -144,8 +146,9 @@ internal class SessionViewModel(
                 ),
                 responses = responses,
             )
+            val route = endOfSessionUseCase.getRoute()
             withContext(Dispatchers.Main) {
-                AppNavigation.navigate(LearningInternalRoute.CongratulationRoute, true)
+                AppNavigation.navigate(route, true)
             }
         }
     }

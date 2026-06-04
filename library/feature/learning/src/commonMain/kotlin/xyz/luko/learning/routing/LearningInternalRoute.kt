@@ -4,6 +4,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.domain.model.Session
 import xyz.luko.learning.builder.QuestionCount
 
 @Serializable
@@ -16,5 +17,8 @@ internal sealed interface LearningInternalRoute : NavKey {
     ) : LearningInternalRoute
 
     @Serializable
-    data object CongratulationRoute : LearningInternalRoute
+    data class StreakRoute(val newValue: Int) : LearningInternalRoute
+
+    @Serializable
+    data class CongratulationRoute(val lastSession: Session) : LearningInternalRoute
 }

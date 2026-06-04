@@ -25,6 +25,7 @@ import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.designsystem.components.page.NestedScaffold
+import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -37,7 +38,8 @@ import xyz.luko.navigation.AppRoute
 import xyz.luko.utils.toHHMMSS
 
 @Composable
-internal fun EndOfSessionStatsScreen(session: Session) {
+internal fun CongratulationScreen(session: Session) {
+
     val device = rememberAdaptiveWindowInfo()
 
     val orientation =
@@ -135,13 +137,13 @@ internal fun EndOfSessionStatsScreen(session: Session) {
     }
 }
 
-//@PreviewScreen
+@PreviewScreen
 @Composable
-private fun PreviewEndOfStatsScreen(
+private fun PreviewCongratulationScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
-        EndOfSessionStatsScreen(
+        CongratulationScreen(
             session = PreviewProvider.session,
         )
     }

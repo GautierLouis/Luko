@@ -4,7 +4,8 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import xyz.luko.learning.builder.SessionBuilderScreen
-import xyz.luko.learning.congratulation.EndOfSessionRouterScreen
+import xyz.luko.learning.congratulation.stats.CongratulationScreen
+import xyz.luko.learning.congratulation.streak.StreakRefreshScreen
 import xyz.luko.learning.list.SessionListScreen
 import xyz.luko.learning.session.ui.SessionScreen
 import xyz.luko.navigation.AppRoute
@@ -22,5 +23,6 @@ fun EntryProviderScope<NavKey>.learningScreens() {
     // Private route
     entry<LearningInternalRoute.SessionRoute> { SessionScreen(it) }
 
-    entry<LearningInternalRoute.CongratulationRoute> { EndOfSessionRouterScreen() }
+    entry<LearningInternalRoute.StreakRoute> { StreakRefreshScreen(it.newValue) }
+    entry<LearningInternalRoute.CongratulationRoute> { CongratulationScreen(it.lastSession) }
 }
