@@ -24,7 +24,7 @@ import xyz.luko.designsystem.token.dimens.ShapeDefaults
 @Composable
 internal fun StreakWeek(
     days: ImmutableList<StreakDay>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val daysString = Theme.strings.dayOfWeekName
 
@@ -47,7 +47,7 @@ internal fun StreakWeek(
                 StreakDayItem(
                     title = title,
                     day = day,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }

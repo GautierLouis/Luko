@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
@@ -69,9 +68,15 @@ internal fun DayCount(
         }
 
         Text(
-            text = "Day Streak!",
+            text = Theme.strings.dayStreak.get(newStreak),
             style = Theme.typography.displaySmall,
             fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = Theme.strings.dayStreakDesc,
+            style = Theme.typography.bodyLarge,
+            fontWeight = FontWeight.Medium,
         )
     }
 }

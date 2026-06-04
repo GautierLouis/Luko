@@ -32,7 +32,7 @@ import xyz.luko.learning.congratulation.streak.ui.StreakWeek
 import xyz.luko.learning.congratulation.streak.ui.previewStreakDays
 
 @Composable
-fun StreakRefreshScreen(
+internal fun StreakRefreshScreen(
     newStreak: Int,
     onClick: () -> Unit = {},
 ) {
@@ -68,19 +68,19 @@ private fun StreakRefreshScreen(
                 verticalArrangement = Spacing.extraExtraLarge,
             ) {
                 DayCount(
-                    showNew = state.showNew,
+                    showNew = state.startFirstAnim,
                     newStreak = newStreak
                 )
                 StreakWeek(
                     days = state.streakDays,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = Padding.extraLarge)
+                        .padding(horizontal = Padding.extraLarge),
                 )
             }
 
             AnimatedVisibility(
-                visible = state.showBtn,
+                visible = state.startSecondAnim,
                 modifier = Modifier
                     .align(Alignment.BottomCenter),
                 enter = fadeIn(tween(350))
@@ -104,8 +104,8 @@ private fun PreviewSteakRefreshScreen(
     AppTheme(themeMode) {
         StreakRefreshScreen(
             state = StreakRefreshViewModel.UIState(
-                showBtn = true,
-                showNew = true,
+                startSecondAnim = true,
+                startFirstAnim = true,
                 streakDays = previewStreakDays
             ),
             newStreak = 2

@@ -66,6 +66,8 @@ data class Strings(
     val sessionDetailClickLabel : (String) -> String,
     val sessionDetailTotalStrokes : (Int, Int) -> String,
     val sessionStreakRefreshButtonNext: String,
+    val dayStreak: Plurals,
+    val dayStreakDesc: String,
     // Dictionary
     val searchPlaceholder: String,
     val filterFrequencyGroup: String,

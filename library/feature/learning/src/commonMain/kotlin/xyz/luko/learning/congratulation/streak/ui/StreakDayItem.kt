@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,52 +56,18 @@ import kotlin.time.Duration.Companion.milliseconds
 internal fun StreakDayItem(
     title: String,
     day: StreakDay,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        verticalArrangement = Spacing.small,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = Padding.medium, bottom = Padding.large)
-    ) {
-        Text(
-            text = title.first().toString(),
-            style = Theme.typography.bodyMedium,
-            color = Theme.materialColors.onBackground,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            maxLines = 1,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = Theme.typography.bodyLarge.fontSize,
-                maxFontSize = Theme.typography.titleLarge.fontSize
-            )
-        )
-
-        StreakDayContent(
-            day = day,
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
-}
-
-@Composable
-private fun StreakDayContent(
-    day: StreakDay,
     modifier: Modifier = Modifier,
 ) {
-
     val streakColor = when {
         day.currentStreak -> Theme.materialColors.primary
         else -> Theme.materialColors.error
     }
-
     val borderColor = when (day.segment) {
         SegmentPosition.None -> Theme.materialColors.outline
         else -> streakColor
     }
 
-    var animate by remember(day) {
+    var animate by remember(day.shouldAnimate) {
         mutableStateOf(!day.shouldAnimate)
     }
 
@@ -124,60 +91,126 @@ private fun StreakDayContent(
         label = "streak-progress"
     )
 
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.CenterStart
+    Column(
+        verticalArrangement = Spacing.small,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = Padding.medium, bottom = Padding.large)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(progress)
-                .height(36.dp)
-                .stroke(!day.currentStreak, streakColor)
-                .background(
-                    color = streakColor.copy(alpha = .4f),
-                    shape = day.shape(progress)
-                )
+        Text(
+            text = title.first().toString(),
+            style = Theme.typography.bodyMedium,
+            color = Theme.materialColors.onBackground,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = Theme.typography.bodyLarge.fontSize,
+                maxFontSize = Theme.typography.titleLarge.fontSize
+            )
         )
 
-        Column(
+        Box(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            contentAlignment = Alignment.CenterStart
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(28.dp)
-                    .background(color = Color.Transparent)
-                    .border(
-                        border = BorderStrokeDefaults.minimum(borderColor),
-                        shape = CircleShape
+            AnimatableBackground(
+                progress = progress,
+                streakColor = streakColor,
+                stroke = !day.currentStreak,
+                shape = day.shape(progress)
+            )
+            StreakBadge(
+                visible = progress == 1f,
+                streakColor = streakColor,
+                borderColor = borderColor
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun StreakBadge(
+    visible: Boolean,
+    streakColor: Color,
+    borderColor: Color,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(28.dp)
+                .background(color = Color.Transparent)
+                .border(
+                    border = BorderStrokeDefaults.minimum(borderColor),
+                    shape = CircleShape
+                )
+        ) {
+            this@Column.AnimatedVisibility(
+                visible = visible,
+                enter = fadeIn(
+                    animationSpec = spring(stiffness = Spring.StiffnessMedium)
+                ) + scaleIn(
+                    initialScale = 2.5f,
+                    transformOrigin = TransformOrigin.Center,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = Spring.StiffnessMedium
                     )
+                ),
             ) {
-                this@Column.AnimatedVisibility(
-                    visible = progress == 1f,
-                    enter = fadeIn(
-                        animationSpec = spring(stiffness = Spring.StiffnessMedium)
-                    ) + scaleIn(
-                        initialScale = 2.5f,
-                        transformOrigin = TransformOrigin.Center,
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = Spring.StiffnessMedium
-                        )
-                    ),
-                ) {
-                    Icon(
-                        imageVector = AppIcon.RoundedBolt,
-                        contentDescription = null,
-                        tint = streakColor,
-                        modifier = Modifier.fillMaxSize().padding(Padding.small)
-                    )
-                }
+                Icon(
+                    imageVector = AppIcon.RoundedBolt,
+                    contentDescription = null,
+                    tint = streakColor,
+                    modifier = Modifier.fillMaxSize().padding(Padding.small)
+                )
             }
         }
     }
+}
+
+@Composable
+private fun AnimatableBackground(
+    progress: Float,
+    streakColor: Color,
+    shape: Shape,
+    modifier: Modifier = Modifier,
+    stroke: Boolean = false,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth(progress)
+            .height(36.dp)
+            .drawBehind {
+                if (stroke) {
+                    drawLine(
+                        color = streakColor,
+                        start = Offset(
+                            x = 0f,
+                            y = size.height / 2
+                        ),
+                        end = Offset(
+                            x = size.width,
+                            y = size.height / 2
+                        ),
+                        strokeWidth = 2.dp.toPx()
+                    )
+                }
+            }
+            .background(
+                color = streakColor.copy(alpha = .4f),
+                shape = shape
+            )
+    )
 }
 
 

@@ -60,6 +60,11 @@ internal fun provideStringsEN(): Strings =
         sessionDetailClickLabel = { pinyin -> "View more details for response $pinyin" },
         sessionDetailTotalStrokes = { left, right -> "$left / $right strokes" },
         sessionStreakRefreshButtonNext = "Continue",
+        dayStreak = Plurals(
+            single = "Day Streak!",
+            multiple = "Days Streak!",
+        ),
+        dayStreakDesc = "Consistency is the key.",
         searchPlaceholder = "Search by pinyin or character",
         filterFrequencyGroup = "Frequency Group",
         today = "Today",

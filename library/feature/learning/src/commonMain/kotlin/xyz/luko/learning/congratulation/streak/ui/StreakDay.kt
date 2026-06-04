@@ -22,7 +22,7 @@ internal val previewStreakDays = listOf(
     StreakDay(
         date = LocalDate(2026, 6, 1),
         segment = SegmentPosition.Last,
-        shouldAnimate = true
+        currentStreak = false
     ),
     StreakDay(
         date = LocalDate(2026, 6, 2),
@@ -30,9 +30,14 @@ internal val previewStreakDays = listOf(
     ),
     StreakDay(
         date = LocalDate(2026, 6, 3),
+        segment = SegmentPosition.First,
+        currentStreak = true
     ),
     StreakDay(
         date = LocalDate(2026, 6, 4),
+        segment = SegmentPosition.Last,
+        currentStreak = true,
+        shouldAnimate = true
     ),
     StreakDay(
         date = LocalDate(2026, 6, 5),

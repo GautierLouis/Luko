@@ -28,8 +28,8 @@ internal class StreakRefreshViewModel(
 ) : ViewModel() {
 
     data class UIState(
-        val showNew: Boolean = false,
-        val showBtn: Boolean = false,
+        val startFirstAnim: Boolean = false,
+        val startSecondAnim: Boolean = false,
         val streakDays: ImmutableList<StreakDay> = persistentListOf(),
     )
 
@@ -43,9 +43,9 @@ internal class StreakRefreshViewModel(
 
             _state.update { it.copy(streakDays = streak) }
             delay(600.milliseconds)
-            _state.update { it.copy(showNew = true) }
+            _state.update { it.copy(startFirstAnim = true) }
             delay(600.milliseconds)
-            _state.update { it.copy(showBtn = true) }
+            _state.update { it.copy(startSecondAnim = true) }
         }
     }
 
