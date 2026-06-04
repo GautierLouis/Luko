@@ -45,7 +45,7 @@ internal fun RowScope.DrawableWrapper(
         verticalArrangement = Spacing.medium,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(if (type == Type.REFERENCE) "Reference" else "Your drawing")
+        Text(if (type == Type.REFERENCE) Theme.strings.listExtraReferenceStroke else Theme.strings.listExtraYourStroke)
 
         DrawableArea(
             enableDrawing = false,

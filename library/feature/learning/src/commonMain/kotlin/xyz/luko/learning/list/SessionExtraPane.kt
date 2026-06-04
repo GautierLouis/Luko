@@ -53,7 +53,7 @@ internal fun SessionExtraPane(
 
         item {
             Text(
-                text = "STROKE BY STROKE",
+                text = Theme.strings.listExtraStrokeByStroke.uppercase(),
                 style = Theme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = Padding.medium)
             )
@@ -69,13 +69,13 @@ internal fun SessionExtraPane(
 
         item {
             Text(
-                text = "HISTORIC",
+                text = Theme.strings.listExtraHistoric.uppercase(),
                 style = Theme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = Padding.medium)
             )
 
             Text(
-                text = "ALL TIME",
+                text = Theme.strings.listExtraHistoricAllTime.uppercase(),
                 style = Theme.typography.titleSmall,
                 modifier = Modifier.padding(bottom = Padding.medium)
             )
@@ -95,32 +95,34 @@ internal fun SessionExtraPane(
 
                 HistoricAllTime(
                     value = "${similarResponse.size}",
-                    label = "times seen"
+                    label = Theme.strings.listExtraHistoricTimeSeen
                 )
                 HistoricAllTime(
                     value = "${avgAccuracy.roundToInt()}%",
-                    label = "avg accuracy"
+                    label = Theme.strings.listExtraHistoricAvgAccuracy
                 )
 
                 HistoricAllTime(
                     value = progress?.let { "${if (it >= 0) "+" else ""}${it.roundToInt()}%" }
                         ?: "-",
-                    label = "progress"
+                    label = Theme.strings.listExtraHistoricProgress
                 )
             }
 
             Text(
-                text = "ACCURACY OVER TIME",
+                text = Theme.strings.listExtraHistoricAccuracyOverTime.uppercase(),
                 style = Theme.typography.titleSmall,
                 modifier = Modifier.padding(vertical = Padding.medium)
             )
 
             AccuracyChart(
                 accuracies = similarResponse.map { it.statistics.overallAccuracy },
-                modifier = Modifier.background(
-                    color = Theme.materialColors.surfaceContainer,
-                    shape = ShapeDefaults.card(),
-                ).padding(Padding.large)
+                modifier = Modifier
+                    .background(
+                        color = Theme.materialColors.surfaceContainer,
+                        shape = ShapeDefaults.card(),
+                    )
+                    .padding(Padding.large)
             )
 
         }
