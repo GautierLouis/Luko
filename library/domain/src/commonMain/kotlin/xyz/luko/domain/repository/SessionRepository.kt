@@ -2,6 +2,7 @@ package xyz.luko.domain.repository
 
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.LocalDate
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Statistics
@@ -29,4 +30,6 @@ interface SessionRepository {
     fun getStatistics(): Flow<Statistics>
 
     suspend fun getEndOfSessionStats(): EndOfSessionStats
+
+    suspend fun getLastSessionsDates(): List<LocalDate>
 }
