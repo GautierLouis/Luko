@@ -45,9 +45,9 @@ import xyz.luko.learning.session.ui.component.LeaveSessionDialog
 import xyz.luko.learning.session.ui.component.Pager
 import xyz.luko.learning.session.ui.component.PinyinCharacter
 import xyz.luko.learning.session.ui.component.SessionHeader
-import xyz.luko.navigation.AppNavigation
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.navigation.AppNavigation
 import kotlin.time.Clock
 
 @Composable

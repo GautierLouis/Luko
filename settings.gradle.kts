@@ -52,6 +52,8 @@ include(":library:feature:sessions")
 include(":library:feature:dictionary")
 include(":library:feature:ui:core")
 include(":library:feature:ui:drawing")
+include(":library:feature:ui:navigation")
+
 //Domain
 include(":library:domain")
 //Data
@@ -64,6 +66,5 @@ include(":library:core:tracking")
 include(":library:core:utils")
 include(":library:core:permission")
 include(":library:core:firebase")
-include(":library:core:navigation")
 //Design-System
 include(":library:design-system")

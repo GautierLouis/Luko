@@ -28,9 +28,9 @@ import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
 import xyz.luko.learning.session.model.SessionState
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
-import xyz.luko.navigation.AppNavigation
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
+import xyz.luko.ui.navigation.AppNavigation
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import xyz.luko.firebase.RemoteConfigManager
-import xyz.luko.navigation.AppRoute
-import xyz.luko.navigation.MainTab
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
+import xyz.luko.ui.navigation.AppRoute
+import xyz.luko.ui.navigation.MainTab
 
 internal class MainViewModel(
     savedStateHandle: SavedStateHandle,

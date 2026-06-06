@@ -31,10 +31,10 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.Session
-import xyz.luko.navigation.AppNavigation
-import xyz.luko.navigation.AppRoute
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.utils.toHHMMSS
 
 @Composable

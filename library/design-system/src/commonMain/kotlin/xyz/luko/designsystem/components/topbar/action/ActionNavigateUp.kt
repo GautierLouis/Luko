@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import xyz.luko.designsystem.icon.AppIcon
 import xyz.luko.designsystem.icon.ArrowBack
 import xyz.luko.designsystem.theme.Theme
-import xyz.luko.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppNavigation
 
 @Composable
 fun ActionNavigateUp(modifier: Modifier = Modifier) {

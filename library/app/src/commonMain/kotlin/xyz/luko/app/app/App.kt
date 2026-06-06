@@ -30,8 +30,8 @@ import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.LocalAnimatedContentScope
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.learning.navigation.learningScreens
-import xyz.luko.navigation.AppRoute
 import xyz.luko.sessions.navigation.sessionsScreens
+import xyz.luko.ui.navigation.AppRoute
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable

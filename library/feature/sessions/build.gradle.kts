@@ -10,7 +10,7 @@ kotlin {
             implementation(projects.library.feature.baseUi)
             implementation(projects.library.core.utils)
             implementation(projects.library.core.tracking)
-            implementation(projects.library.core.navigation)
+            implementation(projects.library.feature.ui.navigation)
             implementation(projects.library.designSystem)
             implementation(projects.library.domain)
 

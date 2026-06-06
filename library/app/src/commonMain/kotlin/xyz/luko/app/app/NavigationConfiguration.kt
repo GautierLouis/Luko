@@ -3,7 +3,7 @@ package xyz.luko.app.app
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.plus
 import xyz.luko.learning.navigation.learningInternalRouteSerializer
-import xyz.luko.navigation.appRouteSerializers
+import xyz.luko.ui.navigation.appRouteSerializers
 
 val navigationConfiguration =
     SavedStateConfiguration {

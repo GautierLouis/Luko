@@ -10,8 +10,8 @@ import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.navigation.AppNavigation
-import xyz.luko.navigation.AppRoute.LearningRoute
+import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute.LearningRoute
 
 internal class ModalCharacterDetailsViewModel(
     private val characterCode: Int,

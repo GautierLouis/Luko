@@ -1,4 +1,4 @@
-package xyz.luko.navigation
+package xyz.luko.ui.navigation
 
 import androidx.navigation3.runtime.NavKey
 

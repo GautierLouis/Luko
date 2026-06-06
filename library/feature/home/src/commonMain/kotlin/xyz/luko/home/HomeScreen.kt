@@ -29,10 +29,10 @@ import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
-import xyz.luko.navigation.AppNavigation
-import xyz.luko.navigation.AppRoute
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute
 
 @Composable
 fun HomeScreen() {

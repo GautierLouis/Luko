@@ -8,7 +8,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.library.core.navigation)
+            implementation(projects.library.feature.ui.navigation)
             implementation(projects.library.core.utils)
             implementation(libs.compose.components.resources)
         }

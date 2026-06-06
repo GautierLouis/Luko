@@ -18,11 +18,11 @@ import xyz.luko.domain.repository.SettingTheme
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager
 import xyz.luko.firebase.RemoteConfigManager
-import xyz.luko.navigation.AppNavigation
-import xyz.luko.navigation.AppRoute
-import xyz.luko.navigation.NavigationCommand
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
+import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute
+import xyz.luko.ui.navigation.NavigationCommand
 import xyz.luko.utils.AppConfig
 import xyz.luko.utils.Flavor
 

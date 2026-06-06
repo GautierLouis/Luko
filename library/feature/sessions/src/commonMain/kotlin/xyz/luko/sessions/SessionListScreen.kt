@@ -15,10 +15,10 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.navigation.AppRoute
 import xyz.luko.sessions.component.SessionDetailsPane
 import xyz.luko.sessions.component.SessionExtraPane
 import xyz.luko.sessions.component.SessionListPane
+import xyz.luko.ui.navigation.AppRoute
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3AdaptiveApi::class)
 @Composable
