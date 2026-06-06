@@ -16,6 +16,7 @@ interface StorageSource {
     suspend fun loadDictionaryFile(): List<CharacterSource>
     suspend fun loadHanziFile(): List<HanziSource>
     suspend fun loadVocabulary(): List<HskEntrySource>
+    suspend fun loadAudio(name: String): ByteArray
 }
 
 // --- Implementation ---
@@ -26,6 +27,7 @@ internal class DefaultStorageSource(
 
     companion object {
         private const val BUCKET_NAME = "hanzi-files"
+        private const val AUDIO_BUCKET_NAME = "audio"
         private const val DICTIONARY_FILE: String = "dictionary.txt" //Character
         private const val GRAPHIC_FILE: String = "graphics.txt" // Character strokes
         private const val HANZI_FILE: String = "hanzi.csv" // Alternative Character (old)
@@ -56,6 +58,17 @@ internal class DefaultStorageSource(
     override suspend fun loadVocabulary(): List<HskEntrySource> {
         val file = loadFile(WORDS_FILE)
         return Json.decodeFromString(file)
+    }
+
+    override suspend fun loadAudio(name: String): ByteArray {
+        return runCatching {
+            supabase.storage.from(AUDIO_BUCKET_NAME).downloadAuthenticated(name)
+        }.getOrElse {
+            throw IllegalStateException(
+                "Failed to load '$name' from bucket '$AUDIO_BUCKET_NAME'",
+                it
+            )
+        }
     }
 
     private suspend fun loadFile(fileName: String): String {

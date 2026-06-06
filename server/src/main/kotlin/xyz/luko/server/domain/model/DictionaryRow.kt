@@ -6,5 +6,6 @@ data class DictionaryRow(
     val decomposition: String,
     val medians: String,
     val frequency: Int,
-    val hskLevel: Int
+    val hskLevel: Int,
+    val sound: String,
 )

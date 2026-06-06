@@ -13,6 +13,7 @@ import xyz.luko.server.domain.repo.DictionaryRepository
 import xyz.luko.server.domain.repo.SessionRepository
 import xyz.luko.server.domain.repo.UserRepository
 import xyz.luko.server.domain.usecase.CompositionUseCase
+import xyz.luko.server.domain.usecase.PinyinToAudioUseCase
 import xyz.luko.server.domain.usecase.PrepopulateDatabaseUseCase
 import xyz.luko.server.domain.usecase.StrokeRenderingUseCase
 
@@ -26,4 +27,5 @@ val domainModule = module {
     factoryOf(::PrepopulateDatabaseUseCase)
     factoryOf(::CompositionUseCase)
     factoryOf(::StrokeRenderingUseCase)
+    factoryOf(::PinyinToAudioUseCase)
 }

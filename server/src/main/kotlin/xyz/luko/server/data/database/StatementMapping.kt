@@ -114,6 +114,7 @@ internal object StatementMapping {
         this[DictionaryTable.medians] = entity.medians
         this[DictionaryTable.level] = entity.frequency
         this[DictionaryTable.hskLevel] = entity.hskLevel
+        this[DictionaryTable.sound] = entity.sound
     }
 
     fun UpdateBuilder<*>.add(entity: UserRow) {

@@ -27,13 +27,13 @@ object BezierCurveConverter {
 
         // First anchor: move-to, no incoming curve
         val result =
-            mutableListOf<PointDto>(PointDto.Straight(points[0].first, points[0].second))
+            mutableListOf<PointDto>(PointDto.Straight(points[0].first.round(), points[0].second.round()))
 
         if (points.size == 1) return result
 
         // Straight line case — no control points
         if (points.size == 2) {
-            result += PointDto.Straight(points[1].first, points[1].second)
+            result += PointDto.Straight(points[1].first.round(), points[1].second.round())
             return result
         }
 
@@ -49,15 +49,18 @@ object BezierCurveConverter {
             val cp2y = p2.second - (p3.second - p1.second) * tension / 3f
 
             result += PointDto.Curved(
-                x = p2.first,
-                y = p2.second,
-                cp1x = cp1x,
-                cp1y = cp1y,
-                cp2x = cp2x,
-                cp2y = cp2y
+                x = p2.first.round(),
+                y = p2.second.round(),
+                cp1x = cp1x.round(),
+                cp1y = cp1y.round(),
+                cp2x = cp2x.round(),
+                cp2y = cp2y.round()
             )
         }
 
         return result
     }
+
+    private fun Float.round() = "%.2f".format(this).toFloat()
+
 }

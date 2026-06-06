@@ -110,14 +110,16 @@ internal object DomainMapping {
 
     fun PrepopulateRow.toRow(
         composition: List<DecompositionDto>,
-        medians: List<StrokeDto>
+        medians: List<StrokeDto>,
+        sound: List<String>,
     ) = DictionaryRow(
         code = code,
         char = Char(code).toString(),
         decomposition = Json.encodeToString(composition),
         medians = Json.encodeToString(medians),
         frequency = rankToLevel(frequency),
-        hskLevel = hskLevel
+        hskLevel = hskLevel,
+        sound = Json.encodeToString(sound)
     )
 
     fun AuthRegistrationDto.toRow(

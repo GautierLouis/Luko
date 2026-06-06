@@ -7,4 +7,5 @@ data class PrepopulateRow(
     val decomposition: String,
     val frequency: Int? = null,
     val hskLevel: Int,
+    val pinyin: List<String>
 )

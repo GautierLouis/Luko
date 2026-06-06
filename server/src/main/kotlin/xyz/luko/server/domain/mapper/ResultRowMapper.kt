@@ -22,7 +22,8 @@ internal object ResultRowMapping {
         decomposition = Json.decodeFromString<List<DecompositionDto>>(this[DictionaryTable.decomposition].orEmpty()),
         level = CharacterFrequencyLevelDto.fromValue(this[DictionaryTable.level]),
         strokes = Json.decodeFromString<List<String>>(this[GraphicTable.strokes]),
-        medians = Json.decodeFromString(this[DictionaryTable.medians])
+        medians = Json.decodeFromString(this[DictionaryTable.medians]),
+        sounds = Json.decodeFromString(this[DictionaryTable.sound])
     )
 
     fun ResultRow.toSimpleDictionary() = SimpleDictionaryDto(

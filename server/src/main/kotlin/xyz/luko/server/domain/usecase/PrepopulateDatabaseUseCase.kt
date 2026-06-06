@@ -13,7 +13,8 @@ class PrepopulateDatabaseUseCase(
     private val dao: PrepopulateDao,
     private val dictionaryDao: DictionaryDao,
     private val compositionUseCase: CompositionUseCase,
-    private val strokeRenderingUseCase: StrokeRenderingUseCase
+    private val strokeRenderingUseCase: StrokeRenderingUseCase,
+    private val pinyinToAudioUseCase: PinyinToAudioUseCase
 ) {
 
     suspend fun init() = coroutineScope {
@@ -48,8 +49,9 @@ class PrepopulateDatabaseUseCase(
         dao.getPrepopulateData()
             .map {
                 it.toRow(
-                    compositionUseCase.decompose(it.decomposition),
-                    strokeRenderingUseCase.execute(it.medians)
+                    composition = compositionUseCase.decompose(it.decomposition),
+                    medians = strokeRenderingUseCase.execute(it.medians),
+                    sound = it.pinyin.mapNotNull { p -> pinyinToAudioUseCase.execute(p) }
                 )
             }.run { dictionaryDao.batchInsert(this) }
     }

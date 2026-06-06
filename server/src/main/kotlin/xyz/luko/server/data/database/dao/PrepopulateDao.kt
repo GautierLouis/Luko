@@ -108,14 +108,16 @@ internal class DefaultPrepopulateDao : PrepopulateDao {
                     CharacterTable.code,
                     CharacterTable.decomposition,
                     GraphicTable.medians,
-                    HanziTable.frequencyJunda
+                    HanziTable.frequencyJunda,
+                    CharacterTable.pinyin
                 ).toList().map {
                     PrepopulateRow(
                         code = it[CharacterTable.code],
                         decomposition = it[CharacterTable.decomposition],
                         medians = Json.Default.decodeFromString(it[GraphicTable.medians]),
                         frequency = it[HanziTable.frequencyJunda],
-                        hskLevel = characterHskLevels[it[CharacterTable.code]] ?: -1
+                        hskLevel = characterHskLevels[it[CharacterTable.code]] ?: -1,
+                        pinyin = it[CharacterTable.pinyin].orEmpty().split(",")
                     )
                 }
         }

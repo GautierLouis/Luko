@@ -9,4 +9,5 @@ object DictionaryTable : IntIdTable("dictionary") {
     val medians = text("medians")
     val level = integer("level")
     val hskLevel = integer("hsk_level")
+    val sound = text("sound")
 }

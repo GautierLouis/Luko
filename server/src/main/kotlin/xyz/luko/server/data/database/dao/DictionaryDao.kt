@@ -87,6 +87,7 @@ internal class DefaultDictionaryDao : DictionaryDao {
                     DictionaryTable.medians,
                     GraphicTable.strokes,
                     CharacterTable.pinyin,
+                    DictionaryTable.sound
                 )
                 .defaultWhere { DictionaryTable.code eq code }
                 .limit(1)

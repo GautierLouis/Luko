@@ -9,5 +9,6 @@ data class DictionaryDto(
     val decomposition: List<DecompositionDto> = emptyList(),
     val level: CharacterFrequencyLevelDto = CharacterFrequencyLevelDto.UNKNOWN,
     val strokes: List<String>,
-    val medians: List<StrokeDto>
+    val medians: List<StrokeDto>,
+    val sounds: List<String>
 )
