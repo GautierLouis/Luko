@@ -15,9 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
-import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.baseui.session.toUiModel
-import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
@@ -33,6 +31,8 @@ import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.navigation.AppNavigation
 import xyz.luko.navigation.AppRoute
+import xyz.luko.ui.core.TestTags
+import xyz.luko.ui.core.preview.PreviewProvider
 
 @Composable
 fun HomeScreen() {

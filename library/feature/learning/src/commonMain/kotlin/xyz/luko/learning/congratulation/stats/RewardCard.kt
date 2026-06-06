@@ -39,7 +39,6 @@ import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation
 import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.COLUMN
 import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.ROW
-import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.metrics.attrs.MetricItem
 import xyz.luko.designsystem.components.metrics.attrs.SessionStatistic
 import xyz.luko.designsystem.preview.ThemeMode
@@ -49,6 +48,7 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.ui.core.TestTags
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable

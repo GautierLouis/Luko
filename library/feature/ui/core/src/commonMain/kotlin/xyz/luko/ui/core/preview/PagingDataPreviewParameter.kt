@@ -1,4 +1,4 @@
-package xyz.luko.baseui.preview
+package xyz.luko.ui.core.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.paging.LoadState

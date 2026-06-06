@@ -50,6 +50,7 @@ include(":library:feature:profile")
 include(":library:feature:learning")
 include(":library:feature:sessions")
 include(":library:feature:dictionary")
+include(":library:feature:ui:core")
 include(":library:feature:ui:drawing")
 //Domain
 include(":library:domain")

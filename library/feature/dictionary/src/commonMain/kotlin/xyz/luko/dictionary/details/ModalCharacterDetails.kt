@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.components.page.ErrorContent
 import xyz.luko.designsystem.components.page.LoadingContent
 import xyz.luko.designsystem.components.page.NestedScaffold
@@ -25,6 +24,7 @@ import xyz.luko.designsystem.token.dimens.ShapeDefaults
 import xyz.luko.dictionary.details.ModalCharacterDetailsEvent.OnPractice
 import xyz.luko.dictionary.details.ModalCharacterDetailsEvent.OnRetry
 import xyz.luko.dictionary.details.ModalCharacterDetailsViewModel.UIState
+import xyz.luko.ui.core.preview.PreviewProvider
 
 @Composable
 internal fun ModalCharacterDetails(

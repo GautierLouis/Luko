@@ -1,4 +1,4 @@
-package xyz.luko.baseui.preview
+package xyz.luko.ui.core.preview
 
 import xyz.luko.domain.model.CharacterFrequencyLevel
 import xyz.luko.domain.model.ComparisonDetails

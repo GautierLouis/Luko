@@ -1,4 +1,4 @@
-package xyz.luko.baseui.test
+package xyz.luko.ui.core
 
 object TestTags {
     object Screen {

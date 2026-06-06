@@ -18,8 +18,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.luko.baseui.preview.PagingDataPreviewParameter
-import xyz.luko.baseui.preview.PreviewProvider
 import xyz.luko.designsystem.components.page.ErrorContent
 import xyz.luko.designsystem.components.page.LoadingContent
 import xyz.luko.designsystem.components.page.NestedScaffold
@@ -31,6 +29,8 @@ import xyz.luko.dictionary.details.ModalCharacterDetails
 import xyz.luko.dictionary.details.ModalCharacterDetailsViewModel
 import xyz.luko.dictionary.home.DictionaryScreenEvent.OnCharacterClicked
 import xyz.luko.domain.model.SimpleDictionary
+import xyz.luko.ui.core.preview.PagingDataPreviewParameter
+import xyz.luko.ui.core.preview.PreviewProvider
 
 @Composable
 fun DictionaryScreen() {

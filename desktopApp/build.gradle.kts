@@ -10,7 +10,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
 
     testImplementation(libs.koin.test)
-    testImplementation(projects.library.feature.baseUi) //For testTags
+    testImplementation(projects.library.feature.ui.core) //For testTags
     testImplementation(projects.library.domain) // For mock
     testImplementation(libs.androidx.paging.common)
     testImplementation(libs.androidx.paging.compose)

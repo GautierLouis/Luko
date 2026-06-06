@@ -26,11 +26,11 @@ import org.koin.dsl.module
 import xyz.luko.app.Environment
 import xyz.luko.app.app.App
 import xyz.luko.app.libraryModule
-import xyz.luko.baseui.test.TestTags
-import xyz.luko.baseui.test.TestWindowSize
 import xyz.luko.domain.repository.AuthRepository
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
+import xyz.luko.ui.core.TestTags
+import xyz.luko.ui.core.TestWindowSize
 import java.io.File
 import kotlin.time.Duration.Companion.seconds
 

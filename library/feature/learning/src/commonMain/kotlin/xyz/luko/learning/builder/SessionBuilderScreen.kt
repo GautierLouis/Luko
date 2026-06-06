@@ -17,12 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
@@ -41,6 +38,7 @@ import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnNextPage
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
 import xyz.luko.learning.builder.SessionBuilderViewModel.Companion.PAGE_COUNT
+import xyz.luko.ui.core.TestTags
 
 @Composable
 internal fun SessionBuilderScreen() {

@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.designsystem.components.page.NestedScaffold
@@ -30,6 +29,7 @@ import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.learning.congratulation.streak.ui.DayCount
 import xyz.luko.learning.congratulation.streak.ui.StreakWeek
 import xyz.luko.learning.congratulation.streak.ui.previewStreakDays
+import xyz.luko.ui.core.TestTags
 
 @Composable
 internal fun StreakRefreshScreen(

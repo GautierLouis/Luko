@@ -23,8 +23,6 @@ import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
-import xyz.luko.baseui.preview.PreviewProvider
-import xyz.luko.baseui.test.TestTags
 import xyz.luko.designsystem.components.page.ErrorScreen
 import xyz.luko.designsystem.components.page.LoadingScreen
 import xyz.luko.designsystem.components.page.NestedScaffold
@@ -48,6 +46,8 @@ import xyz.luko.learning.session.ui.component.Pager
 import xyz.luko.learning.session.ui.component.PinyinCharacter
 import xyz.luko.learning.session.ui.component.SessionHeader
 import xyz.luko.navigation.AppNavigation
+import xyz.luko.ui.core.TestTags
+import xyz.luko.ui.core.preview.PreviewProvider
 import kotlin.time.Clock
 
 @Composable
