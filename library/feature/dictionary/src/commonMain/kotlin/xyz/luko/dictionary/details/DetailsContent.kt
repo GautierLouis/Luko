@@ -26,6 +26,7 @@ import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.Session
+import xyz.luko.ui.drawing.AnimatedGraphic
 
 @Composable
 internal fun DetailsContent(

@@ -26,9 +26,9 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
-import xyz.luko.learning.drawing.DrawableArea
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
+import xyz.luko.ui.drawing.DrawableArea
 
 @Composable
 internal fun GraphicSketcher(

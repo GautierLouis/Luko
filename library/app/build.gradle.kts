@@ -30,6 +30,7 @@ kotlin {
             implementation(projects.library.feature.feed)
             implementation(projects.library.feature.profile)
             implementation(projects.library.feature.learning)
+            implementation(projects.library.feature.sessions)
             implementation(projects.library.feature.dictionary)
 
             implementation(projects.library.designSystem)

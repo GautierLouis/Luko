@@ -13,7 +13,7 @@ import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnNextPage
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
-import xyz.luko.learning.routing.LearningInternalRoute
+import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.navigation.AppNavigation
 
 internal class SessionBuilderViewModel : ViewModel() {

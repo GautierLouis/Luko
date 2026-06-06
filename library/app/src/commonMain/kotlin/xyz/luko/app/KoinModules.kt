@@ -14,6 +14,7 @@ import xyz.luko.home.homeModule
 import xyz.luko.learning.learningModule
 import xyz.luko.permission.permissionModule
 import xyz.luko.profile.profileModule
+import xyz.luko.sessions.sessionsModule
 import xyz.luko.utils.AppConfig
 import xyz.luko.utils.Flavor
 import xyz.luko.utils.utilsModule
@@ -53,6 +54,7 @@ private fun Module.includeFeatureModule() {
         feedModule,
         profileModule,
         learningModule,
+        sessionsModule,
         dictionaryModule,
     )
 }

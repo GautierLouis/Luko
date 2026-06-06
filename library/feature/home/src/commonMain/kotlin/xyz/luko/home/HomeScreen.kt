@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.adaptive.AdaptiveLayout
 import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
@@ -99,7 +98,7 @@ private fun HomeScreen(
                             model = state.lastSession.toUiModel(),
                             onClick = {
                                 AppNavigation.navigate(
-                                    AppRoute.LearningRoute.SessionListRoute(it.id)
+                                    AppRoute.SessionsRoute.SessionListRoute(it.id)
                                 )
                             }
                         )
@@ -112,7 +111,7 @@ private fun HomeScreen(
                         modifier = Modifier.testTag(TestTags.Action.SECONDARY),
                         role = ButtonRole.Secondary,
                         onClick = {
-                            AppNavigation.navigate(AppRoute.LearningRoute.SessionListRoute())
+                            AppNavigation.navigate(AppRoute.SessionsRoute.SessionListRoute())
                         },
                     )
                 }

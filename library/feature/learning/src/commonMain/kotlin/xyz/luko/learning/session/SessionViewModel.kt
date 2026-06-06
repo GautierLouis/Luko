@@ -18,7 +18,7 @@ import xyz.luko.domain.model.Stroke
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.learning.congratulation.EndOfSessionUseCase
-import xyz.luko.learning.routing.LearningInternalRoute
+import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
 import xyz.luko.learning.session.model.SessionScreenEvent.Finish

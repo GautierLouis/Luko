@@ -1,7 +1,7 @@
 package xyz.luko.learning.congratulation
 
 import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.learning.routing.LearningInternalRoute
+import xyz.luko.learning.navigation.LearningInternalRoute
 
 internal class EndOfSessionUseCase(
     private val sessionRepository: SessionRepository

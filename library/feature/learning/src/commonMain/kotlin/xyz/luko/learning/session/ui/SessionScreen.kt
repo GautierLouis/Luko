@@ -35,7 +35,7 @@ import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
-import xyz.luko.learning.routing.LearningInternalRoute
+import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent

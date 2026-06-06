@@ -29,8 +29,9 @@ import xyz.luko.app.main.MainScaffold
 import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.LocalAnimatedContentScope
 import xyz.luko.designsystem.theme.Theme
-import xyz.luko.learning.routing.learningScreens
+import xyz.luko.learning.navigation.learningScreens
 import xyz.luko.navigation.AppRoute
+import xyz.luko.sessions.navigation.sessionsScreens
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -81,6 +82,7 @@ fun App() {
                             entryProvider {
                                 entry<AppRoute.MainRoute> { MainScaffold() }
                                 learningScreens()
+                                sessionsScreens()
                             },
                     )
                 }

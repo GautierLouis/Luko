@@ -127,7 +127,7 @@ internal fun CongratulationScreen(session: Session) {
                         .testTag(TestTags.Action.SECONDARY),
                     onClick = {
                         AppNavigation.navigate(
-                            AppRoute.LearningRoute.SessionListRoute(session.id),
+                            AppRoute.SessionsRoute.SessionListRoute(session.id),
                             true,
                         )
                     },

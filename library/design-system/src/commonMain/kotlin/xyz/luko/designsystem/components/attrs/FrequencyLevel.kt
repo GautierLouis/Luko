@@ -13,7 +13,7 @@ enum class FrequencyLevel {
     STANDARD,
     ;
 
-    companion object Companion {
+    companion object {
         @Composable
         fun FrequencyLevel.label() =
             when (this) {

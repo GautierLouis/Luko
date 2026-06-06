@@ -48,7 +48,9 @@ include(":library:feature:home")
 include(":library:feature:feed")
 include(":library:feature:profile")
 include(":library:feature:learning")
+include(":library:feature:sessions")
 include(":library:feature:dictionary")
+include(":library:feature:ui:drawing")
 //Domain
 include(":library:domain")
 //Data
