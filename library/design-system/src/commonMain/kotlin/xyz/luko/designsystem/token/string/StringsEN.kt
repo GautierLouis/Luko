@@ -10,6 +10,7 @@ internal fun provideStringsEN(): Strings =
         goodAfternoon = "Good afternoon",
         goodEvening = "Good evening",
         welcomeBack = "Welcome back",
+        lastSessionTitle = "Last Session",
         home = "Home",
         dictionary = "Dictionary",
         feed = "Feed",

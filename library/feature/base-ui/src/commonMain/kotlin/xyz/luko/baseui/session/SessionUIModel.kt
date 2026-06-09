@@ -2,11 +2,17 @@ package xyz.luko.baseui.session
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import xyz.luko.designsystem.components.metrics.SessionUiModel
+import xyz.luko.designsystem.components.metrics.attrs.AppStatistic
+import xyz.luko.designsystem.components.metrics.attrs.MetricItem
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Session
+import xyz.luko.domain.model.Statistics
 import xyz.luko.utils.toAccessibilityDate
+import xyz.luko.utils.toFormattedString
 import xyz.luko.utils.toHHMMSS
 import xyz.luko.utils.toISODateString
 
@@ -24,6 +30,24 @@ fun Session.toUiModel(): SessionUiModel {
                 DifficultyLevel.HARD -> Theme.strings.hard
             },
         questionsCount = questionsCount.toString(),
-        score = score.toString(),
+        score = score.toFormattedString(),
     )
 }
+
+fun Statistics.toUiModel(): ImmutableList<MetricItem.AppMetric> {
+    return persistentListOf(
+        MetricItem.AppMetric(
+            metric = AppStatistic.Streak,
+            value = currentDayStreak.toString(),
+        ),
+        MetricItem.AppMetric(
+            metric = AppStatistic.Sessions,
+            value = sessionCount.toString(),
+        ),
+        MetricItem.AppMetric(
+            metric = AppStatistic.TotalScore,
+            value = totalScore.toFormattedString(),
+        ),
+    )
+}
+

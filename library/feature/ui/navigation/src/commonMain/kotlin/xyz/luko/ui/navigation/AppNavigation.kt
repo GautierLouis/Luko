@@ -27,7 +27,7 @@ object AppNavigation {
     }
 
     fun navigateHome() {
-        navigate(NavigationCommand.Navigate(AppRoute.MainRoute(), true))
+        navigate(NavigationCommand.Navigate(AppRoute.MainRoute, true))
     }
 
     private fun navigate(command: NavigationCommand) {

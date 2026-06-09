@@ -11,6 +11,7 @@ data class Strings(
     val goodAfternoon: String,
     val goodEvening: String,
     val welcomeBack: String,
+    val lastSessionTitle: String,
     // BottomBar
     val home: String,
     val dictionary: String,

@@ -18,8 +18,7 @@ internal class HomeViewModel(
     private val sessionRepository: SessionRepository,
 ) : ViewModel() {
     data class UIState(
-        val lastSession: Session? = null,
-        val hasMore: Boolean = false,
+        val lastSessions: List<Session> = emptyList(),
         val stats: Statistics =
             Statistics(
                 totalScore = 0,
@@ -42,10 +41,7 @@ internal class HomeViewModel(
         .distinctUntilChanged()
         .onEach { lastSessions ->
             _state.update {
-                it.copy(
-                    hasMore = lastSessions.size == 2,
-                    lastSession = lastSessions.firstOrNull()
-                )
+                it.copy(lastSessions = lastSessions)
             }
         }
 

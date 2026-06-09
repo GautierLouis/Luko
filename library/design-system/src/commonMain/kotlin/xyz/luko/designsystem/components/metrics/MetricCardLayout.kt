@@ -1,6 +1,8 @@
 package xyz.luko.designsystem.components.metrics
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -10,6 +12,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -35,23 +39,28 @@ internal fun MetricCardLayout(
     header: @Composable RowScope.() -> Unit,
     items: ImmutableList<MetricItem>,
     modifier: Modifier = Modifier,
+    enable: Boolean = true,
+    onClick: () -> Unit = {}
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        shape = ShapeDefaults.card(),
-        shadowElevation = 16.dp,
-        color = Theme.materialColors.surfaceContainer,
-        tonalElevation = 0.dp,
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(Padding.smallest) // room for shadow to breathe
+            .shadow(elevation = 8.dp, shape = ShapeDefaults.card())
+            .clip(ShapeDefaults.card())
+            .clickable(enabled = enable) { onClick() }
     ) {
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(Padding.large),
-            verticalArrangement = Spacing.large,
+        Surface(
+            modifier = modifier.fillMaxWidth(),
+            shape = ShapeDefaults.card(),
+            color = Theme.materialColors.surfaceContainer,
         ) {
             Column(
-                verticalArrangement = Spacing.medium,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(Padding.large),
+                verticalArrangement = Spacing.large,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -60,8 +69,8 @@ internal fun MetricCardLayout(
                 ) {
                     header()
                 }
+                MetricRow(items)
             }
-            MetricRow(items)
         }
     }
 }
@@ -75,7 +84,7 @@ private fun MetricRow(items: ImmutableList<MetricItem>) {
                 .padding(horizontal = Padding.large),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        items.take(3).forEach { item ->
+        items.forEach { item ->
             when (item) {
                 is MetricItem.AppMetric -> {
                     AppMetricItem(item = item)

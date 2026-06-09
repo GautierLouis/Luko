@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import xyz.luko.designsystem.components.metrics.attrs.AppStatistic
 import xyz.luko.designsystem.components.metrics.attrs.MetricItem
@@ -16,9 +17,7 @@ import xyz.luko.designsystem.theme.Theme
 
 @Composable
 fun OverallStatisticsCard(
-    streak: String,
-    sessions: String,
-    score: String,
+    metrics: ImmutableList<MetricItem.AppMetric>,
     modifier: Modifier = Modifier,
 ) {
     MetricCardLayout(
@@ -29,21 +28,7 @@ fun OverallStatisticsCard(
             )
         },
         modifier = modifier,
-        items =
-            persistentListOf(
-                MetricItem.AppMetric(
-                    metric = AppStatistic.Streak,
-                    value = streak,
-                ),
-                MetricItem.AppMetric(
-                    metric = AppStatistic.Sessions,
-                    value = sessions,
-                ),
-                MetricItem.AppMetric(
-                    metric = AppStatistic.TotalScore,
-                    value = score,
-                ),
-            ),
+        items = metrics,
     )
 }
 
@@ -54,9 +39,20 @@ private fun PreviewOverallStatisticsCard(
 ) {
     AppTheme(themeMode) {
         OverallStatisticsCard(
-            streak = "10",
-            sessions = "3",
-            score = "1500",
+            metrics = persistentListOf(
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Streak,
+                    value = "2",
+                ),
+                MetricItem.AppMetric(
+                    metric = AppStatistic.Sessions,
+                    value = "1",
+                ),
+                MetricItem.AppMetric(
+                    metric = AppStatistic.TotalScore,
+                    value = "1000",
+                ),
+            )
         )
     }
 }

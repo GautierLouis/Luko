@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,21 +19,16 @@ fun NestedScaffold(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
-    floatingActionButton: @Composable () -> Unit = {},
-    floatingActionButtonPosition: FabPosition = FabPosition.Center,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
-//        modifier = modifier.safeDrawingPadding(),
         modifier = modifier,
         topBar = topBar,
         bottomBar = bottomBar,
         content = content,
-        floatingActionButton = floatingActionButton,
-        floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = Theme.materialColors.background,
         contentColor = Theme.materialColors.onBackground,
-        contentWindowInsets = WindowInsets(0)
+        contentWindowInsets = WindowInsets()
     )
 }
 

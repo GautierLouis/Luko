@@ -40,9 +40,7 @@ private fun FeedScreen(
                 key = { index -> sessions[index]?.id ?: index },
             ) {
                 val session = sessions[it]?.toUiModel() ?: return@items
-                SessionCard(
-                    model = session,
-                )
+                SessionCard(model = session)
             }
         }
     }

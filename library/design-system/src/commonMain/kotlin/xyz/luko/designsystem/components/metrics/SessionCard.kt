@@ -1,19 +1,22 @@
 package xyz.luko.designsystem.components.metrics
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material3.ripple
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
+import xyz.luko.designsystem.components.button.AppButton
+import xyz.luko.designsystem.components.button.attrs.ButtonRole
+import xyz.luko.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.designsystem.components.metrics.attrs.MetricItem
 import xyz.luko.designsystem.components.metrics.attrs.SessionStatistic
 import xyz.luko.designsystem.icon.AppIcon
@@ -35,6 +38,36 @@ data class SessionUiModel(
 )
 
 @Composable
+fun MoreSessionCard(
+    model: SessionUiModel,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(
+            modifier = Modifier
+                .clip(ShapeDefaults.card())
+                .blur(10.dp),
+        ) {
+            SessionCard(
+                model = model,
+                clickable = false,
+            )
+        }
+        AppButton(
+            text = "See More",
+            shape = ButtonShape.Ghost,
+            role = ButtonRole.Secondary,
+            onClick = onClick,
+        )
+    }
+}
+
+@Composable
 fun SessionCard(
     model: SessionUiModel,
     modifier: Modifier = Modifier,
@@ -42,21 +75,18 @@ fun SessionCard(
     onClick: () -> Unit = {}
 ) {
     val accessibleDate = Theme.strings.sessionCardAccessibleDate(model.accessibilityDate)
+    val clickLabel = Theme.strings.sessionCardLabel
 
     MetricCardLayout(
+        onClick = onClick,
+        enable = clickable,
         modifier = modifier
-            .clip(ShapeDefaults.card())
             .semantics {
-                contentDescription = accessibleDate
-            }
-            .clickable(
-                onClick = onClick,
-                role = Role.Button,
-                enabled = clickable,
-                onClickLabel = Theme.strings.sessionCardLabel,
-                indication = ripple(true),
-                interactionSource = remember { MutableInteractionSource() },
-            ),
+                if (clickable) {
+                    contentDescription = accessibleDate
+                    onClick(label = clickLabel, action = null)
+                }
+            },
         header = {
             MetricHeader(
                 title = model.date,

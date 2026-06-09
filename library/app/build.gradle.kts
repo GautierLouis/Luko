@@ -21,7 +21,6 @@ kotlin {
             implementation(projects.library.core.utils)
             implementation(projects.library.core.firebase)
             implementation(projects.library.core.permission)
-            implementation(projects.library.feature.ui.navigation)
             implementation(projects.library.core.tracking)
 
             implementation(projects.library.domain)
@@ -32,6 +31,8 @@ kotlin {
             implementation(projects.library.feature.learning)
             implementation(projects.library.feature.sessions)
             implementation(projects.library.feature.dictionary)
+            implementation(projects.library.feature.ui.navigation)
+            implementation(projects.library.feature.ui.core)
 
             implementation(projects.library.designSystem)
         }

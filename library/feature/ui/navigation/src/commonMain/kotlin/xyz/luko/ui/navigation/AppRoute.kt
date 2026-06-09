@@ -9,9 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface AppRoute : NavKey {
     @Serializable
-    data class MainRoute(
-        val tab: MainTab = MainTab.Home,
-    ) : AppRoute
+    data object MainRoute : AppRoute
 
     @Serializable
     sealed interface LearningRoute : AppRoute {
@@ -32,10 +30,3 @@ sealed interface AppRoute : NavKey {
     }
 }
 
-@Serializable
-enum class MainTab {
-    Home,
-    Dictionary,
-    Feed,
-    Profile,
-}

@@ -10,6 +10,7 @@ internal fun provideStringsFR(): Strings =
         goodAfternoon = "Bon après-midi",
         goodEvening = "Bonsoir",
         welcomeBack = "Bon retour",
+        lastSessionTitle = "Dernière session",
         home = "Home",
         dictionary = "Dictionnaire",
         feed = "Actualitées",

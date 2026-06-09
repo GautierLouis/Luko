@@ -72,6 +72,7 @@ private fun SessionBuilderScreen(
                     .testTag(TestTags.Screen.SESSION_BUILDER)
                     .sharedBounds("start_session")
                     .padding(paddingValues)
+                    .padding(bottom = Padding.large)
                     .fillMaxSize(),
         ) {
             HorizontalPager(

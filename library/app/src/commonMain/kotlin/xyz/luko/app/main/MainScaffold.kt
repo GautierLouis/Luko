@@ -1,25 +1,32 @@
 package xyz.luko.app.main
 
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.app.main.MainScaffoldEvent.OnBottomItemClicked
 import xyz.luko.app.main.MainViewModel.UiState
-import xyz.luko.designsystem.components.page.NestedScaffold
+import xyz.luko.app.main.MenuDefault.FloatingActionSize
+import xyz.luko.designsystem.preview.PreviewScreen
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
+import xyz.luko.designsystem.theme.Theme
+import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.dictionary.home.DictionaryScreen
 import xyz.luko.feed.FeedScreen
 import xyz.luko.home.HomeScreen
 import xyz.luko.profile.ProfileScreen
+import xyz.luko.ui.core.window.rememberWindowInfo
 
 @Composable
 internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
@@ -27,11 +34,15 @@ internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
     MainScaffold(
         state = state,
         screenContent = {
-            when (state.selectedItem) {
-                BottomNavItem.Home -> HomeScreen()
-                BottomNavItem.Dictionary -> DictionaryScreen()
-                BottomNavItem.Feed -> FeedScreen()
-                BottomNavItem.Profile -> ProfileScreen()
+            Box(modifier = Modifier.padding(it)) {
+                when (state.selectedItem) {
+                    MenuItem.Home -> HomeScreen()
+                    MenuItem.Dictionary -> DictionaryScreen()
+                    MenuItem.Feed -> FeedScreen()
+                    MenuItem.Profile -> ProfileScreen()
+                    MenuItem.Session -> { /*Main Action*/
+                    }
+                }
             }
         },
         onEvent = { event -> viewModel.onEventReceived(event) },
@@ -41,32 +52,62 @@ internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
 @Composable
 private fun MainScaffold(
     state: UiState,
-    screenContent: @Composable () -> Unit = {},
+    screenContent: @Composable (PaddingValues) -> Unit = {},
     onEvent: (MainScaffoldEvent) -> Unit = {},
 ) {
-    NestedScaffold(
-        bottomBar = {
-            if (state.enableBottomBar) {
-                BottomBar(
-                    items = state.bottomNavItem,
-                    selectedItem = state.selectedItem,
-                    onClick = { onEvent(OnBottomItemClicked(it)) },
-                )
-            }
-        },
+    val windowInfo = rememberWindowInfo()
+
+    val boxAlignment = when {
+        windowInfo.isExpanded() -> Alignment.CenterEnd
+        else -> Alignment.BottomCenter
+    }
+
+    val orientation = when {
+        windowInfo.isExpanded() -> Orientation.Vertical
+        else -> Orientation.Horizontal
+    }
+
+    val paddingToEdge = when {
+        windowInfo.isExpanded() -> PaddingValues(end = Padding.large)
+        else -> PaddingValues(bottom = Padding.large)
+    }
+
+    val paddingToMenu = when {
+        windowInfo.isExpanded() -> PaddingValues(end = FloatingActionSize + Padding.large)
+        else -> PaddingValues(bottom = FloatingActionSize + Padding.large)
+    }
+
+    Scaffold(
+        containerColor = Theme.materialColors.background,
+        contentColor = Theme.materialColors.onBackground,
     ) { paddingValues ->
         Box(
-            modifier =
-                Modifier.padding(
-                    bottom = paddingValues.calculateBottomPadding(),
-                ),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = boxAlignment
         ) {
-            screenContent()
+            screenContent(paddingToMenu)
+            Menu(
+                leadingMenuItems = state.leadingMenuItems,
+                trailingMenuItems = state.trailingMenuItems,
+                selectedItem = state.selectedItem,
+                orientation = orientation,
+                modifier = Modifier
+                    .align(boxAlignment)
+                    .padding(paddingToEdge),
+                onItemClick = {
+                    onEvent(MainScaffoldEvent.OnItemClick(it))
+                },
+                onMainItemClick = {
+                    onEvent(MainScaffoldEvent.OnMainItemClick)
+                }
+            )
         }
     }
 }
 
-@Preview
+@PreviewScreen
 @Composable
 private fun PreviewMainScaffold(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
@@ -75,7 +116,15 @@ private fun PreviewMainScaffold(
         MainScaffold(
             state =
                 UiState(
-                    selectedItem = BottomNavItem.Dictionary,
+                    selectedItem = MenuItem.Dictionary,
+                    leadingMenuItems = persistentListOf(
+                        MenuItem.Home,
+                        MenuItem.Dictionary
+                    ),
+                    trailingMenuItems = persistentListOf(
+                        MenuItem.Feed,
+                        MenuItem.Profile
+                    )
                 ),
             screenContent = {
                 Box(Modifier.fillMaxSize())

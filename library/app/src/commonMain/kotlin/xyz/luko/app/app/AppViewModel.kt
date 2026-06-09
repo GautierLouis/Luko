@@ -81,7 +81,7 @@ internal class AppViewModel(
 
                             if (event.clearBackStack) {
                                 stack.clear()
-                                stack += AppRoute.MainRoute()
+                                stack += AppRoute.MainRoute
                             }
 
                             if (event.route !is AppRoute.MainRoute) {
