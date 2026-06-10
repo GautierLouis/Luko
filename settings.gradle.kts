@@ -53,7 +53,7 @@ include(":library:feature:dictionary")
 include(":library:feature:ui:core")
 include(":library:feature:ui:drawing")
 include(":library:feature:ui:navigation")
-
+include(":library:feature:ui:design-system")
 //Domain
 include(":library:domain")
 //Data
@@ -66,5 +66,3 @@ include(":library:core:tracking")
 include(":library:core:utils")
 include(":library:core:permission")
 include(":library:core:firebase")
-//Design-System
-include(":library:design-system")

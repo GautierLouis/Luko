@@ -4,8 +4,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
-import luko.library.design_system.generated.resources.Res
-import luko.library.design_system.generated.resources.openhuninn
+import luko.library.feature.ui.design_system.generated.resources.Res
+import luko.library.feature.ui.design_system.generated.resources.openhuninn
 import org.jetbrains.compose.resources.Font
 
 @Composable

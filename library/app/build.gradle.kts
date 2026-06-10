@@ -34,7 +34,7 @@ kotlin {
             implementation(projects.library.feature.ui.navigation)
             implementation(projects.library.feature.ui.core)
 
-            implementation(projects.library.designSystem)
+            implementation(projects.library.feature.ui.designSystem)
         }
 
         commonTest.dependencies {

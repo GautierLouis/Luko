@@ -7,7 +7,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.library.domain)
             implementation(projects.library.core.utils)
-            implementation(projects.library.designSystem)
+            implementation(projects.library.feature.ui.designSystem)
             implementation(projects.library.feature.ui.core)
         }
     }

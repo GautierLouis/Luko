@@ -9,6 +9,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.library.feature.ui.navigation)
+            implementation(projects.library.feature.ui.core)
             implementation(projects.library.core.utils)
             implementation(libs.compose.components.resources)
         }
@@ -17,6 +18,6 @@ kotlin {
 
 compose.resources {
     generateResClass = ResourcesExtension.ResourceClassGeneration.Always
-    packageOfResClass = "luko.library.design_system.generated.resources"
+    packageOfResClass = "luko.library.feature.ui.design_system.generated.resources"
     publicResClass = true
 }
