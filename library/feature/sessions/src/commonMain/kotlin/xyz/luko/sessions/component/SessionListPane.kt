@@ -1,7 +1,11 @@
 package xyz.luko.sessions.component
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -24,6 +28,7 @@ import xyz.luko.ui.core.preview.PreviewProvider
 internal fun SessionListPane(
     state: SessionListViewModel.UiState,
     lazyColumState: LazyListState = rememberLazyListState(),
+    contentPadding: PaddingValues = WindowInsets.systemBars.asPaddingValues(),
     onClick: (Long) -> Unit = {}
 ) {
     LazyColumn(
@@ -33,6 +38,7 @@ internal fun SessionListPane(
             .padding(top = Padding.large)
             .padding(horizontal = Padding.large),
         verticalArrangement = Spacing.large,
+        contentPadding = contentPadding
     ) {
         items(
             items = state.sessions,

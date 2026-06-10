@@ -1,11 +1,11 @@
 package xyz.luko.app.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,14 +34,12 @@ internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
     MainScaffold(
         state = state,
         screenContent = {
-            Box(modifier = Modifier.padding(it)) {
-                when (state.selectedItem) {
-                    MenuItem.Home -> HomeScreen()
-                    MenuItem.Dictionary -> DictionaryScreen()
-                    MenuItem.Feed -> FeedScreen()
-                    MenuItem.Profile -> ProfileScreen()
-                    MenuItem.Session -> { /*Main Action*/
-                    }
+            when (state.selectedItem) {
+                MenuItem.Home -> HomeScreen()
+                MenuItem.Dictionary -> DictionaryScreen()
+                MenuItem.Feed -> FeedScreen()
+                MenuItem.Profile -> ProfileScreen()
+                MenuItem.Session -> { /*Main Action*/
                 }
             }
         },
@@ -52,7 +50,7 @@ internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
 @Composable
 private fun MainScaffold(
     state: UiState,
-    screenContent: @Composable (PaddingValues) -> Unit = {},
+    screenContent: @Composable () -> Unit = {},
     onEvent: (MainScaffoldEvent) -> Unit = {},
 ) {
     val windowInfo = rememberWindowInfo()
@@ -77,33 +75,30 @@ private fun MainScaffold(
         else -> PaddingValues(bottom = FloatingActionSize + Padding.large)
     }
 
-    Scaffold(
-        containerColor = Theme.materialColors.background,
-        contentColor = Theme.materialColors.onBackground,
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = boxAlignment
-        ) {
-            screenContent(paddingToMenu)
-            Menu(
-                leadingMenuItems = state.leadingMenuItems,
-                trailingMenuItems = state.trailingMenuItems,
-                selectedItem = state.selectedItem,
-                orientation = orientation,
-                modifier = Modifier
-                    .align(boxAlignment)
-                    .padding(paddingToEdge),
-                onItemClick = {
-                    onEvent(MainScaffoldEvent.OnItemClick(it))
-                },
-                onMainItemClick = {
-                    onEvent(MainScaffoldEvent.OnMainItemClick)
-                }
-            )
+    Box(
+        modifier = Modifier
+            .background(Theme.materialColors.background)
+            .fillMaxSize(),
+        contentAlignment = boxAlignment
+    ) {
+        Box(modifier = Modifier.padding(paddingToMenu)) {
+            screenContent()
         }
+        Menu(
+            leadingMenuItems = state.leadingMenuItems,
+            trailingMenuItems = state.trailingMenuItems,
+            selectedItem = state.selectedItem,
+            orientation = orientation,
+            modifier = Modifier
+                .align(boxAlignment)
+                .padding(paddingToEdge),
+            onItemClick = {
+                onEvent(MainScaffoldEvent.OnItemClick(it))
+            },
+            onMainItemClick = {
+                onEvent(MainScaffoldEvent.OnMainItemClick)
+            }
+        )
     }
 }
 

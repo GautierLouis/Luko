@@ -1,10 +1,14 @@
 package xyz.luko.sessions.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -28,7 +32,8 @@ import kotlin.math.roundToInt
 @Composable
 internal fun SessionExtraPane(
     response: SessionResponse,
-    similarResponse: List<SessionResponse>
+    similarResponse: List<SessionResponse>,
+    contentPadding: PaddingValues = WindowInsets.systemBars.asPaddingValues(),
 ) {
     LazyColumn(
         modifier = Modifier
@@ -36,6 +41,7 @@ internal fun SessionExtraPane(
             .padding(top = Padding.large)
             .padding(horizontal = Padding.large),
         verticalArrangement = Spacing.large,
+        contentPadding = contentPadding
     ) {
         item {
             Row(
