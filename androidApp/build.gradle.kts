@@ -75,6 +75,9 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt")
             )
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
         }
 
         debug {
