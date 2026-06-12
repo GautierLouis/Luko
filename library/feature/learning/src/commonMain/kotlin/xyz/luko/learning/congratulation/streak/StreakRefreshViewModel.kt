@@ -37,7 +37,7 @@ internal class StreakRefreshViewModel(
     val state = _state.asStateFlow()
 
     init {
-
+        //TODO Fix anim restart on rotation
         viewModelScope.launch {
             val streak = useCase.build(getDates())
 

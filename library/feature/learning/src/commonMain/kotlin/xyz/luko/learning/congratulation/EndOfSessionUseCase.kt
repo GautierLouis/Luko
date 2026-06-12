@@ -9,8 +9,12 @@ internal class EndOfSessionUseCase(
     suspend fun getRoute(): LearningInternalRoute {
         val stats = sessionRepository.getEndOfSessionStats()
 
+        //TODO Do better
         return when {
-            stats.newStreak > stats.oldStreak -> LearningInternalRoute.StreakRoute(stats.newStreak)
+            stats.newStreak > stats.oldStreak -> LearningInternalRoute.StreakRoute(
+                stats.newStreak,
+                stats.lastSession
+            )
             else -> LearningInternalRoute.CongratulationRoute(stats.lastSession)
         }
     }

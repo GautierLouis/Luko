@@ -20,6 +20,6 @@ fun EntryProviderScope<NavKey>.learningScreens() {
     // Private route
     entry<LearningInternalRoute.SessionRoute> { SessionScreen(it) }
 
-    entry<LearningInternalRoute.StreakRoute> { StreakRefreshScreen(it.newValue) }
+    entry<LearningInternalRoute.StreakRoute> { StreakRefreshScreen(it.newValue, it.lastSession) }
     entry<LearningInternalRoute.CongratulationRoute> { CongratulationScreen(it.lastSession) }
 }

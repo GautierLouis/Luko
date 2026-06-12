@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -67,7 +70,10 @@ private fun MainScaffold(
 
     val paddingToEdge = when {
         windowInfo.isExpanded() -> PaddingValues(end = Padding.large)
-        else -> PaddingValues(bottom = Padding.large)
+        else -> PaddingValues(
+            bottom = Padding.large + WindowInsets.navigationBars.asPaddingValues()
+                .calculateBottomPadding()
+        )
     }
 
     val paddingToMenu = when {

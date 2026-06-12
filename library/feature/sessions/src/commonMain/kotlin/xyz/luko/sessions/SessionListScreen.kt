@@ -5,6 +5,7 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +16,9 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
+import xyz.luko.sessions.PaneNavigationEvent.NavigateBack
+import xyz.luko.sessions.PaneNavigationEvent.NavigateToDetails
+import xyz.luko.sessions.PaneNavigationEvent.NavigateToExtra
 import xyz.luko.sessions.component.SessionDetailsPane
 import xyz.luko.sessions.component.SessionExtraPane
 import xyz.luko.sessions.component.SessionListPane
@@ -33,25 +37,32 @@ fun SessionListScreen(
     val lazyColumState = rememberLazyListState()
 
     LaunchedEffect(route.id, state.sessions) {
-        if (route.id != null && state.sessions.isNotEmpty()) {
-            val index = state.sessions.indexOfFirst { it.id == route.id }
-            if (index >= 0) lazyColumState.scrollToItem(index)
-            viewModel.onSessionSelected(route.id!!)
-        }
+        val canShowDetail =
+            navigator.scaffoldValue[ListDetailPaneScaffoldRole.Detail] == PaneAdaptedValue.Expanded
+        viewModel.initView(route.id, canShowDetail)
     }
 
     LaunchedEffect(Unit) {
         viewModel.navigationEvents.collect { event ->
             when (event) {
-                is PaneNavigationEvent.NavigateBack -> navigator.navigateBack()
-                is PaneNavigationEvent.NavigateToExtra ->
-                    navigator.navigateTo(
-                        ListDetailPaneScaffoldRole.Extra,
-                        event.responseCode.toLong()
-                    )
+                is NavigateBack -> navigator.navigateBack()
 
-                is PaneNavigationEvent.NavigateToDetails -> {
-                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, event.sessionId)
+                is NavigateToExtra -> {
+                    navigator.navigateTo(
+                        pane = ListDetailPaneScaffoldRole.Extra,
+                        contentKey = event.responseCode.toLong()
+                    )
+                }
+
+                is NavigateToDetails -> {
+                    event.scrollPosition?.let {
+                        lazyColumState.scrollToItem(event.scrollPosition)
+                    }
+
+                    navigator.navigateTo(
+                        pane = ListDetailPaneScaffoldRole.Detail,
+                        contentKey = event.sessionId
+                    )
                 }
             }
         }

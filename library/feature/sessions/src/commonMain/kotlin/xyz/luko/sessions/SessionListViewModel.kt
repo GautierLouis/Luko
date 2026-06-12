@@ -49,13 +49,38 @@ internal class SessionListViewModel(
         }
     }
 
-    fun onSessionSelected(sessionId: Long) {
+    fun initView(
+        sessionId: Long? = null,
+        canShowDetail: Boolean,
+    ) {
+        when {
+            _state.value.sessions.isEmpty() -> {
+                //Do nothing
+            }
+
+            sessionId != null -> {
+                val index = _state.value.sessions.indexOfFirst { it.id == sessionId }
+                onSessionSelected(sessionId, index.takeIf { it >= 0 })
+            }
+
+            canShowDetail -> {
+                onSessionSelected(_state.value.sessions.first().id, null)
+            }
+        }
+    }
+
+    fun onSessionSelected(sessionId: Long, scrollPosition: Int? = null) {
         viewModelScope.launch {
             val responses = sessionRepository.getResponses(sessionId)
             _state.update {
                 it.copy(selectedSessionId = sessionId, responses = responses)
             }
-            _navigationEvents.tryEmit(PaneNavigationEvent.NavigateToDetails(sessionId))
+            _navigationEvents.tryEmit(
+                PaneNavigationEvent.NavigateToDetails(
+                    sessionId,
+                    scrollPosition
+                )
+            )
         }
     }
 

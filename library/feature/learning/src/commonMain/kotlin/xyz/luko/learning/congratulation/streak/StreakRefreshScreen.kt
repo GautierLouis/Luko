@@ -26,15 +26,18 @@ import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.domain.model.Session
 import xyz.luko.learning.congratulation.streak.ui.DayCount
 import xyz.luko.learning.congratulation.streak.ui.StreakWeek
 import xyz.luko.learning.congratulation.streak.ui.previewStreakDays
+import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.core.TestTags
+import xyz.luko.ui.navigation.AppNavigation
 
 @Composable
 internal fun StreakRefreshScreen(
     newStreak: Int,
-    onClick: () -> Unit = {},
+    lastSession: Session
 ) {
     val viewModel = koinViewModel<StreakRefreshViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -42,7 +45,12 @@ internal fun StreakRefreshScreen(
     StreakRefreshScreen(
         state = state,
         newStreak = newStreak,
-        onClick = onClick
+        onClick = {
+            AppNavigation.navigate(
+                route = LearningInternalRoute.CongratulationRoute(lastSession),
+                clearBackStack = true
+            )
+        }
     )
 }
 

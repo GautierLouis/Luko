@@ -72,13 +72,7 @@ interface SessionDao {
     )
     fun getBasicStatistics(): Flow<BasicStatistics>
 
-    @Query(
-        """
-        SELECT
-            GROUP_CONCAT(DISTINCT date) AS uniqueDates
-        FROM SessionEntity
-    """,
-    )
+    @Query("SELECT DISTINCT date FROM SessionEntity")
     suspend fun getUniqueDates(): List<String>
 
     @Query(

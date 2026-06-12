@@ -17,7 +17,7 @@ internal sealed interface LearningInternalRoute : NavKey {
     ) : LearningInternalRoute
 
     @Serializable
-    data class StreakRoute(val newValue: Int) : LearningInternalRoute
+    data class StreakRoute(val newValue: Int, val lastSession: Session) : LearningInternalRoute
 
     @Serializable
     data class CongratulationRoute(val lastSession: Session) : LearningInternalRoute

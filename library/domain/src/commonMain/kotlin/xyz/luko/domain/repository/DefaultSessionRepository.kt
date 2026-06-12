@@ -7,6 +7,8 @@ import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import xyz.luko.database.dao.SessionDao
 import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.domain.mapper.SessionMapper.toDto
@@ -100,7 +102,7 @@ internal class DefaultSessionRepository(
 
     override suspend fun getSessionDatesForWeek(start: Instant, end: Instant): List<LocalDate> =
         sessionDao.getSessionDatesForWeek(start.toString(), end.toString())
-            .map { LocalDate.parse(it) }
+            .map { Instant.parse(it).toLocalDateTime(TimeZone.currentSystemDefault()).date }
 }
 
 data class EndOfSessionStats(
