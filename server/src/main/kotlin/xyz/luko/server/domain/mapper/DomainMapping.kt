@@ -83,8 +83,8 @@ internal object DomainMapping {
     fun HskFormSource.toRow() = HskFormRow(
         traditional = traditional,
         transcriptions = transcriptions?.toRow(),
-        meanings = classifiers.takeIf { it.isNotEmpty() }?.joinToString("\n"),
-        classifiers = meanings.takeIf { it.isNotEmpty() }?.joinToString(",")
+        meanings = meanings.takeIf { it.isNotEmpty() }?.joinToString("\n"),
+        classifiers = classifiers.takeIf { it.isNotEmpty() }?.joinToString(",")
     )
 
     fun HskTranscriptionsSource.toRow() = HskTranscriptionsRow(
