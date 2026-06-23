@@ -2,9 +2,6 @@ package xyz.luko.app.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation3.runtime.NavBackStack
-import androidx.navigation3.runtime.NavKey
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
@@ -12,17 +9,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import xyz.luko.domain.repository.AuthRepository
 import xyz.luko.domain.repository.SettingTheme
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager
 import xyz.luko.firebase.RemoteConfigManager
 import xyz.luko.tracking.Tracker
-import xyz.luko.tracking.TrackingEvent
-import xyz.luko.ui.navigation.AppNavigation
-import xyz.luko.ui.navigation.AppRoute
-import xyz.luko.ui.navigation.NavigationCommand
 import xyz.luko.utils.AppConfig
 import xyz.luko.utils.Flavor
 
@@ -63,37 +55,6 @@ internal class AppViewModel(
         viewModelScope.launch {
             Tracker.events.collect { event ->
                 firebaseManager.logEvent(event)
-            }
-        }
-    }
-
-    fun observeNavigation(stack: NavBackStack<NavKey>) {
-        viewModelScope.launch {
-            AppNavigation.navigationEvents.collect { event ->
-                withContext(Dispatchers.Main) {
-                    when (event) {
-                        is NavigationCommand.Navigate -> {
-                            Tracker.track(TrackingEvent.NavigateTo(event.route.toString()))
-
-                            if (!event.clearBackStack) {
-                                stack.removeAll { it::class == event.route::class }
-                            }
-
-                            if (event.clearBackStack) {
-                                stack.clear()
-                                stack += AppRoute.MainRoute
-                            }
-
-                            if (event.route !is AppRoute.MainRoute) {
-                                stack += event.route
-                            }
-                        }
-
-                        is NavigationCommand.NavigateUp -> {
-                            stack.removeLast()
-                        }
-                    }
-                }
             }
         }
     }

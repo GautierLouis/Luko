@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -131,7 +132,8 @@ private fun SessionScreen(
             SessionHeader(
                 pager = pagerState,
                 modifier = Modifier
-                    .padding(top = Padding.extraLarge),
+                    .padding(top = Padding.medium)
+                    .statusBarsPadding(),
             )
         },
         content = { paddingValues ->

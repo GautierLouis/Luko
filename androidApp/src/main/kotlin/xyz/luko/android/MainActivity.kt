@@ -46,8 +46,7 @@ class MainActivity : FragmentActivity() {
             KoinMultiplatformApplication(
                 config = koinConfiguration {
                     modules(libraryModule, androidModule)
-                }
-            ) {
+                }) {
                 activityObserver.setIntentLauncher(activityResultLauncher)
                 activityObserver.setPermissionLauncher(permissionLauncher)
                 App()

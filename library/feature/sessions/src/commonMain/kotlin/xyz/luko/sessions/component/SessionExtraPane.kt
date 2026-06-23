@@ -38,6 +38,7 @@ internal fun SessionExtraPane(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .background(Theme.materialColors.background)
             .padding(top = Padding.large)
             .padding(horizontal = Padding.large),
         verticalArrangement = Spacing.large,

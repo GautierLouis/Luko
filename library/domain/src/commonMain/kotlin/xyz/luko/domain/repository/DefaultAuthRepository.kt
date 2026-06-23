@@ -3,9 +3,9 @@ package xyz.luko.domain.repository
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.firebase.FirebaseManager
-import xyz.luko.utils.AppLogger
 import xyz.luko.network.interfaces.AuthService
 import xyz.luko.preferences.AppPreferences
+import xyz.luko.utils.AppLogger
 
 internal class DefaultAuthRepository(
     private val client: AuthService,
@@ -20,8 +20,8 @@ internal class DefaultAuthRepository(
         if (cached == null) {
             // First launch — Firebase + create user
             val uid = firebaseManager.registerAnonymously().getOrThrow()
+            preferences.setUserId(uid)
             client.registerAnonymously(AuthRegistrationDto(fcmToken = fcmToken))
-                .onSuccess { preferences.setUserId(uid) }
                 .onFailure { AppLogger.w(tag = "Auth", message = "Failed to register anonymously") }
         } else {
             // Already registered — update FCM only if changed

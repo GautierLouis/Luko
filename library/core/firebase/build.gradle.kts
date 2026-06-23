@@ -24,6 +24,7 @@ kotlin {
             products =
                 listOf(
                     product("FirebaseAnalytics"),
+                    product("FirebaseCrashlytics"),
                     product("FirebaseMessaging"),
                     product("FirebaseAuth"),
                     product("FirebaseRemoteConfig"),
@@ -44,6 +45,7 @@ kotlin {
 
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.analytics)
+            implementation(libs.firebase.crashlytics)
             implementation(libs.firebase.config)
             implementation(libs.firebase.messaging)
             implementation(libs.firebase.auth)

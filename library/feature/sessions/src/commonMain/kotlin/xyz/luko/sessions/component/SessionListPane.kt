@@ -1,5 +1,6 @@
 package xyz.luko.sessions.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -19,6 +20,7 @@ import xyz.luko.designsystem.components.metrics.SessionCard
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
+import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.sessions.SessionListViewModel
@@ -35,6 +37,7 @@ internal fun SessionListPane(
         state = lazyColumState,
         modifier = Modifier
             .fillMaxSize()
+            .background(Theme.materialColors.background)
             .padding(top = Padding.large)
             .padding(horizontal = Padding.large),
         verticalArrangement = Spacing.large,
