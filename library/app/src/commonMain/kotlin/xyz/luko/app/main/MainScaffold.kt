@@ -59,26 +59,27 @@ private fun MainScaffold(
     val windowInfo = rememberWindowInfo()
 
     val boxAlignment = when {
-        windowInfo.isExpanded() -> Alignment.CenterEnd
-        else -> Alignment.BottomCenter
+        windowInfo.isCompact() -> Alignment.BottomCenter
+        else -> Alignment.CenterEnd
     }
 
     val orientation = when {
-        windowInfo.isExpanded() -> Orientation.Vertical
-        else -> Orientation.Horizontal
+        windowInfo.isCompact() -> Orientation.Horizontal
+        else -> Orientation.Vertical
     }
 
     val paddingToEdge = when {
-        windowInfo.isExpanded() -> PaddingValues(end = Padding.large)
-        else -> PaddingValues(
+        windowInfo.isCompact() -> PaddingValues(
             bottom = Padding.large + WindowInsets.navigationBars.asPaddingValues()
                 .calculateBottomPadding()
         )
+
+        else -> PaddingValues(end = Padding.large)
     }
 
     val paddingToMenu = when {
-        windowInfo.isExpanded() -> PaddingValues(end = FloatingActionSize + Padding.large)
-        else -> PaddingValues(bottom = FloatingActionSize + Padding.large)
+        windowInfo.isCompact() -> PaddingValues(bottom = FloatingActionSize + Padding.large)
+        else -> PaddingValues(end = FloatingActionSize + Padding.large)
     }
 
     Box(

@@ -2,18 +2,32 @@ package xyz.luko.home
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.session.toUiModel
+import xyz.luko.designsystem.components.button.AppButton
+import xyz.luko.designsystem.components.button.attrs.ButtonRole
+import xyz.luko.designsystem.components.button.attrs.ButtonShape
+import xyz.luko.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.designsystem.components.metrics.MoreSessionCard
 import xyz.luko.designsystem.components.metrics.OverallStatisticsCard
 import xyz.luko.designsystem.components.metrics.SessionCard
@@ -30,7 +44,7 @@ import xyz.luko.ui.core.preview.PreviewProvider
 import xyz.luko.ui.core.window.WindowInfo
 import xyz.luko.ui.core.window.rememberWindowInfo
 import xyz.luko.ui.navigation.AppNavigation
-import xyz.luko.ui.navigation.AppRoute
+import xyz.luko.ui.navigation.AppRoute.SessionsRoute
 
 @Composable
 fun HomeScreen() {
@@ -46,8 +60,30 @@ private fun HomeScreen(
     val windowInfo = rememberWindowInfo()
 
     val span = when (windowInfo) {
-        WindowInfo.EXPANDED -> 2
+        WindowInfo.WIDTH_COMPACT -> 1
+        else -> 2
+    }
+
+    val columns = when {
+        windowInfo.isHeightCompact() -> 3
+        windowInfo == WindowInfo.WIDTH_COMPACT -> 1
+        else -> 2
+    }
+
+    val statsSpan = when {
+        windowInfo.isHeightCompact() -> 1
+        else -> columns
+    }
+
+    val seeAllSpan = when {
+        windowInfo.isHeightCompact() -> 2
         else -> 1
+    }
+
+    val density = LocalDensity.current
+    var statCardHeight by remember { mutableStateOf(IntSize.Zero) }
+    val fixedCardHeight by derivedStateOf {
+        with(density) { statCardHeight.height.toDp() }
     }
 
     NestedScaffold(
@@ -65,16 +101,18 @@ private fun HomeScreen(
             contentPadding = PaddingValues(Padding.large)
         ) {
             item(
-                span = { GridItemSpan(span) }
+                span = { GridItemSpan(statsSpan) }
             ) {
                 OverallStatisticsCard(
-                    metrics = state.stats.toUiModel()
+                    metrics = state.stats.toUiModel(),
+                    modifier = Modifier.onGloballyPositioned { p ->
+                        statCardHeight = p.size
+                    }
                 )
             }
 
-
-            if (state.lastSessions.isNotEmpty() && span == 1) {
-                item {
+            if (state.seeAll && !windowInfo.isHeightCompact()) {
+                item(span = { GridItemSpan(columns) }) {
                     Text(
                         text = Theme.strings.lastSessionTitle.uppercase(),
                         style = Theme.typography.titleMedium,
@@ -83,25 +121,35 @@ private fun HomeScreen(
                 }
             }
 
-            items(
-                count = state.lastSessions.size,
-                key = { index -> state.lastSessions[index].id },
-                contentType = { index -> index == 0 }
-            ) { index ->
-                val session = state.lastSessions[index]
+            state.lastSession?.let {
+                item {
+                    SessionCard(
+                        model = state.lastSession.toUiModel(),
+                        modifier = Modifier.height(fixedCardHeight),
+                        onClick = {
+                            AppNavigation.navigate(SessionsRoute.SessionListRoute(state.lastSession.id))
+                        }
+                    )
+                }
+            }
 
-                if (index == 0) {
-                    SessionCard(model = session.toUiModel()) {
-                        AppNavigation.navigate(
-                            AppRoute.SessionsRoute.SessionListRoute(session.id)
+            if (state.seeAll) {
+                item(span = { GridItemSpan(seeAllSpan) }) {
+                    if (windowInfo.isHeightCompact()) {
+                        AppButton(
+                            text = "See More",
+                            shape = ButtonShape.Outlined,
+                            role = ButtonRole.Secondary,
+                            size = ButtonSize.Large,
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { AppNavigation.navigate(SessionsRoute.SessionListRoute()) }
                         )
-                    }
-                } else {
-                    MoreSessionCard(
-                        modifier = Modifier.testTag(TestTags.Action.SECONDARY),
-                        model = session.toUiModel()
-                    ) {
-                        AppNavigation.navigate(AppRoute.SessionsRoute.SessionListRoute())
+                    } else {
+                        MoreSessionCard(
+                            model = state.lastSession!!.toUiModel(),
+                            modifier = Modifier.height(fixedCardHeight),
+                            onClick = { AppNavigation.navigate(SessionsRoute.SessionListRoute()) }
+                        )
                     }
                 }
             }
@@ -118,7 +166,8 @@ private fun PreviewHomeScreen(
         HomeScreen(
             state =
                 HomeViewModel.UIState(
-                    lastSessions = PreviewProvider.sessionList,
+                    lastSession = PreviewProvider.session,
+                    seeAll = true,
                     stats = PreviewProvider.statistics,
                 ),
         )
