@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.mp.KoinPlatform.getKoin
-import xyz.luko.baseui.adaptive.AdaptiveContainer
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
@@ -31,6 +30,7 @@ import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.Session
 import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.core.TestTags
+import xyz.luko.ui.core.adaptive.AdaptiveContainer
 import xyz.luko.ui.core.preview.PreviewProvider
 import xyz.luko.ui.core.window.rememberIsWiderThanTall
 import xyz.luko.ui.core.window.rememberWindowInfo
@@ -111,6 +111,7 @@ internal fun CongratulationScreen(
         ) {
             AdaptiveContainer(
                 modifier = Modifier.weight(1f),
+                horizontalArrangement = Spacing.medium,
                 verticalArrangement = Arrangement.spacedBy(
                     space = Padding.large,
                     alignment = Alignment.CenterVertically
@@ -149,7 +150,11 @@ internal fun CongratulationScreen(
                 )
             }
 
-            AdaptiveContainer(useRow = isWiderThanTall) { itemModifier ->
+            AdaptiveContainer(
+                useRow = isWiderThanTall,
+                horizontalArrangement = Spacing.medium,
+                verticalArrangement = Spacing.medium
+            ) { itemModifier ->
                 if (isWiderThanTall) resultCta(itemModifier) else finishCta(itemModifier)
                 if (isWiderThanTall) finishCta(itemModifier) else resultCta(itemModifier)
             }

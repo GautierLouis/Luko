@@ -1,4 +1,4 @@
-package xyz.luko.baseui.adaptive
+package xyz.luko.ui.core.adaptive
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,16 +6,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import xyz.luko.designsystem.token.dimens.Spacing
 
 @Composable
 fun AdaptiveContainer(
     useRow: Boolean,
-    verticalArrangement: Arrangement.Vertical = Spacing.medium,
-    horizontalArrangement: Arrangement.Horizontal = Spacing.medium,
+    modifier: Modifier = Modifier,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    modifier: Modifier = Modifier,
     content: @Composable (Modifier) -> Unit,
 ) {
     if (useRow) {

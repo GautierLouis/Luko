@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import xyz.luko.baseui.adaptive.AdaptiveContainer
 import xyz.luko.designsystem.components.metrics.attrs.MetricItem
 import xyz.luko.designsystem.components.metrics.attrs.SessionStatistic
 import xyz.luko.designsystem.preview.ThemeMode
@@ -47,6 +46,7 @@ import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.ui.core.TestTags
+import xyz.luko.ui.core.adaptive.AdaptiveContainer
 import xyz.luko.utils.toPercentage
 
 @Composable
@@ -115,7 +115,8 @@ internal fun RewardCard(
             modifier = Modifier.padding(Padding.medium),
             useRow = useRow,
             verticalAlignment = Alignment.CenterVertically,
-            verticalArrangement = Spacing.medium
+            verticalArrangement = Spacing.medium,
+            horizontalArrangement = Spacing.medium,
         ) { parentModifier ->
             OverhaulAccuracy(
                 modifier = parentModifier,
@@ -124,7 +125,9 @@ internal fun RewardCard(
             )
             AdaptiveContainer(
                 modifier = parentModifier,
-                useRow = !useRow
+                useRow = !useRow,
+                horizontalArrangement = Spacing.medium,
+                verticalArrangement = Spacing.medium
             ) { itemModifier ->
                 metric1(itemModifier.fillMaxWidth())
                 metric2(itemModifier.fillMaxWidth())
