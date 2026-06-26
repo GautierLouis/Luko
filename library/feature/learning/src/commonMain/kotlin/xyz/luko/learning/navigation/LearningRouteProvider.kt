@@ -12,14 +12,12 @@ import xyz.luko.ui.navigation.AppRoute
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 fun EntryProviderScope<NavKey>.learningScreens() {
 
-    // Public route
+    // Public routes
     entry<AppRoute.LearningRoute.NewSessionRoute> { SessionBuilderScreen() }
-
     entry<AppRoute.LearningRoute.PracticeCharacterRoute> { TODO() }
 
-    // Private route
+    // Private routes
     entry<LearningInternalRoute.SessionRoute> { SessionScreen(it) }
-
-    entry<LearningInternalRoute.StreakRoute> { StreakRefreshScreen(it.newValue, it.lastSession) }
-    entry<LearningInternalRoute.CongratulationRoute> { CongratulationScreen(it.lastSession) }
+    entry<LearningInternalRoute.StreakRoute> { StreakRefreshScreen(it) }
+    entry<LearningInternalRoute.CongratulationRoute> { CongratulationScreen(it) }
 }

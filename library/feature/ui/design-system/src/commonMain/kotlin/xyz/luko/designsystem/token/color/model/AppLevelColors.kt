@@ -12,6 +12,6 @@ data class AppLevelColors(
     val hard: LevelColors,
     val streak: LevelColors,
     val sessions: LevelColors,
-    val totalScore: LevelColors,
+    val avgAccuracy: LevelColors,
     val appMetrics: LevelColors,
 )

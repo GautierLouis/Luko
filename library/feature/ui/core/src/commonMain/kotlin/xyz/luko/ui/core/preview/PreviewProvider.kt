@@ -84,11 +84,12 @@ object PreviewProvider {
 
     val statistics by lazy {
         Statistics(
-            totalScore = 3000,
+            averageAccuracy = 90f,
             averageTime = 2.seconds,
             averageDifficulty = DifficultyLevel.EASY,
             currentDayStreak = 123,
             sessionCount = 10,
+            averageQuestionsCount = 5f
         )
     }
 

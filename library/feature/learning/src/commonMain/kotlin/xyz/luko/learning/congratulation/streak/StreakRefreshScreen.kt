@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.designsystem.components.page.NestedScaffold
@@ -26,31 +27,27 @@ import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
-import xyz.luko.domain.model.Session
 import xyz.luko.learning.congratulation.streak.ui.DayCount
 import xyz.luko.learning.congratulation.streak.ui.StreakWeek
 import xyz.luko.learning.congratulation.streak.ui.previewStreakDays
 import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.core.TestTags
-import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.core.window.WindowInfo
+import xyz.luko.ui.core.window.rememberWindowInfo
 
 @Composable
 internal fun StreakRefreshScreen(
-    newStreak: Int,
-    lastSession: Session
+    route: LearningInternalRoute.StreakRoute
 ) {
-    val viewModel = koinViewModel<StreakRefreshViewModel>()
+    val viewModel = koinViewModel<StreakRefreshViewModel> {
+        parametersOf(route.lastSession.id)
+    }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     StreakRefreshScreen(
         state = state,
-        newStreak = newStreak,
-        onClick = {
-            AppNavigation.navigate(
-                route = LearningInternalRoute.CongratulationRoute(lastSession),
-                clearBackStack = true
-            )
-        }
+        newStreak = route.newValue,
+        onClick = { viewModel.next() }
     )
 }
 
@@ -60,6 +57,12 @@ private fun StreakRefreshScreen(
     newStreak: Int,
     onClick: () -> Unit = {},
 ) {
+
+    val windowInfo = rememberWindowInfo()
+    val align = when (windowInfo) {
+        WindowInfo.HEIGHT_COMPACT -> Alignment.TopCenter
+        else -> Alignment.Center
+    }
 
     NestedScaffold { paddingValues ->
         Box(
@@ -71,7 +74,7 @@ private fun StreakRefreshScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.Center),
+                    .align(align),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Spacing.extraExtraLarge,
             ) {
@@ -81,6 +84,7 @@ private fun StreakRefreshScreen(
                 )
                 StreakWeek(
                     days = state.streakDays,
+                    startFirstAnim = state.startFirstAnim,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = Padding.extraLarge),

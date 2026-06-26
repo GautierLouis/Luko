@@ -2,15 +2,19 @@ package xyz.luko.designsystem.components.metrics.attrs
 
 import androidx.compose.runtime.Composable
 import xyz.luko.designsystem.icon.AppIcon
+import xyz.luko.designsystem.icon.RoundedAvgTime
 import xyz.luko.designsystem.icon.RoundedBolt
 import xyz.luko.designsystem.icon.RoundedCalendarToday
+import xyz.luko.designsystem.icon.RoundedCrown
 import xyz.luko.designsystem.icon.RoundedStreak
 import xyz.luko.designsystem.theme.Theme
 
 enum class AppStatistic {
     Streak,
     Sessions,
-    TotalScore,
+    AvgAccuracy,
+    AvgDifficulty,
+    AvgTime,
     ;
 
     companion object {
@@ -19,7 +23,9 @@ enum class AppStatistic {
             when (this) {
                 Streak -> Theme.strings.streak
                 Sessions -> Theme.strings.sessions
-                TotalScore -> Theme.strings.totalScore
+                AvgAccuracy -> Theme.strings.avgAccuracy
+                AvgDifficulty -> Theme.strings.avgDifficulty
+                AvgTime -> Theme.strings.avgDifficulty
             }
 
         @Composable
@@ -27,7 +33,9 @@ enum class AppStatistic {
             when (this) {
                 Streak -> AppIcon.RoundedStreak
                 Sessions -> AppIcon.RoundedCalendarToday
-                TotalScore -> AppIcon.RoundedBolt
+                AvgAccuracy -> AppIcon.RoundedBolt
+                AvgDifficulty -> AppIcon.RoundedCrown
+                AvgTime -> AppIcon.RoundedAvgTime
             }
 
         @Composable
@@ -35,7 +43,9 @@ enum class AppStatistic {
             when (this) {
                 Streak -> Theme.appLevelColors.streak
                 Sessions -> Theme.appLevelColors.sessions
-                TotalScore -> Theme.appLevelColors.totalScore
+                AvgAccuracy -> Theme.appLevelColors.avgAccuracy
+                AvgDifficulty -> Theme.appLevelColors.medium
+                AvgTime -> Theme.appLevelColors.medium
             }
     }
 }

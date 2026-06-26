@@ -2,22 +2,20 @@ package xyz.luko.learning.congratulation.stats
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import xyz.luko.baseui.adaptive.AdaptiveLayout
-import xyz.luko.baseui.adaptive.AdaptiveLayoutOrder
-import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation
-import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.mp.KoinPlatform.getKoin
+import xyz.luko.baseui.adaptive.AdaptiveContainer
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
@@ -31,19 +29,76 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.Session
+import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.core.window.rememberIsWiderThanTall
+import xyz.luko.ui.core.window.rememberWindowInfo
 import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.utils.toHHMMSS
 
 @Composable
-internal fun CongratulationScreen(session: Session) {
+internal fun CongratulationScreen(
+    route: LearningInternalRoute.CongratulationRoute
+) {
 
-    val device = rememberAdaptiveWindowInfo()
+    val viewModel = koinViewModel<CongratulationViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val orientation =
-        if (device.isPhoneLandscape) AdaptiveLayoutOrientation.ROW else AdaptiveLayoutOrientation.COLUMN
+    CongratulationScreen(
+        state = state,
+        session = route.lastSession,
+        overhaulAccuracy = route.overhaulAccuracy,
+        onEvent = {
+            getKoin().getScopeOrNull("session_${route.lastSession.id}")?.close()
+        }
+    )
+}
+
+@Composable
+internal fun CongratulationScreen(
+    state: CongratulationViewModel.UIState,
+    session: Session,
+    overhaulAccuracy: Float,
+    onEvent: () -> Unit = {}
+) {
+
+    val isWiderThanTall = rememberIsWiderThanTall()
+    val windowInfo = rememberWindowInfo()
+
+    val finishCta: @Composable (Modifier) -> Unit = { modifier: Modifier ->
+        AppButton(
+            text = Theme.strings.congratulationButtonHome,
+            size = ButtonSize.Large,
+            modifier = modifier
+                .testTag(TestTags.Action.PRIMARY),
+            role = ButtonRole.Primary,
+            shape = ButtonShape.Filled,
+            onClick = {
+                onEvent()
+                AppNavigation.navigateHome()
+            },
+        )
+    }
+
+    val resultCta: @Composable (Modifier) -> Unit = { modifier: Modifier ->
+        AppButton(
+            text = Theme.strings.congratulationButtonSeeMore,
+            size = ButtonSize.Large,
+            role = ButtonRole.Secondary,
+            shape = ButtonShape.Outlined,
+            modifier = modifier
+                .testTag(TestTags.Action.SECONDARY),
+            onClick = {
+                onEvent()
+                AppNavigation.navigate(
+                    AppRoute.SessionsRoute.SessionListRoute(session.id),
+                    true,
+                )
+            },
+        )
+    }
 
     NestedScaffold { paddingValues ->
         Column(
@@ -51,23 +106,24 @@ internal fun CongratulationScreen(session: Session) {
                 Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = Padding.large)
+                    .padding(Padding.large)
                     .testTag(TestTags.Screen.CONGRATS),
         ) {
-            AdaptiveLayout(
-                orientation = orientation,
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentHeight(),
-            ) {
+            AdaptiveContainer(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(
+                    space = Padding.large,
+                    alignment = Alignment.CenterVertically
+                ),
+                useRow = windowInfo.isHeightCompact(),
+            ) { itemModifier ->
                 Column(
+                    modifier = itemModifier,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    Spacer(Modifier.height(Padding.extraExtraLarge))
                     AnimatedRewardIcon(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                     )
-                    Spacer(Modifier.height(Padding.medium))
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,55 +139,19 @@ internal fun CongratulationScreen(session: Session) {
                         )
                     }
                 }
-
                 RewardCard(
-                    score = session.score,
+                    startAnim = state.startAnim,
+                    avgAccuracy = overhaulAccuracy,
                     questionCount = session.questionsCount.toString(),
                     time = session.duration.toHHMMSS(),
-                    parentOrientation = orientation,
+                    useRow = isWiderThanTall,
+                    modifier = itemModifier,
                 )
             }
 
-            AdaptiveLayout(
-                modifier = Modifier.padding(bottom = Padding.large),
-                orientation =
-                    if (device.isPhoneLandscape || device.isTabletLandscape) {
-                        AdaptiveLayoutOrientation.ROW
-                    } else {
-                        AdaptiveLayoutOrientation.COLUMN
-                    },
-                order =
-                    if (device.isPhoneLandscape || device.isTabletLandscape) {
-                        AdaptiveLayoutOrder.REVERSED
-                    } else {
-                        AdaptiveLayoutOrder.NATURAL
-                    },
-            ) {
-
-                AppButton(
-                    text = Theme.strings.congratulationButtonHome,
-                    size = ButtonSize.Large,
-                    modifier = Modifier
-                        .testTag(TestTags.Action.PRIMARY),
-                    role = ButtonRole.Primary,
-                    shape = ButtonShape.Filled,
-                    onClick = { AppNavigation.navigateHome() },
-                )
-
-                AppButton(
-                    text = Theme.strings.congratulationButtonSeeMore,
-                    size = ButtonSize.Large,
-                    role = ButtonRole.Secondary,
-                    shape = ButtonShape.Outlined,
-                    modifier = Modifier
-                        .testTag(TestTags.Action.SECONDARY),
-                    onClick = {
-                        AppNavigation.navigate(
-                            AppRoute.SessionsRoute.SessionListRoute(session.id),
-                            true,
-                        )
-                    },
-                )
+            AdaptiveContainer(useRow = isWiderThanTall) { itemModifier ->
+                if (isWiderThanTall) resultCta(itemModifier) else finishCta(itemModifier)
+                if (isWiderThanTall) finishCta(itemModifier) else resultCta(itemModifier)
             }
         }
     }
@@ -144,7 +164,10 @@ private fun PreviewCongratulationScreen(
 ) {
     AppTheme(themeMode) {
         CongratulationScreen(
+            state = CongratulationViewModel.UIState(false),
             session = PreviewProvider.session,
+            overhaulAccuracy = 90f
+
         )
     }
 }

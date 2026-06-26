@@ -16,9 +16,10 @@ interface SessionDao {
     suspend fun insertSessionWithResponses(
         session: SessionEntity,
         responses: List<SessionResponseEntity>,
-    ) {
+    ): Long {
         val sessionId = insertSession(session)
         insertResponses(responses.map { it.copy(sessionId = sessionId) })
+        return sessionId
     }
 
     @Insert
@@ -61,14 +62,16 @@ interface SessionDao {
 
     @Query(
         """
-        SELECT
-            COALESCE(SUM(score), 0) AS totalScore,
-            COALESCE(AVG(duration), 0) AS averageTime,
-            COALESCE(COUNT(*), 0) AS sessionCount,
-            GROUP_CONCAT(difficulty) AS difficulties,
-            GROUP_CONCAT(DISTINCT date) AS uniqueDates
-        FROM SessionEntity
-    """,
+    SELECT
+        COALESCE(AVG(duration), 0) AS averageTime,
+        COALESCE(AVG(questionsCount), 0) AS averageQuestionsCount,
+        COALESCE(AVG(overallAccuracy), 0) AS averageAccuracy,
+        GROUP_CONCAT(difficulty) AS difficulties,
+        COALESCE(COUNT(*), 0) AS sessionCount,
+        GROUP_CONCAT(DISTINCT date) AS uniqueDates
+    FROM SessionEntity
+    LEFT JOIN SessionResponseEntity ON SessionResponseEntity.sessionId = SessionEntity.id
+""",
     )
     fun getBasicStatistics(): Flow<BasicStatistics>
 

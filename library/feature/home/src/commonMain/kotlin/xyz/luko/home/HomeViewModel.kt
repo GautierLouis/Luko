@@ -22,11 +22,12 @@ internal class HomeViewModel(
         val seeAll: Boolean = false,
         val stats: Statistics =
             Statistics(
-                totalScore = 0,
                 averageTime = Duration.ZERO,
                 averageDifficulty = null,
                 currentDayStreak = 0,
                 sessionCount = 0,
+                averageAccuracy = 0f,
+                averageQuestionsCount = 0f
             ),
     )
 

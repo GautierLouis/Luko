@@ -10,6 +10,15 @@ interface SessionResponseDao {
     @Query("SELECT * FROM SessionResponseEntity WHERE SessionResponseEntity.sessionId = :sessionId")
     suspend fun get(sessionId: Long): List<SessionResponseEntity>
 
+    @Query(
+        """
+        SELECT COALESCE(AVG(overallAccuracy), 0)
+        FROM SessionResponseEntity
+        WHERE SessionResponseEntity.sessionId = :sessionId
+    """
+    )
+    suspend fun getOverhaulAccuracy(sessionId: Long): Float
+
     @Query("SELECT * FROM SessionResponseEntity WHERE code = :code")
     suspend fun getSimilar(code: Int): List<SessionResponseEntity>
 }

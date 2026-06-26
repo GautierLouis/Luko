@@ -15,6 +15,7 @@ import xyz.luko.utils.toAccessibilityDate
 import xyz.luko.utils.toFormattedString
 import xyz.luko.utils.toHHMMSS
 import xyz.luko.utils.toISODateString
+import xyz.luko.utils.toPercentage
 
 @Composable
 fun Session.toUiModel(): SessionUiModel {
@@ -45,8 +46,30 @@ fun Statistics.toUiModel(): ImmutableList<MetricItem.AppMetric> {
             value = sessionCount.toString(),
         ),
         MetricItem.AppMetric(
-            metric = AppStatistic.TotalScore,
-            value = totalScore.toFormattedString(),
+            metric = AppStatistic.AvgAccuracy,
+            value = averageAccuracy.toPercentage(),
+        ),
+    )
+}
+
+@Composable
+fun Statistics.toUiModelExtended(): ImmutableList<MetricItem.AppMetric> {
+    return persistentListOf(
+        MetricItem.AppMetric(
+            metric = AppStatistic.Streak,
+            value = currentDayStreak.toString(),
+        ),
+        MetricItem.AppMetric(
+            metric = AppStatistic.Sessions,
+            value = sessionCount.toString(),
+        ),
+        MetricItem.AppMetric(
+            metric = AppStatistic.AvgDifficulty,
+            value = averageDifficulty?.title() ?: "-",
+        ),
+        MetricItem.AppMetric(
+            metric = AppStatistic.AvgAccuracy,
+            value = averageAccuracy.toPercentage(),
         ),
     )
 }

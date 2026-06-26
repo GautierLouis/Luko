@@ -17,12 +17,14 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import xyz.luko.domain.repository.SessionRepository
+import xyz.luko.learning.congratulation.EndOfSessionCoordinator
 import xyz.luko.learning.congratulation.streak.ui.StreakDay
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 
 
 internal class StreakRefreshViewModel(
+    private val coordinator: EndOfSessionCoordinator,
     private val sessionRepository: SessionRepository,
     private val useCase: StreakListUseCase,
 ) : ViewModel() {
@@ -63,5 +65,9 @@ internal class StreakRefreshViewModel(
             .atStartOfDayIn(TimeZone.currentSystemDefault())
 
         return sessionRepository.getSessionDatesForWeek(weekStart, weekEnd)
+    }
+
+    fun next() {
+        coordinator.next()
     }
 }

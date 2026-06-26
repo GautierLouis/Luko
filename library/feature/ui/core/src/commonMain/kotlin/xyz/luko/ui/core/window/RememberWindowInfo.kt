@@ -3,6 +3,7 @@ package xyz.luko.ui.core.window
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_MEDIUM_LOWER_BOUND
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_LOWER_BOUND
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
@@ -24,5 +25,13 @@ fun rememberWindowInfo(): WindowInfo {
             !isWidthAtLeast(WIDTH_DP_EXPANDED_LOWER_BOUND) -> WindowInfo.MEDIUM
             else -> WindowInfo.EXPANDED
         }
+    }
+}
+
+@Composable
+fun rememberIsWiderThanTall(): Boolean {
+    val windowInfo = LocalWindowInfo.current
+    return remember(windowInfo) {
+        windowInfo.containerSize.width > windowInfo.containerSize.height
     }
 }

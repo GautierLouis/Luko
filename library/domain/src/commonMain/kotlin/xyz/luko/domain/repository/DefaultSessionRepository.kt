@@ -13,6 +13,7 @@ import xyz.luko.database.dao.SessionDao
 import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.domain.mapper.SessionMapper.toDto
 import xyz.luko.domain.mapper.SessionMapper.toEntity
+import xyz.luko.domain.model.EndOfSessionStats
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Statistics
@@ -33,10 +34,10 @@ internal class DefaultSessionRepository(
     override suspend fun save(
         session: Session,
         responses: List<SessionResponse>,
-    ) {
+    ): Long {
         val sessionEntity = session.toEntity()
         val responseEntity = responses.map { it.toEntity() }
-        sessionDao.insertSessionWithResponses(sessionEntity, responseEntity)
+        return sessionDao.insertSessionWithResponses(sessionEntity, responseEntity)
     }
 
     override fun getLastSessions(limit: Int): Flow<List<Session>> =
@@ -77,17 +78,19 @@ internal class DefaultSessionRepository(
                     ?.map { it.toUTCDate() }
                     .orEmpty()
             Statistics(
-                totalScore = basic.totalScore,
                 averageTime = basic.averageTime.toDuration(DurationUnit.SECONDS),
                 averageDifficulty = difficultyComputer.average(basic.difficulties.orEmpty()),
                 currentDayStreak = dayStreakComputer.calculateCurrentDayStreak(dates),
                 sessionCount = basic.sessionCount,
+                averageQuestionsCount = basic.averageQuestionsCount,
+                averageAccuracy = basic.averageAccuracy,
             )
         }
     }
 
     override suspend fun getEndOfSessionStats(): EndOfSessionStats {
         val lastSession = sessionDao.getLastSession()!!
+        val overhaulAccuracy = responseDao.getOverhaulAccuracy(lastSession.id)
 
         val allDates = sessionDao.getUniqueDates().map { it.toUTCDate() }
 
@@ -97,16 +100,10 @@ internal class DefaultSessionRepository(
 
         val newStreak = dayStreakComputer.calculateCurrentDayStreak(allDates)
 
-        return EndOfSessionStats(lastSession.toDto(), oldStreak, newStreak)
+        return EndOfSessionStats(lastSession.toDto(), overhaulAccuracy, oldStreak, newStreak)
     }
 
     override suspend fun getSessionDatesForWeek(start: Instant, end: Instant): List<LocalDate> =
         sessionDao.getSessionDatesForWeek(start.toString(), end.toString())
             .map { Instant.parse(it).toLocalDateTime(TimeZone.currentSystemDefault()).date }
 }
-
-data class EndOfSessionStats(
-    val lastSession: Session,
-    val oldStreak: Int,
-    val newStreak: Int
-)

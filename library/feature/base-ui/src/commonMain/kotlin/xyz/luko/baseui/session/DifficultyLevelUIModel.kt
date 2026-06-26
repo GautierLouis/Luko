@@ -1,4 +1,4 @@
-package xyz.luko.learning.builder
+package xyz.luko.baseui.session
 
 import androidx.compose.runtime.Composable
 import xyz.luko.designsystem.icon.AppIcon
@@ -12,7 +12,7 @@ import xyz.luko.domain.model.DifficultyLevel.HARD
 import xyz.luko.domain.model.DifficultyLevel.MEDIUM
 
 @Composable
-internal fun DifficultyLevel.label() =
+fun DifficultyLevel.label() =
     when (this) {
         EASY -> Theme.strings.easy
         MEDIUM -> Theme.strings.medium
@@ -20,7 +20,7 @@ internal fun DifficultyLevel.label() =
     }
 
 @Composable
-internal fun DifficultyLevel.title() =
+fun DifficultyLevel.title() =
     when (this) {
         EASY -> Theme.strings.easyTitle
         MEDIUM -> Theme.strings.mediumTitle
@@ -28,7 +28,7 @@ internal fun DifficultyLevel.title() =
     }
 
 @Composable
-internal fun DifficultyLevel.caption() =
+fun DifficultyLevel.caption() =
     when (this) {
         EASY -> Theme.strings.easyCaption
         MEDIUM -> Theme.strings.mediumCaption
@@ -36,7 +36,7 @@ internal fun DifficultyLevel.caption() =
     }
 
 @Composable
-internal fun DifficultyLevel.icon() =
+fun DifficultyLevel.icon() =
     when (this) {
         EASY -> AppIcon.Lightbulb
         MEDIUM -> AppIcon.Visibility
@@ -44,7 +44,7 @@ internal fun DifficultyLevel.icon() =
     }
 
 @Composable
-internal fun DifficultyLevel.colorFamily() =
+fun DifficultyLevel.colorFamily() =
     when (this) {
         EASY -> Theme.appLevelColors.easy
         MEDIUM -> Theme.appLevelColors.medium

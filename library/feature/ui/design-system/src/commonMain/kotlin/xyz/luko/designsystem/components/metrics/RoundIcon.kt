@@ -66,13 +66,13 @@ private fun PreviewRoundIcon(
         Row {
             RoundIcon(
                 icon = AppIcon.RoundedBarChart,
-                colors = Theme.appLevelColors.totalScore,
+                colors = Theme.appLevelColors.avgAccuracy,
                 size = RoundIconSize.Large,
                 modifier = Modifier,
             )
             RoundIcon(
                 icon = AppIcon.RoundedBarChart,
-                colors = Theme.appLevelColors.totalScore,
+                colors = Theme.appLevelColors.avgAccuracy,
                 size = RoundIconSize.Small,
                 modifier = Modifier,
             )

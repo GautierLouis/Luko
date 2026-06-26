@@ -5,8 +5,8 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.ui.core.window.rememberWindowInfo
 
 @Composable
 internal fun <T> OrientationGrid(
@@ -16,11 +16,11 @@ internal fun <T> OrientationGrid(
     content: @Composable LazyGridItemScope.(T) -> Unit
 ) {
 
-    val window = rememberAdaptiveWindowInfo()
+    val windowInfo = rememberWindowInfo()
 
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(if (window.isLandscape) data.size else 1),
+        columns = GridCells.Fixed(if (windowInfo.isHeightCompact()) data.size else 1),
         userScrollEnabled = false,
         verticalArrangement = Spacing.large,
         horizontalArrangement = Spacing.large,

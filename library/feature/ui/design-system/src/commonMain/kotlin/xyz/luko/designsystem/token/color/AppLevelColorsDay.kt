@@ -63,7 +63,7 @@ internal val AppLevelColorsDay =
                 subtle = AppPalette.teal100,
                 onSubtle = AppPalette.teal700,
             ),
-        totalScore =
+        avgAccuracy =
             LevelColors(
                 primary = AppPalette.purple600,
                 onPrimary = AppPalette.white,

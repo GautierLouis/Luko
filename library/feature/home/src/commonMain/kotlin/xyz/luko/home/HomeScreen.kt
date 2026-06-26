@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.session.toUiModel
+import xyz.luko.baseui.session.toUiModelExtended
 import xyz.luko.designsystem.components.button.AppButton
 import xyz.luko.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.designsystem.components.button.attrs.ButtonShape
@@ -103,8 +104,10 @@ private fun HomeScreen(
             item(
                 span = { GridItemSpan(statsSpan) }
             ) {
+                val metrics =
+                    if (statsSpan == 1) state.stats.toUiModel() else state.stats.toUiModelExtended()
                 OverallStatisticsCard(
-                    metrics = state.stats.toUiModel(),
+                    metrics = metrics,
                     modifier = Modifier.onGloballyPositioned { p ->
                         statCardHeight = p.size
                     }

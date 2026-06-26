@@ -23,11 +23,7 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,7 +36,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import xyz.luko.designsystem.icon.AppIcon
 import xyz.luko.designsystem.icon.RoundedBolt
 import xyz.luko.designsystem.preview.ThemeMode
@@ -50,12 +45,12 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.Spacing
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun StreakDayItem(
     title: String,
     day: StreakDay,
+    startFirstAnim: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val streakColor = when {
@@ -67,22 +62,12 @@ internal fun StreakDayItem(
         else -> streakColor
     }
 
-    var animate by remember(day.shouldAnimate) {
-        mutableStateOf(!day.shouldAnimate)
-    }
-
-    LaunchedEffect(day.shouldAnimate) {
-        delay(600.milliseconds)
-        if (day.shouldAnimate) {
-            animate = true
-        }
-    }
-
     val progress by animateFloatAsState(
         targetValue = when {
             day.segment == SegmentPosition.None -> 0f
-            animate -> 1f
-            else -> 0f
+            !day.shouldAnimate -> 1f        // already done, snap to 1f
+            startFirstAnim -> 1f            // gate opens, animate to 1f
+            else -> 0f                      // not yet, stay at 0f
         },
         animationSpec = tween(
             durationMillis = 800,
@@ -228,6 +213,7 @@ private fun PreviewStreakDayItem(
             StreakDayItem(
                 title = "M",
                 day = item,
+                startFirstAnim = true,
                 modifier = Modifier.size(50.dp)
             )
         }

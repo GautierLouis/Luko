@@ -63,7 +63,7 @@ internal val AppLevelColorNight =
                 subtle = AppPalette.teal900,
                 onSubtle = AppPalette.teal300,
             ),
-        totalScore =
+        avgAccuracy =
             LevelColors(
                 primary = AppPalette.purple600,
                 onPrimary = AppPalette.white,

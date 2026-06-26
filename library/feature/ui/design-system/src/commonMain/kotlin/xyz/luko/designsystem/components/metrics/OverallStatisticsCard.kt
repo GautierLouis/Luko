@@ -49,8 +49,8 @@ private fun PreviewOverallStatisticsCard(
                     value = "1",
                 ),
                 MetricItem.AppMetric(
-                    metric = AppStatistic.TotalScore,
-                    value = "1000",
+                    metric = AppStatistic.AvgAccuracy,
+                    value = "90%",
                 ),
             )
         )

@@ -6,6 +6,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import xyz.luko.baseui.session.caption
+import xyz.luko.baseui.session.colorFamily
+import xyz.luko.baseui.session.icon
+import xyz.luko.baseui.session.label
+import xyz.luko.baseui.session.title
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme

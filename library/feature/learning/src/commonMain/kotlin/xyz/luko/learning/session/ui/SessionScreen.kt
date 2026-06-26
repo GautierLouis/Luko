@@ -23,7 +23,6 @@ import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.luko.baseui.device.rememberAdaptiveWindowInfo
 import xyz.luko.designsystem.components.page.ErrorScreen
 import xyz.luko.designsystem.components.page.LoadingScreen
 import xyz.luko.designsystem.components.page.NestedScaffold
@@ -48,6 +47,7 @@ import xyz.luko.learning.session.ui.component.PinyinCharacter
 import xyz.luko.learning.session.ui.component.SessionHeader
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.core.window.rememberWindowInfo
 import xyz.luko.ui.navigation.AppNavigation
 import kotlin.time.Clock
 
@@ -92,6 +92,8 @@ private fun SessionScreen(
     state: SessionState.Success,
     onEvent: (SessionScreenEvent) -> Unit = {},
 ) {
+    val windowInfo = rememberWindowInfo()
+
     val pagerState =
         rememberPagerState(
             initialPage = state.currentPageIndex,
@@ -107,8 +109,6 @@ private fun SessionScreen(
             },
         )
     }
-
-    val device = rememberAdaptiveWindowInfo()
 
     LaunchedEffect(state.currentPageIndex) {
         if (pagerState.currentPage != state.currentPageIndex) {
@@ -147,7 +147,7 @@ private fun SessionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                if (device.isPhoneLandscape) {
+                if (windowInfo.isHeightCompact()) {
                     Row(
                         horizontalArrangement = Spacing.large,
                     ) {

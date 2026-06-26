@@ -3,12 +3,10 @@ package xyz.luko.learning.session
 import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import xyz.luko.baseui.session.toDomain
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
@@ -17,7 +15,7 @@ import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Stroke
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.learning.congratulation.EndOfSessionUseCase
+import xyz.luko.learning.congratulation.EndOfSessionCoordinator
 import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
@@ -30,7 +28,6 @@ import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
-import xyz.luko.ui.navigation.AppNavigation
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -43,7 +40,7 @@ internal class SessionViewModel(
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
-    private val endOfSessionUseCase: EndOfSessionUseCase
+    private val coordinator: EndOfSessionCoordinator
 ) : ViewModel() {
 
     val drawHint get() = params.difficulty == DifficultyLevel.EASY
@@ -79,7 +76,7 @@ internal class SessionViewModel(
                     val now = Clock.System.now()
 
                     TrackingEvent.CreateSession(
-                        trackingSessionID,
+                        trackingId = trackingSessionID,
                         startDate = now.toString(),
                         difficulty = params.difficulty.name,
                         levels = params.levels.joinToString(),
@@ -146,10 +143,7 @@ internal class SessionViewModel(
                 ),
                 responses = responses,
             )
-            val route = endOfSessionUseCase.getRoute()
-            withContext(Dispatchers.Main) {
-                AppNavigation.navigate(route, true)
-            }
+            coordinator.prepareAndStart()
         }
     }
 

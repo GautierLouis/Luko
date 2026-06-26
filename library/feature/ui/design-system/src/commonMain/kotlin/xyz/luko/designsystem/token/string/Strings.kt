@@ -20,7 +20,9 @@ data class Strings(
     // Statistic
     val streak: String,
     val sessions: String,
-    val totalScore: String,
+    val avgAccuracy: String,
+    val avgDifficulty: String,
+    val avgTime: String,
     val questions: String,
     val time: String,
     val score: String,

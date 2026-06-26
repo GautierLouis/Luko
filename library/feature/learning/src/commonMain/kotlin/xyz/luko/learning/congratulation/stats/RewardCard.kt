@@ -19,6 +19,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,11 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import xyz.luko.baseui.adaptive.AdaptiveLayout
-import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation
-import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.COLUMN
-import xyz.luko.baseui.adaptive.AdaptiveLayoutOrientation.ROW
+import xyz.luko.baseui.adaptive.AdaptiveContainer
 import xyz.luko.designsystem.components.metrics.attrs.MetricItem
 import xyz.luko.designsystem.components.metrics.attrs.SessionStatistic
 import xyz.luko.designsystem.preview.ThemeMode
@@ -48,32 +45,56 @@ import xyz.luko.designsystem.theme.Theme
 import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.ui.core.TestTags
-import kotlin.time.Duration.Companion.milliseconds
+import xyz.luko.utils.toPercentage
 
 @Composable
 internal fun RewardCard(
-    score: Int,
+    startAnim: Boolean,
+    avgAccuracy: Float,
     questionCount: String,
     time: String,
-    parentOrientation: AdaptiveLayoutOrientation,
+    useRow: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val orientation = if (parentOrientation == ROW) COLUMN else ROW
-
     val animatedProgress = remember { Animatable(0f) }
     val animatedScore = remember { Animatable(0f) }
 
-    LaunchedEffect(Unit) {
-        delay(300.milliseconds)
-        animatedProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 1000),
+    val metric1: @Composable (Modifier) -> Unit = {
+        CurrentSessionMetric(
+            item =
+                MetricItem.SessionMetric(
+                    metric = SessionStatistic.QuestionCount,
+                    value = questionCount,
+                ),
+            modifier = it.wrapContentHeight(),
         )
     }
-    LaunchedEffect(score) {
+
+    val metric2: @Composable (Modifier) -> Unit = {
+        CurrentSessionMetric(
+            item =
+                MetricItem.SessionMetric(
+                    metric = SessionStatistic.Time,
+                    value = time,
+                ),
+            modifier = it.wrapContentHeight(),
+        )
+    }
+
+    LaunchedEffect(startAnim) {
+        if (startAnim) {
+            animatedProgress.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(durationMillis = 1000),
+            )
+        }
+    }
+
+    LaunchedEffect(avgAccuracy) {
         animatedScore.animateTo(
-            targetValue = score.toFloat(),
+            targetValue = avgAccuracy,
             animationSpec =
                 tween(
                     durationMillis = 500,
@@ -85,69 +106,55 @@ internal fun RewardCard(
     Card(
         shape = ShapeDefaults.card(),
         border = BorderStrokeDefaults.minimum(Theme.materialColors.outline),
-        colors =
-            CardDefaults.cardColors(
-                containerColor = Theme.materialColors.surfaceContainer,
-            ),
-        modifier =
-            modifier
-                .wrapContentHeight()
-                .testTag(TestTags.Misc.CONGRATS_CARD),
+        colors = CardDefaults.cardColors(
+            containerColor = Theme.materialColors.surfaceContainer,
+        ),
+        modifier = modifier.testTag(TestTags.Misc.CONGRATS_CARD),
     ) {
-        AdaptiveLayout(
-            modifier =
-                Modifier
-                    .wrapContentHeight()
-                    .padding(Padding.large),
-            orientation = orientation,
-            spacing = Padding.large,
-        ) {
-            AccumulatedXp(animatedProgress, animatedScore)
-
-            AdaptiveLayout(
-                modifier = Modifier.wrapContentHeight(),
-                orientation = parentOrientation,
-                spacing = Padding.medium,
-            ) {
-                CurrentSessionMetric(
-                    item =
-                        MetricItem.SessionMetric(
-                            metric = SessionStatistic.QuestionCount,
-                            value = questionCount,
-                        ),
-                    modifier = Modifier.weight(1f).wrapContentHeight(),
-                )
-                CurrentSessionMetric(
-                    item =
-                        MetricItem.SessionMetric(
-                            metric = SessionStatistic.Time,
-                            value = time,
-                        ),
-                    modifier = Modifier.weight(1f).wrapContentHeight(),
-                )
+        AdaptiveContainer(
+            modifier = Modifier.padding(Padding.medium),
+            useRow = useRow,
+            verticalAlignment = Alignment.CenterVertically,
+            verticalArrangement = Spacing.medium
+        ) { parentModifier ->
+            OverhaulAccuracy(
+                modifier = parentModifier,
+                animatedProgress = animatedProgress,
+                animatedScore = animatedScore
+            )
+            AdaptiveContainer(
+                modifier = parentModifier,
+                useRow = !useRow
+            ) { itemModifier ->
+                metric1(itemModifier.fillMaxWidth())
+                metric2(itemModifier.fillMaxWidth())
             }
         }
     }
 }
 
 @Composable
-private fun AccumulatedXp(
+private fun OverhaulAccuracy(
     animatedProgress: Animatable<Float, AnimationVector1D>,
     animatedScore: Animatable<Float, AnimationVector1D>,
+    modifier: Modifier = Modifier
 ) {
     var progressSize by remember { mutableStateOf(IntSize.Zero) }
-
-    val size =
-        with(LocalDensity.current) {
-            if (progressSize == IntSize.Zero) {
-                150.dp
-            } else {
-                progressSize.width.toDp()
+    val density = LocalDensity.current
+    val size by remember {
+        derivedStateOf {
+            with(density) {
+                if (progressSize == IntSize.Zero) {
+                    150.dp
+                } else {
+                    progressSize.width.toDp()
+                }
             }
         }
+    }
 
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -169,14 +176,14 @@ private fun AccumulatedXp(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = animatedScore.value.toInt().toString(),
+                text = animatedScore.value.toPercentage(),
                 color = Theme.materialColors.tertiary,
                 style = Theme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
             )
 
             Text(
-                text = "XP",
+                text = "Accuracy",
                 style = Theme.typography.bodyLarge,
                 color = Theme.materialColors.tertiary,
             )
@@ -192,16 +199,18 @@ private fun PreviewRewardCard(
     AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             RewardCard(
-                score = 50,
+                startAnim = false,
+                avgAccuracy = 50f,
                 questionCount = "5",
                 time = "10:00",
-                parentOrientation = COLUMN,
+                useRow = false,
             )
             RewardCard(
-                score = 50,
+                startAnim = false,
+                avgAccuracy = 50f,
                 questionCount = "5",
                 time = "10:00",
-                parentOrientation = ROW,
+                useRow = true,
             )
         }
     }
