@@ -20,14 +20,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import xyz.luko.designsystem.components.LabelTag
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.color.model.LevelColors
-import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.ShapeDefaults
-import xyz.luko.designsystem.token.dimens.Spacing
-import xyz.luko.designsystem.token.typo.FontWeight
+import xyz.luko.ui.designsystem.components.LabelTag
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.color.model.LevelColors
+import xyz.luko.ui.designsystem.token.dimens.BorderStrokeDefaults
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.ui.designsystem.token.dimens.Spacing
+import xyz.luko.ui.designsystem.token.typo.FontWeight
 
 @Composable
 internal fun LevelCard(

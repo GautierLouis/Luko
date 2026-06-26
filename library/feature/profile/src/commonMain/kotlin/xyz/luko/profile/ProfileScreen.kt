@@ -11,14 +11,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toPersistentList
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.designsystem.components.page.NestedScaffold
-import xyz.luko.designsystem.components.topbar.AppTopbar
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.domain.repository.SettingTheme
+import xyz.luko.ui.designsystem.components.page.NestedScaffold
+import xyz.luko.ui.designsystem.components.topbar.AppTopbar
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
 
 @Composable
 fun ProfileScreen() {

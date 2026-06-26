@@ -13,15 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.ShapeDefaults
-import xyz.luko.designsystem.token.dimens.Spacing
-import xyz.luko.designsystem.token.typo.FontWeight
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.ui.designsystem.token.dimens.Spacing
+import xyz.luko.ui.designsystem.token.typo.FontWeight
 
 @Composable
 internal fun PinyinCharacter(

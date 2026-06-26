@@ -11,14 +11,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import xyz.luko.designsystem.icon.AppIcon
-import xyz.luko.designsystem.icon.Reset
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.ui.designsystem.icon.AppIcon
+import xyz.luko.ui.designsystem.icon.Reset
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
 
 @Composable
 internal fun ResetButton(

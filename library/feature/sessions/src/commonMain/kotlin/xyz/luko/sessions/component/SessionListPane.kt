@@ -16,15 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import xyz.luko.baseui.session.toUiModel
-import xyz.luko.designsystem.components.metrics.SessionCard
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.sessions.SessionListViewModel
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.designsystem.components.metrics.SessionCard
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 
 @Composable
 internal fun SessionListPane(

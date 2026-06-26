@@ -22,18 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.designsystem.components.button.AppButton
-import xyz.luko.designsystem.components.button.attrs.ButtonRole
-import xyz.luko.designsystem.components.button.attrs.ButtonSize
-import xyz.luko.designsystem.components.page.NestedScaffold
-import xyz.luko.designsystem.modifier.sharedBounds
-import xyz.luko.designsystem.preview.PreviewScreen
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnNextPage
@@ -41,6 +29,18 @@ import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
 import xyz.luko.learning.builder.SessionBuilderViewModel.Companion.PAGE_COUNT
 import xyz.luko.ui.core.TestTags
+import xyz.luko.ui.designsystem.components.button.AppButton
+import xyz.luko.ui.designsystem.components.button.attrs.ButtonRole
+import xyz.luko.ui.designsystem.components.button.attrs.ButtonSize
+import xyz.luko.ui.designsystem.components.page.NestedScaffold
+import xyz.luko.ui.designsystem.modifier.sharedBounds
+import xyz.luko.ui.designsystem.preview.PreviewScreen
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 
 @Composable
 internal fun SessionBuilderScreen() {

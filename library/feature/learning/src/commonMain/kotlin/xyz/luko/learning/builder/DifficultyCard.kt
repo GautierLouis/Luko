@@ -11,10 +11,10 @@ import xyz.luko.baseui.session.colorFamily
 import xyz.luko.baseui.session.icon
 import xyz.luko.baseui.session.label
 import xyz.luko.baseui.session.title
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
 
 @Composable
 internal fun DifficultyCard(

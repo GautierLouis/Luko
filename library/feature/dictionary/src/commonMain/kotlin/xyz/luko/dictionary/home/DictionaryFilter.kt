@@ -11,18 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import xyz.luko.designsystem.components.attrs.FrequencyLevel
-import xyz.luko.designsystem.components.attrs.FrequencyLevel.COMMON
-import xyz.luko.designsystem.components.attrs.FrequencyLevel.Companion.colorFamily
-import xyz.luko.designsystem.components.attrs.FrequencyLevel.Companion.label
-import xyz.luko.designsystem.components.attrs.FrequencyLevel.FREQUENT
-import xyz.luko.designsystem.components.attrs.FrequencyLevel.STANDARD
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel.COMMON
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel.Companion.colorFamily
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel.Companion.label
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel.FREQUENT
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel.STANDARD
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 
 @Composable
 internal fun DictionaryFilter(

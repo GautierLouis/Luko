@@ -1,7 +1,7 @@
 package xyz.luko.learning.builder
 
-import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel
 
 internal sealed class SessionBuilderScreenEvent {
     data class OnNextPage(

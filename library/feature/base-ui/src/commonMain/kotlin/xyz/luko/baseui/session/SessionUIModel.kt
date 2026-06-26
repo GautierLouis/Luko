@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import xyz.luko.designsystem.components.metrics.SessionUiModel
-import xyz.luko.designsystem.components.metrics.attrs.AppStatistic
-import xyz.luko.designsystem.components.metrics.attrs.MetricItem
-import xyz.luko.designsystem.theme.Theme
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.Statistics
+import xyz.luko.ui.designsystem.components.metrics.SessionUiModel
+import xyz.luko.ui.designsystem.components.metrics.attrs.AppStatistic
+import xyz.luko.ui.designsystem.components.metrics.attrs.MetricItem
+import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.utils.toAccessibilityDate
 import xyz.luko.utils.toFormattedString
 import xyz.luko.utils.toHHMMSS

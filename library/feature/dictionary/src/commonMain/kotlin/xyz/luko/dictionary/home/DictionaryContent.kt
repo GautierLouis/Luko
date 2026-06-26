@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import xyz.luko.designsystem.components.page.LoadingContent
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.SimpleDictionary
+import xyz.luko.ui.designsystem.components.page.LoadingContent
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 
 /**
  * Preview on parent to handle all states of the screen

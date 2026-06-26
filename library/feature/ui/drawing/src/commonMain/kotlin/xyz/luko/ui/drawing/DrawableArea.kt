@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
-import xyz.luko.designsystem.theme.Theme
 import xyz.luko.domain.model.Stroke
+import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.ui.drawing.internal.StrokeTransformer
 import xyz.luko.ui.drawing.internal.drawHint
 import xyz.luko.ui.drawing.internal.drawStroke

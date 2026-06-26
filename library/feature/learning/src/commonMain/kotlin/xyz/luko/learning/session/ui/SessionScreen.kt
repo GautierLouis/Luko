@@ -23,16 +23,6 @@ import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.luko.designsystem.components.page.ErrorScreen
-import xyz.luko.designsystem.components.page.LoadingScreen
-import xyz.luko.designsystem.components.page.NestedScaffold
-import xyz.luko.designsystem.preview.LoadingMode
-import xyz.luko.designsystem.preview.LoadingModeProvider
-import xyz.luko.designsystem.preview.PreviewScreen
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.model.DrawingPageState
@@ -48,6 +38,16 @@ import xyz.luko.learning.session.ui.component.SessionHeader
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
 import xyz.luko.ui.core.window.rememberWindowInfo
+import xyz.luko.ui.designsystem.components.page.ErrorScreen
+import xyz.luko.ui.designsystem.components.page.LoadingScreen
+import xyz.luko.ui.designsystem.components.page.NestedScaffold
+import xyz.luko.ui.designsystem.preview.LoadingMode
+import xyz.luko.ui.designsystem.preview.LoadingModeProvider
+import xyz.luko.ui.designsystem.preview.PreviewScreen
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 import xyz.luko.ui.navigation.AppNavigation
 import kotlin.time.Clock
 

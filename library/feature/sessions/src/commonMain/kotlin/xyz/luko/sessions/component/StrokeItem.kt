@@ -10,8 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Spacing
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 import kotlin.math.roundToInt
 
 @Composable

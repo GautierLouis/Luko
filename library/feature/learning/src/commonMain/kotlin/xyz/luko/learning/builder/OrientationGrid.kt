@@ -5,8 +5,8 @@ import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.ui.core.window.rememberWindowInfo
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 
 @Composable
 internal fun <T> OrientationGrid(

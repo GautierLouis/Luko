@@ -1,7 +1,7 @@
 package xyz.luko.baseui.session
 
-import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.domain.model.CharacterFrequencyLevel
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel
 
 fun List<FrequencyLevel>.toDomain(): List<CharacterFrequencyLevel> =
     map {

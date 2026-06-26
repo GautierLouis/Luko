@@ -23,12 +23,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.app.main.MainScaffold
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.LocalAnimatedContentScope
 import xyz.luko.learning.navigation.learningScreens
 import xyz.luko.sessions.navigation.sessionsScreens
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.LocalAnimatedContentScope
 import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.ui.navigation.NavigationCommand

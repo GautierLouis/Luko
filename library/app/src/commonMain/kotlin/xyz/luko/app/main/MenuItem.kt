@@ -2,13 +2,13 @@ package xyz.luko.app.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import xyz.luko.designsystem.icon.AppIcon
-import xyz.luko.designsystem.icon.Feed
-import xyz.luko.designsystem.icon.Home
-import xyz.luko.designsystem.icon.Library
-import xyz.luko.designsystem.icon.Person
-import xyz.luko.designsystem.icon.PlayArrow
-import xyz.luko.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.icon.AppIcon
+import xyz.luko.ui.designsystem.icon.Feed
+import xyz.luko.ui.designsystem.icon.Home
+import xyz.luko.ui.designsystem.icon.Library
+import xyz.luko.ui.designsystem.icon.Person
+import xyz.luko.ui.designsystem.icon.PlayArrow
+import xyz.luko.ui.designsystem.theme.Theme
 
 internal enum class MenuItem(
     val icon: ImageVector,

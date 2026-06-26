@@ -1,15 +1,15 @@
 package xyz.luko.baseui.session
 
 import androidx.compose.runtime.Composable
-import xyz.luko.designsystem.icon.AppIcon
-import xyz.luko.designsystem.icon.Lightbulb
-import xyz.luko.designsystem.icon.Visibility
-import xyz.luko.designsystem.icon.VisibilityOff
-import xyz.luko.designsystem.theme.Theme
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.DifficultyLevel.EASY
 import xyz.luko.domain.model.DifficultyLevel.HARD
 import xyz.luko.domain.model.DifficultyLevel.MEDIUM
+import xyz.luko.ui.designsystem.icon.AppIcon
+import xyz.luko.ui.designsystem.icon.Lightbulb
+import xyz.luko.ui.designsystem.icon.Visibility
+import xyz.luko.ui.designsystem.icon.VisibilityOff
+import xyz.luko.ui.designsystem.theme.Theme
 
 @Composable
 fun DifficultyLevel.label() =

@@ -13,12 +13,12 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.session.toUiModel
-import xyz.luko.designsystem.components.metrics.SessionCard
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.theme.AppTheme
 import xyz.luko.domain.model.Session
 import xyz.luko.ui.core.preview.PagingDataPreviewParameter
 import xyz.luko.ui.core.preview.PreviewProvider
+import xyz.luko.ui.designsystem.components.metrics.SessionCard
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.theme.AppTheme
 
 @Composable
 fun FeedScreen() {

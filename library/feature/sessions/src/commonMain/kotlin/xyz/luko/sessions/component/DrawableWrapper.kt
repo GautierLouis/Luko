@@ -12,12 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.BorderStrokeDefaults
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.ShapeDefaults
-import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.domain.model.Stroke
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.BorderStrokeDefaults
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 import xyz.luko.ui.drawing.DrawableArea
 import xyz.luko.ui.drawing.DrawableAreaDefault
 

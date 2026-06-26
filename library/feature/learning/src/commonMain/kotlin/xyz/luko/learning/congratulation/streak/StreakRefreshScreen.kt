@@ -17,16 +17,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.luko.designsystem.components.button.AppButton
-import xyz.luko.designsystem.components.button.attrs.ButtonSize
-import xyz.luko.designsystem.components.page.NestedScaffold
-import xyz.luko.designsystem.preview.PreviewScreen
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
-import xyz.luko.designsystem.token.dimens.Spacing
 import xyz.luko.learning.congratulation.streak.ui.DayCount
 import xyz.luko.learning.congratulation.streak.ui.StreakWeek
 import xyz.luko.learning.congratulation.streak.ui.previewStreakDays
@@ -34,6 +24,16 @@ import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.window.WindowInfo
 import xyz.luko.ui.core.window.rememberWindowInfo
+import xyz.luko.ui.designsystem.components.button.AppButton
+import xyz.luko.ui.designsystem.components.button.attrs.ButtonSize
+import xyz.luko.ui.designsystem.components.page.NestedScaffold
+import xyz.luko.ui.designsystem.preview.PreviewScreen
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.designsystem.token.dimens.Spacing
 
 @Composable
 internal fun StreakRefreshScreen(

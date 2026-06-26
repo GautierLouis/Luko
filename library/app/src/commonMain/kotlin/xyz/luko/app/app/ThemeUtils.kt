@@ -1,7 +1,7 @@
 package xyz.luko.app.app
 
-import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.domain.repository.SettingTheme
+import xyz.luko.ui.designsystem.preview.ThemeMode
 
 internal fun SettingTheme.toThemeMode(isSystemInDarkTheme: Boolean): ThemeMode =
     when (this) {

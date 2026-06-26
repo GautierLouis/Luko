@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
@@ -14,6 +13,7 @@ import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnNextPage
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
 import xyz.luko.learning.navigation.LearningInternalRoute
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.ui.navigation.AppNavigation
 
 internal class SessionBuilderViewModel : ViewModel() {

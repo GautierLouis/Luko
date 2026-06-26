@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import xyz.luko.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.theme.Theme
 
 @Composable
 internal fun AccuracyChart(

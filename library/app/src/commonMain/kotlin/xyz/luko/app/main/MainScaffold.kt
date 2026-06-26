@@ -19,17 +19,17 @@ import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.app.main.MainViewModel.UiState
 import xyz.luko.app.main.MenuDefault.FloatingActionSize
-import xyz.luko.designsystem.preview.PreviewScreen
-import xyz.luko.designsystem.preview.ThemeMode
-import xyz.luko.designsystem.preview.ThemeModeProvider
-import xyz.luko.designsystem.theme.AppTheme
-import xyz.luko.designsystem.theme.Theme
-import xyz.luko.designsystem.token.dimens.Padding
 import xyz.luko.dictionary.home.DictionaryScreen
 import xyz.luko.feed.FeedScreen
 import xyz.luko.home.HomeScreen
 import xyz.luko.profile.ProfileScreen
 import xyz.luko.ui.core.window.rememberWindowInfo
+import xyz.luko.ui.designsystem.preview.PreviewScreen
+import xyz.luko.ui.designsystem.preview.ThemeMode
+import xyz.luko.ui.designsystem.preview.ThemeModeProvider
+import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.designsystem.token.dimens.Padding
 
 @Composable
 internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
