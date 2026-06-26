@@ -9,6 +9,7 @@ import xyz.luko.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.designsystem.preview.ThemeMode
 import xyz.luko.designsystem.preview.ThemeModeProvider
 import xyz.luko.designsystem.theme.AppTheme
+import xyz.luko.designsystem.theme.Theme
 
 @Composable
 internal fun CharaFreqLevelGroupPicker(
@@ -16,18 +17,22 @@ internal fun CharaFreqLevelGroupPicker(
     selectedLevels: List<FrequencyLevel> = listOf(),
     onClick: (FrequencyLevel) -> Unit = {},
 ) {
-
-    OrientationGrid(
-        data = FrequencyLevel.entries,
+    PickerLayout(
+        label = Theme.strings.builderSelectDifficulty,
         modifier = modifier,
-        key = { level -> level.ordinal }
-    ) { level ->
-        CharaFreqLevelCard(
-            level = level,
-            modifier = Modifier,
-            selected = level in selectedLevels,
-            onClick = { onClick(level) },
-        )
+    ) {
+        OrientationGrid(
+            data = FrequencyLevel.entries,
+            modifier = modifier,
+            key = { level -> level.ordinal }
+        ) { level ->
+            CharaFreqLevelCard(
+                level = level,
+                modifier = Modifier,
+                selected = level in selectedLevels,
+                onClick = { onClick(level) },
+            )
+        }
     }
 }
 

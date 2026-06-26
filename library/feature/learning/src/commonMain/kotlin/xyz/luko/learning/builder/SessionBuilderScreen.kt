@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
@@ -122,9 +124,7 @@ private fun SessionBuilderScreen(
             ) {
                 AnimatedVisibility(
                     visible = state.showPreviewButton,
-                    modifier =
-                        Modifier
-                            .weight(1f),
+                    modifier = Modifier.weight(1f),
                     enter = slideInHorizontally(),
                     exit = slideOutHorizontally(),
                 ) {
@@ -138,17 +138,29 @@ private fun SessionBuilderScreen(
                     )
                 }
 
-                AppButton(
-                    text = if (state.isFinished) Theme.strings.start else Theme.strings.next,
-                    size = ButtonSize.Large,
-                    modifier =
-                        Modifier
-                            .testTag(TestTags.Action.PRIMARY)
-                            .weight(1f),
-                    onClick = {
-                        onEvent(OnNextPage(pager.currentPage, pager.pageCount))
-                    },
-                )
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    if (state.levels.isEmpty()) {
+                        Text(
+                            text = Theme.strings.builderNoFrequencySelectedError,
+                            style = Theme.typography.labelMedium,
+                            textAlign = TextAlign.Center,
+                            color = Theme.materialColors.error,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    AppButton(
+                        text = if (state.isFinished) Theme.strings.start else Theme.strings.next,
+                        size = ButtonSize.Large,
+                        enabled = state.levels.isNotEmpty(),
+                        modifier = Modifier.testTag(TestTags.Action.PRIMARY),
+                        onClick = {
+                            onEvent(OnNextPage(pager.currentPage, pager.pageCount))
+                        },
+                    )
+                }
             }
         }
     }

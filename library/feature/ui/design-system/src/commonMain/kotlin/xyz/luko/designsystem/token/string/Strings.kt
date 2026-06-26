@@ -52,6 +52,8 @@ data class Strings(
     val start: String,
     val builderPickQuestionCount: String,
     val builderSelectDifficulty: String,
+    val builderSelectFrequency: String,
+    val builderNoFrequencySelectedError: String,
     val sessionHeaderTitle: String,
     val sessionComplete: String,
     val sessionFinish: String,
