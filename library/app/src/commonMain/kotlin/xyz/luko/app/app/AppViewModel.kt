@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import xyz.luko.domain.repository.AuthRepository
-import xyz.luko.domain.repository.SettingTheme
+import xyz.luko.domain.model.SettingTheme
+import xyz.luko.domain.repository.AppStartUseCase
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager
 import xyz.luko.firebase.RemoteConfigManager
@@ -19,8 +19,8 @@ import xyz.luko.utils.AppConfig
 import xyz.luko.utils.Flavor
 
 internal class AppViewModel(
+    private val appStartViewModel: AppStartUseCase,
     private val firebaseManager: FirebaseManager,
-    private val authRepository: AuthRepository,
     private val remoteConfigManager: RemoteConfigManager,
     userRepository: UserRepository,
     appConfig: AppConfig,
@@ -35,11 +35,8 @@ internal class AppViewModel(
     val state = _state.asStateFlow()
 
     init {
-
-        firebaseManager.initialize()
-
         viewModelScope.launch {
-            authRepository.registerAnonymously()
+            appStartViewModel.initialize()
         }
 
         userRepository

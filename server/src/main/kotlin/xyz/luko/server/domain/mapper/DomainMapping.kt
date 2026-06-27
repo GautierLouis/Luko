@@ -1,7 +1,7 @@
 package xyz.luko.server.domain.mapper
 
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.v1.core.ResultRow
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.DecompositionDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto

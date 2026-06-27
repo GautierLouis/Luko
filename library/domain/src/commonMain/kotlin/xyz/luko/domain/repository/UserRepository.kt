@@ -3,13 +3,8 @@ package xyz.luko.domain.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import xyz.luko.domain.model.SettingTheme
 import xyz.luko.preferences.AppPreferences
-
-enum class SettingTheme {
-    Default,
-    Night,
-    Day,
-}
 
 interface UserRepository {
     suspend fun getTheme(): SettingTheme

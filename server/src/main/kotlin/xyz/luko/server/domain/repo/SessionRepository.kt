@@ -6,7 +6,7 @@ import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.data.database.dao.DictionaryDao
 import xyz.luko.server.data.database.dao.SeedDao
 import xyz.luko.server.domain.mapper.ResultRowMapping.toDictionary
-import xyz.luko.server.domain.mapper.ResultRowMapping.toSeedRow
+import xyz.luko.server.domain.mapper.ResultRowMapping.toSeedDto
 import xyz.luko.server.domain.model.SeedRow
 import xyz.luko.server.error.missingParameter
 import kotlin.random.Random
@@ -57,7 +57,7 @@ internal class DefaultSessionRepository(
         params: Destination.Session.Replay
     ): ResponseSessionDto<DictionaryDto> {
         val seedRow = seedDao.getSeed(params.seed)
-            ?.toSeedRow()
+            ?.toSeedDto()
             ?: throw IllegalArgumentException("seed not found")
 
         val result = dictionaryDao.createSession(

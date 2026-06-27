@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import xyz.luko.domain.repository.SettingTheme
+import xyz.luko.domain.model.SettingTheme
 import xyz.luko.domain.repository.UserRepository
 
 internal sealed class ProfileScreenEvent {

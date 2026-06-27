@@ -1,11 +1,13 @@
 package xyz.luko.domain
 
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import xyz.luko.database.databaseModule
 import xyz.luko.domain.provider.DefaultFcmProvider
 import xyz.luko.domain.provider.DefaultTokenProvider
+import xyz.luko.domain.repository.AppStartUseCase
 import xyz.luko.domain.repository.AuthRepository
 import xyz.luko.domain.repository.DefaultAuthRepository
 import xyz.luko.domain.repository.DefaultDictionaryRepository
@@ -29,4 +31,6 @@ val domainModule =
         singleOf(::DefaultDictionaryRepository) bind DictionaryRepository::class
         singleOf(::DefaultSessionRepository) bind SessionRepository::class
         singleOf(::DefaultUserRepository) bind UserRepository::class
+
+        factoryOf(::AppStartUseCase)
     }

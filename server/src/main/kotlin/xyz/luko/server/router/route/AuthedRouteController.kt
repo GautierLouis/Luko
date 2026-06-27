@@ -14,8 +14,11 @@ import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.domain.repo.UserRepository
+import xyz.luko.server.error.ErrorCode.NO_RESULT
+import xyz.luko.server.error.NotResultException
 import xyz.luko.server.plugin.BEARER
 import xyz.luko.server.router.RouteController
+import xyz.luko.server.router.respondOk
 
 class AuthedRouteController(
     private val userRepository: UserRepository
@@ -46,8 +49,10 @@ class AuthedRouteController(
             }
 
             get<Destination.Me> {
-                val principal = call.principal<UserIdPrincipal>()
-                call.respond(mapOf("user_id" to principal))
+                val principal = call.principal<UserIdPrincipal>()!!
+                val user = userRepository.getUser(principal.name)
+                    ?: throw NotResultException(NO_RESULT, "No user found")
+                call.respondOk(user)
             }
         }
     }

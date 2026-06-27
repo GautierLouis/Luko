@@ -1,11 +1,8 @@
 package xyz.luko.server.router.route
 
 import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.authenticate
 import io.ktor.server.resources.get
-import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import xyz.luko.apicontracts.dto.StrokeDto
@@ -15,14 +12,12 @@ import xyz.luko.server.domain.repo.SessionRepository
 import xyz.luko.server.error.dictionaryNotFound
 import xyz.luko.server.plugin.BEARER
 import xyz.luko.server.router.RouteController
+import xyz.luko.server.router.respondOk
 
 class CharacterRouteController(
     private val sessionRepository: SessionRepository,
     private val dictionaryRepository: DictionaryRepository,
 ) : RouteController {
-
-    private suspend inline fun <reified T : Any> ApplicationCall.respondOk(body: T) =
-        this.respond(status = HttpStatusCode.OK, message = body)
 
     override fun Route.register() {
         authenticate(BEARER) {

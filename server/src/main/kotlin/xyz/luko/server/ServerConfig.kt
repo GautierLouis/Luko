@@ -2,9 +2,9 @@ package xyz.luko.server
 
 import io.github.jan.supabase.logging.LogLevel
 import io.ktor.server.application.ApplicationEnvironment
-import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
-import org.jetbrains.exposed.sql.SqlLogger
-import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.v1.core.Slf4jSqlDebugLogger
+import org.jetbrains.exposed.v1.core.SqlLogger
+import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.koin.core.logger.Level
 
 data class ServerConfig(

@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
-import xyz.luko.domain.repository.SettingTheme
+import xyz.luko.domain.model.SettingTheme
 import xyz.luko.ui.designsystem.icon.AppIcon
 import xyz.luko.ui.designsystem.icon.Check
 import xyz.luko.ui.designsystem.preview.ThemeMode

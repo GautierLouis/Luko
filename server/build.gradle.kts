@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.hikaricp)
     implementation(libs.flyway)
+    implementation(libs.flyway.postgres)
     implementation(libs.ehcache)
     implementation(libs.firebase.admin)
 

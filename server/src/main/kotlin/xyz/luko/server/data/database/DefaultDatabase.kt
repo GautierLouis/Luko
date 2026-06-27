@@ -1,7 +1,7 @@
 package xyz.luko.server.data.database
 
 import com.zaxxer.hikari.HikariDataSource
-import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import xyz.luko.server.ServerConfig
 import xyz.luko.server.data.database.table.TableList
@@ -14,19 +14,27 @@ class DefaultDatabase(
 ) : Database {
     override suspend fun init() {
         val dataSource = buildDataSource()
+        migrate(dataSource)
         connect(dataSource)
-        migrate()
         prepopulate.init()
+    }
+
+    private fun migrate(dataSource: HikariDataSource) {
+        Flyway.configure()
+            .dataSource(dataSource)
+            .locations("classpath:db/migration")
+            .baselineVersion("0")
+            .load()
+            .migrate()
     }
 
     private fun connect(dataSource: HikariDataSource) {
         ExposedDatabase.connect(dataSource)
-    }
-
-    private fun migrate() {
         transaction {
             addLogger(config.sqlLogger)
-            SchemaUtils.create(*TableList.get())
+            TableList.get().forEach { table ->
+                println(table.ddl.joinToString(";\n"))
+            }
         }
     }
 

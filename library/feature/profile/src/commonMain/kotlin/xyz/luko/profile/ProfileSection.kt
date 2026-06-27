@@ -1,7 +1,7 @@
 package xyz.luko.profile
 
 import kotlinx.collections.immutable.ImmutableList
-import xyz.luko.domain.repository.SettingTheme
+import xyz.luko.domain.model.SettingTheme
 
 internal enum class ProfileSection {
     Profile,

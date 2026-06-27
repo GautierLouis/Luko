@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toPersistentList
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.domain.repository.SettingTheme
+import xyz.luko.domain.model.SettingTheme
 import xyz.luko.ui.designsystem.components.page.NestedScaffold
 import xyz.luko.ui.designsystem.components.topbar.AppTopbar
 import xyz.luko.ui.designsystem.preview.ThemeMode
