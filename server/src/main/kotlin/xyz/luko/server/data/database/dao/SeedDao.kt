@@ -1,10 +1,11 @@
 package xyz.luko.server.data.database.dao
 
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.insertAll
-import xyz.luko.server.data.database.suspendTransaction
 import xyz.luko.server.data.database.table.SeedTable
 import xyz.luko.server.domain.model.SeedRow
 

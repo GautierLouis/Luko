@@ -1,41 +1,38 @@
 package xyz.luko.server.data.database
 
-import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.SqlExpressionBuilder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.batchInsert
-import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.statements.BatchInsertStatement
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Op
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.between
+import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.isNotNull
+import org.jetbrains.exposed.v1.core.like
+import org.jetbrains.exposed.v1.core.neq
+import org.jetbrains.exposed.v1.core.or
+import org.jetbrains.exposed.v1.core.statements.BatchInsertStatement
+import org.jetbrains.exposed.v1.jdbc.Query
+import org.jetbrains.exposed.v1.jdbc.andWhere
+import org.jetbrains.exposed.v1.jdbc.batchInsert
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.domain.model.PaginatedRow
-
-suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
-    newSuspendedTransaction(Dispatchers.IO, statement = block)
 
 /** Checks if the column value is not an empty JSON array */
 private fun Column<String?>.arrayNotEmpty() = this.neq("[]")
 
 /** Excludes pure radical entries: must have a pinyin or a non-empty decomposition list */
-private fun SqlExpressionBuilder.notRadical() =
+private fun notRadical() =
     CharacterTable.pinyin.isNotNull() or DictionaryTable.decomposition.arrayNotEmpty()
 
 /** Restricts to characters that belong to a valid frequency level */
-private fun SqlExpressionBuilder.validLevel() =
+private fun validLevel() =
     DictionaryTable.level.between(1, 3)
 
 /** Applies the default validity filters (notRadical + validLevel) and appends a custom clause */
-fun Query.defaultWhere(clause: SqlExpressionBuilder.() -> Op<Boolean>) =
+fun Query.defaultWhere(clause: () -> Op<Boolean>) =
     this.where { notRadical() and validLevel() }.andWhere(clause)
 
 /**
@@ -76,7 +73,7 @@ fun String.toneVariants(): List<String> {
 /** Builds a pinyin LIKE condition matching any tone variant of this query string */
 internal fun matchesPinyin(query: String): Op<Boolean> =
     query.toneVariants()
-        .map { v -> Op.build { CharacterTable.pinyin like "%$v%" } }
+        .map<String, Op<Boolean>> { v -> CharacterTable.pinyin like "%$v%" }
         .reduce { acc, op -> acc or op }
 
 // --- Utils ---

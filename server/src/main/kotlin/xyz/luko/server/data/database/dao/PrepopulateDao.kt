@@ -1,11 +1,13 @@
 package xyz.luko.server.data.database.dao
 
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.v1.core.JoinType
+import org.jetbrains.exposed.v1.core.notLike
+import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.exist
 import xyz.luko.server.data.database.insertAll
-import xyz.luko.server.data.database.suspendTransaction
 import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.GraphicTable
 import xyz.luko.server.data.database.table.HanziTable

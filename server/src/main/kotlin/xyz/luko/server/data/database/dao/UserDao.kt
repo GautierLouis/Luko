@@ -1,11 +1,12 @@
 package xyz.luko.server.data.database.dao
 
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.update
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.jdbc.update
+import org.jetbrains.exposed.v1.jdbc.upsert
 import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.StatementMapping.update
-import xyz.luko.server.data.database.suspendTransaction
 import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.domain.mapper.ResultRowMapping.toDto
 import xyz.luko.server.domain.model.UpdateUserRow

@@ -1,12 +1,12 @@
 package xyz.luko.server.data.database
 
 import com.zaxxer.hikari.HikariDataSource
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import xyz.luko.server.ServerConfig
 import xyz.luko.server.data.database.table.TableList
 import xyz.luko.server.domain.usecase.PrepopulateDatabaseUseCase
+import org.jetbrains.exposed.v1.jdbc.Database as ExposedDatabase
 
 class DefaultDatabase(
     private val config: ServerConfig,
@@ -20,7 +20,7 @@ class DefaultDatabase(
     }
 
     private fun connect(dataSource: HikariDataSource) {
-        org.jetbrains.exposed.sql.Database.connect(dataSource)
+        ExposedDatabase.connect(dataSource)
     }
 
     private fun migrate() {

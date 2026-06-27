@@ -1,16 +1,19 @@
 package xyz.luko.server.data.database.dao
 
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.Random
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.core.JoinType
+import org.jetbrains.exposed.v1.core.Random
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import xyz.luko.server.data.database.StatementMapping.add
 import xyz.luko.server.data.database.defaultWhere
 import xyz.luko.server.data.database.insertAll
 import xyz.luko.server.data.database.matchesPinyin
 import xyz.luko.server.data.database.paginated
-import xyz.luko.server.data.database.suspendTransaction
 import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.data.database.table.GraphicTable
@@ -47,6 +50,7 @@ internal class DefaultDictionaryDao : DictionaryDao {
                 .toList()
         }
     }
+
 
     override suspend fun getByLevel(
         page: Int,

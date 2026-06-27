@@ -1,6 +1,6 @@
 package xyz.luko.server.data.database.table
 
-import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
 object HanziTable : IntIdTable("hanzi") {
     val code = integer("code").index()
