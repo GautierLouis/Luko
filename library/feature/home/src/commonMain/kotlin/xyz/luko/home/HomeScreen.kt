@@ -3,7 +3,6 @@ package xyz.luko.home
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -12,25 +11,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.session.toUiModel
 import xyz.luko.baseui.session.toUiModelExtended
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
-import xyz.luko.ui.core.window.WindowInfo
-import xyz.luko.ui.core.window.rememberWindowInfo
+import xyz.luko.ui.core.window.rememberIsWiderThanTall
 import xyz.luko.ui.designsystem.components.button.AppButton
 import xyz.luko.ui.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.ui.designsystem.components.button.attrs.ButtonShape
@@ -64,34 +54,8 @@ private fun HomeScreen(
     state: HomeViewModel.UIState,
     onEvent: (HomeScreenEvent) -> Unit = {}
 ) {
-    val windowInfo = rememberWindowInfo()
-
-    val span = when (windowInfo) {
-        WindowInfo.WIDTH_COMPACT -> 1
-        else -> 2
-    }
-
-    val columns = when {
-        windowInfo.isHeightCompact() -> 3
-        windowInfo == WindowInfo.WIDTH_COMPACT -> 1
-        else -> 2
-    }
-
-    val statsSpan = when {
-        windowInfo.isHeightCompact() -> 1
-        else -> columns
-    }
-
-    val seeAllSpan = when {
-        windowInfo.isHeightCompact() -> 2
-        else -> 1
-    }
-
-    val density = LocalDensity.current
-    var statCardHeight by remember { mutableStateOf(IntSize.Zero) }
-    val fixedCardHeight by derivedStateOf {
-        with(density) { statCardHeight.height.toDp() }
-    }
+    val isWider = rememberIsWiderThanTall()
+    val span = if (isWider) 2 else 1
 
     NestedScaffold(
         modifier = Modifier.testTag(TestTags.Screen.HOME),
@@ -108,10 +72,10 @@ private fun HomeScreen(
             contentPadding = PaddingValues(Padding.large)
         ) {
             item(
-                span = { GridItemSpan(statsSpan) }
+                span = { GridItemSpan(span) }
             ) {
                 val metrics =
-                    if (statsSpan == 1) state.stats.toUiModel() else state.stats.toUiModelExtended()
+                    if (span == 1) state.stats.toUiModel() else state.stats.toUiModelExtended()
                 OverallStatisticsCard(
                     metrics = metrics,
                     modifier = Modifier
@@ -119,14 +83,11 @@ private fun HomeScreen(
                             key = OnboardingKey.OVERALL_STATS,
                             anchorPosition = TooltipAnchorPosition.Below
                         )
-                        .onGloballyPositioned { p ->
-                            statCardHeight = p.size
-                        }
                 )
             }
 
-            if (state.seeAll && !windowInfo.isHeightCompact()) {
-                item(span = { GridItemSpan(columns) }) {
+            if (state.seeAll && !isWider) {
+                item(span = { GridItemSpan(1) }) {
                     Text(
                         text = Theme.strings.lastSessionTitle.uppercase(),
                         style = Theme.typography.titleMedium,
@@ -139,7 +100,6 @@ private fun HomeScreen(
                 item {
                     SessionCard(
                         model = state.lastSession.toUiModel(),
-                        modifier = Modifier.height(fixedCardHeight),
                         onClick = {
                             AppNavigation.navigate(SessionsRoute.SessionListRoute(state.lastSession.id))
                         }
@@ -148,8 +108,8 @@ private fun HomeScreen(
             }
 
             if (state.seeAll) {
-                item(span = { GridItemSpan(seeAllSpan) }) {
-                    if (windowInfo.isHeightCompact()) {
+                item {
+                    if (!isWider) {
                         AppButton(
                             text = "See More",
                             shape = ButtonShape.Outlined,
@@ -161,7 +121,6 @@ private fun HomeScreen(
                     } else {
                         MoreSessionCard(
                             model = state.lastSession!!.toUiModel(),
-                            modifier = Modifier.height(fixedCardHeight),
                             onClick = { AppNavigation.navigate(SessionsRoute.SessionListRoute()) }
                         )
                     }

@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import xyz.luko.ui.core.adaptive.AdaptiveContainer
 import xyz.luko.ui.designsystem.components.LabelTag
 import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.ui.designsystem.token.color.model.LevelColors
@@ -36,6 +37,7 @@ internal fun LevelCard(
     icon: ImageVector,
     color: LevelColors,
     modifier: Modifier = Modifier,
+    inlineCaption: Boolean = true,
     selected: Boolean = false,
     tagLabel: String? = null,
     onClick: () -> Unit = {},
@@ -86,9 +88,12 @@ internal fun LevelCard(
             Column(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Row(
+                AdaptiveContainer(
+                    useRow = inlineCaption,
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Spacing.medium,
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Spacing.medium
                 ) {
                     Text(
                         text = title,
@@ -104,6 +109,7 @@ internal fun LevelCard(
                         )
                     }
                 }
+
                 Text(
                     text = caption,
                     style = Theme.typography.bodySmall,

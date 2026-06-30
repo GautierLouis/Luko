@@ -12,6 +12,7 @@ import xyz.luko.baseui.session.icon
 import xyz.luko.baseui.session.label
 import xyz.luko.baseui.session.title
 import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.ui.core.window.rememberIsWiderThanTall
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
@@ -23,10 +24,13 @@ internal fun DifficultyCard(
     selected: Boolean = false,
     onClick: () -> Unit = {},
 ) {
+    val isWider = rememberIsWiderThanTall()
+
     LevelCard(
         title = difficulty.title(),
         tagLabel = difficulty.label(),
         caption = difficulty.caption(),
+        inlineCaption = !isWider,
         icon = difficulty.icon(),
         color = difficulty.colorFamily(),
         modifier = modifier,
