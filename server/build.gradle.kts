@@ -29,6 +29,7 @@ tasks {
     // produce a fat jar without classifier so Docker picks it up easily
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         isZip64 = true
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         exclude("META-INF/*.SF")
         exclude("META-INF/*.DSA")
         exclude("META-INF/*.RSA")
