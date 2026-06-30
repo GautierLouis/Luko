@@ -24,6 +24,7 @@ class DefaultDatabase(
             .dataSource(dataSource)
             .locations("classpath:db/migration")
             .baselineVersion("0")
+            .baselineOnMigrate(true)
             .load()
             .migrate()
     }
