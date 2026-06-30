@@ -35,6 +35,7 @@ tasks {
         archiveBaseName.set("app")
         archiveClassifier.set("")  // no "-all" suffix
         archiveVersion.set("")     // optional: remove version in name
+        mergeServiceFiles()
     }
 }
 
