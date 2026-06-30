@@ -2,8 +2,10 @@ package xyz.luko.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -16,6 +18,9 @@ internal class DefaultAppPreferences(
         private val USER_ID = stringPreferencesKey("user_id")
         private val KEY_FCM_TOKEN = stringPreferencesKey("fcm_token")
         private val KEY_USER_THEME = stringPreferencesKey("theme")
+
+        private val KEY_OB_STATE = booleanPreferencesKey("onboarding_state")
+        private val KEY_OB_SEEN_KEYS = stringSetPreferencesKey("onboarding_seen_keys")
     }
 
     override suspend fun setUserId(id: String) {
@@ -44,4 +49,22 @@ internal class DefaultAppPreferences(
     }
 
     override suspend fun getTheme(): String? = observeTheme().firstOrNull()
+
+    // ONBOARDING
+    override fun observeIsOnboardingActivated(): Flow<Boolean> =
+        store.data.map { preferences -> preferences[KEY_OB_STATE] ?: false }
+
+    override suspend fun setOnboardingState(enable: Boolean) {
+        store.edit { it[KEY_OB_STATE] = enable }
+    }
+
+    override fun observeSeenKeys(): Flow<Set<String>> =
+        store.data.map { preferences -> preferences[KEY_OB_SEEN_KEYS].orEmpty() }
+
+    override suspend fun getSeenKeys(): Set<String> =
+        observeSeenKeys().first()
+
+    override suspend fun setKeySeen(keys: Set<String>) {
+        store.edit { it[KEY_OB_SEEN_KEYS] = keys }
+    }
 }

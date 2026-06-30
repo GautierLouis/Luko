@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -37,6 +39,7 @@ import xyz.luko.ui.designsystem.components.metrics.MoreSessionCard
 import xyz.luko.ui.designsystem.components.metrics.OverallStatisticsCard
 import xyz.luko.ui.designsystem.components.metrics.SessionCard
 import xyz.luko.ui.designsystem.components.page.NestedScaffold
+import xyz.luko.ui.designsystem.onboarding.OnboardingKey
 import xyz.luko.ui.designsystem.preview.PreviewScreen
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
@@ -46,17 +49,20 @@ import xyz.luko.ui.designsystem.token.dimens.Padding
 import xyz.luko.ui.designsystem.token.dimens.Spacing
 import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute.SessionsRoute
+import xyz.luko.ui.onboarding.registerTooltip
 
 @Composable
 fun HomeScreen() {
     val viewModel = koinViewModel<HomeViewModel>()
     val state = viewModel.state.collectAsStateWithLifecycle()
-    HomeScreen(state.value)
+    HomeScreen(state.value) { viewModel.event(it) }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
     state: HomeViewModel.UIState,
+    onEvent: (HomeScreenEvent) -> Unit = {}
 ) {
     val windowInfo = rememberWindowInfo()
 
@@ -108,9 +114,14 @@ private fun HomeScreen(
                     if (statsSpan == 1) state.stats.toUiModel() else state.stats.toUiModelExtended()
                 OverallStatisticsCard(
                     metrics = metrics,
-                    modifier = Modifier.onGloballyPositioned { p ->
-                        statCardHeight = p.size
-                    }
+                    modifier = Modifier
+                        .registerTooltip(
+                            key = OnboardingKey.OVERALL_STATS,
+                            anchorPosition = TooltipAnchorPosition.Below
+                        )
+                        .onGloballyPositioned { p ->
+                            statCardHeight = p.size
+                        }
                 )
             }
 

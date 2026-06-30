@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +27,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import xyz.luko.app.main.MenuDefault.FloatingActionSize
 import xyz.luko.app.main.MenuDefault.IconSize
+import xyz.luko.ui.designsystem.onboarding.OnboardingKey
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
@@ -33,7 +36,9 @@ import xyz.luko.ui.designsystem.token.dimens.BorderStrokeDefaults
 import xyz.luko.ui.designsystem.token.dimens.Padding
 import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
 import xyz.luko.ui.designsystem.token.dimens.Spacing
+import xyz.luko.ui.onboarding.registerTooltip
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun Menu(
     modifier: Modifier = Modifier,
@@ -101,7 +106,15 @@ internal fun Menu(
                 )
             }
         }
-        MenuMainItem(MenuItem.Session, onClick = { onMainItemClick() })
+
+        MenuMainItem(
+            modifier = Modifier.registerTooltip(
+                key = OnboardingKey.HOME_MENU,
+                anchorPosition = if (orientation == Orientation.Horizontal) TooltipAnchorPosition.Above else TooltipAnchorPosition.Left
+            ),
+            item = MenuItem.Session,
+            onClick = { onMainItemClick() }
+        )
     }
 }
 
@@ -153,7 +166,7 @@ private fun PreviewMenu(
 ) {
     AppTheme(themeMode) {
         Column {
-            Menu(orientation = Orientation.Horizontal)
+            Menu()
             Menu(orientation = Orientation.Vertical)
         }
     }

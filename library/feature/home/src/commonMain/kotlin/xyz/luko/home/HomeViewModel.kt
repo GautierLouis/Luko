@@ -9,13 +9,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.Statistics
 import xyz.luko.domain.repository.SessionRepository
+import xyz.luko.domain.repository.UserRepository
 import kotlin.time.Duration
 
 internal class HomeViewModel(
     private val sessionRepository: SessionRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     data class UIState(
         val lastSession: Session? = null,
@@ -29,6 +32,7 @@ internal class HomeViewModel(
                 averageAccuracy = 0f,
                 averageQuestionsCount = 0f
             ),
+        val showOBStats: Boolean = false
     )
 
     private val _state = MutableStateFlow(UIState())
@@ -54,4 +58,16 @@ internal class HomeViewModel(
         .onEach { stats ->
             _state.update { it.copy(stats = stats) }
         }
+
+    fun event(event: HomeScreenEvent) {
+        when (event) {
+            HomeScreenEvent.StartOnboarding -> startOnboarding()
+        }
+    }
+
+    fun startOnboarding() {
+        viewModelScope.launch {
+            userRepository.setOnboarding(true)
+        }
+    }
 }

@@ -54,6 +54,7 @@ include(":library:feature:ui:core")
 include(":library:feature:ui:drawing")
 include(":library:feature:ui:navigation")
 include(":library:feature:ui:design-system")
+include(":library:feature:ui:onboarding")
 //Domain
 include(":library:domain")
 //Data

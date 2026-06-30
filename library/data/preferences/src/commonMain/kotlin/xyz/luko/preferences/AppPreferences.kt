@@ -15,4 +15,11 @@ interface AppPreferences {
     fun observeTheme(): Flow<String?>
     suspend fun getTheme(): String?
     suspend fun setTheme(theme: String)
+
+    // Onboarding
+    fun observeIsOnboardingActivated(): Flow<Boolean>
+    suspend fun setOnboardingState(enable: Boolean)
+    suspend fun setKeySeen(keys: Set<String>)
+    fun observeSeenKeys(): Flow<Set<String>>
+    suspend fun getSeenKeys(): Set<String>
 }

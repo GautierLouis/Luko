@@ -32,6 +32,7 @@ import xyz.luko.ui.designsystem.theme.LocalAnimatedContentScope
 import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.ui.navigation.NavigationCommand
+import xyz.luko.ui.onboarding.OnboardingTooltipContainer
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -71,32 +72,37 @@ fun App() {
                 }
             }
         }
-
     }
 
     AppTheme(themeMode) {
         SharedTransitionLayout {
-            NavDisplay(
-                entryDecorators =
-                    listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator(), // scopes VM to back stack entry
-                        NavEntryDecorator { entry ->
-                            CompositionLocalProvider(
-                                LocalAnimatedContentScope provides LocalNavAnimatedContentScope.current
-                            ) { entry.Content() }
-                        }
-                    ),
-                backStack = backStack,
-                onBack = { backStack.removeLast() },
-                sceneStrategy = strategy,
-                entryProvider =
-                    entryProvider {
-                        entry<AppRoute.MainRoute> { MainScaffold() }
-                        learningScreens()
-                        sessionsScreens()
-                    },
-            )
+            OnboardingTooltipContainer(
+                state.seenKeys,
+                state.activateOB,
+                { viewModel.onKeySeen(it) }
+            ) {
+                NavDisplay(
+                    entryDecorators =
+                        listOf(
+                            rememberSaveableStateHolderNavEntryDecorator(),
+                            rememberViewModelStoreNavEntryDecorator(), // scopes VM to back stack entry
+                            NavEntryDecorator { entry ->
+                                CompositionLocalProvider(
+                                    LocalAnimatedContentScope provides LocalNavAnimatedContentScope.current
+                                ) { entry.Content() }
+                            }
+                        ),
+                    backStack = backStack,
+                    onBack = { backStack.removeLast() },
+                    sceneStrategy = strategy,
+                    entryProvider =
+                        entryProvider {
+                            entry<AppRoute.MainRoute> { MainScaffold() }
+                            learningScreens()
+                            sessionsScreens()
+                        },
+                )
+            }
         }
     }
 }

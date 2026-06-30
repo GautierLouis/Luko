@@ -7,9 +7,11 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.intl.Locale
+import xyz.luko.ui.designsystem.onboarding.TooltipData
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.token.color.AppLevelColorsDay
 import xyz.luko.ui.designsystem.token.color.materialColorsDay
@@ -30,13 +32,16 @@ fun AppTheme(
 
     val typography = openHuninn()
 
+    val onboardingState = remember { mutableStateOf<List<TooltipData>>(emptyList()) }
+
     SharedTransitionLayout {
         CompositionLocalProvider(
             LocalMaterialColors provides materialColors,
             LocalAppLevelColors provides appLevelColors,
             LocalAppStrings provides strings,
             LocalTypography provides typography,
-            LocalSharedTransitionScope provides this@SharedTransitionLayout
+            LocalSharedTransitionScope provides this@SharedTransitionLayout,
+            LocalOnboardingState provides onboardingState
         ) {
             content()
         }
@@ -56,3 +61,5 @@ internal val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionSco
 val LocalAnimatedContentScope = compositionLocalOf<AnimatedContentScope> {
     error("No AnimatedContentScope provided")
 }
+
+val LocalOnboardingState = compositionLocalOf { mutableStateOf<List<TooltipData>>(emptyList()) }

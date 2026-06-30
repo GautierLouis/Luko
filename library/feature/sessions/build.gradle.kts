@@ -12,6 +12,7 @@ kotlin {
             implementation(projects.library.core.tracking)
             implementation(projects.library.feature.ui.navigation)
             implementation(projects.library.feature.ui.designSystem)
+            implementation(projects.library.feature.ui.onboarding)
             implementation(projects.library.domain)
 
         }

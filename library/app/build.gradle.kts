@@ -33,7 +33,7 @@ kotlin {
             implementation(projects.library.feature.dictionary)
             implementation(projects.library.feature.ui.navigation)
             implementation(projects.library.feature.ui.core)
-
+            implementation(projects.library.feature.ui.onboarding)
             implementation(projects.library.feature.ui.designSystem)
         }
 
