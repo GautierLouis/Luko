@@ -112,7 +112,6 @@ internal fun Menu(
                 key = OnboardingKey.HOME_MENU,
                 anchorPosition = if (orientation == Orientation.Horizontal) TooltipAnchorPosition.Above else TooltipAnchorPosition.Left
             ),
-            item = MenuItem.Session,
             onClick = { onMainItemClick() }
         )
     }
@@ -140,7 +139,6 @@ private fun MenuItem(
 
 @Composable
 private fun MenuMainItem(
-    item: MenuItem,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -151,8 +149,8 @@ private fun MenuMainItem(
         onClick = onClick
     ) {
         Icon(
-            imageVector = item.icon,
-            contentDescription = item.title(),
+            imageVector = MenuItem.Session.icon,
+            contentDescription = MenuItem.Session.title(),
             tint = Color.White,
             modifier = Modifier.size(IconSize)
         )
@@ -166,8 +164,23 @@ private fun PreviewMenu(
 ) {
     AppTheme(themeMode) {
         Column {
-            Menu()
-            Menu(orientation = Orientation.Vertical)
+            Menu(
+                leadingMenuItems = persistentListOf(
+                    MenuItem.Home,
+                ),
+                trailingMenuItems = persistentListOf(
+                    MenuItem.Dictionary
+                )
+            )
+            Menu(
+                orientation = Orientation.Vertical,
+                leadingMenuItems = persistentListOf(
+                    MenuItem.Home,
+                ),
+                trailingMenuItems = persistentListOf(
+                    MenuItem.Dictionary
+                )
+            )
         }
     }
 }

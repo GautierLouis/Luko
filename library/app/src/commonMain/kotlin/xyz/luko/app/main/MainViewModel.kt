@@ -27,10 +27,10 @@ internal class MainViewModel : ViewModel() {
                 UiState(
                     selectedItem = MenuItem.Home,
                     leadingMenuItems = persistentListOf(
-//                        MenuItem.Home,
+                        MenuItem.Home,
                     ),
                     trailingMenuItems = persistentListOf(
-//                        MenuItem.Dictionary
+                        MenuItem.Dictionary
                     )
                 ),
         )
