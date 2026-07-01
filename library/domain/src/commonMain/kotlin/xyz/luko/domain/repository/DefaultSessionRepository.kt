@@ -13,22 +13,18 @@ import xyz.luko.database.dao.SessionDao
 import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.domain.mapper.SessionMapper.toDto
 import xyz.luko.domain.mapper.SessionMapper.toEntity
-import xyz.luko.domain.model.EndOfSessionStats
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Statistics
-import xyz.luko.domain.usecase.ComputeDayStreak
 import xyz.luko.domain.usecase.ComputeDifficulty
-import xyz.luko.utils.toUTCDate
 import kotlin.time.DurationUnit
 import kotlin.time.Instant
 import kotlin.time.toDuration
 
 internal class DefaultSessionRepository(
     private val sessionDao: SessionDao,
-    private val responseDao: SessionResponseDao
+    private val responseDao: SessionResponseDao,
 ) : SessionRepository {
-    val dayStreakComputer = ComputeDayStreak()
     val difficultyComputer = ComputeDifficulty()
 
     override suspend fun save(
@@ -42,6 +38,10 @@ internal class DefaultSessionRepository(
 
     override fun getLastSessions(limit: Int): Flow<List<Session>> =
         sessionDao.getLast(limit).map { list -> list.map { it.toDto() } }
+
+    override suspend fun getLastSession(): Session {
+        return sessionDao.getLastSession()?.toDto()!!
+    }
 
     override suspend fun getLastSessions(): List<Session> =
         sessionDao.getAll().map { it.toDto() }
@@ -73,34 +73,14 @@ internal class DefaultSessionRepository(
 
     override fun getStatistics(): Flow<Statistics> {
         return sessionDao.getBasicStatistics().map { basic ->
-            val dates =
-                basic.uniqueDates
-                    ?.map { it.toUTCDate() }
-                    .orEmpty()
             Statistics(
                 averageTime = basic.averageTime.toDuration(DurationUnit.SECONDS),
                 averageDifficulty = difficultyComputer.average(basic.difficulties.orEmpty()),
-                currentDayStreak = dayStreakComputer.calculateCurrentDayStreak(dates),
                 sessionCount = basic.sessionCount,
                 averageQuestionsCount = basic.averageQuestionsCount,
                 averageAccuracy = basic.averageAccuracy,
             )
         }
-    }
-
-    override suspend fun getEndOfSessionStats(): EndOfSessionStats {
-        val lastSession = sessionDao.getLastSession()!!
-        val overhaulAccuracy = responseDao.getOverhaulAccuracy(lastSession.id)
-
-        val allDates = sessionDao.getUniqueDates().map { it.toUTCDate() }
-
-        val oldStreak = allDates
-            .filter { it != lastSession.date.toUTCDate() }
-            .let { dayStreakComputer.calculateCurrentDayStreak(it) }
-
-        val newStreak = dayStreakComputer.calculateCurrentDayStreak(allDates)
-
-        return EndOfSessionStats(lastSession.toDto(), overhaulAccuracy, oldStreak, newStreak)
     }
 
     override suspend fun getSessionDatesForWeek(start: Instant, end: Instant): List<LocalDate> =

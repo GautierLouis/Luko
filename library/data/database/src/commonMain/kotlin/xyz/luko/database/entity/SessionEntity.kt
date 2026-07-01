@@ -11,4 +11,5 @@ data class SessionEntity(
     val difficulty: String,
     val questionsCount: Int,
     val score: Int,
+    val accuracy: Double,
 )

@@ -28,6 +28,7 @@ import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
+import xyz.luko.utils.AppConfig
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -40,7 +41,8 @@ internal class SessionViewModel(
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
-    private val coordinator: EndOfSessionCoordinator
+    private val coordinator: EndOfSessionCoordinator,
+    private val appConfig: AppConfig
 ) : ViewModel() {
 
     val drawHint get() = params.difficulty == DifficultyLevel.EASY
@@ -65,6 +67,31 @@ internal class SessionViewModel(
         Finish -> finishSession()
         is SessionScreenEvent.StrokeCompleted -> onStrokeCompleted(event.stroke)
         SessionScreenEvent.Reset -> resetPage()
+        SessionScreenEvent.AutofillDebug -> autofillSessionForDebug()
+
+    }
+
+    // DEBUG ONLY
+    private fun autofillSessionForDebug() {
+        val state = (_state.value as SessionState.Success)
+        state.drawingPageState.forEach { (key, value) ->
+            val reference = value.referenceStrokes.map { s -> s.points.map { Offset(it.x, it.y) } }
+            val statistics = analyzeUserDrawing.calculate(
+                reference = reference,
+                userStroke = reference,
+            )
+            responses.add(
+                SessionResponse(
+                    code = key,
+                    pinyin = state.questions.first { it.code == key }.pinyin.firstOrNull()
+                        .orEmpty(),
+                    statistics = statistics,
+                    references = value.referenceStrokes,
+                    strokes = value.referenceStrokes,
+                )
+            )
+        }
+        finishSession()
     }
 
     // --- Session ---
@@ -87,6 +114,7 @@ internal class SessionViewModel(
                         SessionState.Success(
                             startTime = now,
                             questions = data,
+                            showDebugMenu = !appConfig.isProduction,
                             drawingPageState = data.toInitialPageState(),
                         )
                     }
@@ -140,6 +168,7 @@ internal class SessionViewModel(
                     difficulty = params.difficulty,
                     questionsCount = responses.count(),
                     score = score,
+                    accuracy = responses.map { it.statistics.overallAccuracy }.average()
                 ),
                 responses = responses,
             )

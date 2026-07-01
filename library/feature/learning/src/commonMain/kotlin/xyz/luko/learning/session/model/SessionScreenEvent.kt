@@ -17,4 +17,6 @@ internal sealed class SessionScreenEvent {
     ) : SessionScreenEvent()
 
     data object Reset : SessionScreenEvent()
+
+    data object AutofillDebug : SessionScreenEvent()
 }

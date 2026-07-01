@@ -6,8 +6,7 @@ import androidx.room.DatabaseView
 data class BasicStatistics(
     val averageTime: Long,
     val averageQuestionsCount: Float,
-    val averageAccuracy: Float,
+    val averageAccuracy: Double,
     val difficulties: List<String>?,
     val sessionCount: Int,
-    val uniqueDates: List<String>?,
 )

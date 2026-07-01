@@ -25,7 +25,8 @@ val learningModule =
                 sessionRepository = get(),
                 analyzeUserDrawing = get(),
                 scoreCalculator = get(),
-                coordinator = get()
+                coordinator = get(),
+                appConfig = get()
             )
         }
         viewModelOf(::StreakRefreshViewModel)

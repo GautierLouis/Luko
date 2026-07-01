@@ -15,6 +15,7 @@ import xyz.luko.domain.repository.DefaultSessionRepository
 import xyz.luko.domain.repository.DefaultUserRepository
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
+import xyz.luko.domain.repository.UpdateStreakUseCase
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.notification.FcmProvider
 import xyz.luko.network.interfaces.TokenProvider
@@ -33,4 +34,5 @@ val domainModule =
         singleOf(::DefaultUserRepository) bind UserRepository::class
 
         factoryOf(::AppStartUseCase)
+        factoryOf(::UpdateStreakUseCase)
     }

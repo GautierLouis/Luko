@@ -57,26 +57,19 @@ interface SessionDao {
     )
     suspend fun getLastFor(code: Int): List<SessionEntity>
 
-    @Query("SELECT AVG(overallAccuracy) FROM SessionResponseEntity WHERE code = :code")
-    suspend fun getAverageAccuracy(code: Int): Float?
-
     @Query(
         """
     SELECT
         COALESCE(AVG(duration), 0) AS averageTime,
         COALESCE(AVG(questionsCount), 0) AS averageQuestionsCount,
-        COALESCE(AVG(overallAccuracy), 0) AS averageAccuracy,
+        COALESCE(AVG(accuracy), 0) AS averageAccuracy,
         GROUP_CONCAT(difficulty) AS difficulties,
-        COALESCE(COUNT(*), 0) AS sessionCount,
-        GROUP_CONCAT(DISTINCT date) AS uniqueDates
+        COALESCE(COUNT(*), 0) AS sessionCount
     FROM SessionEntity
     LEFT JOIN SessionResponseEntity ON SessionResponseEntity.sessionId = SessionEntity.id
 """,
     )
     fun getBasicStatistics(): Flow<BasicStatistics>
-
-    @Query("SELECT DISTINCT date FROM SessionEntity")
-    suspend fun getUniqueDates(): List<String>
 
     @Query(
         """

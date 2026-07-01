@@ -12,4 +12,5 @@ data class Session(
     val difficulty: DifficultyLevel,
     val questionsCount: Int,
     val score: Int,
+    val accuracy: Double,
 )

@@ -52,6 +52,7 @@ object PreviewProvider {
             difficulty = DifficultyLevel.EASY,
             questionsCount = 5,
             score = 250,
+            accuracy = 90.toDouble()
         )
     }
 
@@ -84,10 +85,9 @@ object PreviewProvider {
 
     val statistics by lazy {
         Statistics(
-            averageAccuracy = 90f,
+            averageAccuracy = 90.toDouble(),
             averageTime = 2.seconds,
             averageDifficulty = DifficultyLevel.EASY,
-            currentDayStreak = 123,
             sessionCount = 10,
             averageQuestionsCount = 5f
         )

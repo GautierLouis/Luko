@@ -6,8 +6,13 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.json.Json
 import xyz.luko.domain.model.SettingTheme
 import xyz.luko.preferences.AppPreferences
+import kotlin.time.Clock
 
 interface UserRepository {
     suspend fun getTheme(): SettingTheme
@@ -20,6 +25,10 @@ interface UserRepository {
     suspend fun setOnboarding(enable: Boolean)
     suspend fun setKeySeen(key: String)
     fun observeKey(): Flow<Set<String>>
+
+    fun observeStreak(): Flow<StreakResult>
+    suspend fun getStreak(): StreakPreferences?
+    suspend fun updateStreak(streak: StreakPreferences)
 }
 
 internal class DefaultUserRepository(
@@ -72,5 +81,31 @@ internal class DefaultUserRepository(
 //            .toMutableSet()
 //        old.add(key.name)
 //        preferences.setKeySeen(old)
+    }
+
+    override fun observeStreak(): Flow<StreakResult> {
+        return preferences.observeStreak()
+            .map { raw ->
+                val prefs = raw?.let { Json.decodeFromString<StreakPreferences>(it) }
+                    ?: return@map StreakResult(0, false)
+
+                val todayUtc = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
+                val lastDate = LocalDate.parse(prefs.lastUpdatedDate)
+
+                StreakResult(
+                    streakCount = prefs.streakCount,
+                    updatedToday = lastDate == todayUtc
+                )
+            }
+    }
+
+    override suspend fun getStreak(): StreakPreferences? {
+        return preferences.getStreak()?.let {
+            Json.decodeFromString(it)
+        }
+    }
+
+    override suspend fun updateStreak(streak: StreakPreferences) {
+        preferences.updateStreak(Json.encodeToString(streak))
     }
 }

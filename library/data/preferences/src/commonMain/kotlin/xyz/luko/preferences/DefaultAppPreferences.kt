@@ -21,6 +21,8 @@ internal class DefaultAppPreferences(
 
         private val KEY_OB_STATE = booleanPreferencesKey("onboarding_state")
         private val KEY_OB_SEEN_KEYS = stringSetPreferencesKey("onboarding_seen_keys")
+
+        private val KEY_STREAK = stringPreferencesKey("user_streak")
     }
 
     override suspend fun setUserId(id: String) {
@@ -66,5 +68,16 @@ internal class DefaultAppPreferences(
 
     override suspend fun setKeySeen(keys: Set<String>) {
         store.edit { it[KEY_OB_SEEN_KEYS] = keys }
+    }
+
+    // STREAK
+    override fun observeStreak(): Flow<String?> =
+        store.data.map { preferences -> preferences[KEY_STREAK].orEmpty() }
+
+    override suspend fun getStreak(): String? =
+        observeStreak().first()
+
+    override suspend fun updateStreak(str: String) {
+        store.edit { it[KEY_STREAK] = str }
     }
 }

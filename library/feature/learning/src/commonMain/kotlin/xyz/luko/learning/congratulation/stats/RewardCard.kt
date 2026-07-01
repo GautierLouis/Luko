@@ -118,7 +118,7 @@ internal fun RewardCard(
             verticalArrangement = Spacing.medium,
             horizontalArrangement = Spacing.medium,
         ) { parentModifier ->
-            OverhaulAccuracy(
+            OverallAccuracy(
                 modifier = parentModifier,
                 animatedProgress = animatedProgress,
                 animatedScore = animatedScore
@@ -137,7 +137,7 @@ internal fun RewardCard(
 }
 
 @Composable
-private fun OverhaulAccuracy(
+private fun OverallAccuracy(
     animatedProgress: Animatable<Float, AnimationVector1D>,
     animatedScore: Animatable<Float, AnimationVector1D>,
     modifier: Modifier = Modifier

@@ -22,4 +22,10 @@ interface AppPreferences {
     suspend fun setKeySeen(keys: Set<String>)
     fun observeSeenKeys(): Flow<Set<String>>
     suspend fun getSeenKeys(): Set<String>
+
+    // Streak
+    fun observeStreak(): Flow<String?>
+    suspend fun getStreak(): String?
+    suspend fun updateStreak(str: String)
+
 }

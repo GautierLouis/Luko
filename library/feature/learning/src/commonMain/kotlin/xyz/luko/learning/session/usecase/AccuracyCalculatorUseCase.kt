@@ -6,11 +6,12 @@ import xyz.luko.domain.model.StrokeComparisonResult
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 internal class AccuracyCalculatorUseCase {
     private companion object {
-        private const val TOLERANCE_RADIUS: Float = 50f // Acceptable deviation in pixels
+        private const val TOLERANCE_RADIUS: Float = 80f // Acceptable deviation in pixels
         private const val SAMPLING_POINTS: Int = 20 // Number of points to sample for comparison
     }
 
@@ -32,12 +33,7 @@ internal class AccuracyCalculatorUseCase {
         val userStrokeCount = userStroke.size
 
         // Penalize for wrong number of strokes
-        val countPenalty =
-            if (userStrokeCount != strokeCount) {
-                0.5f // 50% penalty for wrong stroke count
-            } else {
-                1f
-            }
+        val countPenalty = if (userStrokeCount != strokeCount) 0.8f else 1f
 
         // Compare each stroke
         val strokeAccuracies = mutableListOf<Float>()
@@ -123,12 +119,7 @@ internal class AccuracyCalculatorUseCase {
 
         // Calculate weighted accuracy
         val accuracy =
-            (
-                startAccuracy * 0.15f +
-                    endAccuracy * 0.15f +
-                    directionAccuracy * 0.20f +
-                    pathSimilarity * 0.50f
-                ) * 100f
+            (startAccuracy * 0.10f + endAccuracy * 0.10f + directionAccuracy * 0.30f + pathSimilarity * 0.50f) * 100f
 
         return SingleStrokeResult(
             accuracy = accuracy,
@@ -153,8 +144,7 @@ internal class AccuracyCalculatorUseCase {
                     (ref.y - user.y) * (ref.y - user.y),
             )
 
-        // Linear decay from 1.0 to 0.0 based on tolerance
-        return (1f - (distance / TOLERANCE_RADIUS).coerceIn(0f, 1f))
+        return (1f - (distance / TOLERANCE_RADIUS).coerceIn(0f, 1f)).pow(0.5f)
     }
 
     /**
@@ -207,7 +197,7 @@ internal class AccuracyCalculatorUseCase {
         val avgDistance = totalDistance / SAMPLING_POINTS
 
         // Convert to similarity score
-        return (1f - (avgDistance / (TOLERANCE_RADIUS * 2)).coerceIn(0f, 1f))
+        return (1f - (avgDistance / (TOLERANCE_RADIUS * 3)).coerceIn(0f, 1f))
     }
 
     /**

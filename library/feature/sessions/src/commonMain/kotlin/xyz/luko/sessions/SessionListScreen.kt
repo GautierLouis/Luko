@@ -7,14 +7,12 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole.Detail
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole.List
-import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
@@ -47,10 +45,8 @@ fun SessionListScreen(
     val lazyColumState = rememberLazyListState()
     val backState = rememberNavigationEventState(currentInfo = NavigationEventInfo.None)
 
-    LaunchedEffect(route.id, state.sessions) {
-        val canShowDetail =
-            navigator.scaffoldValue[Detail] == PaneAdaptedValue.Expanded
-        viewModel.initView(route.id, canShowDetail)
+    LaunchedEffect(route.id) {
+        viewModel.initView(route.id)
     }
 
     LaunchedEffect(Unit) {
@@ -94,7 +90,6 @@ fun SessionListScreen(
         ListDetailPaneScaffold(
             directive = navigator.scaffoldDirective,
             value = navigator.scaffoldValue,
-            modifier = Modifier,
             listPane = {
                 AnimatedPane {
                     SessionListPane(

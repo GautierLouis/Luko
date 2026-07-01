@@ -43,15 +43,21 @@ internal class SessionListViewModel(
         viewModelScope.launch {
             val sessions = sessionRepository.getLastSessions()
 
-            val firstResponses = sessions.firstOrNull()?.id?.let {
-                it to sessionRepository.getResponses(it)
+            val additionalInfo = sessions.firstOrNull()?.let { s ->
+                val responses = sessionRepository.getResponses(s.id)
+                val similar = responses.firstOrNull()?.let { sr ->
+                    sessionRepository.getSimilarResponse(sr.code)
+                }
+                Triple(s.id, responses, similar)
             }
 
             _state.update {
                 it.copy(
                     sessions = sessions,
-                    selectedSessionId = firstResponses?.first,
-                    responses = firstResponses?.second.orEmpty()
+                    selectedSessionId = additionalInfo?.first,
+                    responses = additionalInfo?.second.orEmpty(),
+                    selectedResponse = additionalInfo?.second?.firstOrNull(),
+                    similarResponses = additionalInfo?.third.orEmpty()
                 )
             }
         }
@@ -59,7 +65,6 @@ internal class SessionListViewModel(
 
     fun initView(
         sessionId: Long? = null,
-        canShowDetail: Boolean,
     ) {
         when {
             _state.value.sessions.isEmpty() -> {
@@ -69,10 +74,6 @@ internal class SessionListViewModel(
             sessionId != null -> {
                 val index = _state.value.sessions.indexOfFirst { it.id == sessionId }
                 onSessionSelected(sessionId, index.takeIf { it >= 0 })
-            }
-
-            canShowDetail -> {
-                onSessionSelected(_state.value.sessions.first().id, null)
             }
         }
     }

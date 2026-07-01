@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.baseui.session.toUiModel
-import xyz.luko.baseui.session.toUiModelExtended
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
 import xyz.luko.ui.core.window.rememberIsWiderThanTall
@@ -75,7 +74,7 @@ private fun HomeScreen(
                 span = { GridItemSpan(span) }
             ) {
                 val metrics =
-                    if (span == 1) state.stats.toUiModel() else state.stats.toUiModelExtended()
+                    if (span == 1) state.toUiModelMinimal() else state.toUiModelExtended()
                 OverallStatisticsCard(
                     metrics = metrics,
                     modifier = Modifier
@@ -141,7 +140,10 @@ private fun PreviewHomeScreen(
                 HomeViewModel.UIState(
                     lastSession = PreviewProvider.session,
                     seeAll = true,
-                    stats = PreviewProvider.statistics,
+                    streakCount = 1,
+                    sessionCount = PreviewProvider.statistics.sessionCount,
+                    avgDifficultyLevel = PreviewProvider.statistics.averageDifficulty,
+                    avgAccuracy = PreviewProvider.statistics.averageAccuracy,
                 ),
         )
     }

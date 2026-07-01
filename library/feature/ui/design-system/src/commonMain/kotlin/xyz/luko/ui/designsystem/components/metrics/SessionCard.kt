@@ -1,6 +1,7 @@
 package xyz.luko.ui.designsystem.components.metrics
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
@@ -10,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,7 @@ data class SessionUiModel(
     val difficulty: String,
     val questionsCount: String,
     val score: String,
+    val accuracy: String,
 )
 
 @Composable
@@ -91,7 +94,14 @@ fun SessionCard(
             MetricHeader(
                 title = model.date,
                 icon = AppIcon.RoundedTrophy,
-                trailing = { SessionScore(model.score) },
+                trailing = {
+                    Text(
+                        text = model.accuracy,
+                        color = Theme.materialColors.tertiary,
+                        fontWeight = FontWeight.SemiBold,
+                        style = Theme.typography.titleLarge,
+                    )
+                },
             )
         },
         items =
@@ -127,6 +137,7 @@ private fun PreviewSessionCard(
                     questionsCount = "10",
                     difficulty = "Hard",
                     score = "1000",
+                    accuracy = "90%"
                 ),
         )
     }

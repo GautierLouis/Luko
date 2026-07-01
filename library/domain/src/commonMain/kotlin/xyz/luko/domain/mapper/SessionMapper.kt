@@ -17,6 +17,7 @@ object SessionMapper {
             difficulty = difficulty.name,
             questionsCount = questionsCount,
             score = score,
+            accuracy = accuracy,
         )
 
     fun SessionEntity.toDto(): Session =
@@ -27,6 +28,7 @@ object SessionMapper {
             difficulty = DifficultyLevel.valueOf(difficulty),
             questionsCount = questionsCount,
             score = score,
+            accuracy = accuracy,
         )
 
     fun SessionResponse.toEntity(): SessionResponseEntity =

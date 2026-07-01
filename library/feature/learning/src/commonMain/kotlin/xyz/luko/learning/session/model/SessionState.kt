@@ -14,6 +14,7 @@ sealed class SessionState {
         val questions: List<Dictionary> = emptyList(),
         val drawingPageState: Map<Int, DrawingPageState> = emptyMap(),
         val showLeaveDialog: Boolean = false,
+        val showDebugMenu: Boolean = false,
     ) : SessionState() {
         // Get current question general information
         val currentQuestion = questions[currentPageIndex]

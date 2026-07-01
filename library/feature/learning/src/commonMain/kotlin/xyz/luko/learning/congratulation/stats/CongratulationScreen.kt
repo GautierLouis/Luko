@@ -49,7 +49,6 @@ internal fun CongratulationScreen(
     CongratulationScreen(
         state = state,
         session = route.lastSession,
-        overhaulAccuracy = route.overhaulAccuracy,
         onEvent = {
             getKoin().getScopeOrNull("session_${route.lastSession.id}")?.close()
         }
@@ -60,7 +59,6 @@ internal fun CongratulationScreen(
 internal fun CongratulationScreen(
     state: CongratulationViewModel.UIState,
     session: Session,
-    overhaulAccuracy: Float,
     onEvent: () -> Unit = {}
 ) {
 
@@ -142,7 +140,7 @@ internal fun CongratulationScreen(
                 }
                 RewardCard(
                     startAnim = state.startAnim,
-                    avgAccuracy = overhaulAccuracy,
+                    avgAccuracy = session.accuracy.toFloat(),
                     questionCount = session.questionsCount.toString(),
                     time = session.duration.toHHMMSS(),
                     useRow = isWiderThanTall,
@@ -171,8 +169,6 @@ private fun PreviewCongratulationScreen(
         CongratulationScreen(
             state = CongratulationViewModel.UIState(false),
             session = PreviewProvider.session,
-            overhaulAccuracy = 90f
-
         )
     }
 }
