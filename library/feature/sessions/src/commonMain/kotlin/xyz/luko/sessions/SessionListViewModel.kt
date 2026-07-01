@@ -43,8 +43,16 @@ internal class SessionListViewModel(
         viewModelScope.launch {
             val sessions = sessionRepository.getLastSessions()
 
+            val firstResponses = sessions.firstOrNull()?.id?.let {
+                it to sessionRepository.getResponses(it)
+            }
+
             _state.update {
-                it.copy(sessions = sessions)
+                it.copy(
+                    sessions = sessions,
+                    selectedSessionId = firstResponses?.first,
+                    responses = firstResponses?.second.orEmpty()
+                )
             }
         }
     }
@@ -71,10 +79,14 @@ internal class SessionListViewModel(
 
     fun onSessionSelected(sessionId: Long, scrollPosition: Int? = null) {
         viewModelScope.launch {
-            val responses = sessionRepository.getResponses(sessionId)
-            _state.update {
-                it.copy(selectedSessionId = sessionId, responses = responses)
+
+            if (sessionId != _state.value.selectedSessionId) {
+                val responses = sessionRepository.getResponses(sessionId)
+                _state.update {
+                    it.copy(selectedSessionId = sessionId, responses = responses)
+                }
             }
+
             _navigationEvents.tryEmit(
                 PaneNavigationEvent.NavigateToDetails(
                     sessionId,
