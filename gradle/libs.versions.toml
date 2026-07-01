@@ -11,7 +11,7 @@ android-min-sdk = "24"
 
 # App versioning
 app-version = "1.0.0"
-app-version-code = "4"
+app-version-code = "5"
 
 # AndroidX
 androidx-activity = "1.12.1"
