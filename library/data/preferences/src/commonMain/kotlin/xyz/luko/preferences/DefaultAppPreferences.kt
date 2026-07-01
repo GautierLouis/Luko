@@ -72,7 +72,7 @@ internal class DefaultAppPreferences(
 
     // STREAK
     override fun observeStreak(): Flow<String?> =
-        store.data.map { preferences -> preferences[KEY_STREAK].orEmpty() }
+        store.data.map { preferences -> preferences[KEY_STREAK] }
 
     override suspend fun getStreak(): String? =
         observeStreak().first()
