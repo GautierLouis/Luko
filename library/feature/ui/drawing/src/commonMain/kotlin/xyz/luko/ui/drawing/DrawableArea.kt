@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
+import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Stroke
 import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.ui.drawing.internal.StrokeTransformer
@@ -37,26 +38,26 @@ fun DrawableArea(
 ) {
 
     var canvasSize by remember { mutableStateOf(IntSize.Zero) }
-    val ongoingStroke = remember { mutableStateListOf<Offset>() }
+    val ongoingStroke = remember { mutableStateListOf<Point.Straight>() }
     val transformer = remember { StrokeTransformer() }
 
     val referencePaths = remember(reference, canvasSize) {
-        reference.map { transformer.toCanvasPath(it, canvasSize) }
+        reference.map { transformer.referenceToPath(it, canvasSize) }
     }
 
     val referenceHint = remember(hint, canvasSize) {
-        hint?.let { transformer.toCanvasHint(it, canvasSize) }
+        hint?.let { transformer.referenceToHintPath(it, canvasSize) }
     }
 
     val previousUserDraw = remember(userStroke, canvasSize) {
-        userStroke.map { transformer.toCanvasPath(it, canvasSize) }
+        userStroke.map { transformer.strokeToPath(it, canvasSize) }
     }
 
     val drawingModifier = if (enableDrawing) {
         Modifier.drawingDetector(
             points = ongoingStroke,
             onGestureComplete = {
-                val raw = transformer.fromCanvasOffsets(ongoingStroke.toList(), canvasSize)
+                val raw = transformer.unprojectFromCanvas(ongoingStroke.toList(), canvasSize)
                 onDraw(raw)
                 ongoingStroke.clear()
             },
@@ -68,7 +69,7 @@ fun DrawableArea(
         referencePath = referencePaths,
         referenceHint = referenceHint,
         previousDrawnStrokes = previousUserDraw,
-        ongoingStroke = ongoingStroke,
+        ongoingStroke = ongoingStroke.map { Offset(it.x, it.y) },
         modifier = modifier
             .onGloballyPositioned { canvasSize = it.size }
             .then(drawingModifier)

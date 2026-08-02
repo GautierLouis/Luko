@@ -39,7 +39,12 @@ class Destination {
     @Resource("/me")
     class Me(
         val parent: Destination = Destination(),
-    )
+    ) {
+        @Resource("review-session")
+        class ReviewSession(
+            val parent: Me = Me(),
+        )
+    }
 
     @Resource("characters")
     class Characters(

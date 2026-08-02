@@ -22,6 +22,7 @@ kotlin {
             implementation(projects.library.core.firebase)
             implementation(projects.library.core.permission)
             implementation(projects.library.core.tracking)
+            implementation(projects.library.core.recognition)
 
             implementation(projects.library.domain)
 

@@ -14,9 +14,11 @@ import xyz.luko.domain.repository.AppStartUseCase
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager
 import xyz.luko.firebase.RemoteConfigManager
+import xyz.luko.recognition.CharacterRecognizer
 import xyz.luko.tracking.Tracker
 import xyz.luko.ui.designsystem.onboarding.OnboardingKey
 import xyz.luko.utils.AppConfig
+import xyz.luko.utils.AppLogger
 import xyz.luko.utils.Flavor
 
 internal class AppViewModel(
@@ -24,6 +26,7 @@ internal class AppViewModel(
     private val firebaseManager: FirebaseManager,
     private val remoteConfigManager: RemoteConfigManager,
     private val userRepository: UserRepository,
+    private val recognizer: CharacterRecognizer,
     appConfig: AppConfig,
 ) : ViewModel() {
     data class UiState(
@@ -38,6 +41,12 @@ internal class AppViewModel(
     val state = _state.asStateFlow()
 
     init {
+        AppLogger.init()
+
+        viewModelScope.launch {
+            recognizer.ensureReady()
+        }
+
         viewModelScope.launch {
             appStartViewModel.initialize()
         }

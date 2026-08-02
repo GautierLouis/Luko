@@ -52,7 +52,7 @@ fun AnimatedGraphic(
     }
 
     val medianPaths = remember(medians, canvasSize) {
-        medians.map { transformer.toCanvasPath(it, canvasSize) }
+        medians.map { transformer.referenceToPath(it, canvasSize) }
     }
 
     // true in preview, false at runtime

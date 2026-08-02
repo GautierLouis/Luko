@@ -1,8 +1,13 @@
 package xyz.luko.utils
 
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.platformLogWriter
 
 object AppLogger {
+    fun init() {
+        Logger.setLogWriters(platformLogWriter())
+    }
+
     fun w(
         tag: String = Logger.tag,
         message: String?,

@@ -14,6 +14,7 @@ import xyz.luko.home.homeModule
 import xyz.luko.learning.learningModule
 import xyz.luko.permission.permissionModule
 import xyz.luko.profile.profileModule
+import xyz.luko.recognition.recognitionModule
 import xyz.luko.sessions.sessionsModule
 import xyz.luko.utils.AppConfig
 import xyz.luko.utils.Flavor
@@ -45,6 +46,7 @@ private fun Module.includeCoreModule() {
         utilsModule,
         permissionModule,
         firebaseModule,
+        recognitionModule
     )
 }
 

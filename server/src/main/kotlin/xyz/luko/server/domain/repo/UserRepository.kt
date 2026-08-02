@@ -3,6 +3,7 @@ package xyz.luko.server.domain.repo
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.apicontracts.dto.UserDto
+import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.data.database.dao.UserDao
 import xyz.luko.server.domain.mapper.DomainMapping.toRow
 import xyz.luko.server.domain.mapper.ResultRowMapping.toUserDto
@@ -20,6 +21,10 @@ interface UserRepository {
     )
 
     suspend fun getUser(id: String): UserDto?
+
+    suspend fun reviewSession(
+        params: Destination.Me.ReviewSession
+    )
 }
 
 
@@ -46,5 +51,9 @@ internal class DefaultUserRepository(
 
     override suspend fun getUser(id: String): UserDto? {
         return dao.getById(id)?.toUserDto()
+    }
+
+    override suspend fun reviewSession(params: Destination.Me.ReviewSession) {
+
     }
 }

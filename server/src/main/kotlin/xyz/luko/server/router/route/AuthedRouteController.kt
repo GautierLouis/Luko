@@ -54,6 +54,10 @@ class AuthedRouteController(
                     ?: throw NotResultException(NO_RESULT, "No user found")
                 call.respondOk(user)
             }
+
+            post<Destination.Me.ReviewSession> {
+
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Stroke
+import xyz.luko.domain.model.toGlyphSpace
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.learning.congratulation.EndOfSessionCoordinator
@@ -26,9 +27,13 @@ import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
 import xyz.luko.learning.session.model.SessionState
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.learning.session.usecase.CalculateScoreUseCase
+import xyz.luko.recognition.CharacterRecognizer
+import xyz.luko.recognition.RecognizablePoint
+import xyz.luko.recognition.RecognizableStroke
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
 import xyz.luko.utils.AppConfig
+import xyz.luko.utils.AppLogger
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -42,7 +47,8 @@ internal class SessionViewModel(
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val scoreCalculator: CalculateScoreUseCase,
     private val coordinator: EndOfSessionCoordinator,
-    private val appConfig: AppConfig
+    private val appConfig: AppConfig,
+    private val recognizer: CharacterRecognizer
 ) : ViewModel() {
 
     val drawHint get() = params.difficulty == DifficultyLevel.EASY
@@ -196,12 +202,36 @@ internal class SessionViewModel(
             val medians = success.currentQuestion.medians
             val drawnStrokes = success.currentDrawingPageState.userPreviousOffsets
             val reference = medians.map { s -> s.points.map { Offset(it.x, it.y) } }
-            val drawing = drawnStrokes.map { s -> s.points.map { Offset(it.x, it.y) } }
+            val drawing =
+                drawnStrokes.map { s -> s.toGlyphSpace(900f).points.map { Offset(it.x, it.y) } }
 
             val statistics = analyzeUserDrawing.calculate(
                 reference = reference,
                 userStroke = drawing,
             )
+
+            val result = recognizer.recognize(
+                strokes = drawnStrokes.map {
+                    RecognizableStroke(it.points.map { p ->
+                        RecognizablePoint(
+                            p.x,
+                            p.y,
+                            p.timestamp
+                        )
+                    })
+                }
+            )
+
+            result.onFailure { AppLogger.e(tag = "Recognition", message = it.message.orEmpty()) }
+                .onSuccess {
+                    AppLogger.d(
+                        "Recognition", """
+                        Recognized: ${it.candidates},
+                        Pinyin: ${success.pinyin}
+                        Statistics: $statistics
+                    """.trimIndent()
+                    )
+                }
 
             responses.add(
                 SessionResponse(

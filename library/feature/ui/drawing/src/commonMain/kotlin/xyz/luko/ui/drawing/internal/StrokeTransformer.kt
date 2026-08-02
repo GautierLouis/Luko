@@ -29,11 +29,10 @@ internal class StrokeTransformer(
     fun toCanvasPaths(
         svgPaths: List<String>,
         canvasSize: IntSize,
-        padding: Float = 0f,
     ): List<Path> {
         if (svgPaths.isEmpty()) return emptyList()
         val base = matrixProvider.baseMatrix()
-        val center = matrixProvider.centerMatrix(canvasSize, padding)
+        val center = matrixProvider.centerMatrix(canvasSize)
         return svgPaths.map {
             PathParser().parsePathString(it).toPath()
                 .apply { transform(base) }
@@ -41,45 +40,44 @@ internal class StrokeTransformer(
         }
     }
 
-    fun toCanvasPath(
+    // Rotate and Scale
+    fun referenceToPath(
         stroke: Stroke,
         canvasSize: IntSize,
-        padding: Float = 0f,
     ): Path {
         val base = matrixProvider.baseMatrix()
-        val center = matrixProvider.centerMatrix(canvasSize, padding)
+        val center = matrixProvider.centerMatrix(canvasSize)
         return stroke.toPath(base, center)
     }
 
-    fun toCanvasHint(
+    fun referenceToHintPath(
         stroke: Stroke,
         canvasSize: IntSize,
-        padding: Float = 0f,
     ): TransformedHint {
         val base = matrixProvider.baseMatrix()
-        val center = matrixProvider.centerMatrix(canvasSize, padding)
+        val center = matrixProvider.centerMatrix(canvasSize)
         return stroke.toHint(base, center)
     }
 
-    fun toCanvasOffsets(
-        offsets: List<Offset>,
+    // only for user's drawing
+    fun strokeToPath(
+        stroke: Stroke,
         canvasSize: IntSize,
-    ): List<Offset> {
-        val base = matrixProvider.baseMatrix()
+    ): Path {
         val center = matrixProvider.centerMatrix(canvasSize)
-        return offsets.map { center.map(base.map(it)) }
+        return stroke.toPath(Matrix(), center)
     }
 
-    fun fromCanvasOffsets(
-        offsets: List<Offset>,
+    // reverse strokeToPath function (to store raw data - not scoped to any canvasSize)
+    fun unprojectFromCanvas(
+        offsets: List<Point.Straight>,
         canvasSize: IntSize,
     ): Stroke {
         val invertedCenter = matrixProvider.centerMatrix(canvasSize).apply { invert() }
-        val invertedBase = matrixProvider.baseMatrix().apply { invert() }
         return Stroke(
             points = offsets.map {
-                val mapped = invertedBase.map(invertedCenter.map(it))
-                Point.Straight(mapped.x, mapped.y)
+                val mapped = invertedCenter.map(Offset(it.x, it.y))
+                Point.Straight(mapped.x, mapped.y, it.timestamp)
             }
         )
     }

@@ -93,6 +93,9 @@ ehcache = "3.11.1"
 # Build Plugins
 google-services = "4.4.4"
 
+# Google
+digital-ink-recognition = "19.0.0"
+
 [libraries]
 # === Testing ===
 junit = { module = "junit:junit", version.ref = "junit4" }
@@ -121,6 +124,8 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 # === Lint ===
 ktlint-ruleset-compose = { module = "io.nlopez.compose.rules:ktlint", version.ref = "ktlint-ruleset-compose" }
 
+# === Google ===
+digital-ink-recognition = { module = "com.google.mlkit:digital-ink-recognition", version.ref = "digital-ink-recognition" }
 
 # === Ktor Server ===
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }

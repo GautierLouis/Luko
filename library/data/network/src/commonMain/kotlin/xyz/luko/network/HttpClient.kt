@@ -10,7 +10,6 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
@@ -22,6 +21,7 @@ import xyz.luko.apicontracts.dto.AppHeader.APP_PLATFORM
 import xyz.luko.apicontracts.dto.AppHeader.APP_VERSION
 import xyz.luko.network.interfaces.TokenProvider
 import xyz.luko.utils.AppConfig
+import xyz.luko.utils.AppLogger
 
 internal fun buildHttpClient(
     tokenProvider: TokenProvider,
@@ -31,8 +31,12 @@ internal fun buildHttpClient(
     expectSuccess = true
     install(Resources)
     install(Logging) {
-        logger = Logger.SIMPLE
-        level = LogLevel.ALL
+        logger = object : Logger {
+            override fun log(message: String) {
+                AppLogger.i("HttpClient", message)
+            }
+        }
+        level = LogLevel.INFO
     }
     install(ContentNegotiation) {
         json(defaultJson)

@@ -9,4 +9,20 @@ object UserTable : IntIdTable("user") {
     val isAnonymous = bool("is_anonymous").default(true)
     val createdAt = long("created_at")
     val updatedAt = long("updated_at")
+//    val streak = integer("streak").default(0)
+//    val streakUpdatedAt = long("streak_updated_at").default(0)
 }
+
+//object CharacterProgressTable : IntIdTable("character_progress") {
+//    val userId = reference("user_id", UserTable, onDelete = ReferenceOption.CASCADE)
+//    val characterCode = integer("character_code")
+//    val easeFactor = float("ease_factor")
+//    val intervalDays = integer("interval_days")
+//    val tier = integer("tier")
+//    val lastReviewedAt = long("last_reviewed_at")
+//    val updatedAt = long("updated_at")
+//
+//    init {
+//        uniqueIndex(userId, characterCode)
+//    }
+//}

@@ -26,7 +26,8 @@ val learningModule =
                 analyzeUserDrawing = get(),
                 scoreCalculator = get(),
                 coordinator = get(),
-                appConfig = get()
+                appConfig = get(),
+                recognizer = get(),
             )
         }
         viewModelOf(::StreakRefreshViewModel)
