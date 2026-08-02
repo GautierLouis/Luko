@@ -12,6 +12,9 @@ sealed interface AppRoute : NavKey {
     data object MainRoute : AppRoute
 
     @Serializable
+    data class CharacterDetail(val code: Int) : AppRoute
+
+    @Serializable
     sealed interface LearningRoute : AppRoute {
         @Serializable
         data object NewSessionRoute : LearningRoute

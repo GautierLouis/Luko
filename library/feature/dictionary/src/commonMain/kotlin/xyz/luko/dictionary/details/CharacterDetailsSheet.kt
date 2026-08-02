@@ -1,9 +1,7 @@
 package xyz.luko.dictionary.details
 
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import xyz.luko.dictionary.details.ModalCharacterDetailsEvent.OnPractice
 import xyz.luko.dictionary.details.ModalCharacterDetailsEvent.OnRetry
 import xyz.luko.dictionary.details.ModalCharacterDetailsViewModel.UIState
@@ -23,19 +23,18 @@ import xyz.luko.ui.designsystem.preview.LoadingMode
 import xyz.luko.ui.designsystem.preview.LoadingModeProvider
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.theme.AppTheme
-import xyz.luko.ui.designsystem.theme.Theme
-import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
+import xyz.luko.ui.navigation.AppRoute
 
 @Composable
-internal fun ModalCharacterDetails(
-    viewModel: ModalCharacterDetailsViewModel,
-    onDismiss: () -> Unit = {},
+fun CharacterDetailsSheet(
+    route: AppRoute.CharacterDetail
 ) {
+    val viewModel =
+        koinViewModel<ModalCharacterDetailsViewModel>(parameters = { parametersOf(route.code) })
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    ModalCharacterDetails(
+    CharacterDetailsSheet(
         state = state,
-        onDismiss = onDismiss,
         onEvent = { event ->
             when (event) {
                 OnRetry -> viewModel.retry()
@@ -47,10 +46,9 @@ internal fun ModalCharacterDetails(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ModalCharacterDetails(
+internal fun CharacterDetailsSheet(
     state: UIState,
     onEvent: (ModalCharacterDetailsEvent) -> Unit = {},
-    onDismiss: () -> Unit = {},
 ) {
     val modalState =
         rememberModalBottomSheetState(
@@ -67,46 +65,32 @@ internal fun ModalCharacterDetails(
             is UIState.Success -> Unit
         }
     }
-    ModalBottomSheet(
-        modifier = Modifier,
-        sheetState = modalState,
-        containerColor = Theme.materialColors.background,
-        shape = ShapeDefaults.bottomSheet(),
-        scrimColor = Theme.materialColors.scrim,
-        dragHandle = {
-            BottomSheetDefaults.DragHandle(
-                color = Theme.materialColors.onBackground,
-            )
-        },
-        onDismissRequest = onDismiss,
-        content = {
-            NestedScaffold { _ ->
-                when (state) {
-                    is UIState.Error -> {
-                        ErrorContent(
-                            modifier = Modifier.fillMaxHeight(.5f),
-                            action = { onEvent(OnRetry) },
-                        )
-                    }
 
-                    is UIState.Loading -> {
-                        LoadingContent(
-                            modifier = Modifier.fillMaxHeight(.5f),
-                        )
-                    }
-
-                    is UIState.Success ->
-                        DetailsContent(
-                            dictionary = state.selectedDictionary,
-                            lastSession = state.lastSession,
-                            onPractice = {
-                                onEvent(OnPractice)
-                            },
-                        )
-                }
+    NestedScaffold { _ ->
+        when (state) {
+            is UIState.Error -> {
+                ErrorContent(
+                    modifier = Modifier.fillMaxHeight(.5f),
+                    action = { onEvent(OnRetry) },
+                )
             }
-        },
-    )
+
+            is UIState.Loading -> {
+                LoadingContent(
+                    modifier = Modifier.fillMaxHeight(.5f),
+                )
+            }
+
+            is UIState.Success ->
+                DetailsContent(
+                    dictionary = state.selectedDictionary,
+                    lastSession = state.lastSession,
+                    onPractice = {
+                        onEvent(OnPractice)
+                    },
+                )
+        }
+    }
 }
 
 private val successState = UIState.Success(
@@ -116,11 +100,11 @@ private val successState = UIState.Success(
 
 @Preview
 @Composable
-private fun PreviewModalCharacterDetailsDay(
+private fun PreviewCharacterDetailsSheetDay(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
 ) {
     AppTheme(ThemeMode.Day) {
-        ModalCharacterDetails(
+        CharacterDetailsSheet(
             state =
                 when (mode) {
                     LoadingMode.LOADING -> UIState.Loading
@@ -133,11 +117,11 @@ private fun PreviewModalCharacterDetailsDay(
 
 @Preview
 @Composable
-private fun PreviewModalCharacterDetailsNight(
+private fun PreviewCharacterDetailsSheetNight(
     @PreviewParameter(LoadingModeProvider::class) mode: LoadingMode,
 ) {
     AppTheme(ThemeMode.Night) {
-        ModalCharacterDetails(
+        CharacterDetailsSheet(
             state =
                 when (mode) {
                     LoadingMode.LOADING -> UIState.Loading

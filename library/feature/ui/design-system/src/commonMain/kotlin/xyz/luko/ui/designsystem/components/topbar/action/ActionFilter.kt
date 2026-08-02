@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import xyz.luko.ui.designsystem.icon.AppIcon
-import xyz.luko.ui.designsystem.icon.Filter
+import xyz.luko.ui.designsystem.icon.RoundedSettings
 import xyz.luko.ui.designsystem.theme.Theme
 
 @Composable
@@ -19,7 +19,7 @@ fun ActionFilter(
         onClick = onClick,
     ) {
         Icon(
-            imageVector = AppIcon.Filter,
+            imageVector = AppIcon.RoundedSettings,
             contentDescription = Theme.strings.actionFilter,
         )
     }

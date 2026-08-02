@@ -3,7 +3,7 @@ package xyz.luko.learning.congratulation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.domain.repository.UpdateStreakUseCase
+import xyz.luko.domain.usecase.UpdateStreakUseCase
 import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.navigation.AppNavigation
 

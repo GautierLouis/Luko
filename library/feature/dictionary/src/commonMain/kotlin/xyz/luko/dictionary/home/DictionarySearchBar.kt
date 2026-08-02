@@ -3,7 +3,6 @@ package xyz.luko.dictionary.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
@@ -15,7 +14,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -34,11 +32,12 @@ import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
 
 @Composable
-internal fun DictionarySearchBar(textFieldState: TextFieldState) {
+internal fun DictionarySearchBar(
+    textFieldState: TextFieldState,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier =
-            Modifier
-                .height(TopAppBarDefaults.TopAppBarExpandedHeight),
+        modifier = modifier,
     ) {
         OutlinedTextField(
             state = textFieldState,
@@ -79,6 +78,7 @@ internal fun DictionarySearchBar(textFieldState: TextFieldState) {
                     text = Theme.strings.searchPlaceholder,
                     style = Theme.typography.bodyMedium,
                     color = Theme.materialColors.outline,
+                    maxLines = 1,
                 )
             },
             colors =

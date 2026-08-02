@@ -15,8 +15,8 @@ import xyz.luko.domain.repository.DefaultSessionRepository
 import xyz.luko.domain.repository.DefaultUserRepository
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.domain.repository.UpdateStreakUseCase
 import xyz.luko.domain.repository.UserRepository
+import xyz.luko.domain.usecase.UpdateStreakUseCase
 import xyz.luko.firebase.notification.FcmProvider
 import xyz.luko.network.interfaces.TokenProvider
 import xyz.luko.network.networkModule

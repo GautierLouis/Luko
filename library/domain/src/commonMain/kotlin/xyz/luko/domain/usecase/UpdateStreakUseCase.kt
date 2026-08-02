@@ -1,4 +1,4 @@
-package xyz.luko.domain.repository
+package xyz.luko.domain.usecase
 
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -6,6 +6,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
+import xyz.luko.domain.repository.UserRepository
 import kotlin.time.Clock
 
 class UpdateStreakUseCase(

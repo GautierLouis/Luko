@@ -13,7 +13,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import xyz.luko.domain.model.SimpleDictionary
 import xyz.luko.ui.designsystem.components.page.LoadingContent
-import xyz.luko.ui.designsystem.token.dimens.Padding
 import xyz.luko.ui.designsystem.token.dimens.Spacing
 
 /**
@@ -23,6 +22,7 @@ import xyz.luko.ui.designsystem.token.dimens.Spacing
 internal fun DictionaryContent(
     items: LazyPagingItems<SimpleDictionary>,
     modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues.Zero,
     onItemClick: (Int) -> Unit = {},
 ) {
     val state = rememberLazyGridState()
@@ -33,7 +33,7 @@ internal fun DictionaryContent(
         columns = GridCells.Adaptive(CharacterItemDefault.MINIMUM_WIDTH.dp),
         state = state,
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(Padding.large),
+        contentPadding = paddingValues,
         verticalArrangement = Spacing.large,
         horizontalArrangement = Spacing.large,
     ) {

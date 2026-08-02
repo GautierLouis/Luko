@@ -2,6 +2,7 @@ package xyz.luko.app.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -28,10 +29,10 @@ internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     MainScaffold(
         state = state,
-        screenContent = {
+        screenContent = { paddingValues ->
             when (state.selectedItem) {
-                MenuItem.Home -> HomeScreen()
-                MenuItem.Dictionary -> DictionaryScreen()
+                MenuItem.Home -> HomeScreen(paddingValues)
+                MenuItem.Dictionary -> DictionaryScreen(paddingValues)
                 MenuItem.Feed -> FeedScreen()
                 MenuItem.Profile -> ProfileScreen()
                 MenuItem.Session -> { /*Main Action*/
@@ -45,7 +46,7 @@ internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
 @Composable
 private fun MainScaffold(
     state: UiState,
-    screenContent: @Composable () -> Unit = {},
+    screenContent: @Composable (PaddingValues) -> Unit = {},
     onEvent: (MainScaffoldEvent) -> Unit = {},
 ) {
     val menu = rememberMenu()
@@ -56,16 +57,12 @@ private fun MainScaffold(
             .fillMaxSize(),
         contentAlignment = menu.boxAlignment
     ) {
-        Box(modifier = Modifier.padding(menu.paddingToMenu)) {
-            screenContent()
-        }
+        screenContent(menu.paddingToMenu)
         Menu(
             modifier = Modifier
-                .align(menu.boxAlignment)
-                .navigationBarsPadding()
-                .padding(menu.paddingToEdge),
-            leadingMenuItems = state.leadingMenuItems,
-            trailingMenuItems = state.trailingMenuItems,
+                .padding(menu.paddingToEdge)
+                .navigationBarsPadding(),
+            menuItems = state.menuItems,
             selectedItem = state.selectedItem,
             orientation = menu.orientation,
             onItemClick = {
@@ -88,13 +85,9 @@ private fun PreviewMainScaffold(
             state =
                 UiState(
                     selectedItem = MenuItem.Dictionary,
-                    leadingMenuItems = persistentListOf(
+                    menuItems = persistentListOf(
                         MenuItem.Home,
                         MenuItem.Dictionary
-                    ),
-                    trailingMenuItems = persistentListOf(
-                        MenuItem.Feed,
-                        MenuItem.Profile
                     )
                 ),
             screenContent = {

@@ -2,6 +2,7 @@ package xyz.luko.dictionary.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,10 +18,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
-import xyz.luko.dictionary.details.ModalCharacterDetails
-import xyz.luko.dictionary.details.ModalCharacterDetailsViewModel
-import xyz.luko.dictionary.home.DictionaryScreenEvent.OnCharacterClicked
 import xyz.luko.domain.model.SimpleDictionary
 import xyz.luko.ui.core.preview.PagingDataPreviewParameter
 import xyz.luko.ui.core.preview.PreviewProvider
@@ -31,14 +28,19 @@ import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.theme.AppTheme
 import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.ui.designsystem.token.dimens.Padding
+import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute
 
 @Composable
-fun DictionaryScreen() {
+fun DictionaryScreen(
+    paddingValues: PaddingValues,
+) {
     val viewModel = koinViewModel<DictionaryListViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val items = viewModel.items.collectAsLazyPagingItems()
 
     DictionaryScreen(
+        paddingValues = paddingValues,
         state = state,
         items = items,
         onEvent = { event -> viewModel.onEventReceived(event) },
@@ -47,26 +49,13 @@ fun DictionaryScreen() {
 
 @Composable
 private fun DictionaryScreen(
+    paddingValues: PaddingValues = PaddingValues.Zero,
     state: DictionaryListViewModel.UIState,
     items: LazyPagingItems<SimpleDictionary>,
     onEvent: (DictionaryScreenEvent) -> Unit = {},
 ) {
     val isError = items.loadState.refresh is LoadState.Error
     val isLoading = items.loadState.refresh is LoadState.Loading
-
-    if (state.selectedCharacter != null) {
-        val modalVm =
-            koinViewModel<ModalCharacterDetailsViewModel>(
-                parameters = { parametersOf(state.selectedCharacter) },
-            )
-
-        ModalCharacterDetails(
-            viewModel = modalVm,
-            onDismiss = {
-                onEvent(DictionaryScreenEvent.OnModalDismiss)
-            },
-        )
-    }
 
     val contentTopCorner =
         if (state.filterMenuExpended) {
@@ -77,13 +66,13 @@ private fun DictionaryScreen(
 
     NestedScaffold(
         topBar = {
-            DictionaryTopBar(
-                textFieldState = state.textFieldState,
-                filterMenuExpended = state.filterMenuExpended,
-                activeFilter = state.activeFilter,
-                enabled = !isError && !isLoading,
-                onEvent = onEvent,
-            )
+//            DictionaryTopBar(
+//                textFieldState = state.textFieldState,
+//                filterMenuExpended = state.filterMenuExpended,
+//                activeFilter = state.activeFilter,
+//                enabled = !isError && !isLoading,
+//                onEvent = onEvent,
+//            )
         },
     ) { paddingValues ->
         Box(
@@ -121,7 +110,7 @@ private fun DictionaryScreen(
                     DictionaryContent(
                         items = items,
                         onItemClick = {
-                            onEvent(OnCharacterClicked(it))
+                            AppNavigation.navigate(AppRoute.CharacterDetail(it))
                         },
                     )
             }

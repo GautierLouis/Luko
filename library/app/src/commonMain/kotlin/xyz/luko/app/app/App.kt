@@ -2,6 +2,7 @@ package xyz.luko.app.app
 
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.app.main.MainScaffold
+import xyz.luko.dictionary.details.CharacterDetailsSheet
 import xyz.luko.learning.navigation.learningScreens
 import xyz.luko.sessions.navigation.sessionsScreens
 import xyz.luko.tracking.Tracker
@@ -34,7 +36,7 @@ import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.ui.navigation.NavigationCommand
 import xyz.luko.ui.onboarding.OnboardingTooltipContainer
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
     val viewModel: AppViewModel = koinViewModel()
@@ -44,6 +46,7 @@ fun App() {
     val isSystemDark = isSystemInDarkTheme()
     val themeMode by remember { derivedStateOf { state.theme.toThemeMode(isSystemDark) } }
     val strategy = rememberListDetailSceneStrategy<NavKey>()
+    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<NavKey>() }
 
     LaunchedEffect(Unit) {
         AppNavigation.navigationEvents.collect { event ->
@@ -82,6 +85,7 @@ fun App() {
                 { viewModel.onKeySeen(it) }
             ) {
                 NavDisplay(
+                    sceneStrategies = listOf(strategy, bottomSheetStrategy),
                     entryDecorators =
                         listOf(
                             rememberSaveableStateHolderNavEntryDecorator(),
@@ -94,10 +98,12 @@ fun App() {
                         ),
                     backStack = backStack,
                     onBack = { backStack.removeLast() },
-                    sceneStrategy = strategy,
                     entryProvider =
                         entryProvider {
                             entry<AppRoute.MainRoute> { MainScaffold() }
+                            entry<AppRoute.CharacterDetail>(
+                                metadata = BottomSheetSceneStrategy.bottomSheet()
+                            ) { CharacterDetailsSheet(it) }
                             learningScreens()
                             sessionsScreens()
                         },

@@ -16,8 +16,7 @@ internal class MainViewModel : ViewModel() {
 
     data class UiState(
         val enableBottomBar: Boolean = false,
-        val leadingMenuItems: ImmutableList<MenuItem>,
-        val trailingMenuItems: ImmutableList<MenuItem>,
+        val menuItems: ImmutableList<MenuItem>,
         val selectedItem: MenuItem,
     )
 
@@ -26,12 +25,10 @@ internal class MainViewModel : ViewModel() {
             value =
                 UiState(
                     selectedItem = MenuItem.Home,
-                    leadingMenuItems = persistentListOf(
+                    menuItems = persistentListOf(
                         MenuItem.Home,
-                    ),
-                    trailingMenuItems = persistentListOf(
                         MenuItem.Dictionary
-                    )
+                    ),
                 ),
         )
     val state: StateFlow<UiState> = _state.asStateFlow()

@@ -6,7 +6,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import xyz.luko.ui.core.window.rememberWindowInfo
+import xyz.luko.ui.core.window.rememberIsWiderThanTall
 import xyz.luko.ui.designsystem.token.dimens.Padding
 
 internal data class MenuLayout(
@@ -19,29 +19,29 @@ internal data class MenuLayout(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun rememberMenu(): MenuLayout {
-    val windowInfo = rememberWindowInfo()
+    val isWider = rememberIsWiderThanTall()
 
     val boxAlignment = when {
-        windowInfo.isCompact() -> Alignment.BottomCenter
-        else -> Alignment.CenterEnd
+        isWider -> Alignment.CenterEnd
+        else -> Alignment.BottomCenter
     }
 
     val orientation = when {
-        windowInfo.isCompact() -> Orientation.Horizontal
-        else -> Orientation.Vertical
+        isWider -> Orientation.Vertical
+        else -> Orientation.Horizontal
     }
 
     val paddingToEdge = when {
-        windowInfo.isCompact() -> PaddingValues(bottom = Padding.large)
-        else -> PaddingValues(end = Padding.large)
+        isWider -> PaddingValues(end = Padding.large)
+        else -> PaddingValues(bottom = Padding.large)
     }
 
     val paddingToMenu = when {
-        windowInfo.isCompact() -> PaddingValues(bottom = MenuDefault.FloatingActionSize + Padding.large)
-        else -> PaddingValues(end = MenuDefault.FloatingActionSize + Padding.large)
+        isWider -> PaddingValues(end = MenuDefault.FloatingActionSize + Padding.large)
+        else -> PaddingValues(bottom = MenuDefault.FloatingActionSize + Padding.large)
     }
 
-    return remember(windowInfo) {
+    return remember(isWider) {
         MenuLayout(
             boxAlignment = boxAlignment,
             orientation = orientation,

@@ -1,6 +1,5 @@
 package xyz.luko.dictionary.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +8,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.ui.designsystem.components.topbar.action.ActionFilter
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
@@ -48,10 +46,7 @@ internal fun DictionaryTopBar(
     ) {
         CenterAlignedTopAppBar(
             title = {
-                Text(
-                    text = Theme.strings.dictionary,
-                    style = Theme.typography.titleLarge,
-                )
+                DictionarySearchBar(textFieldState)
             },
             actions = {
                 if (enabled) {
@@ -65,20 +60,17 @@ internal fun DictionaryTopBar(
                     actionIconContentColor = Theme.materialColors.onBackground,
                 ),
         )
-
-        Column {
-            if (enabled) {
-                DictionarySearchBar(textFieldState)
-            }
-
-            AnimatedVisibility(
-                visible = filterMenuExpended,
-            ) {
-                HorizontalDivider(thickness = .5.dp, color = Theme.materialColors.outline)
-                DictionaryFilter(activeFilter, onEvent)
-            }
-        }
     }
+}
+
+data class Filter(
+    val frequencyLevel: List<FrequencyLevel> = FrequencyLevel.entries,
+    val favoritesOnly: Boolean = false,
+    val sort: Sort = Sort.NONE
+)
+
+enum class Sort {
+    DESC, ASC, NONE
 }
 
 @Preview

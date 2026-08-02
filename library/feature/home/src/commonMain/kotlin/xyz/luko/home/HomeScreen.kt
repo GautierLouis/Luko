@@ -41,15 +41,18 @@ import xyz.luko.ui.navigation.AppRoute.SessionsRoute
 import xyz.luko.ui.onboarding.registerTooltip
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    paddingValues: PaddingValues
+) {
     val viewModel = koinViewModel<HomeViewModel>()
     val state = viewModel.state.collectAsStateWithLifecycle()
-    HomeScreen(state.value) { viewModel.event(it) }
+    HomeScreen(paddingValues, state.value) { viewModel.event(it) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
+    paddingValues: PaddingValues = PaddingValues.Zero,
     state: HomeViewModel.UIState,
     onEvent: (HomeScreenEvent) -> Unit = {}
 ) {
@@ -57,7 +60,9 @@ private fun HomeScreen(
     val span = if (isWider) 2 else 1
 
     NestedScaffold(
-        modifier = Modifier.testTag(TestTags.Screen.HOME),
+        modifier = Modifier
+            .padding(paddingValues)
+            .testTag(TestTags.Screen.HOME),
     ) { paddingValues ->
 
         LazyVerticalGrid(
@@ -68,6 +73,7 @@ private fun HomeScreen(
             columns = GridCells.Fixed(span),
             verticalArrangement = Spacing.large,
             horizontalArrangement = Spacing.large,
+            userScrollEnabled = false,
             contentPadding = PaddingValues(Padding.large)
         ) {
             item(

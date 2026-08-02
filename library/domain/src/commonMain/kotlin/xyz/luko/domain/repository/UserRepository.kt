@@ -11,6 +11,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
 import xyz.luko.domain.model.SettingTheme
+import xyz.luko.domain.usecase.StreakPreferences
+import xyz.luko.domain.usecase.StreakResult
 import xyz.luko.preferences.AppPreferences
 import kotlin.time.Clock
 
