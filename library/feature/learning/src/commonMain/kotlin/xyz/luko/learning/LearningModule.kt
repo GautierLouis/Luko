@@ -12,7 +12,6 @@ import xyz.luko.learning.congratulation.streak.StreakListUseCase
 import xyz.luko.learning.congratulation.streak.StreakRefreshViewModel
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
-import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 
 val learningModule =
     module {
