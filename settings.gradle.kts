@@ -37,13 +37,14 @@ plugins {
 //Server
 include(":server")
 //Shared (library - server)
-include(":api-contracts")
+include(":shared:api-contracts")
+include(":shared:fsrs-core")
 //App
 include(":androidApp")
 include(":desktopApp")
 include(":library:app")
 //Feature
-include(":library:feature:base-ui")
+include(":library:feature:base-ui") // TO BE REMOVED
 include(":library:feature:home")
 include(":library:feature:feed")
 include(":library:feature:profile")

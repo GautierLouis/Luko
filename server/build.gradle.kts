@@ -41,7 +41,8 @@ tasks {
 }
 
 dependencies {
-    implementation(projects.apiContracts)
+    implementation(projects.shared.apiContracts)
+    implementation(projects.shared.fsrsCore)
     implementation(libs.kotlinx.datetime)
     implementation(libs.logback)
     implementation(libs.ktor.server.core)

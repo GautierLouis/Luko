@@ -12,7 +12,8 @@ import xyz.luko.server.domain.repo.DefaultUserRepository
 import xyz.luko.server.domain.repo.DictionaryRepository
 import xyz.luko.server.domain.repo.SessionRepository
 import xyz.luko.server.domain.repo.UserRepository
-import xyz.luko.server.domain.usecase.CompositionUseCase
+import xyz.luko.server.domain.usecase.CharacterComplexityUseCase
+import xyz.luko.server.domain.usecase.DecompositionParser
 import xyz.luko.server.domain.usecase.PrepopulateDatabaseUseCase
 import xyz.luko.server.domain.usecase.StrokeRenderingUseCase
 
@@ -24,6 +25,7 @@ val domainModule = module {
     singleOf(::DefaultTokenVerifier) bind TokenVerifier::class
 
     factoryOf(::PrepopulateDatabaseUseCase)
-    factoryOf(::CompositionUseCase)
+    factoryOf(::DecompositionParser)
+    factoryOf(::CharacterComplexityUseCase)
     factoryOf(::StrokeRenderingUseCase)
 }

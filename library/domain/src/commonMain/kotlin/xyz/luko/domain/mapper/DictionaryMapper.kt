@@ -1,14 +1,12 @@
 package xyz.luko.domain.mapper
 
 import xyz.luko.apicontracts.dto.CharacterFrequencyLevelDto
-import xyz.luko.apicontracts.dto.DecompositionDto
 import xyz.luko.apicontracts.dto.DictionaryDto
 import xyz.luko.apicontracts.dto.PointDto
 import xyz.luko.apicontracts.dto.ResponseListDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 import xyz.luko.apicontracts.dto.StrokeDto
 import xyz.luko.domain.model.CharacterFrequencyLevel
-import xyz.luko.domain.model.Decomposition
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.ResponseList
@@ -26,7 +24,7 @@ internal fun <T, U> ResponseListDto<T>.toDomain(converter: (T) -> U) =
 internal fun DictionaryDto.toDomain() = Dictionary(
     code = code,
     pinyin = pinyin,
-    decomposition = decomposition.map { it.toDomain() },
+    decomposition = decomposition,
     level = level.toDomain(),
     strokes = strokes,
     medians = medians.map { it.toDomain() },
@@ -38,8 +36,6 @@ internal fun SimpleDictionaryDto.toDomain() =
         pinyin = pinyin,
         level = level.toDomain(),
     )
-
-internal fun DecompositionDto.toDomain() = Decomposition(symbolCode, glyphsCode)
 
 internal fun StrokeDto.toDomain() =
     Stroke(

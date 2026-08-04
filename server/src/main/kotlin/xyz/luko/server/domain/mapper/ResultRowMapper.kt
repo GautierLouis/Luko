@@ -3,7 +3,6 @@ package xyz.luko.server.domain.mapper
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.v1.core.ResultRow
 import xyz.luko.apicontracts.dto.CharacterFrequencyLevelDto
-import xyz.luko.apicontracts.dto.DecompositionDto
 import xyz.luko.apicontracts.dto.DictionaryDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 import xyz.luko.apicontracts.dto.UserDto
@@ -20,7 +19,7 @@ internal object ResultRowMapping {
     fun ResultRow.toDictionary() = DictionaryDto(
         code = this[DictionaryTable.code],
         pinyin = this[CharacterTable.pinyin].orEmpty().split(","),
-        decomposition = Json.decodeFromString<List<DecompositionDto>>(this[DictionaryTable.decomposition].orEmpty()),
+        decomposition = Json.decodeFromString(this[DictionaryTable.decomposition]),
         level = CharacterFrequencyLevelDto.fromValue(this[DictionaryTable.level]),
         strokes = Json.decodeFromString<List<String>>(this[GraphicTable.strokes]),
         medians = Json.decodeFromString(this[DictionaryTable.medians])

@@ -24,7 +24,6 @@ val learningModule =
                 repository = get(),
                 sessionRepository = get(),
                 analyzeUserDrawing = get(),
-                scoreCalculator = get(),
                 coordinator = get(),
                 appConfig = get(),
                 recognizer = get(),
@@ -32,7 +31,6 @@ val learningModule =
         }
         viewModelOf(::StreakRefreshViewModel)
 
-        factoryOf(::CalculateScoreUseCase)
         factoryOf(::AccuracyCalculatorUseCase)
         factoryOf(::StreakListUseCase)
 

@@ -7,7 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.library.core.utils)
-                api(projects.apiContracts)
+                api(projects.shared.apiContracts)
 
                 implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.client.core)

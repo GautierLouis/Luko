@@ -3,8 +3,8 @@ package xyz.luko.server.domain.mapper
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.v1.core.ResultRow
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
-import xyz.luko.apicontracts.dto.DecompositionDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
+import xyz.luko.apicontracts.dto.IdeographicNodeDto
 import xyz.luko.apicontracts.dto.ResponseListDto
 import xyz.luko.apicontracts.dto.StrokeDto
 import xyz.luko.server.domain.model.CharacterRow
@@ -109,7 +109,7 @@ internal object DomainMapping {
     )
 
     fun PrepopulateRow.toRow(
-        composition: List<DecompositionDto>,
+        composition: IdeographicNodeDto,
         medians: List<StrokeDto>
     ) = DictionaryRow(
         code = code,

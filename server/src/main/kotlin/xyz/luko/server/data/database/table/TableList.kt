@@ -11,7 +11,8 @@ object TableList {
         CharacterTable,
         GraphicTable,
         UserTable,
-//        CharacterProgressTable,
+        CharacterComplexityTable,
+        CharacterFsrsStateTable,
         SeedTable
     ).toTypedArray()
 }

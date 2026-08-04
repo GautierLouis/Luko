@@ -26,14 +26,13 @@ import xyz.luko.learning.session.model.SessionScreenEvent.Reload
 import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
 import xyz.luko.learning.session.model.SessionState
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
-import xyz.luko.learning.session.usecase.CalculateScoreUseCase
 import xyz.luko.recognition.CharacterRecognizer
 import xyz.luko.recognition.RecognizablePoint
 import xyz.luko.recognition.RecognizableStroke
+import xyz.luko.recognition.classifyRecognition
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
 import xyz.luko.utils.AppConfig
-import xyz.luko.utils.AppLogger
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -45,7 +44,6 @@ internal class SessionViewModel(
     private val repository: DictionaryRepository,
     private val sessionRepository: SessionRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
-    private val scoreCalculator: CalculateScoreUseCase,
     private val coordinator: EndOfSessionCoordinator,
     private val appConfig: AppConfig,
     private val recognizer: CharacterRecognizer
@@ -150,11 +148,6 @@ internal class SessionViewModel(
         val success = _state.value as? SessionState.Success ?: return
         val endTime = Clock.System.now()
         val duration = endTime - success.startTime
-        val score = scoreCalculator.calculate(
-            questions = success.questions,
-            difficulty = params.difficulty,
-            timeElapsed = duration.inWholeMilliseconds,
-        )
 
         viewModelScope.launch {
             TrackingEvent.SessionFinish(
@@ -163,7 +156,7 @@ internal class SessionViewModel(
                 duration = duration.inWholeMilliseconds,
                 difficulty = params.difficulty.name,
                 levels = params.levels.joinToString(),
-                score = score,
+                score = 0,
                 responses = responses.associate { it.code to it.statistics.overallAccuracy }
             ).run { Tracker.track(this) }
 
@@ -173,7 +166,7 @@ internal class SessionViewModel(
                     duration = duration,
                     difficulty = params.difficulty,
                     questionsCount = responses.count(),
-                    score = score,
+                    score = 0,
                     accuracy = responses.map { it.statistics.overallAccuracy }.average()
                 ),
                 responses = responses,
@@ -220,18 +213,9 @@ internal class SessionViewModel(
                         )
                     })
                 }
-            )
-
-            result.onFailure { AppLogger.e(tag = "Recognition", message = it.message.orEmpty()) }
-                .onSuccess {
-                    AppLogger.d(
-                        "Recognition", """
-                        Recognized: ${it.candidates},
-                        Pinyin: ${success.pinyin}
-                        Statistics: $statistics
-                    """.trimIndent()
-                    )
-                }
+            ).map {
+                classifyRecognition(Char(success.currentQuestion.code).toString(), it)
+            }
 
             responses.add(
                 SessionResponse(

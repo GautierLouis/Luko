@@ -36,27 +36,25 @@ class AppleCharacterRecognizer : CharacterRecognizer {
     override suspend fun ensureReady(): Result<Unit> =
         Result.success(Unit) // no model download needed
 
-    override suspend fun recognize(strokes: List<RecognizableStroke>): Result<RecognitionResult> =
+    override suspend fun recognize(strokes: List<RecognizableStroke>): Result<List<String>> =
         runCatching {
             val cgImage = rasterize(strokes)?.CGImage ?: error("Failed to rasterize strokes")
 
             suspendCancellableCoroutine { cont ->
                 val request = VNRecognizeTextRequest { request, error ->
                     if (error != null) {
-                        cont.resume(RecognitionResult(emptyList()))
+                        cont.resume(emptyList())
                         return@VNRecognizeTextRequest
                     }
                     val observations = request?.results as? List<VNRecognizedTextObservation>
                     val candidates = observations
                         ?.firstOrNull()
-                        ?.topCandidates(6u)
+                        ?.topCandidates(4u)
                         ?.filterIsInstance<VNRecognizedText>()
                         ?.map { it.string }
                         .orEmpty()
 
-                    cont.resume(
-                        RecognitionResult(candidates)
-                    )
+                    cont.resume(candidates)
                 }
                 request.recognitionLevel = VNRequestTextRecognitionLevelAccurate
                 request.recognitionLanguages = listOf("zh-Hans")

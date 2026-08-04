@@ -12,7 +12,7 @@ class PrepopulateDatabaseUseCase(
     private val source: StorageSource,
     private val dao: PrepopulateDao,
     private val dictionaryDao: DictionaryDao,
-    private val compositionUseCase: CompositionUseCase,
+    private val compositionUseCase: DecompositionParser,
     private val strokeRenderingUseCase: StrokeRenderingUseCase
 ) {
 

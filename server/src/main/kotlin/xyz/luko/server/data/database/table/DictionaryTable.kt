@@ -5,7 +5,7 @@ import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 object DictionaryTable : IntIdTable("dictionary") {
     val code = integer("code").uniqueIndex()
     val char = varchar("char", 4)
-    val decomposition = text("decomposition").nullable()
+    val decomposition = text("decomposition")
     val medians = text("medians")
     val level = integer("level")
     val hskLevel = integer("hsk_level")

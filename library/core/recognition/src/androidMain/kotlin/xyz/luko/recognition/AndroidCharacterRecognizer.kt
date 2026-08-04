@@ -28,7 +28,7 @@ internal class AndroidCharacterRecognizer : CharacterRecognizer {
         }
     }
 
-    override suspend fun recognize(strokes: List<RecognizableStroke>): Result<RecognitionResult> =
+    override suspend fun recognize(strokes: List<RecognizableStroke>): Result<List<String>> =
         runCatching {
             val inkBuilder = Ink.builder()
 
@@ -42,6 +42,6 @@ internal class AndroidCharacterRecognizer : CharacterRecognizer {
 
             val result = recognizer.recognize(inkBuilder.build()).await()
 
-            RecognitionResult(candidates = result.candidates.mapNotNull { it.text })
+            result.candidates.mapNotNull { it.text }
         }
 }

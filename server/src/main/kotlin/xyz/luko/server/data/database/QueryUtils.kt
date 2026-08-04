@@ -20,12 +20,12 @@ import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.domain.model.PaginatedRow
 
-/** Checks if the column value is not an empty JSON array */
-private fun Column<String?>.arrayNotEmpty() = this.neq("[]")
+/** Checks the column doesn't hold only the Unknown-placeholder node (i.e. real decomposition data exists) */
+private fun Column<String>.isNotUnknownOnly() = this.neq("""{"type":"unknown"}""")
 
 /** Excludes pure radical entries: must have a pinyin or a non-empty decomposition list */
 private fun notRadical() =
-    CharacterTable.pinyin.isNotNull() or DictionaryTable.decomposition.arrayNotEmpty()
+    CharacterTable.pinyin.isNotNull() or DictionaryTable.decomposition.isNotUnknownOnly()
 
 /** Restricts to characters that belong to a valid frequency level */
 private fun validLevel() =

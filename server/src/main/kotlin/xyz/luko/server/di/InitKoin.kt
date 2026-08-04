@@ -17,6 +17,7 @@ import xyz.luko.server.domain.domainModule
 import xyz.luko.server.plugin.pluginModule
 import xyz.luko.server.router.routerModule
 import xyz.luko.server.supabase.supabaseModule
+import xyz.luko.fsrscore.fsrsModule
 
 fun Application.initKoin(
     defaultModule: Module,
@@ -51,7 +52,8 @@ val serverModule = module {
     includes(
         domainModule,
         routerModule,
-        pluginModule
+        pluginModule,
+        fsrsModule
     )
     singleOf(::ServerRegistry)
 }

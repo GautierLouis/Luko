@@ -1,7 +1,10 @@
-package xyz.luko.server.domain.model.source
+package xyz.luko.apicontracts.dto
+
+import kotlinx.serialization.Serializable
 
 
-enum class IdeographicChar(val symbol: Int, val codepoint: Int, val arity: Int) {
+@Serializable
+enum class IdeographicCharDto(val symbol: Int, val codepoint: Int, val arity: Int) {
     /*'⿰'*/ LEFT_TO_RIGHT(12272, 0x2FF0, 2),
     /*'⿱'*/ ABOVE_TO_BELOW(12273, 0x2FF1, 2),
     /*'⿲'*/ LEFT_TO_MIDDLE_AND_RIGHT(12274, 0x2FF2, 3),
@@ -18,6 +21,6 @@ enum class IdeographicChar(val symbol: Int, val codepoint: Int, val arity: Int) 
     companion object {
         private val byCode = entries.associateBy { it.codepoint }
 
-        fun fromCodepoint(cp: Int): IdeographicChar? = byCode[cp]
+        fun fromCodepoint(cp: Int): IdeographicCharDto? = byCode[cp]
     }
 }

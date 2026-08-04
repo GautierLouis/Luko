@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class DictionaryDto(
     val code: Int,
     val pinyin: List<String> = emptyList(),
-    val decomposition: List<DecompositionDto> = emptyList(),
+    val decomposition: IdeographicNodeDto,
     val level: CharacterFrequencyLevelDto = CharacterFrequencyLevelDto.UNKNOWN,
     val strokes: List<String>,
     val medians: List<StrokeDto>
