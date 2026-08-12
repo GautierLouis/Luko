@@ -1,7 +1,9 @@
 package xyz.luko.server.router.route
 
 import io.ktor.http.ContentType
+import io.ktor.server.auth.UserIdPrincipal
 import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.principal
 import io.ktor.server.resources.get
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
@@ -9,6 +11,9 @@ import xyz.luko.apicontracts.dto.StrokeDto
 import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.domain.repo.DictionaryRepository
 import xyz.luko.server.domain.repo.SessionRepository
+import xyz.luko.server.domain.repo.UserRepository
+import xyz.luko.server.error.ErrorCode.NO_RESULT
+import xyz.luko.server.error.NotResultException
 import xyz.luko.server.error.dictionaryNotFound
 import xyz.luko.server.plugin.BEARER
 import xyz.luko.server.router.RouteController
@@ -17,18 +22,25 @@ import xyz.luko.server.router.respondOk
 class CharacterRouteController(
     private val sessionRepository: SessionRepository,
     private val dictionaryRepository: DictionaryRepository,
+    private val userRepository: UserRepository
 ) : RouteController {
 
     override fun Route.register() {
         authenticate(BEARER) {
             get<Destination.Session.New> { resources ->
-                sessionRepository.createNewSession(resources).let {
+                val principal = call.principal<UserIdPrincipal>()!!
+                val userId = userRepository.getUserId(principal.name)
+                    ?: throw NotResultException(NO_RESULT, "No user found")
+                sessionRepository.createNewSession(userId, resources).let {
                     call.respondOk(it)
                 }
             }
 
             get<Destination.Session.Replay> { resources ->
-                sessionRepository.replaySession(resources).let {
+                val principal = call.principal<UserIdPrincipal>()!!
+                val userId = userRepository.getUserId(principal.name)
+                    ?: throw NotResultException(NO_RESULT, "No user found")
+                sessionRepository.replaySession(userId, resources).let {
                     call.respondOk(it)
                 }
             }

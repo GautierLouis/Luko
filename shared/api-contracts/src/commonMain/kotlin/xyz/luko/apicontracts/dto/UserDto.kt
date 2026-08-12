@@ -1,39 +1,68 @@
 package xyz.luko.apicontracts.dto
 
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlin.time.Instant
 
 @Serializable
+enum class RecognitionResult { FAILURE, SUCCESS, PARTIAL }
+
+@Serializable
+data class ReviewAttemptRequest(
+    val doneAt: LocalDateTime,
+    val responses: List<ReviewResponseRequest>
+)
+
+@Serializable
+data class ReviewResponseRequest(
+    val characterCode: Int,
+    val strokes: List<StrokeDto>,
+    val recognitionResult: RecognitionResult,
+    val resetCount: Int,
+    val durationMs: Long,
+    val practiceMode: PracticeMode,
+)
+
+@Serializable
+data class AttemptSignal(
+    val characterCode: Int,
+    val strokes: List<StrokeDto>,
+    val rawReferenceMedians: List<List<List<Float>>>,
+    val recognitionResult: RecognitionResult,
+    val resetCount: Int,
+    val durationMs: Long,
+    val complexityFactor: Double,
+    val practiceMode: PracticeMode,
+    val fsrsState: FsrsState? = null,
+)
+
+@Serializable
+enum class PracticeMode { EASY, MEDIUM, HARD }
+
+@Serializable
+data class FsrsState(
+    val difficulty: Double,
+    val stability: Double,
+    val level: Int,
+    val lastReviewedAt: Long,
+)
+
+@Serializable
+data class ReviewResultDto(
+    val isStreakUpdated: Boolean,
+    val newStreak: Int,
+    val hasLevelUp: Boolean,
+    val levels: Map<Int, List<Int>>
+)
+
+@Serializable
 data class UserDto(
+    /**
+     * FirebaseID, not Exposed ID
+     */
     val id: String,
     val fcmToken: String?,
     val platform: String,
     val createdAt: Instant,
     val updatedAt: Instant,
-)
-
-
-@Serializable
-data class ReviewSessionRequestDto(
-    val attempts: List<CharacterAttemptDto>
-)
-
-@Serializable
-data class CharacterAttemptDto(
-    val characterCode: Int,
-    val correct: Boolean,              // final pass/fail, still the thing SM-2 cares about
-    val recognitionConfidence: Float? = null,   // ML Kit confidence score, nullable until you wire it up
-    val strokeOrderCorrect: Boolean? = null,
-    val strokeCountCorrect: Boolean? = null,
-)
-
-@Serializable
-enum class MasteryTier {
-    TIER_1, TIER_2, TIER_3, TIER_4, TIER_5
-}
-
-@Serializable
-data class ReviewSessionResultDto(
-    val tierUps: Map<MasteryTier, List<Int>>, // characters that leveled up INTO this tier
-    val streak: Int? = null
 )

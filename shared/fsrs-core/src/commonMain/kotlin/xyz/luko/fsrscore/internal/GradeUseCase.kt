@@ -1,15 +1,17 @@
-package xyz.luko.fsrscore
+package xyz.luko.fsrscore.internal
 
-class GradeUseCase(
-    private val characterDurationUseCase: CharacterDurationUseCase,
-) {
+import xyz.luko.apicontracts.dto.AttemptSignal
+import xyz.luko.apicontracts.dto.PracticeMode
+import xyz.luko.apicontracts.dto.RecognitionResult
+import xyz.luko.fsrscore.model.Grade
+import xyz.luko.fsrscore.model.StrokeComparisonResult
 
-    companion object {
-        private const val FORGOT_THRESHOLD = 0.52f
-        private const val HARD_THRESHOLD = 0.68f
-        private const val GOOD_THRESHOLD = 0.84f
-        private const val OVERALL_ACCURACY_FLOOR = 50f // to calibrate
-    }
+internal object GradeUseCase {
+
+    private const val FORGOT_THRESHOLD = 0.52f
+    private const val HARD_THRESHOLD = 0.68f
+    private const val GOOD_THRESHOLD = 0.84f
+    private const val OVERALL_ACCURACY_FLOOR = 50f // to calibrate
 
     fun deriveGrade(
         signals: AttemptSignal,
@@ -34,8 +36,8 @@ class GradeUseCase(
         }
 
         // ── Layer 2: quality score (0..1) ──
-        val targetMs = characterDurationUseCase.calculate(
-            strokeCount = signals.referenceStrokes.size,
+        val targetMs = CharacterDurationUseCase.calculate(
+            strokeCount = signals.rawReferenceMedians.size,
             practiceMode = signals.practiceMode,
             complexityFactor = signals.complexityFactor,
         )

@@ -10,9 +10,17 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
+import xyz.luko.apicontracts.dto.PracticeMode
+import xyz.luko.apicontracts.dto.RecognitionResult
+import xyz.luko.apicontracts.dto.ReviewAttemptRequest
+import xyz.luko.apicontracts.dto.ReviewResponseRequest
+import xyz.luko.domain.mapper.toDto
+import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.SettingTheme
 import xyz.luko.domain.usecase.StreakPreferences
 import xyz.luko.domain.usecase.StreakResult
+import xyz.luko.network.interfaces.UserService
 import xyz.luko.preferences.AppPreferences
 import kotlin.time.Clock
 
@@ -31,10 +39,16 @@ interface UserRepository {
     fun observeStreak(): Flow<StreakResult>
     suspend fun getStreak(): StreakPreferences?
     suspend fun updateStreak(streak: StreakPreferences)
+
+    suspend fun reviewSession(
+        difficultyLevel: DifficultyLevel,
+        responses: List<SessionResponse>
+    ): Result<Boolean>
 }
 
 internal class DefaultUserRepository(
     private val preferences: AppPreferences,
+    private val userService: UserService,
 ) : UserRepository {
     override suspend fun getTheme(): SettingTheme {
         val stored = preferences.getTheme()
@@ -109,5 +123,36 @@ internal class DefaultUserRepository(
 
     override suspend fun updateStreak(streak: StreakPreferences) {
         preferences.updateStreak(Json.encodeToString(streak))
+    }
+
+    override suspend fun reviewSession(
+        difficultyLevel: DifficultyLevel,
+        responses: List<SessionResponse>
+    ): Result<Boolean> {
+        userService.reviewSession(
+            ReviewAttemptRequest(
+                doneAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+                responses = responses.map { r ->
+                    ReviewResponseRequest(
+                        characterCode = r.code,
+                        strokes = r.strokes.map { it.toDto() },
+                        recognitionResult = RecognitionResult.valueOf(r.recognitionResult),
+                        resetCount = 0,
+                        durationMs = r.strokes.flatMap { it.points }
+                            .map { it.timestamp }
+                            .let { timestamps ->
+                                if (timestamps.isEmpty()) 0L else timestamps.max() - timestamps.min()
+                            },
+                        practiceMode = when (difficultyLevel) {
+                            DifficultyLevel.EASY -> PracticeMode.EASY
+                            DifficultyLevel.MEDIUM -> PracticeMode.MEDIUM
+                            DifficultyLevel.HARD -> PracticeMode.HARD
+                        }
+                    )
+                }
+            )
+        )
+
+        return Result.success(true)
     }
 }

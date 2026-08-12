@@ -1,5 +1,6 @@
-package xyz.luko.fsrscore
+package xyz.luko.fsrscore.internal
 
+import xyz.luko.fsrscore.model.Grade
 import kotlin.math.exp
 import kotlin.math.min
 import kotlin.math.pow
@@ -19,7 +20,7 @@ import kotlin.math.pow
  * @see <a href="https://github.com/open-spaced-repetition/fsrs4anki">FSRS Algorithm Specification</a>
  * @see <a href="https://github.com/open-spaced-repetition/awesome-fsrs/wiki/The-Algorithm">The Algorithm</a>
  */
-object Fsrs {
+internal object Fsrs {
 
     val W = doubleArrayOf(
         0.212, 1.2931, 2.3065, 8.2956, 6.4133, 0.8334, 3.0194, 0.001, 1.8722, 0.1666,

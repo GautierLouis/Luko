@@ -2,9 +2,10 @@ package xyz.luko.ui.core.preview
 
 import xyz.luko.domain.model.CharacterFrequencyLevel
 import xyz.luko.domain.model.ComparisonDetails
-import xyz.luko.domain.model.Decomposition
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.domain.model.IdeographicChar
+import xyz.luko.domain.model.IdeographicNode
 import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
@@ -79,6 +80,7 @@ object PreviewProvider {
                 ),
                 strokes = it.medians,
                 references = it.medians,
+                recognitionResult = "SUCCESS"
             )
         }
     }
@@ -108,11 +110,14 @@ object PreviewProvider {
     )
 
     private fun getFakeDictionary() = Dictionary(
-
         code = 36229,
         pinyin = listOf("chāo"),
-        decomposition = listOf(
-            Decomposition(symbolCode = 12282, glyphsCode = listOf(36208, 21484))
+        decomposition = IdeographicNode.Operator(
+            op = IdeographicChar.SURROUND_FROM_LOWER_LEFT,
+            children = listOf(
+                IdeographicNode.Glyph(code = 36208),
+                IdeographicNode.Glyph(code = 21484),
+            )
         ),
         level = CharacterFrequencyLevel.COMMON,
         strokes = listOf(

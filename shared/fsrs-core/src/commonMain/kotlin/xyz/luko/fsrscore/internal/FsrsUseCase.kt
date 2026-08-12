@@ -1,8 +1,11 @@
-package xyz.luko.fsrscore
+package xyz.luko.fsrscore.internal
 
+import xyz.luko.apicontracts.dto.FsrsState
+import xyz.luko.fsrscore.model.FsrsResult
+import xyz.luko.fsrscore.model.Grade
 import kotlin.math.roundToInt
 
-class ComputeNextFsrsStateUseCase {
+internal object FsrsUseCase {
     /**
      * A use case that calculates the next [FsrsState] and the recommended review interval
      * based on the FSRS-v6 algorithm.
@@ -16,33 +19,39 @@ class ComputeNextFsrsStateUseCase {
      * @param desiredRetention The target probability of recall (0.0 to 1.0) used to calculate
      * the next interval. Defaults to 0.9.
      */
-    operator fun invoke(
+    fun compute(
         current: FsrsState?,
         grade: Grade,
         elapsedDays: Double,
         desiredRetention: Double = 0.9,
-    ): Pair<FsrsState, Int> {
+    ): FsrsResult {
         require(elapsedDays >= 0.0) { "elapsedDays must not be negative, was $elapsedDays" }
         require(current == null || current.stability > 0.0) {
             "stability must be positive, was ${current?.stability}"
         }
 
-        val newState = if (current == null) {
-            FsrsState(
-                difficulty = Fsrs.initialDifficulty(grade),
-                stability = Fsrs.initialStability(grade),
-            )
-        } else {
-            val r = Fsrs.retrievability(elapsedDays, current.stability)
-            FsrsState(
-                difficulty = Fsrs.nextDifficulty(current.difficulty, grade),
-                stability = Fsrs.nextStability(current.difficulty, current.stability, r, grade),
-            )
+        val nextStability = when (current) {
+            null -> Fsrs.initialStability(grade)
+            else -> {
+                val r = Fsrs.retrievability(elapsedDays, current.stability)
+                Fsrs.nextStability(current.difficulty, current.stability, r, grade)
+            }
         }
-        val nextIntervalDays = Fsrs.interval(desiredRetention, newState.stability)
+
+        val nextDifficulty = when (current) {
+            null -> Fsrs.initialDifficulty(grade)
+            else -> Fsrs.nextDifficulty(current.difficulty, grade)
+        }
+
+        val nextIntervalDays = Fsrs.interval(desiredRetention, nextStability)
             .roundToInt()
             .coerceAtLeast(1)
 
-        return newState to nextIntervalDays
+        return FsrsResult(
+            nextStability = nextStability,
+            nextDifficulty = nextDifficulty,
+            nextIntervalDays = nextIntervalDays
+        )
     }
 }
+

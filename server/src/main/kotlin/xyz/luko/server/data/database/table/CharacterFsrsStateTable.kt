@@ -8,12 +8,13 @@ object CharacterFsrsStateTable : IntIdTable("character_fsrs_state") {
     val characterCode = integer("character_code")
     val difficulty = double("difficulty")
     val stability = double("stability")
+    val level = integer("level").default(0)
     val lastReviewedAt = long("last_reviewed_at")
     val nextReviewDueAt = long("next_review_due_at") // lastReviewedAt + intervalDays, precomputed for queue queries
     val updatedAt = long("updated_at")
 
-
     init {
         uniqueIndex(userId, characterCode)
+        index(isUnique = false, columns = arrayOf(userId, nextReviewDueAt))
     }
 }

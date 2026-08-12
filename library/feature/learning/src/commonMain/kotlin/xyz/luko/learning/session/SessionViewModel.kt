@@ -13,9 +13,9 @@ import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.Stroke
-import xyz.luko.domain.model.toGlyphSpace
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
+import xyz.luko.domain.repository.UserRepository
 import xyz.luko.learning.congratulation.EndOfSessionCoordinator
 import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.learning.session.model.DrawingPageState
@@ -27,6 +27,7 @@ import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
 import xyz.luko.learning.session.model.SessionState
 import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
 import xyz.luko.recognition.CharacterRecognizer
+import xyz.luko.recognition.RecognitionResult
 import xyz.luko.recognition.RecognizablePoint
 import xyz.luko.recognition.RecognizableStroke
 import xyz.luko.recognition.classifyRecognition
@@ -43,6 +44,7 @@ internal class SessionViewModel(
     private val params: LearningInternalRoute.SessionRoute,
     private val repository: DictionaryRepository,
     private val sessionRepository: SessionRepository,
+    private val userRepository: UserRepository,
     private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val coordinator: EndOfSessionCoordinator,
     private val appConfig: AppConfig,
@@ -92,6 +94,7 @@ internal class SessionViewModel(
                     statistics = statistics,
                     references = value.referenceStrokes,
                     strokes = value.referenceStrokes,
+                    recognitionResult = RecognitionResult.SUCCESS.name
                 )
             )
         }
@@ -160,6 +163,11 @@ internal class SessionViewModel(
                 responses = responses.associate { it.code to it.statistics.overallAccuracy }
             ).run { Tracker.track(this) }
 
+            userRepository.reviewSession(
+                params.difficulty,
+                responses
+            )
+
             sessionRepository.save(
                 session = Session(
                     date = endTime,
@@ -196,7 +204,7 @@ internal class SessionViewModel(
             val drawnStrokes = success.currentDrawingPageState.userPreviousOffsets
             val reference = medians.map { s -> s.points.map { Offset(it.x, it.y) } }
             val drawing =
-                drawnStrokes.map { s -> s.toGlyphSpace(900f).points.map { Offset(it.x, it.y) } }
+                drawnStrokes.map { s -> s.points.map { Offset(it.x, it.y) } }
 
             val statistics = analyzeUserDrawing.calculate(
                 reference = reference,
@@ -215,7 +223,7 @@ internal class SessionViewModel(
                 }
             ).map {
                 classifyRecognition(Char(success.currentQuestion.code).toString(), it)
-            }
+            }.getOrElse { RecognitionResult.FAILURE }
 
             responses.add(
                 SessionResponse(
@@ -224,6 +232,7 @@ internal class SessionViewModel(
                     statistics = statistics,
                     references = medians,
                     strokes = drawnStrokes,
+                    recognitionResult = result.name
                 )
             )
         }

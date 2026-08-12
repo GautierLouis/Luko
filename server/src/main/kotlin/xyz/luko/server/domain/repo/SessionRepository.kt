@@ -1,5 +1,6 @@
 package xyz.luko.server.domain.repo
 
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import xyz.luko.apicontracts.dto.DictionaryDto
 import xyz.luko.apicontracts.dto.ResponseSessionDto
 import xyz.luko.apicontracts.routing.Destination
@@ -14,10 +15,12 @@ import kotlin.random.Random
 interface SessionRepository {
 
     suspend fun createNewSession(
+        id: EntityID<Int>,
         params: Destination.Session.New
     ): ResponseSessionDto<DictionaryDto>
 
     suspend fun replaySession(
+        id: EntityID<Int>,
         params: Destination.Session.Replay
     ): ResponseSessionDto<DictionaryDto>
 }
@@ -30,6 +33,7 @@ internal class DefaultSessionRepository(
 ) : SessionRepository {
 
     override suspend fun createNewSession(
+        id: EntityID<Int>,
         params: Destination.Session.New
     ): ResponseSessionDto<DictionaryDto> {
 
@@ -47,13 +51,15 @@ internal class DefaultSessionRepository(
         val result = dictionaryDao.createSession(
             levels = levels,
             limit = params.limit,
-            seed = seed
+            seed = seed,
+            id = id
         )
 
         return ResponseSessionDto(seed, result.map { it.toDictionary() })
     }
 
     override suspend fun replaySession(
+        id: EntityID<Int>,
         params: Destination.Session.Replay
     ): ResponseSessionDto<DictionaryDto> {
         val seedRow = seedDao.getSeed(params.seed)
@@ -63,7 +69,8 @@ internal class DefaultSessionRepository(
         val result = dictionaryDao.createSession(
             levels = seedRow.levels.split(",").map { it.toInt() },
             limit = seedRow.limit,
-            seed = seedRow.seed
+            seed = seedRow.seed,
+            id = id
         )
         return ResponseSessionDto(params.seed, result.map { it.toDictionary() })
     }

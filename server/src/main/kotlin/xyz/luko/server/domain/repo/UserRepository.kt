@@ -1,10 +1,11 @@
 package xyz.luko.server.domain.repo
 
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.apicontracts.dto.UserDto
-import xyz.luko.apicontracts.routing.Destination
 import xyz.luko.server.data.database.dao.UserDao
+import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.domain.mapper.DomainMapping.toRow
 import xyz.luko.server.domain.mapper.ResultRowMapping.toUserDto
 
@@ -21,10 +22,7 @@ interface UserRepository {
     )
 
     suspend fun getUser(id: String): UserDto?
-
-    suspend fun reviewSession(
-        params: Destination.Me.ReviewSession
-    )
+    suspend fun getUserId(id: String): EntityID<Int>?
 }
 
 
@@ -46,14 +44,14 @@ internal class DefaultUserRepository(
         uid: String,
         body: FcmUpdateDto
     ) {
-        dao.updateUser(body.toRow(uid))
+        dao.updateFcm(body.toRow(uid))
     }
 
     override suspend fun getUser(id: String): UserDto? {
-        return dao.getById(id)?.toUserDto()
+        return dao.getByFID(id)?.toUserDto()
     }
 
-    override suspend fun reviewSession(params: Destination.Me.ReviewSession) {
-
+    override suspend fun getUserId(id: String): EntityID<Int>? {
+        return dao.getByFID(id)?.get(UserTable.id)
     }
 }

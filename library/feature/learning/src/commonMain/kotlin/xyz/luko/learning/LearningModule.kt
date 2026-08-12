@@ -23,6 +23,7 @@ val learningModule =
                 repository = get(),
                 sessionRepository = get(),
                 analyzeUserDrawing = get(),
+                userRepository = get(),
                 coordinator = get(),
                 appConfig = get(),
                 recognizer = get(),

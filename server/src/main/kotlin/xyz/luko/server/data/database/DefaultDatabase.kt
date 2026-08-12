@@ -46,9 +46,8 @@ class DefaultDatabase(
                 "jdbc:postgresql://${config.databaseHost}:${config.databasePort}/${config.databaseName}"
             username = config.databaseUser
             password = config.databasePassword
-            maximumPoolSize = 3
+            maximumPoolSize = 15
             isAutoCommit = false
-            transactionIsolation = "TRANSACTION_REPEATABLE_READ"
             addDataSourceProperty("ssl", "true")
             addDataSourceProperty("sslmode", "require")
             addDataSourceProperty("reWriteBatchedInserts", "true")

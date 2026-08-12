@@ -4,8 +4,10 @@ import org.jetbrains.exposed.v1.core.JoinType
 import org.jetbrains.exposed.v1.core.Random
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.core.lessEq
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
@@ -14,15 +16,23 @@ import xyz.luko.server.data.database.defaultWhere
 import xyz.luko.server.data.database.insertAll
 import xyz.luko.server.data.database.matchesPinyin
 import xyz.luko.server.data.database.paginated
+import xyz.luko.server.data.database.table.CharacterFsrsStateTable
 import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.data.database.table.GraphicTable
 import xyz.luko.server.domain.model.DictionaryRow
 import xyz.luko.server.domain.model.PaginatedRow
+import kotlin.time.Clock
 
 interface DictionaryDao {
     suspend fun batchInsert(data: List<DictionaryRow>)
-    suspend fun createSession(levels: List<Int>, limit: Int, seed: Long): List<ResultRow>
+    suspend fun createSession(
+        id: EntityID<Int>,
+        levels: List<Int>,
+        limit: Int,
+        seed: Long
+    ): List<ResultRow>
+
     suspend fun getByLevel(page: Int, limit: Int, level: Int): PaginatedRow
     suspend fun search(levels: List<Int>, query: String, page: Int, limit: Int): PaginatedRow
     suspend fun get(code: Int): ResultRow?
@@ -33,18 +43,30 @@ interface DictionaryDao {
 internal class DefaultDictionaryDao : DictionaryDao {
 
     override suspend fun createSession(
+        id: EntityID<Int>,
         levels: List<Int>,
         limit: Int,
         seed: Long
     ): List<ResultRow> {
         return suspendTransaction {
 
+            val now = Clock.System.now().epochSeconds
+
+            val isDue = CharacterFsrsStateTable.nextReviewDueAt lessEq now
+
             exec("SELECT setseed(${seed.toPostgresSeed()})")
             DictionaryTable
                 .join(CharacterTable, JoinType.INNER, DictionaryTable.code, CharacterTable.code)
                 .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
+                .join(
+                    CharacterFsrsStateTable,
+                    JoinType.LEFT,
+                    DictionaryTable.code,
+                    CharacterFsrsStateTable.characterCode,
+                    additionalConstraint = { CharacterFsrsStateTable.userId eq id }
+                )
                 .selectAll()
-                .where { DictionaryTable.level inList levels }
+                .where { (DictionaryTable.level inList levels) and isDue }
                 .orderBy(Random())
                 .limit(limit)
                 .toList()

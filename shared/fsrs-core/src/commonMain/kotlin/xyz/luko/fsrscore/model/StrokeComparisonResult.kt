@@ -1,22 +1,14 @@
-package xyz.luko.domain.model
+package xyz.luko.fsrscore.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SessionResponse(
-    val code: Int,
-    val pinyin: String,
-    val statistics: StrokeComparisonResult,
-    val strokes: List<Stroke>,
-    val references: List<Stroke>,
-    val recognitionResult: String,
-)
-
-@Serializable
 data class StrokeComparisonResult(
-    val overallAccuracy: Float, // 0-100
+    val overallAccuracy: Float,
     val strokeAccuracies: List<Float>,
     val orderAccuracy: Float,
+    val strokeCountCorrect: Boolean,
+    val strokeOrderCorrect: Boolean,
     val details: ComparisonDetails,
 )
 
@@ -26,5 +18,4 @@ data class ComparisonDetails(
     val startPointAccuracy: Float,
     val endPointAccuracy: Float,
     val directionAccuracy: Float,
-    val orderPenalty: Float,
 )
