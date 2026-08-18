@@ -66,3 +66,9 @@ data class UserDto(
     val createdAt: Instant,
     val updatedAt: Instant,
 )
+
+@Serializable
+data class MeDto(
+    val currentStreak: Int,
+    val levels: Map<Int, List<Int>>,
+)

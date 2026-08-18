@@ -18,6 +18,7 @@ fun NestedScaffold(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
+    snackbarHost: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
@@ -25,6 +26,7 @@ fun NestedScaffold(
         topBar = topBar,
         bottomBar = bottomBar,
         content = content,
+        snackbarHost = snackbarHost,
         containerColor = Theme.materialColors.background,
         contentColor = Theme.materialColors.onBackground,
     )

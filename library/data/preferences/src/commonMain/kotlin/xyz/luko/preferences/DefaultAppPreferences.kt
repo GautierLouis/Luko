@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,9 @@ internal class DefaultAppPreferences(
         private val KEY_OB_STATE = booleanPreferencesKey("onboarding_state")
         private val KEY_OB_SEEN_KEYS = stringSetPreferencesKey("onboarding_seen_keys")
 
-        private val KEY_STREAK = stringPreferencesKey("user_streak")
+        private val KEY_STREAK = intPreferencesKey("user_streak")
+
+        private val KEY_LEVELS = stringPreferencesKey("user_levels")
     }
 
     override suspend fun setUserId(id: String) {
@@ -71,13 +74,22 @@ internal class DefaultAppPreferences(
     }
 
     // STREAK
-    override fun observeStreak(): Flow<String?> =
+    override fun observeStreak(): Flow<Int?> =
         store.data.map { preferences -> preferences[KEY_STREAK] }
 
-    override suspend fun getStreak(): String? =
+    override suspend fun getStreak(): Int? =
         observeStreak().first()
 
-    override suspend fun updateStreak(str: String) {
+    override suspend fun updateStreak(str: Int) {
         store.edit { it[KEY_STREAK] = str }
     }
+
+    // LEVELS
+    override fun observeLevels(): Flow<String?> =
+        store.data.map { preferences -> preferences[KEY_LEVELS] }
+
+    override suspend fun updateLevels(levels: String) {
+        store.edit { it[KEY_LEVELS] = levels }
+    }
+
 }

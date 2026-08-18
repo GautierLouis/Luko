@@ -15,8 +15,8 @@ import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import kotlinx.coroutines.tasks.await
 import xyz.luko.firebase.remoteconfig.FeatureFlagKey
-import xyz.luko.utils.AppLogger
 import xyz.luko.tracking.TrackingEvent
+import xyz.luko.utils.AppLogger
 
 class AndroidFirebaseManager(
     private val context: Context,
@@ -93,6 +93,7 @@ class AndroidFirebaseManager(
             mapOf(
                 FeatureFlagKey.ENABLE_DICTIONARY to false,
                 FeatureFlagKey.ENABLE_BOTTOM_NAV to false,
+                FeatureFlagKey.ALTERNATIVE_LAYOUT to false
             )
         remoteConfig
             .setDefaultsAsync(default)
@@ -112,6 +113,7 @@ class AndroidFirebaseManager(
                     RemoteConfigFlags(
                         isDictionaryEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_DICTIONARY),
                         isBottomBarEnabled = remoteConfig.getBoolean(FeatureFlagKey.ENABLE_BOTTOM_NAV),
+                        useAlternativeBuilder = remoteConfig.getBoolean(FeatureFlagKey.ALTERNATIVE_LAYOUT),
                     )
                 remoteConfigManager.register(flags)
             }

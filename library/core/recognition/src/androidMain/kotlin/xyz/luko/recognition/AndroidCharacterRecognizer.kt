@@ -21,10 +21,14 @@ internal class AndroidCharacterRecognizer : CharacterRecognizer {
         DigitalInkRecognition.getClient(DigitalInkRecognizerOptions.builder(model).build())
     }
 
-    override suspend fun ensureReady(): Result<Unit> = runCatching {
-        val isDownloaded = modelManager.isModelDownloaded(model).await()
-        if (!isDownloaded) {
+    override suspend fun needsDownload(): Boolean {
+        return !modelManager.isModelDownloaded(model).await()
+    }
+
+    override suspend fun download(): Result<Boolean> {
+        return runCatching {
             modelManager.download(model, DownloadConditions.Builder().build()).await()
+            needsDownload()
         }
     }
 

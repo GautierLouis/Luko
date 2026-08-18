@@ -33,8 +33,15 @@ import kotlin.coroutines.resume
 @OptIn(ExperimentalForeignApi::class)
 class AppleCharacterRecognizer : CharacterRecognizer {
 
-    override suspend fun ensureReady(): Result<Unit> =
-        Result.success(Unit) // no model download needed
+    // no model download on iOS
+    override suspend fun needsDownload(): Boolean {
+        return false
+    }
+
+    // no model download on iOS
+    override suspend fun download(): Result<Boolean> {
+        return Result.success(true)
+    }
 
     override suspend fun recognize(strokes: List<RecognizableStroke>): Result<List<String>> =
         runCatching {

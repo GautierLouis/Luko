@@ -24,8 +24,12 @@ interface AppPreferences {
     suspend fun getSeenKeys(): Set<String>
 
     // Streak
-    fun observeStreak(): Flow<String?>
-    suspend fun getStreak(): String?
-    suspend fun updateStreak(str: String)
+    fun observeStreak(): Flow<Int?>
+    suspend fun getStreak(): Int?
+    suspend fun updateStreak(str: Int)
+
+    //Levels
+    fun observeLevels(): Flow<String?>
+    suspend fun updateLevels(levels: String)
 
 }

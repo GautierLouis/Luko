@@ -15,7 +15,6 @@ import xyz.luko.ui.navigation.AppRoute
 internal class MainViewModel : ViewModel() {
 
     data class UiState(
-        val enableBottomBar: Boolean = false,
         val menuItems: ImmutableList<MenuItem>,
         val selectedItem: MenuItem,
     )
@@ -27,7 +26,9 @@ internal class MainViewModel : ViewModel() {
                     selectedItem = MenuItem.Home,
                     menuItems = persistentListOf(
                         MenuItem.Home,
-                        MenuItem.Dictionary
+                        MenuItem.Dictionary,
+                        MenuItem.Feed,
+                        MenuItem.Profile,
                     ),
                 ),
         )

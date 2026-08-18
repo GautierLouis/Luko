@@ -6,5 +6,11 @@ enum class QuestionCount(
     FIVE(5),
     TEN(10),
     FIFTEEN(15),
-    TWENTY(20),
+    TWENTY(20);
+
+    fun shifted(by: Int): QuestionCount {
+        val entries = QuestionCount.entries
+        val newIndex = (entries.indexOf(this) + by).coerceIn(entries.indices)
+        return entries[newIndex]
+    }
 }

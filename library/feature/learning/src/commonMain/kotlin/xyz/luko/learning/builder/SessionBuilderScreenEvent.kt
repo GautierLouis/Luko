@@ -14,7 +14,7 @@ internal sealed class SessionBuilderScreenEvent {
         val pageCount: Int,
     ) : SessionBuilderScreenEvent()
 
-    data class OnLevelSelected(
+    data class OnFrequencySelected(
         val level: FrequencyLevel,
     ) : SessionBuilderScreenEvent()
 
@@ -25,4 +25,8 @@ internal sealed class SessionBuilderScreenEvent {
     data class OnQuestionCountSelected(
         val questionCount: QuestionCount,
     ) : SessionBuilderScreenEvent()
+
+    data object QuestionCountIncrease : SessionBuilderScreenEvent()
+
+    data object QuestionCountDecrease : SessionBuilderScreenEvent()
 }

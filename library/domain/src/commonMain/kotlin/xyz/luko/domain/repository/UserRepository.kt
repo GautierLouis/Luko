@@ -1,12 +1,8 @@
 package xyz.luko.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
@@ -18,8 +14,6 @@ import xyz.luko.domain.mapper.toDto
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.SettingTheme
-import xyz.luko.domain.usecase.StreakPreferences
-import xyz.luko.domain.usecase.StreakResult
 import xyz.luko.network.interfaces.UserService
 import xyz.luko.preferences.AppPreferences
 import kotlin.time.Clock
@@ -36,14 +30,15 @@ interface UserRepository {
     suspend fun setKeySeen(key: String)
     fun observeKey(): Flow<Set<String>>
 
-    fun observeStreak(): Flow<StreakResult>
-    suspend fun getStreak(): StreakPreferences?
-    suspend fun updateStreak(streak: StreakPreferences)
+    fun observeStreak(): Flow<Int>
+    suspend fun getStreak(): Int?
 
     suspend fun reviewSession(
         difficultyLevel: DifficultyLevel,
         responses: List<SessionResponse>
     ): Result<Boolean>
+
+    suspend fun getMe(): Result<Unit>
 }
 
 internal class DefaultUserRepository(
@@ -71,27 +66,19 @@ internal class DefaultUserRepository(
         preferences.setTheme(theme.name)
     }
 
-    private val fakeState = MutableStateFlow(false)
-    private val fakeSeen = MutableStateFlow<Set<String>>(setOf())
-
     override fun isOnboardingActivated(): Flow<Boolean> {
-        return fakeState.filter { it }
-//       return preferences.observeIsOnboardingActivated().filter { it }
+        return preferences.observeIsOnboardingActivated()
     }
 
     override suspend fun setOnboarding(enable: Boolean) {
-        fakeState.update { enable }
 //        preferences.setOnboardingState(enable)
     }
 
-    //
     override fun observeKey(): Flow<Set<String>> {
-        return fakeSeen
-//        return preferenceces.observeSeenKeys()
+        return preferences.observeSeenKeys()
     }
 
     override suspend fun setKeySeen(key: String) {
-        fakeSeen.update { it + key }
 //        val old = preferences
 //            .getSeenKeys()
 //            .toMutableSet()
@@ -99,30 +86,12 @@ internal class DefaultUserRepository(
 //        preferences.setKeySeen(old)
     }
 
-    override fun observeStreak(): Flow<StreakResult> {
-        return preferences.observeStreak()
-            .map { raw ->
-                val prefs = raw?.let { Json.decodeFromString<StreakPreferences>(it) }
-                    ?: return@map StreakResult(0, false)
-
-                val todayUtc = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
-                val lastDate = LocalDate.parse(prefs.lastUpdatedDate)
-
-                StreakResult(
-                    streakCount = prefs.streakCount,
-                    updatedToday = lastDate == todayUtc
-                )
-            }
+    override fun observeStreak(): Flow<Int> {
+        return preferences.observeStreak().map { raw -> raw ?: 1 }
     }
 
-    override suspend fun getStreak(): StreakPreferences? {
-        return preferences.getStreak()?.let {
-            Json.decodeFromString(it)
-        }
-    }
-
-    override suspend fun updateStreak(streak: StreakPreferences) {
-        preferences.updateStreak(Json.encodeToString(streak))
+    override suspend fun getStreak(): Int? {
+        return preferences.getStreak()
     }
 
     override suspend fun reviewSession(
@@ -154,5 +123,13 @@ internal class DefaultUserRepository(
         )
 
         return Result.success(true)
+    }
+
+    override suspend fun getMe(): Result<Unit> {
+        return userService.me()
+            .onSuccess {
+                preferences.updateStreak(it.currentStreak)
+                preferences.updateLevels(Json.encodeToString(it.levels))
+            }.map { }
     }
 }

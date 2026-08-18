@@ -1,44 +1,33 @@
 package xyz.luko.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import xyz.luko.baseui.session.toUiModel
+import xyz.luko.domain.model.CharacterFrequencyLevel
+import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.domain.repository.DownloadState
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
-import xyz.luko.ui.core.window.rememberIsWiderThanTall
-import xyz.luko.ui.designsystem.components.button.AppButton
-import xyz.luko.ui.designsystem.components.button.attrs.ButtonRole
-import xyz.luko.ui.designsystem.components.button.attrs.ButtonShape
-import xyz.luko.ui.designsystem.components.button.attrs.ButtonSize
-import xyz.luko.ui.designsystem.components.metrics.MoreSessionCard
-import xyz.luko.ui.designsystem.components.metrics.OverallStatisticsCard
-import xyz.luko.ui.designsystem.components.metrics.SessionCard
 import xyz.luko.ui.designsystem.components.page.NestedScaffold
-import xyz.luko.ui.designsystem.onboarding.OnboardingKey
-import xyz.luko.ui.designsystem.preview.PreviewScreen
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
-import xyz.luko.ui.designsystem.theme.Theme
-import xyz.luko.ui.designsystem.token.dimens.Padding
-import xyz.luko.ui.designsystem.token.dimens.Spacing
-import xyz.luko.ui.navigation.AppNavigation
-import xyz.luko.ui.navigation.AppRoute.SessionsRoute
-import xyz.luko.ui.onboarding.registerTooltip
 
 @Composable
 fun HomeScreen(
@@ -49,93 +38,75 @@ fun HomeScreen(
     HomeScreen(paddingValues, state.value) { viewModel.event(it) }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
-    paddingValues: PaddingValues = PaddingValues.Zero,
+    internalPadding: PaddingValues = PaddingValues.Zero,
     state: HomeViewModel.UIState,
     onEvent: (HomeScreenEvent) -> Unit = {}
 ) {
-    val isWider = rememberIsWiderThanTall()
-    val span = if (isWider) 2 else 1
 
     NestedScaffold(
         modifier = Modifier
-            .padding(paddingValues)
+            .padding(internalPadding)
             .testTag(TestTags.Screen.HOME),
-    ) { paddingValues ->
-
-        LazyVerticalGrid(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-            columns = GridCells.Fixed(span),
-            verticalArrangement = Spacing.large,
-            horizontalArrangement = Spacing.large,
-            userScrollEnabled = false,
-            contentPadding = PaddingValues(Padding.large)
-        ) {
-            item(
-                span = { GridItemSpan(span) }
+        snackbarHost = {
+            AnimatedVisibility(
+                visible = state.isSyncing,
+                enter = slideInVertically(),
+                exit = slideOutVertically()
             ) {
-                val metrics =
-                    if (span == 1) state.toUiModelMinimal() else state.toUiModelExtended()
-                OverallStatisticsCard(
-                    metrics = metrics,
+                DownloadCard(
+                    state = state.syncingState,
                     modifier = Modifier
-                        .registerTooltip(
-                            key = OnboardingKey.OVERALL_STATS,
-                            anchorPosition = TooltipAnchorPosition.Below
-                        )
-                )
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    onEvent(HomeScreenEvent.RetrySync)
+                }
+            }
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(top = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            item(key = "header") {
+                HeaderItem(state.streakCount)
             }
 
-            if (state.seeAll && !isWider) {
-                item(span = { GridItemSpan(1) }) {
-                    Text(
-                        text = Theme.strings.lastSessionTitle.uppercase(),
-                        style = Theme.typography.titleMedium,
-                        color = Theme.materialColors.outline
-                    )
+            item { Spacer(Modifier.height(15.dp)) }
+
+            if (state.enableNews) {
+                item(key = "news") {
+                    NewsItem(state.news, onClick = onEvent)
                 }
             }
 
-            state.lastSession?.let {
-                item {
-                    SessionCard(
-                        model = state.lastSession.toUiModel(),
-                        onClick = {
-                            AppNavigation.navigate(SessionsRoute.SessionListRoute(state.lastSession.id))
-                        }
-                    )
+            if (state.enableSettings) {
+                item(key = "again") {
+                    AgainItem(state.lastSettings)
                 }
             }
 
-            if (state.seeAll) {
-                item {
-                    if (!isWider) {
-                        AppButton(
-                            text = "See More",
-                            shape = ButtonShape.Outlined,
-                            role = ButtonRole.Secondary,
-                            size = ButtonSize.Large,
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = { AppNavigation.navigate(SessionsRoute.SessionListRoute()) }
-                        )
-                    } else {
-                        MoreSessionCard(
-                            model = state.lastSession!!.toUiModel(),
-                            onClick = { AppNavigation.navigate(SessionsRoute.SessionListRoute()) }
-                        )
-                    }
+            if (state.enableLearn) {
+                item(key = "learn") {
+                    LearnItem()
+                }
+            }
+
+            if (state.enableLastSession) {
+                item(key = "previous_sessions") {
+                    PreviouslyItem(state.lastSession)
                 }
             }
         }
     }
 }
 
-@PreviewScreen
+@Preview
 @Composable
 private fun PreviewHomeScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
@@ -144,12 +115,24 @@ private fun PreviewHomeScreen(
         HomeScreen(
             state =
                 HomeViewModel.UIState(
-                    lastSession = PreviewProvider.session,
-                    seeAll = true,
+                    lastSession = PreviewProvider.sessionList.take(5),
                     streakCount = 1,
-                    sessionCount = PreviewProvider.statistics.sessionCount,
-                    avgDifficultyLevel = PreviewProvider.statistics.averageDifficulty,
-                    avgAccuracy = PreviewProvider.statistics.averageAccuracy,
+                    lastSettings = listOf(
+                        LastSessionSettings(
+                            difficultyLevel = DifficultyLevel.HARD,
+                            count = 5,
+                            frequencyLevel = listOf(CharacterFrequencyLevel.COMMON)
+                        ),
+                        LastSessionSettings(
+                            difficultyLevel = DifficultyLevel.HARD,
+                            count = 5,
+                            frequencyLevel = listOf(CharacterFrequencyLevel.COMMON)
+                        )
+                    ),
+                    news = listOf(
+                        NewCard.Onboarding
+                    ),
+                    syncingState = DownloadState.Downloaded
                 ),
         )
     }

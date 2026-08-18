@@ -4,6 +4,7 @@ import xyz.luko.firebase.FirebaseManager
 
 class AppStartUseCase(
     private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
     private val firebaseManager: FirebaseManager
 ) {
 
@@ -20,5 +21,8 @@ class AppStartUseCase(
             // Already registered — update FCM only if changed
             authRepository.updateFcm(fcmToken)
         }
+
+        userRepository.getMe()
+
     }
 }

@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.firebase.RemoteConfigManager
 import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnDifficultySelected
-import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnLevelSelected
-import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnNextPage
-import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnPreviousPage
-import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnQuestionCountSelected
+import xyz.luko.learning.builder.SessionBuilderScreenEvent.OnFrequencySelected
 import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.designsystem.components.attrs.FrequencyLevel
 import xyz.luko.ui.navigation.AppNavigation
 
-internal class SessionBuilderViewModel : ViewModel() {
+internal class SessionBuilderViewModel(
+    private val remoteConfigManager: RemoteConfigManager,
+) : ViewModel() {
     companion object {
         const val PAGE_COUNT = 3
     }
@@ -26,13 +26,25 @@ internal class SessionBuilderViewModel : ViewModel() {
         val difficulty: DifficultyLevel = DifficultyLevel.EASY,
         val questionCount: QuestionCount = QuestionCount.FIVE,
         val currentPage: Int = 0,
+        val useAlternativeLayout: Boolean = true,
     ) {
         val isFinished = currentPage + 1 == PAGE_COUNT
         val showPreviewButton = currentPage > 0
+        val canDecrease = questionCount.ordinal > 0
+        val canIncrease = questionCount.ordinal < QuestionCount.entries.size - 1
     }
 
     private val _state = MutableStateFlow(UiState())
     val state = _state.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            remoteConfigManager.flags
+                .collect { flags ->
+                    _state.update { it.copy(useAlternativeLayout = flags.useAlternativeBuilder) }
+                }
+        }
+    }
 
     fun onEventReceived(event: SessionBuilderScreenEvent) {
         when (event) {
@@ -40,7 +52,7 @@ internal class SessionBuilderViewModel : ViewModel() {
                 _state.update { it.copy(difficulty = event.difficulty) }
             }
 
-            is OnLevelSelected -> {
+            is OnFrequencySelected -> {
                 _state.update {
                     it.copy(
                         levels =
@@ -53,11 +65,11 @@ internal class SessionBuilderViewModel : ViewModel() {
                 }
             }
 
-            is OnQuestionCountSelected -> {
+            is SessionBuilderScreenEvent.OnQuestionCountSelected -> {
                 _state.update { it.copy(questionCount = event.questionCount) }
             }
 
-            is OnNextPage -> {
+            is SessionBuilderScreenEvent.OnNextPage -> {
                 if (event.currentPage < event.pageCount - 1) {
                     updatePageState(event.currentPage + 1)
                 } else {
@@ -65,8 +77,16 @@ internal class SessionBuilderViewModel : ViewModel() {
                 }
             }
 
-            is OnPreviousPage -> {
+            is SessionBuilderScreenEvent.OnPreviousPage -> {
                 updatePageState(event.currentPage - 1)
+            }
+
+            SessionBuilderScreenEvent.QuestionCountDecrease -> {
+                _state.update { it.copy(questionCount = it.questionCount.shifted(-1)) }
+            }
+
+            SessionBuilderScreenEvent.QuestionCountIncrease -> {
+                _state.update { it.copy(questionCount = it.questionCount.shifted(1)) }
             }
         }
     }
