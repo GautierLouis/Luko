@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.multiplatform.convention)
     alias(libs.plugins.compose.convention)
+    alias(libs.plugins.kotzilla)
 }
 
 kotlin {
@@ -46,4 +47,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
         }
     }
+}
+
+kotzilla {
+    versionName = libs.versions.app.version.asProvider().get()
 }

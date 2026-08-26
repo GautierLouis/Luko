@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.crashlytics)
-    alias(libs.plugins.kotzilla)
 }
 
 object Flavors {
@@ -96,10 +95,6 @@ android {
     buildFeatures {
         buildConfig = true
     }
-}
-
-kotzilla {
-    versionName = "1.0.0"
 }
 
 dependencies {

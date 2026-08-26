@@ -1,6 +1,5 @@
 package xyz.luko.app.app
 
-import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
@@ -18,10 +17,16 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
+import io.kotzilla.generated.monitoring
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.core.module.Module
+import org.koin.dsl.koinConfiguration
 import xyz.luko.app.debug.DebugMenuScreen
+import xyz.luko.app.libraryModule
 import xyz.luko.app.main.MainScaffold
 import xyz.luko.dictionary.navigation.BottomSheetSceneStrategy
 import xyz.luko.dictionary.navigation.dictionaryRoutes
@@ -38,6 +43,21 @@ import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.ui.navigation.NavigationCommand
 import xyz.luko.ui.navigation.savedStateConfiguration
+
+@OptIn(KoinExperimentalAPI::class)
+@Composable
+fun KoinApp(
+    platformModules: List<Module> = emptyList(),
+    content: @Composable () -> Unit = {}
+) {
+    KoinMultiplatformApplication(
+        config = koinConfiguration {
+            modules(libraryModule, *platformModules.toTypedArray())
+            monitoring()
+        },
+        content = content
+    )
+}
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -89,31 +109,29 @@ fun App() {
         themeMode = state.theme,
         featureStrings = featureStrings
     ) {
-        SharedTransitionLayout {
-            NavDisplay(
-                sceneStrategies = listOf(strategy, bottomSheetStrategy),
-                entryDecorators =
-                    listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator(), // scopes VM to back stack entry
-                        NavEntryDecorator { entry ->
-                            CompositionLocalProvider(
-                                LocalAnimatedContentScope provides LocalNavAnimatedContentScope.current
-                            ) { entry.Content() }
-                        },
-                    ),
-                backStack = backStack,
-                onBack = { backStack.removeLast() },
-                entryProvider =
-                    entryProvider {
-                        entry<AppRoute.Home.Main> { MainScaffold() }
-                        entry<AppRoute.Home.DebugMenu> { DebugMenuScreen() }
-                        learningRoutes()
-                        onboardingRoutes()
-                        sessionsRoutes()
-                        dictionaryRoutes()
+        NavDisplay(
+            sceneStrategies = listOf(strategy, bottomSheetStrategy),
+            entryDecorators =
+                listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator(), // scopes VM to back stack entry
+                    NavEntryDecorator { entry ->
+                        CompositionLocalProvider(
+                            LocalAnimatedContentScope provides LocalNavAnimatedContentScope.current
+                        ) { entry.Content() }
                     },
-            )
-        }
+                ),
+            backStack = backStack,
+            onBack = { backStack.removeLast() },
+            entryProvider =
+                entryProvider {
+                    entry<AppRoute.Home.Main> { MainScaffold() }
+                    entry<AppRoute.Home.DebugMenu> { DebugMenuScreen() }
+                    learningRoutes()
+                    onboardingRoutes()
+                    sessionsRoutes()
+                    dictionaryRoutes()
+                },
+        )
     }
 }

@@ -9,14 +9,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
-import io.kotzilla.generated.monitoring
 import org.koin.android.ext.android.inject
-import org.koin.compose.KoinMultiplatformApplication
 import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.dsl.koinConfiguration
 import xyz.luko.app.ActivityObserver
 import xyz.luko.app.app.App
-import xyz.luko.app.libraryModule
+import xyz.luko.app.app.KoinApp
 
 class MainActivity : FragmentActivity() {
 
@@ -44,11 +41,7 @@ class MainActivity : FragmentActivity() {
         }
 
         setContent {
-            KoinMultiplatformApplication(
-                config = koinConfiguration {
-                    monitoring()
-                    modules(libraryModule, androidModule)
-                }) {
+            KoinApp(platformModules = listOf(androidModule)) {
                 activityObserver.setIntentLauncher(activityResultLauncher)
                 activityObserver.setPermissionLauncher(permissionLauncher)
                 App()
