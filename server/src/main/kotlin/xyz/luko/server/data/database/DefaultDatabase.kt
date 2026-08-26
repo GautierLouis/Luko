@@ -51,6 +51,7 @@ class DefaultDatabase(
             addDataSourceProperty("ssl", "true")
             addDataSourceProperty("sslmode", "require")
             addDataSourceProperty("reWriteBatchedInserts", "true")
+            addDataSourceProperty("prepareThreshold", "0")
             validate()
         }
     }
