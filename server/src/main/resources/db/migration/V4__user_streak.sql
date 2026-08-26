@@ -1,3 +1,3 @@
-ALTER TABLE user
+ALTER TABLE "user"
     ADD COLUMN streak INTEGER NOT NULL DEFAULT 0,
     ADD COLUMN streak_updated_at BIGINT;
