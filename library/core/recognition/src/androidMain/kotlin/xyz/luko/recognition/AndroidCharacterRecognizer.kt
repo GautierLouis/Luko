@@ -11,11 +11,19 @@ import kotlinx.coroutines.tasks.await
 
 internal class AndroidCharacterRecognizer : CharacterRecognizer {
 
-    private val modelIdentifier = DigitalInkRecognitionModelIdentifier.fromLanguageTag(
-        DigitalInkRecognitionModelIdentifier.ZH_HANI.languageTag
-    ) ?: error("Unsupported language tag")
-    private val model = DigitalInkRecognitionModel.builder(modelIdentifier).build()
-    private val modelManager = RemoteModelManager.getInstance()
+    private val modelIdentifier by lazy {
+        DigitalInkRecognitionModelIdentifier.fromLanguageTag(
+            DigitalInkRecognitionModelIdentifier.ZH_HANI.languageTag
+        ) ?: error("Unsupported language tag")
+    }
+
+    private val model by lazy {
+        DigitalInkRecognitionModel.builder(modelIdentifier).build()
+    }
+
+    private val modelManager by lazy {
+        RemoteModelManager.getInstance()
+    }
 
     private val recognizer by lazy {
         DigitalInkRecognition.getClient(DigitalInkRecognizerOptions.builder(model).build())
