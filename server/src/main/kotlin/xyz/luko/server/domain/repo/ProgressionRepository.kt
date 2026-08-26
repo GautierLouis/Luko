@@ -87,11 +87,11 @@ internal class DefaultProgressionRepository(
         }
 
     private suspend fun getCharacterReviewContexts(codes: List<Int>) = characterDao.get(codes)
-        .map {
+        .mapIndexed { index, row ->
             CharacterReviewContext(
-                code = it[CharacterComplexityTable.code],
-                rawMedians = Json.decodeFromString(it[GraphicTable.medians]),
-                complexityFactor = it[CharacterComplexityTable.complexityFactor]
+                code = codes[index],
+                rawMedians = Json.decodeFromString(row[GraphicTable.medians]),
+                complexityFactor = row[CharacterComplexityTable.complexityFactor]
             )
         }
 
