@@ -10,6 +10,5 @@ data class SessionEntity(
     val duration: Long, // Duration
     val difficulty: String,
     val questionsCount: Int,
-    val score: Int,
     val accuracy: Double,
 )

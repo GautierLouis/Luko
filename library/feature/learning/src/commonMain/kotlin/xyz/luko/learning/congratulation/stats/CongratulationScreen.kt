@@ -11,12 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.mp.KoinPlatform.getKoin
-import xyz.luko.domain.model.Session
-import xyz.luko.learning.navigation.LearningInternalRoute
+import org.koin.core.parameter.parametersOf
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.adaptive.AdaptiveContainer
 import xyz.luko.ui.core.preview.PreviewProvider
@@ -27,7 +26,6 @@ import xyz.luko.ui.designsystem.components.button.attrs.ButtonRole
 import xyz.luko.ui.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.ui.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.ui.designsystem.components.page.NestedScaffold
-import xyz.luko.ui.designsystem.preview.PreviewScreen
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
@@ -40,26 +38,20 @@ import xyz.luko.utils.toHHMMSS
 
 @Composable
 internal fun CongratulationScreen(
-    route: LearningInternalRoute.CongratulationRoute
+    route: AppRoute.Learning.Congratulation
 ) {
 
-    val viewModel = koinViewModel<CongratulationViewModel>()
+    val viewModel = koinViewModel<CongratulationViewModel> {
+        parametersOf(route)
+    }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    CongratulationScreen(
-        state = state,
-        session = route.lastSession,
-        onEvent = {
-            getKoin().getScopeOrNull("session_${route.lastSession.id}")?.close()
-        }
-    )
+    CongratulationScreen(state)
 }
 
 @Composable
 internal fun CongratulationScreen(
     state: CongratulationViewModel.UIState,
-    session: Session,
-    onEvent: () -> Unit = {}
 ) {
 
     val isWiderThanTall = rememberIsWiderThanTall()
@@ -74,7 +66,6 @@ internal fun CongratulationScreen(
             role = ButtonRole.Primary,
             shape = ButtonShape.Filled,
             onClick = {
-                onEvent()
                 AppNavigation.navigateHome()
             },
         )
@@ -89,9 +80,8 @@ internal fun CongratulationScreen(
             modifier = modifier
                 .testTag(TestTags.Action.SECONDARY),
             onClick = {
-                onEvent()
                 AppNavigation.navigate(
-                    AppRoute.SessionsRoute.SessionListRoute(session.id),
+                    AppRoute.Sessions.List(state.session.id),
                     true,
                 )
             },
@@ -140,9 +130,9 @@ internal fun CongratulationScreen(
                 }
                 RewardCard(
                     startAnim = state.startAnim,
-                    avgAccuracy = session.accuracy.toFloat(),
-                    questionCount = session.questionsCount.toString(),
-                    time = session.duration.toHHMMSS(),
+                    avgAccuracy = state.session.accuracy.toFloat(),
+                    questionCount = state.session.questionsCount.toString(),
+                    time = state.session.duration.toHHMMSS(),
                     useRow = isWiderThanTall,
                     modifier = itemModifier,
                 )
@@ -160,15 +150,17 @@ internal fun CongratulationScreen(
     }
 }
 
-@PreviewScreen
+@Preview
 @Composable
 private fun PreviewCongratulationScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
 ) {
     AppTheme(themeMode) {
         CongratulationScreen(
-            state = CongratulationViewModel.UIState(false),
-            session = PreviewProvider.session,
+            state = CongratulationViewModel.UIState(
+                startAnim = false,
+                session = PreviewProvider.session
+            ),
         )
     }
 }

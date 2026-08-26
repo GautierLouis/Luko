@@ -3,7 +3,7 @@ package xyz.luko.app.app
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -15,7 +15,7 @@ import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager
 import xyz.luko.firebase.RemoteConfigManager
 import xyz.luko.tracking.Tracker
-import xyz.luko.ui.designsystem.onboarding.OnboardingKey
+import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.utils.AppConfig
 import xyz.luko.utils.AppLogger
 import xyz.luko.utils.Flavor
@@ -24,19 +24,17 @@ internal class AppViewModel(
     private val appStartViewModel: AppStartUseCase,
     private val firebaseManager: FirebaseManager,
     private val remoteConfigManager: RemoteConfigManager,
-    private val userRepository: UserRepository,
+    userRepository: UserRepository,
     appConfig: AppConfig,
 ) : ViewModel() {
     data class UiState(
         val showFlavorBanner: Boolean,
         val flavor: Flavor,
-        val theme: SettingTheme = SettingTheme.Default,
-        val activateOB: Boolean = false,
-        val seenKeys: List<OnboardingKey> = emptyList()
+        val theme: ThemeMode? = null,
     )
 
-    private val _state = MutableStateFlow(UiState(!appConfig.isProduction, appConfig.flavor))
-    val state = _state.asStateFlow()
+    val state: StateFlow<UiState>
+        field = MutableStateFlow(UiState(!appConfig.isProduction, appConfig.flavor))
 
     init {
         AppLogger.init()
@@ -48,7 +46,15 @@ internal class AppViewModel(
         userRepository
             .observeTheme()
             .onEach { theme ->
-                _state.update { it.copy(theme = theme) }
+                state.update {
+                    it.copy(
+                        theme = when (theme) {
+                            SettingTheme.Default -> null
+                            SettingTheme.Night -> ThemeMode.Night
+                            SettingTheme.Day -> ThemeMode.Day
+                        }
+                    )
+                }
             }.launchIn(viewModelScope)
 
         viewModelScope.launch {
@@ -59,24 +65,6 @@ internal class AppViewModel(
             Tracker.events.collect { event ->
                 firebaseManager.logEvent(event)
             }
-        }
-
-        viewModelScope.launch {
-            userRepository.isOnboardingActivated().collect { activated ->
-                _state.update { it.copy(activateOB = activated) }
-            }
-        }
-
-        viewModelScope.launch {
-            userRepository.observeKey().collect { keys ->
-                _state.update { s -> s.copy(seenKeys = keys.map { OnboardingKey.valueOf(it) }) }
-            }
-        }
-    }
-
-    fun onKeySeen(key: OnboardingKey) {
-        viewModelScope.launch {
-            userRepository.setKeySeen(key.name)
         }
     }
 }

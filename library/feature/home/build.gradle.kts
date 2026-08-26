@@ -11,7 +11,7 @@ kotlin {
             implementation(projects.library.feature.ui.navigation)
             implementation(projects.library.domain)
             implementation(projects.library.feature.ui.designSystem)
-            implementation(projects.library.feature.ui.onboarding)
+//            implementation(projects.library.feature.ui.onboarding)
             implementation(projects.library.feature.ui.drawing)
         }
     }

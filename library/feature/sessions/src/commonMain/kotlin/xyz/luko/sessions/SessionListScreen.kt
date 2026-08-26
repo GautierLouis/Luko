@@ -31,7 +31,7 @@ import xyz.luko.ui.navigation.AppRoute
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun SessionListScreen(
-    route: AppRoute.SessionsRoute.SessionListRoute
+    route: AppRoute.Sessions.List
 ) {
     val viewModel = koinViewModel<SessionListViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()

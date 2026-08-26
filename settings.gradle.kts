@@ -51,11 +51,12 @@ include(":library:feature:profile")
 include(":library:feature:learning")
 include(":library:feature:sessions")
 include(":library:feature:dictionary")
+include(":library:feature:onboarding")
 include(":library:feature:ui:core")
 include(":library:feature:ui:drawing")
 include(":library:feature:ui:navigation")
 include(":library:feature:ui:design-system")
-include(":library:feature:ui:onboarding")
+//include(":library:feature:ui:onboarding") // TO RENAME
 //Domain
 include(":library:domain")
 //Data

@@ -7,23 +7,24 @@ import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.json.Json
 import xyz.luko.database.dao.SessionDao
 import xyz.luko.database.dao.SessionResponseDao
 import xyz.luko.domain.mapper.SessionMapper.toDto
 import xyz.luko.domain.mapper.SessionMapper.toEntity
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
+import xyz.luko.domain.model.SessionSettings
 import xyz.luko.domain.model.Statistics
 import xyz.luko.domain.usecase.ComputeDifficulty
+import xyz.luko.preferences.AppPreferences
 import kotlin.time.DurationUnit
-import kotlin.time.Instant
 import kotlin.time.toDuration
 
 internal class DefaultSessionRepository(
     private val sessionDao: SessionDao,
     private val responseDao: SessionResponseDao,
+    private val appPreferences: AppPreferences,
 ) : SessionRepository {
     val difficultyComputer = ComputeDifficulty()
 
@@ -83,7 +84,27 @@ internal class DefaultSessionRepository(
         }
     }
 
-    override suspend fun getSessionDatesForWeek(start: Instant, end: Instant): List<LocalDate> =
-        sessionDao.getSessionDatesForWeek(start.toString(), end.toString())
-            .map { Instant.parse(it).toLocalDateTime(TimeZone.currentSystemDefault()).date }
+    override suspend fun hasSessionFor(days: List<LocalDate>): List<Boolean> {
+        val instantStr = days.map { it.toString() }
+        val session = sessionDao.hasSessionFor(instantStr).toSet()
+        return instantStr.map { it in session }
+    }
+
+    override fun getLastSessionConfiguration(): Flow<List<SessionSettings>> =
+        appPreferences.observeSessionConfiguration().map { set ->
+            set?.map { Json.decodeFromString<SessionSettings>(it) }?.take(2) ?: emptyList()
+        }
+
+    override suspend fun setLastSessionConfiguration(configuration: SessionSettings) {
+        val last = appPreferences.getSessionConfiguration()
+            ?.map { Json.decodeFromString<SessionSettings>(it) }
+            ?: emptySet()
+
+        val updated = (last + configuration)
+            .distinct()
+            .take(2)
+            .map { Json.encodeToString(it) }
+            .toSet()
+        appPreferences.updateSessionConfiguration(updated)
+    }
 }

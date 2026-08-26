@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.luko.domain.model.Session
@@ -28,8 +28,8 @@ internal class SessionListViewModel(
         val similarResponses: List<SessionResponse> = emptyList(),
     )
 
-    private val _state = MutableStateFlow(UiState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<UiState>
+        field = MutableStateFlow(UiState())
 
     private val _navigationEvents =
         MutableSharedFlow<PaneNavigationEvent>(
@@ -51,7 +51,7 @@ internal class SessionListViewModel(
                 Triple(s.id, responses, similar)
             }
 
-            _state.update {
+            state.update {
                 it.copy(
                     sessions = sessions,
                     selectedSessionId = additionalInfo?.first,
@@ -67,12 +67,12 @@ internal class SessionListViewModel(
         sessionId: Long? = null,
     ) {
         when {
-            _state.value.sessions.isEmpty() -> {
+            state.value.sessions.isEmpty() -> {
                 //Do nothing
             }
 
             sessionId != null -> {
-                val index = _state.value.sessions.indexOfFirst { it.id == sessionId }
+                val index = state.value.sessions.indexOfFirst { it.id == sessionId }
                 onSessionSelected(sessionId, index.takeIf { it >= 0 })
             }
         }
@@ -81,9 +81,9 @@ internal class SessionListViewModel(
     fun onSessionSelected(sessionId: Long, scrollPosition: Int? = null) {
         viewModelScope.launch {
 
-            if (sessionId != _state.value.selectedSessionId) {
+            if (sessionId != state.value.selectedSessionId) {
                 val responses = sessionRepository.getResponses(sessionId)
-                _state.update {
+                state.update {
                     it.copy(selectedSessionId = sessionId, responses = responses)
                 }
             }
@@ -98,9 +98,9 @@ internal class SessionListViewModel(
     }
 
     fun onResponseSelected(code: Int) {
-        val isDeselecting = _state.value.selectedResponse?.code == code
+        val isDeselecting = state.value.selectedResponse?.code == code
 
-        _state.update { s ->
+        state.update { s ->
             s.copy(
                 selectedResponse = s.responses
                     .find { it.code == code }
@@ -111,7 +111,7 @@ internal class SessionListViewModel(
         if (!isDeselecting) {
             viewModelScope.launch {
                 val r = sessionRepository.getSimilarResponse(code)
-                _state.update { it.copy(similarResponses = r) }
+                state.update { it.copy(similarResponses = r) }
             }
         }
 

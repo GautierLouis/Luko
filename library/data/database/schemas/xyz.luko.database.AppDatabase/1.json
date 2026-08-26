@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1a3ed5146035ffbe397586e6a3b420ef",
+      "identityHash": "61f0dca5428cb5004f28e860762dcbf8",
     "entities": [
       {
         "tableName": "SessionEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `duration` INTEGER NOT NULL, `difficulty` TEXT NOT NULL, `questionsCount` INTEGER NOT NULL, `score` INTEGER NOT NULL, `accuracy` REAL NOT NULL)",
+          "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `duration` INTEGER NOT NULL, `difficulty` TEXT NOT NULL, `questionsCount` INTEGER NOT NULL, `accuracy` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -35,12 +35,6 @@
           {
             "fieldPath": "questionsCount",
             "columnName": "questionsCount",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "score",
-            "columnName": "score",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -136,7 +130,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1a3ed5146035ffbe397586e6a3b420ef')"
+        "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '61f0dca5428cb5004f28e860762dcbf8')"
     ]
   }
 }

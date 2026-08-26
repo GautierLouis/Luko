@@ -20,18 +20,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.app.main.MainViewModel.UiState
-import xyz.luko.dictionary.home.DictionaryScreen
-import xyz.luko.feed.FeedScreen
 import xyz.luko.home.HomeScreen
-import xyz.luko.profile.ProfileScreen
 import xyz.luko.ui.core.window.rememberIsWiderThanTall
-import xyz.luko.ui.designsystem.preview.PreviewScreen
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
@@ -40,20 +37,23 @@ import xyz.luko.ui.designsystem.theme.Theme
 @Composable
 internal fun MainScaffold(viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    MainScaffold(
-        state = state,
-        screenContent = { paddingValues ->
-            when (state.selectedItem) {
-                MenuItem.Home -> HomeScreen(paddingValues)
-                MenuItem.Dictionary -> DictionaryScreen(paddingValues)
-                MenuItem.Feed -> FeedScreen()
-                MenuItem.Profile -> ProfileScreen()
-                MenuItem.Session -> { /*Main Action*/
-                }
-            }
-        },
-        onEvent = { event -> viewModel.onEventReceived(event) },
-    )
+
+    HomeScreen(PaddingValues())
+
+//    MainScaffold(
+//        state = state,
+//        screenContent = { paddingValues ->
+//            when (state.selectedItem) {
+//                MenuItem.Home -> HomeScreen(paddingValues)
+//                MenuItem.Dictionary -> DictionaryScreen(paddingValues)
+//                MenuItem.Feed -> FeedScreen()
+//                MenuItem.Profile -> ProfileScreen()
+//                MenuItem.Session -> { /*Main Action*/
+//                }
+//            }
+//        },
+//        onEvent = { event -> viewModel.onEventReceived(event) },
+//    )
 }
 
 @Composable
@@ -111,7 +111,7 @@ private fun MainScaffold(
     }
 }
 
-@PreviewScreen
+@Preview
 @Composable
 private fun PreviewMainScaffold(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,

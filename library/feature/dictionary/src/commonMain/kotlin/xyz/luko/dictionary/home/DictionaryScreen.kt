@@ -2,7 +2,6 @@ package xyz.luko.dictionary.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,15 +31,13 @@ import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 
 @Composable
-fun DictionaryScreen(
-    paddingValues: PaddingValues,
-) {
+fun DictionaryScreen() {
+
     val viewModel = koinViewModel<DictionaryListViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val items = viewModel.items.collectAsLazyPagingItems()
 
     DictionaryScreen(
-        paddingValues = paddingValues,
         state = state,
         items = items,
         onEvent = { event -> viewModel.onEventReceived(event) },
@@ -49,7 +46,6 @@ fun DictionaryScreen(
 
 @Composable
 private fun DictionaryScreen(
-    paddingValues: PaddingValues = PaddingValues.Zero,
     state: DictionaryListViewModel.UIState,
     items: LazyPagingItems<SimpleDictionary>,
     onEvent: (DictionaryScreenEvent) -> Unit = {},
@@ -110,7 +106,7 @@ private fun DictionaryScreen(
                     DictionaryContent(
                         items = items,
                         onItemClick = {
-                            AppNavigation.navigate(AppRoute.CharacterDetail(it))
+                            AppNavigation.navigate(AppRoute.Dictionary.Detail(it))
                         },
                     )
             }

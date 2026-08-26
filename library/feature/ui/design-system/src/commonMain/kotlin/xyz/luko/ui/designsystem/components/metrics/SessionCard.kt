@@ -1,24 +1,14 @@
 package xyz.luko.ui.designsystem.components.metrics
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
-import xyz.luko.ui.designsystem.components.button.AppButton
-import xyz.luko.ui.designsystem.components.button.attrs.ButtonRole
-import xyz.luko.ui.designsystem.components.button.attrs.ButtonShape
 import xyz.luko.ui.designsystem.components.metrics.attrs.MetricItem
 import xyz.luko.ui.designsystem.components.metrics.attrs.SessionStatistic
 import xyz.luko.ui.designsystem.icon.AppIcon
@@ -27,7 +17,6 @@ import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
 import xyz.luko.ui.designsystem.theme.Theme
-import xyz.luko.ui.designsystem.token.dimens.ShapeDefaults
 
 @Immutable
 data class SessionUiModel(
@@ -36,39 +25,8 @@ data class SessionUiModel(
     val duration: String,
     val difficulty: String,
     val questionsCount: String,
-    val score: String,
     val accuracy: String,
 )
-
-@Composable
-fun MoreSessionCard(
-    model: SessionUiModel,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
-) {
-
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ) {
-        Box(
-            modifier = Modifier
-                .clip(ShapeDefaults.card())
-                .blur(10.dp),
-        ) {
-            SessionCard(
-                model = model,
-                clickable = false,
-            )
-        }
-        AppButton(
-            text = "See More",
-            shape = ButtonShape.Ghost,
-            role = ButtonRole.Secondary,
-            onClick = onClick,
-        )
-    }
-}
 
 @Composable
 fun SessionCard(
@@ -94,14 +52,6 @@ fun SessionCard(
             MetricHeader(
                 title = model.date,
                 icon = AppIcon.RoundedTrophy,
-                trailing = {
-                    Text(
-                        text = model.accuracy,
-                        color = Theme.materialColors.tertiary,
-                        fontWeight = FontWeight.SemiBold,
-                        style = Theme.typography.titleLarge,
-                    )
-                },
             )
         },
         items =
@@ -136,7 +86,6 @@ private fun PreviewSessionCard(
                     duration = "0",
                     questionsCount = "10",
                     difficulty = "Hard",
-                    score = "1000",
                     accuracy = "90%"
                 ),
         )

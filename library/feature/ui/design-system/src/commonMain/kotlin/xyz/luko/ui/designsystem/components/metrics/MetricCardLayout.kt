@@ -13,10 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import xyz.luko.ui.designsystem.components.metrics.attrs.AppStatistic
@@ -46,13 +44,12 @@ internal fun MetricCardLayout(
         modifier = modifier
             .fillMaxWidth()
             .padding(Padding.smallest) // room for shadow to breathe
-            .shadow(elevation = 8.dp, shape = ShapeDefaults.card())
-            .clip(ShapeDefaults.card())
+            .clip(ShapeDefaults.button())
             .clickable(enabled = enable) { onClick() }
     ) {
         Surface(
             modifier = modifier.fillMaxWidth(),
-            shape = ShapeDefaults.card(),
+            shape = ShapeDefaults.button(),
             color = Theme.materialColors.surfaceContainer,
         ) {
             Column(

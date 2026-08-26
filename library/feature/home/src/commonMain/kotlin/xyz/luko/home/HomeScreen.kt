@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -21,13 +25,22 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import xyz.luko.domain.model.CharacterFrequencyLevel
 import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.domain.model.SessionSettings
 import xyz.luko.domain.repository.DownloadState
+import xyz.luko.home.item.DownloadCard
+import xyz.luko.home.item.HeaderItem
+import xyz.luko.home.item.LearnItem
+import xyz.luko.home.item.NewsItem
+import xyz.luko.home.item.PreviouslyItem
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.preview.PreviewProvider
 import xyz.luko.ui.designsystem.components.page.NestedScaffold
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
+import xyz.luko.ui.designsystem.theme.Theme
+import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute
 
 @Composable
 fun HomeScreen(
@@ -79,22 +92,20 @@ private fun HomeScreen(
 
             item { Spacer(Modifier.height(15.dp)) }
 
+            if (state.isDebug) {
+                item(key = "debug_menu") {
+                    DevMenuScreen()
+                }
+            }
+
             if (state.enableNews) {
                 item(key = "news") {
                     NewsItem(state.news, onClick = onEvent)
                 }
             }
 
-            if (state.enableSettings) {
-                item(key = "again") {
-                    AgainItem(state.lastSettings)
-                }
-            }
-
-            if (state.enableLearn) {
-                item(key = "learn") {
-                    LearnItem()
-                }
+            item(key = "learn") {
+                LearnItem(state.enableLearn, state.lastSettings)
             }
 
             if (state.enableLastSession) {
@@ -106,6 +117,24 @@ private fun HomeScreen(
     }
 }
 
+@Composable
+private fun DevMenuScreen() {
+    Button(
+        onClick = {
+            AppNavigation.navigate(AppRoute.Home.DebugMenu)
+        },
+        modifier = Modifier.fillMaxSize()
+            .padding(horizontal = 8.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Theme.materialColors.error,
+            contentColor = Theme.materialColors.onError
+        )
+    ) {
+        Text("Debug menu")
+    }
+}
+
 @Preview
 @Composable
 private fun PreviewHomeScreen(
@@ -113,27 +142,23 @@ private fun PreviewHomeScreen(
 ) {
     AppTheme(themeMode) {
         HomeScreen(
-            state =
-                HomeViewModel.UIState(
-                    lastSession = PreviewProvider.sessionList.take(5),
-                    streakCount = 1,
-                    lastSettings = listOf(
-                        LastSessionSettings(
-                            difficultyLevel = DifficultyLevel.HARD,
-                            count = 5,
-                            frequencyLevel = listOf(CharacterFrequencyLevel.COMMON)
-                        ),
-                        LastSessionSettings(
-                            difficultyLevel = DifficultyLevel.HARD,
-                            count = 5,
-                            frequencyLevel = listOf(CharacterFrequencyLevel.COMMON)
-                        )
-                    ),
-                    news = listOf(
-                        NewCard.Onboarding
-                    ),
-                    syncingState = DownloadState.Downloaded
+            state = HomeViewModel.UIState(
+                isDebug = false,
+                lastSession = PreviewProvider.sessionList.take(5),
+                streakCount = 1,
+                lastSettings = listOf(
+                    SessionSettings(
+                        difficultyLevel = DifficultyLevel.HARD,
+                        count = 5,
+                        frequencyLevel = listOf(CharacterFrequencyLevel.COMMON)
+                    )
                 ),
+                news = listOf(
+                    NewCard.Onboarding,
+                    NewCard.Dictionary
+                ),
+                syncingState = DownloadState.Downloaded
+            ),
         )
     }
 }

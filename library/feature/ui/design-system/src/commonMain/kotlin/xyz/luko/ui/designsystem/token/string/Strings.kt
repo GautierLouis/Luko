@@ -1,6 +1,7 @@
 package xyz.luko.ui.designsystem.token.string
 
 import androidx.compose.runtime.Immutable
+import xyz.luko.ui.designsystem.theme.AppString
 
 @Immutable
 data class Strings(
@@ -68,20 +69,20 @@ data class Strings(
     val congratulationButtonHome: String,
     val sessionCardLabel: String,
     val sessionCardAccessibleDate: (String) -> String,
-    val sessionDetailClickLabel : (String) -> String,
-    val sessionDetailTotalStrokes : (Int, Int) -> String,
+    val sessionDetailClickLabel: (String) -> String,
+    val sessionDetailTotalStrokes: (Int, Int) -> String,
     val sessionStreakRefreshButtonNext: String,
     val dayStreak: Plurals,
     val dayStreakDesc: String,
     val listExtraYourStroke: String,
     val listExtraReferenceStroke: String,
-    val listExtraStrokeByStroke : String,
-    val listExtraHistoric : String,
-    val listExtraHistoricAllTime : String,
-    val listExtraHistoricTimeSeen : String,
-    val listExtraHistoricAvgAccuracy : String,
-    val listExtraHistoricProgress : String,
-    val listExtraHistoricAccuracyOverTime : String,
+    val listExtraStrokeByStroke: String,
+    val listExtraHistoric: String,
+    val listExtraHistoricAllTime: String,
+    val listExtraHistoricTimeSeen: String,
+    val listExtraHistoricAvgAccuracy: String,
+    val listExtraHistoricProgress: String,
+    val listExtraHistoricAccuracyOverTime: String,
     // Dictionary
     val searchPlaceholder: String,
     val filterFrequencyGroup: String,
@@ -102,4 +103,4 @@ data class Strings(
     val actionReset: String,
     // Formatter
     val datePattern: String,
-)
+) : AppString

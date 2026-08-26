@@ -26,6 +26,9 @@ internal class DefaultAppPreferences(
         private val KEY_STREAK = intPreferencesKey("user_streak")
 
         private val KEY_LEVELS = stringPreferencesKey("user_levels")
+
+        private val KEY_SESSION_CONFIGURATION =
+            stringSetPreferencesKey("last_session_configuration")
     }
 
     override suspend fun setUserId(id: String) {
@@ -92,4 +95,14 @@ internal class DefaultAppPreferences(
         store.edit { it[KEY_LEVELS] = levels }
     }
 
+    // SESSION CONFIGURATION
+    override fun observeSessionConfiguration(): Flow<Set<String>?> =
+        store.data.map { preferences -> preferences[KEY_SESSION_CONFIGURATION] }
+
+    override suspend fun getSessionConfiguration(): Set<String>? =
+        observeSessionConfiguration().first()
+
+    override suspend fun updateSessionConfiguration(configs: Set<String>) {
+        store.edit { it[KEY_SESSION_CONFIGURATION] = configs }
+    }
 }

@@ -1,17 +1,16 @@
 package xyz.luko.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
-import xyz.luko.apicontracts.dto.PracticeMode
-import xyz.luko.apicontracts.dto.RecognitionResult
 import xyz.luko.apicontracts.dto.ReviewAttemptRequest
-import xyz.luko.apicontracts.dto.ReviewResponseRequest
+import xyz.luko.domain.mapper.toDomain
 import xyz.luko.domain.mapper.toDto
-import xyz.luko.domain.model.DifficultyLevel
+import xyz.luko.domain.model.ReviewResult
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.SettingTheme
 import xyz.luko.network.interfaces.UserService
@@ -25,18 +24,15 @@ interface UserRepository {
 
     suspend fun setTheme(theme: SettingTheme)
 
-    fun isOnboardingActivated(): Flow<Boolean>
-    suspend fun setOnboarding(enable: Boolean)
-    suspend fun setKeySeen(key: String)
-    fun observeKey(): Flow<Set<String>>
+    fun haveSeenOnboarding(): Flow<Boolean>
+    suspend fun setSeenOnboarding(enable: Boolean)
 
     fun observeStreak(): Flow<Int>
     suspend fun getStreak(): Int?
 
     suspend fun reviewSession(
-        difficultyLevel: DifficultyLevel,
         responses: List<SessionResponse>
-    ): Result<Boolean>
+    ): Result<ReviewResult>
 
     suspend fun getMe(): Result<Unit>
 }
@@ -66,24 +62,12 @@ internal class DefaultUserRepository(
         preferences.setTheme(theme.name)
     }
 
-    override fun isOnboardingActivated(): Flow<Boolean> {
-        return preferences.observeIsOnboardingActivated()
+    override fun haveSeenOnboarding(): Flow<Boolean> {
+        return flowOf(false) //preferences.observeIsOnboardingActivated()
     }
 
-    override suspend fun setOnboarding(enable: Boolean) {
-//        preferences.setOnboardingState(enable)
-    }
-
-    override fun observeKey(): Flow<Set<String>> {
-        return preferences.observeSeenKeys()
-    }
-
-    override suspend fun setKeySeen(key: String) {
-//        val old = preferences
-//            .getSeenKeys()
-//            .toMutableSet()
-//        old.add(key.name)
-//        preferences.setKeySeen(old)
+    override suspend fun setSeenOnboarding(enable: Boolean) {
+        preferences.setOnboardingState(enable)
     }
 
     override fun observeStreak(): Flow<Int> {
@@ -95,34 +79,14 @@ internal class DefaultUserRepository(
     }
 
     override suspend fun reviewSession(
-        difficultyLevel: DifficultyLevel,
         responses: List<SessionResponse>
-    ): Result<Boolean> {
-        userService.reviewSession(
+    ): Result<ReviewResult> {
+        return userService.reviewSession(
             ReviewAttemptRequest(
                 doneAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                responses = responses.map { r ->
-                    ReviewResponseRequest(
-                        characterCode = r.code,
-                        strokes = r.strokes.map { it.toDto() },
-                        recognitionResult = RecognitionResult.valueOf(r.recognitionResult),
-                        resetCount = 0,
-                        durationMs = r.strokes.flatMap { it.points }
-                            .map { it.timestamp }
-                            .let { timestamps ->
-                                if (timestamps.isEmpty()) 0L else timestamps.max() - timestamps.min()
-                            },
-                        practiceMode = when (difficultyLevel) {
-                            DifficultyLevel.EASY -> PracticeMode.EASY
-                            DifficultyLevel.MEDIUM -> PracticeMode.MEDIUM
-                            DifficultyLevel.HARD -> PracticeMode.HARD
-                        }
-                    )
-                }
+                responses = responses.toDto()
             )
-        )
-
-        return Result.success(true)
+        ).map { it.toDomain() }
     }
 
     override suspend fun getMe(): Result<Unit> {

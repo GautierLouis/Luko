@@ -30,7 +30,6 @@ import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
@@ -56,10 +55,11 @@ import xyz.luko.ui.designsystem.theme.AppTheme
 import xyz.luko.ui.designsystem.token.dimens.Padding
 import xyz.luko.ui.designsystem.token.dimens.Spacing
 import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute
 import kotlin.time.Clock
 
 @Composable
-internal fun SessionScreen(route: LearningInternalRoute.SessionRoute) {
+internal fun SessionScreen(route: AppRoute.Learning.StartSession) {
     val viewModel = koinViewModel<SessionViewModel> {
         parametersOf(route)
     }

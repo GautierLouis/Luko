@@ -52,7 +52,24 @@ data class ReviewResultDto(
     val isStreakUpdated: Boolean,
     val newStreak: Int,
     val hasLevelUp: Boolean,
-    val levels: Map<Int, List<Int>>
+    val levels: Map<Int, List<Int>>,
+    val strokeComparison: List<StrokeComparisonResultDto>
+)
+
+@Serializable
+data class StrokeComparisonResultDto(
+    val overallAccuracy: Float,
+    val strokeAccuracies: List<Float>,
+    val orderAccuracy: Float,
+    val details: ComparisonDetailsDto,
+)
+
+@Serializable
+data class ComparisonDetailsDto(
+    val pathSimilarity: Float,
+    val startPointAccuracy: Float,
+    val endPointAccuracy: Float,
+    val directionAccuracy: Float,
 )
 
 @Serializable

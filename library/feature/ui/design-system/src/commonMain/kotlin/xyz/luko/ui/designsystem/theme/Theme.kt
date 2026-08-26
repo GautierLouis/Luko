@@ -4,6 +4,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import xyz.luko.ui.designsystem.token.color.model.AppLevelColors
+import xyz.luko.ui.designsystem.token.string.LocalAppStrings
 import xyz.luko.ui.designsystem.token.string.Strings
 
 object Theme {

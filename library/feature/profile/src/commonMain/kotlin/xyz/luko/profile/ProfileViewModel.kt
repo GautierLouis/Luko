@@ -3,7 +3,7 @@ package xyz.luko.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.luko.domain.model.SettingTheme
@@ -22,14 +22,14 @@ internal class ProfileViewModel(
         val selectedTheme: SettingTheme? = null,
     )
 
-    private val _state = MutableStateFlow(UiState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<UiState>
+        field = MutableStateFlow(UiState())
 
     init {
 
         viewModelScope.launch {
             val theme = userRepository.getTheme()
-            _state.update { it.copy(selectedTheme = theme) }
+            state.update { it.copy(selectedTheme = theme) }
         }
     }
 
@@ -40,7 +40,7 @@ internal class ProfileViewModel(
     }
 
     private fun setUserTheme(theme: SettingTheme) {
-        _state.update { it.copy(selectedTheme = theme) }
+        state.update { it.copy(selectedTheme = theme) }
         viewModelScope.launch {
             userRepository.setTheme(theme)
         }

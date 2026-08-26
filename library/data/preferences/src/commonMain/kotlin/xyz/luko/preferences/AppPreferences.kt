@@ -32,4 +32,9 @@ interface AppPreferences {
     fun observeLevels(): Flow<String?>
     suspend fun updateLevels(levels: String)
 
+    //Session
+    fun observeSessionConfiguration(): Flow<Set<String>?>
+    suspend fun getSessionConfiguration(): Set<String>?
+    suspend fun updateSessionConfiguration(configs: Set<String>)
+
 }

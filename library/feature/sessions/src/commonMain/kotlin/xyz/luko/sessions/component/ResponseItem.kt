@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
@@ -90,30 +89,29 @@ internal fun ResponseItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AccuracyTag(
-                        value = response.statistics.overallAccuracy,
-                        color = response.statistics.overallAccuracy.toAccuracyColor()
+                        value = response.accuracy,
+                        color = response.accuracy.toAccuracyColor()
                     )
-                    Text(
-                        text = Theme.strings.sessionDetailTotalStrokes(
-                            response.statistics.strokeAccuracies.size,
-                            response.references.size
-                        )
-
-                    )
+//                    Text(
+//                        text = Theme.strings.sessionDetailTotalStrokes(
+//                            response.statistics.strokeAccuracies.size,
+//                            response.references.size
+//                        )
+//                    )
                 }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(1.dp)
-                ) {
-                    response.statistics.strokeAccuracies.forEach { accuracy ->
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(4.dp)
-                                .clip(CircleShape)
-                                .background(accuracy.toAccuracyColor().primary)
-                        )
-                    }
-                }
+//                Row(
+//                    horizontalArrangement = Arrangement.spacedBy(1.dp)
+//                ) {
+//                    response.statistics.strokeAccuracies.forEach { accuracy ->
+//                        Box(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .height(4.dp)
+//                                .clip(CircleShape)
+//                                .background(accuracy.toAccuracyColor().primary)
+//                        )
+//                    }
+//                }
             }
         }
     }

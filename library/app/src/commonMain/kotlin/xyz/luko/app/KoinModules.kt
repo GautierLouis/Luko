@@ -11,12 +11,15 @@ import xyz.luko.domain.domainModule
 import xyz.luko.feed.feedModule
 import xyz.luko.firebase.firebaseModule
 import xyz.luko.home.homeModule
+import xyz.luko.learning.learningDebugModule
 import xyz.luko.learning.learningModule
+import xyz.luko.onboarding.onboardingModule
 import xyz.luko.permission.permissionModule
 import xyz.luko.profile.profileModule
 import xyz.luko.recognition.recognitionModule
 import xyz.luko.sessions.sessionsModule
 import xyz.luko.utils.AppConfig
+import xyz.luko.utils.DebugAction
 import xyz.luko.utils.Flavor
 import xyz.luko.utils.utilsModule
 
@@ -39,6 +42,14 @@ val libraryModule =
         }
         viewModelOf(::AppViewModel)
         viewModelOf(::MainViewModel)
+
+        /**
+         * Include only debug actions in debug builds
+         */
+        includeDebugModule()
+        single<List<DebugAction>> {
+            if (get<AppConfig>().isProduction) emptyList() else getAll<DebugAction>()
+        }
     }
 
 private fun Module.includeCoreModule() {
@@ -58,6 +69,13 @@ private fun Module.includeFeatureModule() {
         learningModule,
         sessionsModule,
         dictionaryModule,
+        onboardingModule,
+    )
+}
+
+private fun Module.includeDebugModule() {
+    includes(
+        learningDebugModule,
     )
 }
 

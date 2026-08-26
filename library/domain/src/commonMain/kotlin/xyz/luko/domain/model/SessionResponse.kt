@@ -6,10 +6,11 @@ import kotlinx.serialization.Serializable
 data class SessionResponse(
     val code: Int,
     val pinyin: String,
-    val statistics: StrokeComparisonResult,
     val strokes: List<Stroke>,
     val references: List<Stroke>,
     val recognitionResult: String,
+    val difficultyLevel: DifficultyLevel,
+    val accuracy: Float,
 )
 
 @Serializable
@@ -26,5 +27,4 @@ data class ComparisonDetails(
     val startPointAccuracy: Float,
     val endPointAccuracy: Float,
     val directionAccuracy: Float,
-    val orderPenalty: Float,
 )

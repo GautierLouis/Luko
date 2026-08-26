@@ -18,7 +18,7 @@ internal class DefaultUserService(
             client.get(Destination.Me())
         }
 
-    override suspend fun reviewSession(review: ReviewAttemptRequest): Result<List<ReviewResultDto>> =
+    override suspend fun reviewSession(review: ReviewAttemptRequest): Result<ReviewResultDto> =
         call {
             client.post(Destination.Me.ReviewSession()) { setBody(review) }
         }

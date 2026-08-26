@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
+import xyz.luko.domain.model.SessionSettings
 import xyz.luko.domain.model.Statistics
-import kotlin.time.Instant
 
 interface SessionRepository {
     suspend fun save(
@@ -32,6 +32,9 @@ interface SessionRepository {
 
     fun getStatistics(): Flow<Statistics>
 
+    suspend fun hasSessionFor(days: List<LocalDate>): List<Boolean>
 
-    suspend fun getSessionDatesForWeek(start: Instant, end: Instant): List<LocalDate>
+    suspend fun setLastSessionConfiguration(configuration: SessionSettings)
+    fun getLastSessionConfiguration(): Flow<List<SessionSettings>>
 }
+

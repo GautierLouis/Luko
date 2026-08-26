@@ -1,23 +1,21 @@
 package xyz.luko.learning.session
 
-import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import xyz.luko.baseui.session.toDomain
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
+import xyz.luko.domain.model.SessionSettings
 import xyz.luko.domain.model.Stroke
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.learning.congratulation.EndOfSessionCoordinator
-import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
 import xyz.luko.learning.session.model.SessionScreenEvent.Finish
@@ -25,42 +23,36 @@ import xyz.luko.learning.session.model.SessionScreenEvent.Next
 import xyz.luko.learning.session.model.SessionScreenEvent.Reload
 import xyz.luko.learning.session.model.SessionScreenEvent.ToggleLeaveDialog
 import xyz.luko.learning.session.model.SessionState
-import xyz.luko.learning.session.usecase.AccuracyCalculatorUseCase
-import xyz.luko.recognition.CharacterRecognizer
 import xyz.luko.recognition.RecognitionResult
-import xyz.luko.recognition.RecognizablePoint
-import xyz.luko.recognition.RecognizableStroke
-import xyz.luko.recognition.classifyRecognition
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
+import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.utils.AppConfig
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-
 @OptIn(ExperimentalUuidApi::class)
 internal class SessionViewModel(
-    private val params: LearningInternalRoute.SessionRoute,
+    private val params: AppRoute.Learning.StartSession,
     private val repository: DictionaryRepository,
     private val sessionRepository: SessionRepository,
     private val userRepository: UserRepository,
-    private val analyzeUserDrawing: AccuracyCalculatorUseCase,
     private val coordinator: EndOfSessionCoordinator,
     private val appConfig: AppConfig,
-    private val recognizer: CharacterRecognizer
+    private val recognizer: CharacterRecognizedUseCase
 ) : ViewModel() {
 
-    val drawHint get() = params.difficulty == DifficultyLevel.EASY
-    val drawReference get() = params.difficulty != DifficultyLevel.HARD
+    val drawHint get() = params.settings.difficultyLevel == DifficultyLevel.EASY
+    val drawReference get() = params.settings.difficultyLevel != DifficultyLevel.HARD
 
     // No need to pass this to the view: out of state
     private val responses = mutableListOf<SessionResponse>()
 
     private val trackingSessionID = Uuid.random().toString()
 
-    private val _state: MutableStateFlow<SessionState> = MutableStateFlow(SessionState.Loading)
-    val state = _state.asStateFlow()
+    val state: StateFlow<SessionState>
+        field = MutableStateFlow<SessionState>(SessionState.Loading)
 
     init {
         loadQuestions()
@@ -79,22 +71,19 @@ internal class SessionViewModel(
 
     // DEBUG ONLY
     private fun autofillSessionForDebug() {
-        val state = (_state.value as SessionState.Success)
+        val state = (state.value as SessionState.Success)
         state.drawingPageState.forEach { (key, value) ->
-            val reference = value.referenceStrokes.map { s -> s.points.map { Offset(it.x, it.y) } }
-            val statistics = analyzeUserDrawing.calculate(
-                reference = reference,
-                userStroke = reference,
-            )
             responses.add(
                 SessionResponse(
                     code = key,
                     pinyin = state.questions.first { it.code == key }.pinyin.firstOrNull()
                         .orEmpty(),
-                    statistics = statistics,
+
                     references = value.referenceStrokes,
                     strokes = value.referenceStrokes,
-                    recognitionResult = RecognitionResult.SUCCESS.name
+                    recognitionResult = RecognitionResult.SUCCESS.name,
+                    difficultyLevel = params.settings.difficultyLevel,
+                    accuracy = 0f
                 )
             )
         }
@@ -105,19 +94,19 @@ internal class SessionViewModel(
     private fun loadQuestions() {
         viewModelScope.launch {
             repository
-                .createSession(params.levels.toDomain(), params.limit.value)
+                .createSession(params.settings.frequencyLevel, params.settings.count)
                 .onSuccess { data ->
                     val now = Clock.System.now()
 
                     TrackingEvent.CreateSession(
                         trackingId = trackingSessionID,
                         startDate = now.toString(),
-                        difficulty = params.difficulty.name,
-                        levels = params.levels.joinToString(),
+                        difficulty = params.settings.difficultyLevel.name,
+                        levels = params.settings.frequencyLevel.joinToString(),
                         questions = data.map { it.code },
                     ).run { Tracker.track(this) }
 
-                    _state.update {
+                    state.update {
                         SessionState.Success(
                             startTime = now,
                             questions = data,
@@ -126,7 +115,7 @@ internal class SessionViewModel(
                         )
                     }
                 }.onFailure {
-                    _state.update { SessionState.Error }
+                    state.update { SessionState.Error }
                 }
         }
     }
@@ -139,100 +128,92 @@ internal class SessionViewModel(
         )
     }
 
-    private fun toggleLeaveDialog() = _state.updateSuccess {
+    private fun toggleLeaveDialog() = state.updateSuccess {
         it.copy(showLeaveDialog = !it.showLeaveDialog)
     }
 
-    private fun next() = _state.updateSuccess {
+    private fun next() = state.updateSuccess {
         it.copy(currentPageIndex = it.currentPageIndex + 1)
     }
 
     private fun finishSession() {
-        val success = _state.value as? SessionState.Success ?: return
+        val success = state.value as? SessionState.Success ?: return
         val endTime = Clock.System.now()
         val duration = endTime - success.startTime
 
+        TrackingEvent.SessionFinish(
+            trackingId = trackingSessionID,
+            endDate = endTime.toString(),
+            duration = duration.inWholeMilliseconds,
+            difficulty = params.settings.difficultyLevel.name,
+            levels = params.settings.frequencyLevel.joinToString(),
+            responses = emptyMap()
+        ).run { Tracker.track(this) }
+
         viewModelScope.launch {
-            TrackingEvent.SessionFinish(
-                trackingId = trackingSessionID,
-                endDate = endTime.toString(),
-                duration = duration.inWholeMilliseconds,
-                difficulty = params.difficulty.name,
-                levels = params.levels.joinToString(),
-                score = 0,
-                responses = responses.associate { it.code to it.statistics.overallAccuracy }
-            ).run { Tracker.track(this) }
 
-            userRepository.reviewSession(
-                params.difficulty,
-                responses
+            val result = userRepository.reviewSession(responses).getOrThrow()
+
+            val session = Session(
+                date = endTime,
+                duration = duration,
+                difficulty = params.settings.difficultyLevel,
+                questionsCount = responses.count(),
+                accuracy = result.strokeComparison.map { it.overallAccuracy }.average()
             )
 
-            sessionRepository.save(
-                session = Session(
-                    date = endTime,
-                    duration = duration,
-                    difficulty = params.difficulty,
-                    questionsCount = responses.count(),
-                    score = 0,
-                    accuracy = responses.map { it.statistics.overallAccuracy }.average()
-                ),
-                responses = responses,
+            val updatedResponse = responses.mapIndexed { index, response ->
+                response.copy(accuracy = result.strokeComparison[index].overallAccuracy)
+            }
+
+            sessionRepository.save(session = session, responses = updatedResponse)
+
+            sessionRepository.setLastSessionConfiguration(
+                configuration = SessionSettings(
+                    difficultyLevel = params.settings.difficultyLevel,
+                    count = params.settings.count,
+                    frequencyLevel = params.settings.frequencyLevel,
+                )
             )
-            coordinator.prepareAndStart()
+
+            coordinator.prepareAndStart(result, session)
         }
     }
 
     // --- Page ---
     private fun onStrokeCompleted(userStroke: Stroke) {
-        _state.updateSuccess { current ->
+        state.updateSuccess { current ->
             val newPageState = current.currentDrawingPageState.addStroke(userStroke)
             current.withUpdatedPageState(newPageState)
         }
-        val isComplete = (_state.value as SessionState.Success).currentDrawingPageState.isComplete
+        val isComplete = (state.value as SessionState.Success).currentDrawingPageState.isComplete
         if (isComplete) analyzeAndReport()
     }
 
-    private fun resetPage() = _state.updateSuccess { current ->
+    private fun resetPage() = state.updateSuccess { current ->
         current.withUpdatedPageState(current.currentDrawingPageState.reset())
     }
 
     private fun analyzeAndReport() {
         viewModelScope.launch {
-            val success = _state.value as? SessionState.Success ?: return@launch
+            val success = state.value as? SessionState.Success ?: return@launch
             val medians = success.currentQuestion.medians
             val drawnStrokes = success.currentDrawingPageState.userPreviousOffsets
-            val reference = medians.map { s -> s.points.map { Offset(it.x, it.y) } }
-            val drawing =
-                drawnStrokes.map { s -> s.points.map { Offset(it.x, it.y) } }
-
-            val statistics = analyzeUserDrawing.calculate(
-                reference = reference,
-                userStroke = drawing,
-            )
 
             val result = recognizer.recognize(
-                strokes = drawnStrokes.map {
-                    RecognizableStroke(it.points.map { p ->
-                        RecognizablePoint(
-                            p.x,
-                            p.y,
-                            p.timestamp
-                        )
-                    })
-                }
-            ).map {
-                classifyRecognition(Char(success.currentQuestion.code).toString(), it)
-            }.getOrElse { RecognitionResult.FAILURE }
+                expectedCharacter = Char(success.currentQuestion.code).toString(),
+                strokes = drawnStrokes
+            )
 
             responses.add(
                 SessionResponse(
                     code = success.currentQuestion.code,
                     pinyin = success.pinyin,
-                    statistics = statistics,
                     references = medians,
                     strokes = drawnStrokes,
-                    recognitionResult = result.name
+                    recognitionResult = result.name,
+                    difficultyLevel = params.settings.difficultyLevel,
+                    accuracy = 0f // Set at completion (Backend calculate)
                 )
             )
         }

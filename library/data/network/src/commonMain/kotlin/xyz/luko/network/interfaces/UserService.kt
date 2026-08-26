@@ -7,5 +7,5 @@ import xyz.luko.apicontracts.dto.ReviewResultDto
 interface UserService {
     suspend fun me(): Result<MeDto>
 
-    suspend fun reviewSession(review: ReviewAttemptRequest): Result<List<ReviewResultDto>>
+    suspend fun reviewSession(review: ReviewAttemptRequest): Result<ReviewResultDto>
 }

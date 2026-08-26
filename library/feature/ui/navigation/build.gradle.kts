@@ -8,6 +8,7 @@ kotlin {
             api(libs.compose.navigation3)
             api(libs.compose.navigation3.adaptive)
             implementation(projects.library.core.utils)
+            implementation(projects.library.domain)
         }
     }
 }

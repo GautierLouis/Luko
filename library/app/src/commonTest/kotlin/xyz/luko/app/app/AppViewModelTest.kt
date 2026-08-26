@@ -7,8 +7,11 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import xyz.luko.domain.model.ReviewResult
+import xyz.luko.domain.model.SessionResponse
+import xyz.luko.domain.model.SettingTheme
+import xyz.luko.domain.repository.AppStartUseCase
 import xyz.luko.domain.repository.AuthRepository
-import xyz.luko.domain.repository.SettingTheme
 import xyz.luko.domain.repository.UserRepository
 import xyz.luko.firebase.FirebaseManager
 import xyz.luko.firebase.RemoteConfigFlags
@@ -26,7 +29,6 @@ class AppViewModelTest {
         themeFlow: MutableStateFlow<SettingTheme> = MutableStateFlow(SettingTheme.Default),
     ) = AppViewModel(
         firebaseManager = FakeFirebaseManager(),
-        authRepository = FakeAuthRepository(),
         remoteConfigManager = FakeRemoteConfigManager(),
         userRepository = FakeUserRepository(themeFlow = themeFlow),
         appConfig =
@@ -36,6 +38,42 @@ class AppViewModelTest {
                 versionName = "1.0.0",
                 versionCode = "100",
             ),
+        appStartViewModel = AppStartUseCase(
+            FakeAuthRepository(), FakeUserRepository(),
+            object : FirebaseManager {
+                override fun initialize() {
+
+                }
+
+                override suspend fun registerAnonymously(): Result<String> {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun getIdToken(forceRefresh: Boolean): Result<String> {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun getFCMToken(): Result<String> {
+                    TODO("Not yet implemented")
+                }
+
+                override fun logEvent(event: TrackingEvent) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun setUserId(userId: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun setUserProperty(name: String, value: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun fetchRemoteConfig() {
+                    TODO("Not yet implemented")
+                }
+            })
+
     )
 
     class FakeFirebaseManager : FirebaseManager {
@@ -65,9 +103,22 @@ class AppViewModelTest {
     }
 
     class FakeAuthRepository : AuthRepository {
-        override suspend fun registerAnonymously(): Result<Unit> = Result.success(Unit)
+        override suspend fun getUserId(): String? {
+            TODO("Not yet implemented")
+        }
 
-        override suspend fun onNewFcmToken(token: String): Result<Unit> = Result.success(Unit)
+        override suspend fun registerAnonymously(id: String, fcmToken: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun updateFcm(fcmToken: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun onNewFcmToken(token: String): Result<Unit> {
+            TODO("Not yet implemented")
+        }
+
     }
 
     class FakeRemoteConfigManager : RemoteConfigManager {
@@ -84,11 +135,42 @@ class AppViewModelTest {
     class FakeUserRepository(
         private val themeFlow: MutableStateFlow<SettingTheme> = MutableStateFlow(SettingTheme.Default),
     ) : UserRepository {
-        override suspend fun getTheme(): SettingTheme = themeFlow.value
+        override suspend fun getTheme(): SettingTheme {
+            return themeFlow.value
+        }
 
-        override fun observeTheme(): Flow<SettingTheme> = themeFlow
+        override fun observeTheme(): Flow<SettingTheme> {
+            TODO("Not yet implemented")
+        }
 
-        override suspend fun setTheme(theme: SettingTheme) {}
+        override suspend fun setTheme(theme: SettingTheme) {
+            TODO("Not yet implemented")
+        }
+
+        override fun haveSeenOnboarding(): Flow<Boolean> {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun setSeenOnboarding(enable: Boolean) {
+            TODO("Not yet implemented")
+        }
+
+        override fun observeStreak(): Flow<Int> {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun getStreak(): Int? {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun reviewSession(responses: List<SessionResponse>): Result<ReviewResult> {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun getMe(): Result<Unit> {
+            TODO("Not yet implemented")
+        }
+
     }
 
     @Test
@@ -108,6 +190,6 @@ class AppViewModelTest {
             themeFlow.emit(SettingTheme.Day)
             advanceUntilIdle()
 
-            assertEquals(SettingTheme.Day, viewModel.state.value.theme)
+            assertEquals(SettingTheme.Day.name, viewModel.state.value.theme?.name)
         }
 }

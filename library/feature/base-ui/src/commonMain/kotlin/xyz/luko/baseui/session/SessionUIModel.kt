@@ -7,7 +7,6 @@ import xyz.luko.domain.model.Session
 import xyz.luko.ui.designsystem.components.metrics.SessionUiModel
 import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.utils.toAccessibilityDate
-import xyz.luko.utils.toFormattedString
 import xyz.luko.utils.toHHMMSS
 import xyz.luko.utils.toISODateString
 import xyz.luko.utils.toPercentage
@@ -26,7 +25,6 @@ fun Session.toUiModel(): SessionUiModel {
                 DifficultyLevel.HARD -> Theme.strings.hard
             },
         questionsCount = questionsCount.toString(),
-        score = score.toFormattedString(),
         accuracy = accuracy.toPercentage()
     )
 }

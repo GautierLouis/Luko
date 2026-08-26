@@ -1,7 +1,6 @@
 package xyz.luko.ui.core.preview
 
 import xyz.luko.domain.model.CharacterFrequencyLevel
-import xyz.luko.domain.model.ComparisonDetails
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.IdeographicChar
@@ -10,9 +9,7 @@ import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.SimpleDictionary
-import xyz.luko.domain.model.Statistics
 import xyz.luko.domain.model.Stroke
-import xyz.luko.domain.model.StrokeComparisonResult
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
@@ -52,7 +49,6 @@ object PreviewProvider {
             duration = 15.seconds,
             difficulty = DifficultyLevel.EASY,
             questionsCount = 5,
-            score = 250,
             accuracy = 90.toDouble()
         )
     }
@@ -66,35 +62,14 @@ object PreviewProvider {
             SessionResponse(
                 code = it.code,
                 pinyin = it.pinyin.first(),
-                statistics = StrokeComparisonResult(
-                    overallAccuracy = 100.0f,
-                    strokeAccuracies = List(it.medians.size) { 100f },
-                    orderAccuracy = 0.0f,
-                    details = ComparisonDetails(
-                        pathSimilarity = 0.0f,
-                        startPointAccuracy = 0.0f,
-                        endPointAccuracy = 0.0f,
-                        directionAccuracy = 0.0f,
-                        orderPenalty = 0.0f,
-                    )
-                ),
                 strokes = it.medians,
                 references = it.medians,
+                difficultyLevel = DifficultyLevel.EASY,
+                accuracy = 90f,
                 recognitionResult = "SUCCESS"
             )
         }
     }
-
-    val statistics by lazy {
-        Statistics(
-            averageAccuracy = 90.toDouble(),
-            averageTime = 2.seconds,
-            averageDifficulty = DifficultyLevel.EASY,
-            sessionCount = 10,
-            averageQuestionsCount = 5f
-        )
-    }
-
 
     private fun getCharacterList() = mapOf(
         20054 to "guāi",

@@ -16,7 +16,6 @@ object SessionMapper {
             duration = duration.inWholeMilliseconds,
             difficulty = difficulty.name,
             questionsCount = questionsCount,
-            score = score,
             accuracy = accuracy,
         )
 
@@ -27,7 +26,6 @@ object SessionMapper {
             duration = duration.milliseconds,
             difficulty = DifficultyLevel.valueOf(difficulty),
             questionsCount = questionsCount,
-            score = score,
             accuracy = accuracy,
         )
 
@@ -35,7 +33,7 @@ object SessionMapper {
         SessionResponseEntity(
             sessionId = 0L,
             code = code,
-            overallAccuracy = statistics.overallAccuracy,
+            overallAccuracy = accuracy,
             response = Json.encodeToString(this),
         )
 

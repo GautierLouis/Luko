@@ -11,7 +11,7 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -33,18 +33,19 @@ internal class DictionaryListViewModel(
         val activeFilter: ActiveFilter = ActiveFilter(),
     )
 
-    private val _state = MutableStateFlow(UIState())
+    val state: StateFlow<UIState>
+        field = MutableStateFlow(UIState())
+
     private val debouncedQuery =
         snapshotFlow {
-            _state.value.textFieldState.text
+            state.value.textFieldState.text
                 .toString()
         }.map { it.trim() }
             .distinctUntilChanged()
 
-    val state = _state.asStateFlow()
     val items: Flow<PagingData<SimpleDictionary>> =
         combine(
-            flow = _state.map { it.activeFilter }.distinctUntilChanged(),
+            flow = state.map { it.activeFilter }.distinctUntilChanged(),
             flow2 = debouncedQuery,
         ) { filter, query -> filter to query }
             .distinctUntilChanged()
@@ -77,18 +78,18 @@ internal class DictionaryListViewModel(
         }
 
     private fun onCharacterClicked(code: Int) {
-        _state.update { current -> current.copy(selectedCharacter = code) }
+        state.update { current -> current.copy(selectedCharacter = code) }
     }
 
     private fun toggleFilterMenu() {
-        _state.update { current -> current.copy(filterMenuExpended = !current.filterMenuExpended) }
+        state.update { current -> current.copy(filterMenuExpended = !current.filterMenuExpended) }
     }
 
     private fun updateActiveFilter(activeFilter: ActiveFilter) {
-        _state.update { current -> current.copy(activeFilter = activeFilter) }
+        state.update { current -> current.copy(activeFilter = activeFilter) }
     }
 
     private fun dismissModal() {
-        _state.update { current -> current.copy(selectedCharacter = null) }
+        state.update { current -> current.copy(selectedCharacter = null) }
     }
 }

@@ -26,8 +26,8 @@ import xyz.luko.ui.designsystem.theme.AppTheme
 import xyz.luko.ui.navigation.AppRoute
 
 @Composable
-fun CharacterDetailsSheet(
-    route: AppRoute.CharacterDetail
+internal fun CharacterDetailsSheet(
+    route: AppRoute.Dictionary.Detail
 ) {
     val viewModel =
         koinViewModel<ModalCharacterDetailsViewModel>(parameters = { parametersOf(route.code) })

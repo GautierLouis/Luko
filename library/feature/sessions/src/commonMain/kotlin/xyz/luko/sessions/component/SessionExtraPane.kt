@@ -53,21 +53,20 @@ internal fun SessionExtraPane(
             }
         }
 
-        item {
-            HorizontalDivider(thickness = 1.dp)
-        }
+//        item {
+//            HorizontalDivider(thickness = 1.dp)
+//        }
 
-        item {
-            Text(
-                text = Theme.strings.listExtraStrokeByStroke.uppercase(),
-                style = Theme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = Padding.medium)
-            )
-
-            response.statistics.strokeAccuracies.forEachIndexed { index, value ->
-                StrokeItem(index, value)
-            }
-        }
+//        item {
+//            Text(
+//                text = Theme.strings.listExtraStrokeByStroke.uppercase(),
+//                style = Theme.typography.titleMedium,
+//                modifier = Modifier.padding(bottom = Padding.medium)
+//            )
+//            response.statistics.strokeAccuracies.forEachIndexed { index, value ->
+//                StrokeItem(index, value)
+//            }
+//        }
 
         item {
             HorizontalDivider(thickness = 1.dp)
@@ -90,13 +89,13 @@ internal fun SessionExtraPane(
                 horizontalArrangement = Spacing.medium
             ) {
                 val avgAccuracy = similarResponse
-                    .map { it.statistics.overallAccuracy }
+                    .map { it.accuracy }
                     .average()
                     .toFloat()
 
                 val progress =
-                    similarResponse.lastOrNull()?.statistics?.overallAccuracy?.let { last ->
-                        last - similarResponse.first().statistics.overallAccuracy
+                    similarResponse.lastOrNull()?.accuracy?.let { last ->
+                        last - similarResponse.first().accuracy
                     }
 
                 HistoricAllTime(
@@ -122,7 +121,7 @@ internal fun SessionExtraPane(
             )
 
             AccuracyChart(
-                accuracies = similarResponse.map { it.statistics.overallAccuracy },
+                accuracies = similarResponse.map { it.accuracy },
                 modifier = Modifier
                     .background(
                         color = Theme.materialColors.surfaceContainer,

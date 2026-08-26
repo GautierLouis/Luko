@@ -13,35 +13,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 import xyz.luko.learning.congratulation.streak.ui.DayCount
 import xyz.luko.learning.congratulation.streak.ui.StreakWeek
-import xyz.luko.learning.congratulation.streak.ui.previewStreakDays
-import xyz.luko.learning.navigation.LearningInternalRoute
 import xyz.luko.ui.core.TestTags
 import xyz.luko.ui.core.window.WindowInfo
 import xyz.luko.ui.core.window.rememberWindowInfo
 import xyz.luko.ui.designsystem.components.button.AppButton
 import xyz.luko.ui.designsystem.components.button.attrs.ButtonSize
 import xyz.luko.ui.designsystem.components.page.NestedScaffold
-import xyz.luko.ui.designsystem.preview.PreviewScreen
 import xyz.luko.ui.designsystem.preview.ThemeMode
 import xyz.luko.ui.designsystem.preview.ThemeModeProvider
 import xyz.luko.ui.designsystem.theme.AppTheme
 import xyz.luko.ui.designsystem.theme.Theme
 import xyz.luko.ui.designsystem.token.dimens.Padding
 import xyz.luko.ui.designsystem.token.dimens.Spacing
+import xyz.luko.ui.navigation.AppRoute
 
 @Composable
 internal fun StreakRefreshScreen(
-    route: LearningInternalRoute.StreakRoute
+    route: AppRoute.Learning.StreakUp
 ) {
-    val viewModel = koinViewModel<StreakRefreshViewModel> {
-        parametersOf(route.lastSession.id)
-    }
+    val viewModel = koinViewModel<StreakRefreshViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     StreakRefreshScreen(
@@ -108,7 +105,7 @@ private fun StreakRefreshScreen(
     }
 }
 
-@PreviewScreen
+@Preview
 @Composable
 private fun PreviewSteakRefreshScreen(
     @PreviewParameter(ThemeModeProvider::class) themeMode: ThemeMode,
@@ -118,7 +115,7 @@ private fun PreviewSteakRefreshScreen(
             state = StreakRefreshViewModel.UIState(
                 startSecondAnim = true,
                 startFirstAnim = true,
-                streakDays = previewStreakDays
+                streakDays = dayStreakPreview.toImmutableList()
             ),
             newStreak = 2
         )

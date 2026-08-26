@@ -4,24 +4,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import xyz.luko.domain.model.Session
+import xyz.luko.ui.navigation.AppRoute
 import kotlin.time.Duration.Companion.milliseconds
 
-internal class CongratulationViewModel : ViewModel() {
+internal class CongratulationViewModel(
+    params: AppRoute.Learning.Congratulation
+) : ViewModel() {
 
     data class UIState(
         val startAnim: Boolean = false,
+        val session: Session,
     )
 
-    private val _state = MutableStateFlow(UIState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<UIState>
+        field = MutableStateFlow(UIState(session = params.session))
 
     init {
         viewModelScope.launch {
             delay(300.milliseconds)
-            _state.update { it.copy(startAnim = true) }
+            state.update { it.copy(startAnim = true) }
         }
     }
 }

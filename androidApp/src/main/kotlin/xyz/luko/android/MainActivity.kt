@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
+import io.kotzilla.generated.monitoring
 import org.koin.android.ext.android.inject
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -45,6 +46,7 @@ class MainActivity : FragmentActivity() {
         setContent {
             KoinMultiplatformApplication(
                 config = koinConfiguration {
+                    monitoring()
                     modules(libraryModule, androidModule)
                 }) {
                 activityObserver.setIntentLauncher(activityResultLauncher)

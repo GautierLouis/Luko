@@ -26,7 +26,6 @@ sealed class TrackingEvent(
         val duration: Long,
         val difficulty: String,
         val levels: String,
-        val score: Int,
         val responses: Map<Int, Float>
     ) : TrackingEvent(
         key = "finish_session",
@@ -37,7 +36,6 @@ sealed class TrackingEvent(
                 "duration" to duration,
                 "difficulty" to difficulty,
                 "levels" to levels,
-                "score" to score,
                 "responses" to responses
             ),
     )

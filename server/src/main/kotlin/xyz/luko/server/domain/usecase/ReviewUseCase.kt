@@ -1,8 +1,10 @@
 package xyz.luko.server.domain.usecase
 
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import xyz.luko.apicontracts.dto.ComparisonDetailsDto
 import xyz.luko.apicontracts.dto.ReviewAttemptRequest
 import xyz.luko.apicontracts.dto.ReviewResultDto
+import xyz.luko.apicontracts.dto.StrokeComparisonResultDto
 import xyz.luko.fsrscore.AnalyseResultUseCase
 import xyz.luko.server.domain.mapper.dueDateFromNow
 import xyz.luko.server.domain.model.ProgressionRow
@@ -34,18 +36,18 @@ class ReviewUseCase(
                 level = levels.first,
                 levelUp = levels.second,
                 nextReviewDueAt = dueDateFromNow(analyseResult.fsrsResult.nextIntervalDays).epochSeconds
-            )
+            ) to analyseResult.strokeComparison
         }
 
         progressionRepository.saveProgression(
             id = id,
-            progress = progressions,
+            progress = progressions.map { it.first },
             doneAt = attemptRequest.doneAt
         )
 
         val (isUpdated, newStreak) = streakUseCase.updateStreak(id)
 
-        val levelsMaps = progressions
+        val levelsMaps = progressions.map { it.first }
             .filter { it.levelUp }
             .groupBy { it.level }
             .map { it.key to it.value.map { p -> p.code } }
@@ -54,8 +56,22 @@ class ReviewUseCase(
         return ReviewResultDto(
             isStreakUpdated = isUpdated,
             newStreak = newStreak,
-            hasLevelUp = progressions.any { it.levelUp },
-            levels = levelsMaps
+            hasLevelUp = progressions.map { it.first }.any { it.levelUp },
+            levels = levelsMaps,
+            strokeComparison = progressions.map {
+                val sc = it.second
+                StrokeComparisonResultDto(
+                    overallAccuracy = sc.overallAccuracy,
+                    strokeAccuracies = sc.strokeAccuracies,
+                    orderAccuracy = sc.orderAccuracy,
+                    details = ComparisonDetailsDto(
+                        pathSimilarity = sc.details.pathSimilarity,
+                        startPointAccuracy = sc.details.startPointAccuracy,
+                        endPointAccuracy = sc.details.endPointAccuracy,
+                        directionAccuracy = sc.details.directionAccuracy,
+                    )
+                )
+            }
         )
     }
 }

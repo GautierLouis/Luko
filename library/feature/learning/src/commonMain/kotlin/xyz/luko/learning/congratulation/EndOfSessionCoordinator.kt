@@ -2,33 +2,35 @@ package xyz.luko.learning.congratulation
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.learning.navigation.LearningInternalRoute
+import xyz.luko.domain.model.ReviewResult
+import xyz.luko.domain.model.Session
 import xyz.luko.ui.navigation.AppNavigation
+import xyz.luko.ui.navigation.AppRoute
 
-internal class EndOfSessionCoordinator(
-    private val sessionRepository: SessionRepository,
-) {
+internal class EndOfSessionCoordinator {
 
-    private var queue: ArrayDeque<LearningInternalRoute> = ArrayDeque()
+    private var queue: ArrayDeque<AppRoute.Learning> = ArrayDeque()
 
-    suspend fun prepareAndStart() {
-
-        val lastSession = sessionRepository.getLastSession()
+    suspend fun prepareAndStart(reviewResult: ReviewResult, session: Session) {
 
         queue = ArrayDeque(buildList {
-//            if (!streakResult.updatedToday) {
-//                add(LearningInternalRoute.StreakRoute(streakResult.streakCount, lastSession))
-//            }
-            add(LearningInternalRoute.CongratulationRoute(lastSession))
+            if (reviewResult.isStreakUpdated) {
+                add(AppRoute.Learning.StreakUp(reviewResult.newStreak))
+            }
+            if (reviewResult.hasLevelUp) {
+                add(AppRoute.Learning.LevelUp(reviewResult.levels))
+            }
+            add(AppRoute.Learning.Congratulation(session))
         })
         withContext(Dispatchers.Main) {
-            AppNavigation.navigate(queue.first())
+            AppNavigation.navigate(queue.first(), clearBackStack = true)
         }
     }
 
     fun next() {
-        val route = queue.drop(1).firstOrNull() ?: return
-        AppNavigation.navigate(route)
+        queue.removeFirstOrNull()
+        queue.firstOrNull()?.let {
+            AppNavigation.navigate(it, clearBackStack = true)
+        } ?: AppNavigation.navigateHome()
     }
 }

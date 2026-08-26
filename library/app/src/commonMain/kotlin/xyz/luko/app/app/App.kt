@@ -1,14 +1,12 @@
 package xyz.luko.app.app
 
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,10 +21,15 @@ import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.compose.viewmodel.koinViewModel
+import xyz.luko.app.debug.DebugMenuScreen
 import xyz.luko.app.main.MainScaffold
-import xyz.luko.dictionary.details.CharacterDetailsSheet
-import xyz.luko.learning.navigation.learningScreens
-import xyz.luko.sessions.navigation.sessionsScreens
+import xyz.luko.dictionary.navigation.BottomSheetSceneStrategy
+import xyz.luko.dictionary.navigation.dictionaryRoutes
+import xyz.luko.home.strings.learningStringProvider
+import xyz.luko.learning.learningRoutes
+import xyz.luko.onboarding.onboardingRoutes
+import xyz.luko.onboarding.strings.onboardingStringProvider
+import xyz.luko.sessions.sessionsRoutes
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
 import xyz.luko.ui.designsystem.theme.AppTheme
@@ -34,7 +37,7 @@ import xyz.luko.ui.designsystem.theme.LocalAnimatedContentScope
 import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.ui.navigation.NavigationCommand
-import xyz.luko.ui.onboarding.OnboardingTooltipContainer
+import xyz.luko.ui.navigation.savedStateConfiguration
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -42,9 +45,14 @@ fun App() {
     val viewModel: AppViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val backStack = rememberNavBackStack(navigationConfiguration, AppRoute.MainRoute)
-    val isSystemDark = isSystemInDarkTheme()
-    val themeMode by remember { derivedStateOf { state.theme.toThemeMode(isSystemDark) } }
+    val featureStrings = remember {
+        listOf(
+            onboardingStringProvider,
+            learningStringProvider
+        )
+    }
+
+    val backStack = rememberNavBackStack(savedStateConfiguration, AppRoute.Home.Main)
     val strategy = rememberListDetailSceneStrategy<NavKey>()
     val bottomSheetStrategy = remember { BottomSheetSceneStrategy<NavKey>() }
 
@@ -61,10 +69,10 @@ fun App() {
 
                         if (event.clearBackStack) {
                             backStack.clear()
-                            backStack += AppRoute.MainRoute
+                            backStack += AppRoute.Home.Main
                         }
 
-                        if (event.route !is AppRoute.MainRoute) {
+                        if (event.route !is AppRoute.Home.Main) {
                             backStack += event.route
                         }
                     }
@@ -77,38 +85,35 @@ fun App() {
         }
     }
 
-    AppTheme(themeMode) {
+    AppTheme(
+        themeMode = state.theme,
+        featureStrings = featureStrings
+    ) {
         SharedTransitionLayout {
-            OnboardingTooltipContainer(
-                state.seenKeys,
-                state.activateOB,
-                { viewModel.onKeySeen(it) }
-            ) {
-                NavDisplay(
-                    sceneStrategies = listOf(strategy, bottomSheetStrategy),
-                    entryDecorators =
-                        listOf(
-                            rememberSaveableStateHolderNavEntryDecorator(),
-                            rememberViewModelStoreNavEntryDecorator(), // scopes VM to back stack entry
-                            NavEntryDecorator { entry ->
-                                CompositionLocalProvider(
-                                    LocalAnimatedContentScope provides LocalNavAnimatedContentScope.current
-                                ) { entry.Content() }
-                            }
-                        ),
-                    backStack = backStack,
-                    onBack = { backStack.removeLast() },
-                    entryProvider =
-                        entryProvider {
-                            entry<AppRoute.MainRoute> { MainScaffold() }
-                            entry<AppRoute.CharacterDetail>(
-                                metadata = BottomSheetSceneStrategy.bottomSheet()
-                            ) { CharacterDetailsSheet(it) }
-                            learningScreens()
-                            sessionsScreens()
+            NavDisplay(
+                sceneStrategies = listOf(strategy, bottomSheetStrategy),
+                entryDecorators =
+                    listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator(), // scopes VM to back stack entry
+                        NavEntryDecorator { entry ->
+                            CompositionLocalProvider(
+                                LocalAnimatedContentScope provides LocalNavAnimatedContentScope.current
+                            ) { entry.Content() }
                         },
-                )
-            }
+                    ),
+                backStack = backStack,
+                onBack = { backStack.removeLast() },
+                entryProvider =
+                    entryProvider {
+                        entry<AppRoute.Home.Main> { MainScaffold() }
+                        entry<AppRoute.Home.DebugMenu> { DebugMenuScreen() }
+                        learningRoutes()
+                        onboardingRoutes()
+                        sessionsRoutes()
+                        dictionaryRoutes()
+                    },
+            )
         }
     }
 }

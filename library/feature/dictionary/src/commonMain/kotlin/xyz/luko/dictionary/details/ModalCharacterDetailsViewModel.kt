@@ -3,7 +3,7 @@ package xyz.luko.dictionary.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.luko.domain.model.Dictionary
@@ -11,7 +11,7 @@ import xyz.luko.domain.model.Session
 import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.ui.navigation.AppNavigation
-import xyz.luko.ui.navigation.AppRoute.LearningRoute
+import xyz.luko.ui.navigation.AppRoute
 
 internal class ModalCharacterDetailsViewModel(
     private val characterCode: Int,
@@ -29,8 +29,8 @@ internal class ModalCharacterDetailsViewModel(
         data object Loading : UIState()
     }
 
-    private val _state: MutableStateFlow<UIState> = MutableStateFlow(UIState.Loading)
-    val state = _state.asStateFlow()
+    val state: StateFlow<UIState>
+        field = MutableStateFlow<UIState>(UIState.Loading)
 
     init {
         loadCharacter()
@@ -44,24 +44,24 @@ internal class ModalCharacterDetailsViewModel(
                 .onSuccess { dictionary ->
                     val sessions = sessionRepository.getLastSessionsFor(characterCode)
 
-                    _state.update {
+                    state.update {
                         UIState.Success(
                             selectedDictionary = dictionary,
                             lastSession = sessions,
                         )
                     }
                 }.onFailure {
-                    _state.update { UIState.Error }
+                    state.update { UIState.Error }
                 }
         }
     }
 
     fun retry() {
-        _state.update { UIState.Loading }
+        state.update { UIState.Loading }
         loadCharacter()
     }
 
     fun practice() {
-        AppNavigation.navigate(LearningRoute.PracticeCharacterRoute(characterCode), true)
+        AppNavigation.navigate(AppRoute.Learning.PracticeCharacter(characterCode), true)
     }
 }

@@ -86,7 +86,7 @@ internal fun RewardCard(
     LaunchedEffect(startAnim) {
         if (startAnim) {
             animatedProgress.animateTo(
-                targetValue = 1f,
+                targetValue = avgAccuracy / 100f,
                 animationSpec = tween(durationMillis = 1000),
             )
         }
@@ -202,7 +202,7 @@ private fun PreviewRewardCard(
     AppTheme(themeMode) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             RewardCard(
-                startAnim = false,
+                startAnim = true,
                 avgAccuracy = 50f,
                 questionCount = "5",
                 time = "10:00",

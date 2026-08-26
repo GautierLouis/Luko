@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.dokka)
     alias(libs.plugins.crashlytics) apply false
+    alias(libs.plugins.kotzilla) apply false
 
     alias(libs.plugins.multiplatform.convention) apply false
     alias(libs.plugins.compose.convention) apply false

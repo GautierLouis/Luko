@@ -5,7 +5,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import xyz.luko.tracking.Tracker
 import xyz.luko.tracking.TrackingEvent
@@ -19,8 +18,8 @@ internal class MainViewModel : ViewModel() {
         val selectedItem: MenuItem,
     )
 
-    private val _state =
-        MutableStateFlow(
+    val state: StateFlow<UiState>
+        field = MutableStateFlow(
             value =
                 UiState(
                     selectedItem = MenuItem.Home,
@@ -32,14 +31,13 @@ internal class MainViewModel : ViewModel() {
                     ),
                 ),
         )
-    val state: StateFlow<UiState> = _state.asStateFlow()
 
     fun onEventReceived(event: MainScaffoldEvent) =
         when (event) {
             is MainScaffoldEvent.OnItemClick -> updateBottomItem(event.item)
             is MainScaffoldEvent.OnMainItemClick -> {
                 AppNavigation.navigate(
-                    route = AppRoute.LearningRoute.NewSessionRoute,
+                    route = AppRoute.Learning.BuildSession,
                     clearBackStack = true
                 )
             }
@@ -47,6 +45,6 @@ internal class MainViewModel : ViewModel() {
 
     private fun updateBottomItem(item: MenuItem) {
         Tracker.track(TrackingEvent.NavigateTo(item.toString()))
-        _state.update { it.copy(selectedItem = item) }
+        state.update { it.copy(selectedItem = item) }
     }
 }
