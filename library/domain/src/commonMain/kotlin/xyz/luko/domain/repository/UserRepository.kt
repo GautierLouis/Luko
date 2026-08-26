@@ -71,7 +71,7 @@ internal class DefaultUserRepository(
     }
 
     override fun observeStreak(): Flow<Int> {
-        return preferences.observeStreak().map { raw -> raw ?: 1 }
+        return preferences.observeStreak().map { raw -> raw ?: 0 }
     }
 
     override suspend fun getStreak(): Int? {

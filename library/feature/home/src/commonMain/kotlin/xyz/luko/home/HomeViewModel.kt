@@ -21,6 +21,7 @@ import xyz.luko.domain.repository.UserRepository
 import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.utils.AppConfig
+import xyz.luko.utils.Flavor
 import kotlin.time.Duration.Companion.milliseconds
 
 sealed interface NewCard {
@@ -68,7 +69,7 @@ internal class HomeViewModel(
             sessionRepository.getLastSessionConfiguration(),
         ) { lastSessions, streak, seenOb, syncState, lastSettings ->
             UIState(
-                isDebug = !appConfig.isProduction,
+                isDebug = appConfig.flavor == Flavor.DEV,
                 lastSession = lastSessions,
                 streakCount = streak,
                 lastSettings = lastSettings,
