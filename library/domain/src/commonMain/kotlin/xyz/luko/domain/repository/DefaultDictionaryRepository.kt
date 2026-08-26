@@ -15,7 +15,11 @@ internal class DefaultDictionaryRepository(
         limit: Int,
     ) = characterService
         .createSession(level.map { it.toDto() }, limit)
-        .map { it.data.map { dto -> dto.toDomain() } }
+        .mapCatching { response ->
+            response.data
+                .ifEmpty { throw IllegalStateException("No items from server") }
+                .map { dto -> dto.toDomain() }
+        }
 
     override suspend fun getByLevel(
         level: CharacterFrequencyLevel,

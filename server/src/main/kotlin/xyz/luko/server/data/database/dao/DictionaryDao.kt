@@ -7,7 +7,9 @@ import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.core.lessEq
+import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
@@ -52,7 +54,8 @@ internal class DefaultDictionaryDao : DictionaryDao {
 
             val now = Clock.System.now().epochSeconds
 
-            val isDue = CharacterFsrsStateTable.nextReviewDueAt lessEq now
+            val isDue = CharacterFsrsStateTable.nextReviewDueAt.isNull() or
+                (CharacterFsrsStateTable.nextReviewDueAt lessEq now)
 
             exec("SELECT setseed(${seed.toPostgresSeed()})")
             DictionaryTable
