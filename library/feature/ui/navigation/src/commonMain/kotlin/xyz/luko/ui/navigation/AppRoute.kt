@@ -17,10 +17,10 @@ sealed interface AppRoute : NavKey {
     @Serializable
     sealed interface Home : AppRoute {
         @Serializable
-        data object Main : AppRoute
+        data object Main : Home
 
         @Serializable
-        data object DebugMenu : AppRoute
+        data object DebugMenu : Home
     }
 
     @Serializable
@@ -31,7 +31,6 @@ sealed interface AppRoute : NavKey {
         @Serializable
         data object LastPage : Onboarding
     }
-
 
     @Serializable
     sealed interface Learning : AppRoute {
@@ -54,13 +53,11 @@ sealed interface AppRoute : NavKey {
         data class LevelUp(val levels: Map<Int, List<Int>>) : Learning
     }
 
-
     @Serializable
     sealed interface Sessions : AppRoute {
         @Serializable
         data class List(val id: Long? = null) : Sessions
     }
-
 
     @Serializable
     sealed interface Dictionary : AppRoute {
@@ -70,8 +67,6 @@ sealed interface AppRoute : NavKey {
         @Serializable
         data class Detail(val code: Int) : Dictionary
     }
-
-
 }
 
 @OptIn(ExperimentalSerializationApi::class)
