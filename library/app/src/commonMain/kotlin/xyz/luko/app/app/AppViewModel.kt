@@ -2,6 +2,7 @@ package xyz.luko.app.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
@@ -9,6 +10,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import xyz.luko.domain.model.SettingTheme
 import xyz.luko.domain.repository.AppStartUseCase
 import xyz.luko.domain.repository.UserRepository
@@ -21,12 +24,11 @@ import xyz.luko.utils.AppLogger
 import xyz.luko.utils.Flavor
 
 internal class AppViewModel(
-    private val appStartViewModel: AppStartUseCase,
     private val firebaseManager: FirebaseManager,
     private val remoteConfigManager: RemoteConfigManager,
     userRepository: UserRepository,
     appConfig: AppConfig,
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
     data class UiState(
         val showFlavorBanner: Boolean,
         val flavor: Flavor,
@@ -36,11 +38,13 @@ internal class AppViewModel(
     val state: StateFlow<UiState>
         field = MutableStateFlow(UiState(!appConfig.isProduction, appConfig.flavor))
 
+    private val appStartUseCase: AppStartUseCase by inject()
+
     init {
         AppLogger.init()
 
-        viewModelScope.launch {
-            appStartViewModel.initialize()
+        viewModelScope.launch(Dispatchers.Default) {
+            appStartUseCase.initialize()
         }
 
         userRepository

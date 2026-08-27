@@ -4,7 +4,7 @@ import kotlinx.serialization.json.Json
 
 val defaultJson =
     Json {
-        prettyPrint = true
+        prettyPrint = false
         isLenient = true
         ignoreUnknownKeys = true
         allowStructuredMapKeys = true

@@ -152,19 +152,21 @@ internal class SessionViewModel(
 
         viewModelScope.launch {
 
-            val result = userRepository.reviewSession(responses).getOrThrow()
+            val result = userRepository.reviewSession(responses).getOrNull()
 
             val session = Session(
                 date = endTime,
                 duration = duration,
                 difficulty = params.settings.difficultyLevel,
                 questionsCount = responses.count(),
-                accuracy = result.strokeComparison.map { it.overallAccuracy }.average()
+                accuracy = result?.strokeComparison?.map { it.overallAccuracy }?.average() ?: 0.0
             )
 
-            val updatedResponse = responses.mapIndexed { index, response ->
-                response.copy(accuracy = result.strokeComparison[index].overallAccuracy)
-            }
+            val updatedResponse = result?.let {
+                responses.mapIndexed { index, response ->
+                    response.copy(accuracy = result.strokeComparison[index].overallAccuracy)
+                }
+            } ?: responses
 
             sessionRepository.save(session = session, responses = updatedResponse)
 

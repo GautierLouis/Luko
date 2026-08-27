@@ -11,17 +11,21 @@ internal class EndOfSessionCoordinator {
 
     private var queue: ArrayDeque<AppRoute.Learning> = ArrayDeque()
 
-    suspend fun prepareAndStart(reviewResult: ReviewResult, session: Session) {
+    suspend fun prepareAndStart(reviewResult: ReviewResult?, session: Session) {
 
-        queue = ArrayDeque(buildList {
-            if (reviewResult.isStreakUpdated) {
-                add(AppRoute.Learning.StreakUp(reviewResult.newStreak))
-            }
-            if (reviewResult.hasLevelUp) {
-                add(AppRoute.Learning.LevelUp(reviewResult.levels))
-            }
-            add(AppRoute.Learning.Congratulation(session))
-        })
+        queue = ArrayDeque(
+            if (reviewResult == null) listOf(AppRoute.Learning.Congratulation(session))
+            else
+                buildList {
+                    if (reviewResult.isStreakUpdated) {
+                        add(AppRoute.Learning.StreakUp(reviewResult.newStreak))
+                    }
+                    if (reviewResult.hasLevelUp) {
+                        add(AppRoute.Learning.LevelUp(reviewResult.levels))
+                    }
+                    add(AppRoute.Learning.Congratulation(session))
+                }
+        )
         withContext(Dispatchers.Main) {
             AppNavigation.navigate(queue.first(), clearBackStack = true)
         }

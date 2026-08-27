@@ -75,10 +75,7 @@ internal class StrokeTransformer(
         canvasSize: IntSize,
     ): Stroke {
         val invertedCenter = matrixProvider.centerMatrix(canvasSize).apply { invert() }
-        val revert = Matrix().apply {
-            scale(1f, -1f)
-            translate(0f, -900f)
-        }.apply { invert() }
+        val revert = matrixProvider.baseMatrix().apply { invert() }
         return Stroke(
             points = offsets.map {
                 val mapped = revert.map(invertedCenter.map(Offset(it.x, it.y)))
