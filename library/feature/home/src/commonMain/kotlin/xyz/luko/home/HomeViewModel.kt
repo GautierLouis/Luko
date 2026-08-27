@@ -77,7 +77,7 @@ internal class HomeViewModel(
                     if (!seenOb) {
                         add(NewCard.Onboarding)
                     }
-                    add(NewCard.Dictionary)
+                    //add(NewCard.Dictionary)
                 },
                 syncingState = syncState,
             )
