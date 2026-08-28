@@ -86,7 +86,10 @@ internal class DefaultUserRepository(
                 doneAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
                 responses = responses.toDto()
             )
-        ).map { it.toDomain() }
+        ).onSuccess {
+            preferences.updateStreak(it.newStreak)
+            preferences.updateLevels(Json.encodeToString(it.levels))
+        }.map { it.toDomain() }
     }
 
     override suspend fun getMe(): Result<Unit> {

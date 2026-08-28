@@ -3,7 +3,7 @@ package xyz.luko.fsrscore
 import xyz.luko.apicontracts.dto.AttemptSignal
 import xyz.luko.fsrscore.internal.FsrsUseCase
 import xyz.luko.fsrscore.internal.GradeUseCase
-import xyz.luko.fsrscore.internal.StrokeComparaisonUseCase
+import xyz.luko.fsrscore.internal.StrokeComparisonUseCase
 import xyz.luko.fsrscore.model.AnalysisResult
 import kotlin.time.Clock
 
@@ -12,9 +12,9 @@ class AnalyseResultUseCase {
     fun analyse(signal: AttemptSignal): AnalysisResult {
 
         //run stroke comparison
-        val comparisonResult = StrokeComparaisonUseCase.calculate(
-            reference = StrokeComparaisonUseCase.rawStrokeToComparableStroke(signal.rawReferenceMedians),
-            userStroke = StrokeComparaisonUseCase.strokeToComparableStroke(signal.strokes),
+        val comparisonResult = StrokeComparisonUseCase.calculate(
+            reference = StrokeComparisonUseCase.rawStrokeToComparableStroke(signal.rawReferenceMedians),
+            userStroke = StrokeComparisonUseCase.strokeToComparableStroke(signal.strokes),
         )
 
         //compute Gradle

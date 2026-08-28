@@ -36,7 +36,7 @@ internal fun buildHttpClient(
                 AppLogger.i("HttpClient", message)
             }
         }
-        level = LogLevel.INFO
+        level = LogLevel.ALL
     }
     install(ContentNegotiation) {
         json(defaultJson)

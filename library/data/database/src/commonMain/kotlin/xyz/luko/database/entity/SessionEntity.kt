@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class SessionEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val date: String, // Instant
+    val offset: String,
     val duration: Long, // Duration
     val difficulty: String,
     val questionsCount: Int,

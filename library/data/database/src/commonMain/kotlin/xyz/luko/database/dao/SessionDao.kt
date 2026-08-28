@@ -85,6 +85,6 @@ interface SessionDao {
         weekEnd: String,
     ): List<String>
 
-    @Query("SELECT DISTINCT date FROM SessionEntity WHERE date IN (:days)")
+    @Query("SELECT DISTINCT substr(date, 1, 10) FROM SessionEntity WHERE substr(date, 1, 10) IN (:days)")
     suspend fun hasSessionFor(days: List<String>): List<String>
 }

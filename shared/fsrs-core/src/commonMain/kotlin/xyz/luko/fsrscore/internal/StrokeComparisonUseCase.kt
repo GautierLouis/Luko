@@ -11,7 +11,7 @@ import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-internal object StrokeComparaisonUseCase {
+internal object StrokeComparisonUseCase {
 
     // Acceptable deviation in the normalized 0-1024 coordinate space.
     // Placeholder — needs calibration against real drawing data (see log-and-inspect note below).

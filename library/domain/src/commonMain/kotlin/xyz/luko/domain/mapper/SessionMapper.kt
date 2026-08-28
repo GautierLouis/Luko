@@ -1,11 +1,14 @@
 package xyz.luko.domain.mapper
 
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.offsetAt
 import kotlinx.serialization.json.Json
 import xyz.luko.database.entity.SessionEntity
 import xyz.luko.database.entity.SessionResponseEntity
 import xyz.luko.domain.model.DifficultyLevel
 import xyz.luko.domain.model.Session
 import xyz.luko.domain.model.SessionResponse
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
 
@@ -13,6 +16,7 @@ object SessionMapper {
     fun Session.toEntity(): SessionEntity =
         SessionEntity(
             date = date.toString(),
+            offset = TimeZone.currentSystemDefault().offsetAt(Clock.System.now()).toString(),
             duration = duration.inWholeMilliseconds,
             difficulty = difficulty.name,
             questionsCount = questionsCount,
