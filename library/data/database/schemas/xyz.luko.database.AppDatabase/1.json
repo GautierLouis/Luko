@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-      "identityHash": "014c00c25ede01444a480d6e9fe29dd6",
+      "identityHash": "80d66de043083c8bd4109e3a1b18bba5",
     "entities": [
       {
         "tableName": "SessionEntity",
-          "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `offset` TEXT NOT NULL, `duration` INTEGER NOT NULL, `difficulty` TEXT NOT NULL, `questionsCount` INTEGER NOT NULL, `accuracy` REAL NOT NULL)",
+          "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `offset` TEXT NOT NULL, `duration` INTEGER NOT NULL, `difficulty` TEXT NOT NULL, `questionsCount` INTEGER NOT NULL, `accuracy` REAL NOT NULL, `isSync` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -49,6 +49,12 @@
             "columnName": "accuracy",
             "affinity": "REAL",
             "notNull": true
+          },
+            {
+                "fieldPath": "isSync",
+                "columnName": "isSync",
+                "affinity": "INTEGER",
+                "notNull": true
           }
         ],
         "primaryKey": {
@@ -132,11 +138,58 @@
             ]
           }
         ]
+      },
+        {
+            "tableName": "CharacterLevelEntity",
+            "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` INTEGER NOT NULL, `level` INTEGER NOT NULL, `hasBeenPromoted` INTEGER NOT NULL)",
+            "fields": [
+                {
+                    "fieldPath": "id",
+                    "columnName": "id",
+                    "affinity": "INTEGER",
+                    "notNull": true
+                },
+                {
+                    "fieldPath": "code",
+                    "columnName": "code",
+                    "affinity": "INTEGER",
+                    "notNull": true
+                },
+                {
+                    "fieldPath": "level",
+                    "columnName": "level",
+                    "affinity": "INTEGER",
+                    "notNull": true
+                },
+                {
+                    "fieldPath": "hasBeenPromoted",
+                    "columnName": "hasBeenPromoted",
+                    "affinity": "INTEGER",
+                    "notNull": true
+                }
+            ],
+            "primaryKey": {
+                "autoGenerate": true,
+                "columnNames": [
+                    "id"
+                ]
+            },
+            "indices": [
+                {
+                    "name": "index_CharacterLevelEntity_code",
+                    "unique": true,
+                    "columnNames": [
+                        "code"
+                    ],
+                    "orders": [],
+                    "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_CharacterLevelEntity_code` ON `${TABLE_NAME}` (`code`)"
+                }
+            ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-        "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '014c00c25ede01444a480d6e9fe29dd6')"
+        "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '80d66de043083c8bd4109e3a1b18bba5')"
     ]
   }
 }

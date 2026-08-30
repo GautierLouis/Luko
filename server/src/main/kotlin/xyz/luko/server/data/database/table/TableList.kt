@@ -13,6 +13,8 @@ object TableList {
         UserTable,
         CharacterComplexityTable,
         CharacterFsrsStateTable,
-        SeedTable
+        SeedTable,
+        SessionTable,
+        SessionResponseTable,
     ).toTypedArray()
 }

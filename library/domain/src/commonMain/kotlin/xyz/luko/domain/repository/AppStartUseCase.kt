@@ -1,11 +1,13 @@
 package xyz.luko.domain.repository
 
+import xyz.luko.domain.usecase.SyncPendingSessionsUseCase
 import xyz.luko.firebase.FirebaseManager
 
 class AppStartUseCase(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
-    private val firebaseManager: FirebaseManager
+    private val firebaseManager: FirebaseManager,
+    private val syncPendingSessionsUseCase: SyncPendingSessionsUseCase,
 ) {
 
     suspend fun initialize() = runCatching {
@@ -23,6 +25,8 @@ class AppStartUseCase(
         }
 
         userRepository.getMe()
+
+        syncPendingSessionsUseCase.execute()
 
     }
 }

@@ -10,10 +10,12 @@ import xyz.luko.server.data.database.dao.DefaultCharacterFsrsDao
 import xyz.luko.server.data.database.dao.DefaultDictionaryDao
 import xyz.luko.server.data.database.dao.DefaultPrepopulateDao
 import xyz.luko.server.data.database.dao.DefaultSeedDao
+import xyz.luko.server.data.database.dao.DefaultSessionDao
 import xyz.luko.server.data.database.dao.DefaultUserDao
 import xyz.luko.server.data.database.dao.DictionaryDao
 import xyz.luko.server.data.database.dao.PrepopulateDao
 import xyz.luko.server.data.database.dao.SeedDao
+import xyz.luko.server.data.database.dao.SessionDao
 import xyz.luko.server.data.database.dao.UserDao
 
 val databaseModule = module {
@@ -24,4 +26,5 @@ val databaseModule = module {
     singleOf(::DefaultUserDao) bind UserDao::class
     singleOf(::DefaultCharacterDao) bind CharacterDao::class
     singleOf(::DefaultCharacterFsrsDao) bind CharacterFsrsDao::class
+    singleOf(::DefaultSessionDao) bind SessionDao::class
 }

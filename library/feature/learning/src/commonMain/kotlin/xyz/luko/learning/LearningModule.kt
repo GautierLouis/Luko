@@ -13,6 +13,7 @@ import xyz.luko.learning.congratulation.stats.CongratulationViewModel
 import xyz.luko.learning.congratulation.streak.GetWeekStreakUseCase
 import xyz.luko.learning.congratulation.streak.StreakRefreshViewModel
 import xyz.luko.learning.session.CharacterRecognizedUseCase
+import xyz.luko.learning.session.EndOfSessionUseCase
 import xyz.luko.learning.session.SessionViewModel
 import xyz.luko.utils.DebugAction
 
@@ -24,6 +25,7 @@ val learningModule =
         viewModelOf(::StreakRefreshViewModel)
         viewModelOf(::LevelUpViewModel)
 
+        factoryOf(::EndOfSessionUseCase)
         factoryOf(::GetWeekStreakUseCase)
         factoryOf(::CharacterRecognizedUseCase)
 

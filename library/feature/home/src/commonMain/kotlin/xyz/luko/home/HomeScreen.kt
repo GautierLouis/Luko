@@ -64,7 +64,7 @@ private fun HomeScreen(
             .testTag(TestTags.Screen.HOME),
         snackbarHost = {
             AnimatedVisibility(
-                visible = state.isSyncing,
+                visible = state.showDownloadCard,
                 enter = slideInVertically(),
                 exit = slideOutVertically()
             ) {

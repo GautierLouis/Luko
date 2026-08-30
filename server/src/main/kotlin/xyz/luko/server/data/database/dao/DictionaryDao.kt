@@ -3,12 +3,15 @@ package xyz.luko.server.data.database.dao
 import org.jetbrains.exposed.v1.core.JoinType
 import org.jetbrains.exposed.v1.core.Random
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.core.lessEq
+import org.jetbrains.exposed.v1.core.notInList
 import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
@@ -28,54 +31,80 @@ import kotlin.time.Clock
 
 interface DictionaryDao {
     suspend fun batchInsert(data: List<DictionaryRow>)
-    suspend fun createSession(
-        id: EntityID<Int>,
-        levels: List<Int>,
-        limit: Int,
-        seed: Long
-    ): List<ResultRow>
 
     suspend fun getByLevel(page: Int, limit: Int, level: Int): PaginatedRow
     suspend fun search(levels: List<Int>, query: String, page: Int, limit: Int): PaginatedRow
     suspend fun get(code: Int): ResultRow?
+
+    suspend fun getDueOrNewCharacters(
+        id: EntityID<Int>,
+        levels: List<Int>,
+        limit: Int,
+        seed: Long,
+    ): List<ResultRow>
+
+    suspend fun getUpcomingCharacters(
+        id: EntityID<Int>,
+        levels: List<Int>,
+        limit: Int,
+        excludedCodes: List<Int>,
+    ): List<ResultRow>
 }
 
 // --- Implementation ---
 
 internal class DefaultDictionaryDao : DictionaryDao {
 
-    override suspend fun createSession(
+    override suspend fun getDueOrNewCharacters(
         id: EntityID<Int>,
         levels: List<Int>,
         limit: Int,
-        seed: Long
-    ): List<ResultRow> {
-        return suspendTransaction {
+        seed: Long,
+    ): List<ResultRow> = suspendTransaction {
+        val now = Clock.System.now().epochSeconds
+        val isDueOrNew = CharacterFsrsStateTable.nextReviewDueAt.isNull() or
+            (CharacterFsrsStateTable.nextReviewDueAt lessEq now)
 
-            val now = Clock.System.now().epochSeconds
+        exec("SELECT setseed(${seed.toPostgresSeed()})")
 
-            val isDue = CharacterFsrsStateTable.nextReviewDueAt.isNull() or
-                (CharacterFsrsStateTable.nextReviewDueAt lessEq now)
-
-            exec("SELECT setseed(${seed.toPostgresSeed()})")
-            DictionaryTable
-                .join(CharacterTable, JoinType.INNER, DictionaryTable.code, CharacterTable.code)
-                .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
-                .join(
-                    CharacterFsrsStateTable,
-                    JoinType.LEFT,
-                    DictionaryTable.code,
-                    CharacterFsrsStateTable.characterCode,
-                    additionalConstraint = { CharacterFsrsStateTable.userId eq id }
-                )
-                .selectAll()
-                .where { (DictionaryTable.level inList levels) and isDue }
-                .orderBy(Random())
-                .limit(limit)
-                .toList()
-        }
+        baseQuery(id)
+            .selectAll()
+            .where { (DictionaryTable.level inList levels) and isDueOrNew }
+            .orderBy(Random())
+            .limit(limit)
+            .toList()
     }
 
+    override suspend fun getUpcomingCharacters(
+        id: EntityID<Int>,
+        levels: List<Int>,
+        limit: Int,
+        excludedCodes: List<Int>,
+    ): List<ResultRow> = suspendTransaction {
+        val now = Clock.System.now().epochSeconds
+
+        baseQuery(id)
+            .selectAll()
+            .where {
+                (DictionaryTable.level inList levels) and
+                    (CharacterFsrsStateTable.nextReviewDueAt greater now) and
+                    (DictionaryTable.code notInList excludedCodes)
+            }
+            .orderBy(CharacterFsrsStateTable.nextReviewDueAt, SortOrder.ASC)
+            .limit(limit)
+            .toList()
+    }
+
+    private fun baseQuery(id: EntityID<Int>) = DictionaryTable
+        .join(CharacterTable, JoinType.INNER, DictionaryTable.code, CharacterTable.code)
+        .join(GraphicTable, JoinType.INNER, DictionaryTable.code, GraphicTable.code)
+        .join(
+            CharacterFsrsStateTable,
+            JoinType.LEFT,
+            DictionaryTable.code,
+            CharacterFsrsStateTable.characterCode,
+            additionalConstraint = { CharacterFsrsStateTable.userId eq id }
+        )
 
     override suspend fun getByLevel(
         page: Int,

@@ -14,8 +14,8 @@ class StreakUseCase(
     private val userDao: UserDao
 ) {
 
-    suspend fun updateStreak(id: EntityID<Int>): Pair<Boolean, Int> {
-        val user = userDao.getByID(id) ?: return false to 0
+    suspend fun updateStreak(id: EntityID<Int>): StreakUpdater {
+        val user = userDao.getByID(id) ?: return StreakUpdater(false, 0, false)
 
         val today = Clock.System.now().toLocalDateTime(TimeZone.UTC).date
 
@@ -25,24 +25,23 @@ class StreakUseCase(
             Instant.fromEpochSeconds(it).toLocalDateTime(TimeZone.UTC).date
         }
 
-        val (newStreak, increased) = when (lastReview) {
-            null -> 1 to true                           // first ever review
-            today -> currentStreak to false              // already counted today, no-op
-            today.minus(1, DateTimeUnit.DAY) -> {       // consecutive day, bump
-                (currentStreak + 1) to true
-            }
-
-            else -> 1 to false                            // gap > 1 day, streak broken
+        val (newStreak, increased, shouldWrite) = when (lastReview) {
+            null -> Triple(1, true, true)
+            today -> Triple(currentStreak, false, false)
+            today.minus(1, DateTimeUnit.DAY) -> Triple(currentStreak + 1, true, true)
+            else -> Triple(1, false, true)
         }
 
-        if (lastReview != today) {
-            userDao.updateStreak(
-                id,
-                newStreak,
-                Clock.System.now().toEpochMilliseconds()
-            )
-        }
-
-        return increased to newStreak
+        return StreakUpdater(
+            shouldUpdate = shouldWrite,
+            newStreak = newStreak,
+            hasIncrease = increased
+        )
     }
 }
+
+data class StreakUpdater(
+    val shouldUpdate: Boolean,
+    val newStreak: Int,
+    val hasIncrease: Boolean,
+)

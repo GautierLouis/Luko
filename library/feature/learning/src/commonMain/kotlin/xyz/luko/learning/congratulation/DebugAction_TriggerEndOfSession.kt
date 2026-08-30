@@ -24,7 +24,7 @@ internal class DebugAction_TriggerEndOfSession(
                     2 to listOf(22909, 26159, 19981),
                     3 to listOf(20154, 22823, 23567),
                 ),
-                strokeComparison = emptyList()
+                sessionResponse = emptyList(),
             ),
             session = Session(
                 id = 1L,

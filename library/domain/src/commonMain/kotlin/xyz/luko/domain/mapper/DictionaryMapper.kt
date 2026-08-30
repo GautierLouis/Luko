@@ -8,7 +8,7 @@ import xyz.luko.apicontracts.dto.PointDto
 import xyz.luko.apicontracts.dto.PracticeMode
 import xyz.luko.apicontracts.dto.RecognitionResult
 import xyz.luko.apicontracts.dto.ResponseListDto
-import xyz.luko.apicontracts.dto.ReviewResponseRequest
+import xyz.luko.apicontracts.dto.ReviewResponseRequestDto
 import xyz.luko.apicontracts.dto.ReviewResultDto
 import xyz.luko.apicontracts.dto.SimpleDictionaryDto
 import xyz.luko.apicontracts.dto.StrokeDto
@@ -20,11 +20,12 @@ import xyz.luko.domain.model.IdeographicChar
 import xyz.luko.domain.model.IdeographicNode
 import xyz.luko.domain.model.Point
 import xyz.luko.domain.model.ResponseList
+import xyz.luko.domain.model.ReviewResponse
 import xyz.luko.domain.model.ReviewResult
-import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.SimpleDictionary
 import xyz.luko.domain.model.Stroke
 import xyz.luko.domain.model.StrokeComparisonResult
+import xyz.luko.domain.model.TemporaryResponse
 
 internal fun CharacterFrequencyLevelDto.toDomain() = CharacterFrequencyLevel.valueOf(this.name)
 internal fun CharacterFrequencyLevel.toDto() = CharacterFrequencyLevelDto.valueOf(this.name)
@@ -49,20 +50,14 @@ internal fun SimpleDictionaryDto.toDomain() =
         level = level.toDomain(),
     )
 
-internal fun StrokeDto.toDomain() =
-    Stroke(
-        points = this.points.map { it.toDomain() },
-    )
+internal fun StrokeDto.toDomain() = Stroke(points.map { it.toDomain() })
 
 internal fun PointDto.toDomain() = when (this) {
     is PointDto.Curved -> Point.Curved(x, y, cp1x, cp1y, cp2x, cp2y)
     is PointDto.Straight -> Point.Straight(x, y)
 }
 
-internal fun Stroke.toDto() =
-    StrokeDto(
-        points = this.points.map { it.toDto() },
-    )
+internal fun Stroke.toDto() = StrokeDto(points.map { it.toDto() })
 
 internal fun Point.toDto() = when (this) {
     is Point.Curved -> PointDto.Curved(x, y, cp1x, cp1y, cp2x, cp2y)
@@ -93,8 +88,8 @@ internal fun IdeographicCharDto.toDomain() = when (this) {
     IdeographicCharDto.OVERLAID -> IdeographicChar.OVERLAID
 }
 
-internal fun List<SessionResponse>.toDto() = map { sessionResponse ->
-    ReviewResponseRequest(
+internal fun List<TemporaryResponse>.toDto() = map { sessionResponse ->
+    ReviewResponseRequestDto(
         characterCode = sessionResponse.code,
         strokes = sessionResponse.strokes.map { it.toDto() },
         recognitionResult = RecognitionResult.valueOf(sessionResponse.recognitionResult),
@@ -112,22 +107,33 @@ internal fun List<SessionResponse>.toDto() = map { sessionResponse ->
     )
 }
 
-internal fun ReviewResultDto.toDomain() = ReviewResult(
-    isStreakUpdated = isStreakUpdated,
-    newStreak = newStreak,
-    hasLevelUp = hasLevelUp,
-    levels = levels,
-    strokeComparison = strokeComparison.map { dto ->
-        StrokeComparisonResult(
-            overallAccuracy = dto.overallAccuracy,
-            strokeAccuracies = dto.strokeAccuracies,
-            orderAccuracy = dto.orderAccuracy,
-            details = ComparisonDetails(
-                pathSimilarity = dto.details.pathSimilarity,
-                startPointAccuracy = dto.details.startPointAccuracy,
-                endPointAccuracy = dto.details.endPointAccuracy,
-                directionAccuracy = dto.details.directionAccuracy,
+internal fun ReviewResultDto.toDomain(associate: (Int) -> TemporaryResponse): ReviewResult {
+    return ReviewResult(
+        isStreakUpdated = isStreakUpdated,
+        newStreak = newStreak,
+        hasLevelUp = hasLevelUp,
+        levels = levels,
+        sessionResponse = strokeComparison.map { (key, value) ->
+            val tmp = associate(key)
+            ReviewResponse(
+                code = tmp.code,
+                pinyin = tmp.pinyin,
+                strokes = tmp.strokes,
+                references = tmp.references,
+                recognitionResult = tmp.recognitionResult,
+                difficultyLevel = tmp.difficultyLevel,
+                comparisonResult = StrokeComparisonResult(
+                    overallAccuracy = value.overallAccuracy,
+                    strokeAccuracies = value.strokeAccuracies,
+                    orderAccuracy = value.orderAccuracy,
+                    details = ComparisonDetails(
+                        pathSimilarity = value.details.pathSimilarity,
+                        startPointAccuracy = value.details.startPointAccuracy,
+                        endPointAccuracy = value.details.endPointAccuracy,
+                        directionAccuracy = value.details.directionAccuracy,
+                    )
+                )
             )
-        )
-    }
-)
+        }
+    )
+}

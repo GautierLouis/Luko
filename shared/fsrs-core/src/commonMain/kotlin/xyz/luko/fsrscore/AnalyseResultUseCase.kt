@@ -13,7 +13,7 @@ class AnalyseResultUseCase {
 
         //run stroke comparison
         val comparisonResult = StrokeComparisonUseCase.calculate(
-            reference = StrokeComparisonUseCase.rawStrokeToComparableStroke(signal.rawReferenceMedians),
+            reference = StrokeComparisonUseCase.strokeToComparableStroke(signal.referenceMedians),
             userStroke = StrokeComparisonUseCase.strokeToComparableStroke(signal.strokes),
         )
 

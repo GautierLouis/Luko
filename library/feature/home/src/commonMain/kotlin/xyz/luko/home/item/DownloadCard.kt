@@ -65,7 +65,8 @@ internal fun DownloadCard(
         contentAlignment = Alignment.Center
     ) {
         when (state) {
-            is DownloadState.Downloading -> {
+            is DownloadState.Downloading,
+            is DownloadState.Checking -> {
                 Text(
                     text = Theme.learningStrings.ongoingSync,
                     style = Theme.typography.labelMedium,

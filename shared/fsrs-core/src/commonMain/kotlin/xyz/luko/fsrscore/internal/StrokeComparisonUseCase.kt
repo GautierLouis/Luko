@@ -19,9 +19,6 @@ internal object StrokeComparisonUseCase {
     private const val MISSING_STROKE_PENALTY_MULTIPLIER: Float = 0.8f // to calibrate
     private const val ORDER_ACCURACY_THRESHOLD: Float = 100f
 
-    fun rawStrokeToComparableStroke(rawMedians: List<List<List<Float>>>): List<ComparableStroke> =
-        rawMedians.map { s -> ComparableStroke(s.map { p -> ComparablePoint(p[0], p[1]) }) }
-
     fun strokeToComparableStroke(strokes: List<StrokeDto>): List<ComparableStroke> =
         strokes.map { s -> ComparableStroke(s.points.map { p -> ComparablePoint(p.x, p.y) }) }
 

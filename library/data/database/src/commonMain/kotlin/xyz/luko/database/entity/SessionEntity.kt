@@ -12,4 +12,5 @@ data class SessionEntity(
     val difficulty: String,
     val questionsCount: Int,
     val accuracy: Double,
+    val isSync: Boolean = false
 )

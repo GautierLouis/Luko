@@ -50,8 +50,8 @@ internal class HomeViewModel(
             get() = lastSession.isNotEmpty()
         val enableNews
             get() = news.isNotEmpty()
-        val isSyncing
-            get() = syncingState == DownloadState.Downloading || syncingState is DownloadState.Failed
+        val showDownloadCard
+            get() = syncingState.isSyncing || syncingState is DownloadState.Failed
     }
 
     val state: StateFlow<UIState>
@@ -59,7 +59,9 @@ internal class HomeViewModel(
 
     init {
 
-        synchronizationRepository.start()
+        viewModelScope.launch {
+            synchronizationRepository.start()
+        }
 
         combine(
             sessionRepository.getLastSessions(5),
@@ -102,6 +104,8 @@ internal class HomeViewModel(
     }
 
     private fun restartSync() {
-        synchronizationRepository.retry()
+        viewModelScope.launch {
+            synchronizationRepository.retry()
+        }
     }
 }

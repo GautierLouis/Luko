@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
-import xyz.luko.database.entity.BasicStatistics
 import xyz.luko.database.entity.SessionEntity
 import xyz.luko.database.entity.SessionResponseEntity
 
@@ -27,6 +26,12 @@ interface SessionDao {
 
     @Insert
     suspend fun insertResponses(responses: List<SessionResponseEntity>)
+
+    @Query("SELECT * FROM SessionEntity WHERE isSync = 0")
+    suspend fun getUnsyncedSessions(): List<SessionEntity>
+
+    @Query("SELECT * FROM SessionResponseEntity WHERE sessionId = :sessionId")
+    suspend fun getResponsesForSession(sessionId: Long): List<SessionResponseEntity>
 
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
     suspend fun getAll(): List<SessionEntity>
@@ -56,34 +61,6 @@ interface SessionDao {
     """,
     )
     suspend fun getLastFor(code: Int): List<SessionEntity>
-
-    @Query(
-        """
-    SELECT
-        COALESCE(AVG(duration), 0) AS averageTime,
-        COALESCE(AVG(questionsCount), 0) AS averageQuestionsCount,
-        COALESCE(AVG(accuracy), 0) AS averageAccuracy,
-        GROUP_CONCAT(difficulty) AS difficulties,
-        COALESCE(COUNT(*), 0) AS sessionCount
-    FROM SessionEntity
-    LEFT JOIN SessionResponseEntity ON SessionResponseEntity.sessionId = SessionEntity.id
-""",
-    )
-    fun getBasicStatistics(): Flow<BasicStatistics>
-
-    @Query(
-        """
-    SELECT DISTINCT date
-    FROM SessionEntity
-    WHERE date >= :weekStart
-      AND date < :weekEnd
-    ORDER BY date ASC
-    """
-    )
-    suspend fun getSessionDatesForWeek(
-        weekStart: String,
-        weekEnd: String,
-    ): List<String>
 
     @Query("SELECT DISTINCT substr(date, 1, 10) FROM SessionEntity WHERE substr(date, 1, 10) IN (:days)")
     suspend fun hasSessionFor(days: List<String>): List<String>

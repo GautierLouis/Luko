@@ -37,7 +37,7 @@ internal object GradeUseCase {
 
         // ── Layer 2: quality score (0..1) ──
         val targetMs = CharacterDurationUseCase.calculate(
-            strokeCount = signals.rawReferenceMedians.size,
+            strokeCount = signals.referenceMedians.size,
             practiceMode = signals.practiceMode,
             complexityFactor = signals.complexityFactor,
         )

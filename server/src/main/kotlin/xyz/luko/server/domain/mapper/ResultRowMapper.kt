@@ -10,8 +10,10 @@ import xyz.luko.server.data.database.table.CharacterTable
 import xyz.luko.server.data.database.table.DictionaryTable
 import xyz.luko.server.data.database.table.GraphicTable
 import xyz.luko.server.data.database.table.SeedTable
+import xyz.luko.server.data.database.table.SessionResponseTable
 import xyz.luko.server.data.database.table.UserTable
 import xyz.luko.server.domain.model.SeedRow
+import xyz.luko.server.domain.model.SessionResponseRow
 import kotlin.time.Instant
 
 internal object ResultRowMapping {
@@ -44,4 +46,8 @@ internal object ResultRowMapping {
         levels = this[SeedTable.levels],
         limit = this[SeedTable.limit]
     )
+
+
+    fun ResultRow.toSessionResponseRow(): SessionResponseRow =
+        Json.decodeFromString<SessionResponseRow>(this[SessionResponseTable.response])
 }

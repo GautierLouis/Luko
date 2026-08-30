@@ -6,7 +6,7 @@ import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import xyz.luko.server.data.database.table.CharacterComplexityTable
-import xyz.luko.server.data.database.table.GraphicTable
+import xyz.luko.server.data.database.table.DictionaryTable
 
 interface CharacterDao {
     suspend fun get(codes: List<Int>): List<ResultRow>
@@ -18,14 +18,15 @@ internal class DefaultCharacterDao : CharacterDao {
         return suspendTransaction {
             CharacterComplexityTable
                 .join(
-                    otherTable = GraphicTable,
+                    otherTable = DictionaryTable,
                     joinType = JoinType.INNER,
                     onColumn = CharacterComplexityTable.code,
-                    otherColumn = GraphicTable.code
+                    otherColumn = DictionaryTable.code
                 )
                 .select(
+                    DictionaryTable.code,
+                    DictionaryTable.medians,
                     CharacterComplexityTable.complexityFactor,
-                    GraphicTable.medians
                 )
                 .where { CharacterComplexityTable.code inList codes }
                 .toList()

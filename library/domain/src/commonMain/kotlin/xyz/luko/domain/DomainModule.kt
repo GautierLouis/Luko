@@ -1,8 +1,5 @@
 package xyz.luko.domain
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -21,6 +18,8 @@ import xyz.luko.domain.repository.DictionaryRepository
 import xyz.luko.domain.repository.SessionRepository
 import xyz.luko.domain.repository.SynchronizationRepository
 import xyz.luko.domain.repository.UserRepository
+import xyz.luko.domain.usecase.SyncPendingSessionsUseCase
+import xyz.luko.domain.usecase.SyncSessionUseCase
 import xyz.luko.firebase.notification.FcmProvider
 import xyz.luko.network.interfaces.TokenProvider
 import xyz.luko.network.networkModule
@@ -36,7 +35,8 @@ val domainModule =
         singleOf(::DefaultDictionaryRepository) bind DictionaryRepository::class
         singleOf(::DefaultSessionRepository) bind SessionRepository::class
         singleOf(::DefaultUserRepository) bind UserRepository::class
-        single { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
         singleOf(::DefaultSynchronizationRepository) bind SynchronizationRepository::class
         factoryOf(::AppStartUseCase)
+        factoryOf(::SyncSessionUseCase)
+        factoryOf(::SyncPendingSessionsUseCase)
     }

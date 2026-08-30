@@ -8,5 +8,16 @@ data class ReviewResult(
     val newStreak: Int,
     val hasLevelUp: Boolean,
     val levels: Map<Int, List<Int>>,
-    val strokeComparison: List<StrokeComparisonResult>
+    val sessionResponse: List<ReviewResponse> = emptyList()
+)
+
+@Serializable
+data class ReviewResponse(
+    val code: Int,
+    val pinyin: String,
+    val strokes: List<Stroke>,
+    val references: List<Stroke>,
+    val recognitionResult: String,
+    val difficultyLevel: DifficultyLevel,
+    val comparisonResult: StrokeComparisonResult
 )

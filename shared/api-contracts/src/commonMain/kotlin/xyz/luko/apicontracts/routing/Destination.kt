@@ -24,6 +24,14 @@ class Destination {
         class Metrics(
             val parent: Admin = Admin(),
         )
+
+        @Resource("stroke-comparison")
+        class StrokeComparison(
+            val parent: Admin = Admin(),
+            val sessionId: Int? = null,
+            val code: Int? = null,
+            val referenceType: String? = null,
+        )
     }
 
     @Resource("register_anon")

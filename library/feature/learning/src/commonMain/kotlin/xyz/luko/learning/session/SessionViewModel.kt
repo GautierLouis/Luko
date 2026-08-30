@@ -8,14 +8,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.luko.domain.model.Dictionary
 import xyz.luko.domain.model.DifficultyLevel
-import xyz.luko.domain.model.Session
-import xyz.luko.domain.model.SessionResponse
-import xyz.luko.domain.model.SessionSettings
 import xyz.luko.domain.model.Stroke
-import xyz.luko.domain.repository.DictionaryRepository
+import xyz.luko.domain.model.TemporaryResponse
+import xyz.luko.domain.model.TemporarySession
 import xyz.luko.domain.repository.SessionRepository
-import xyz.luko.domain.repository.UserRepository
-import xyz.luko.learning.congratulation.EndOfSessionCoordinator
 import xyz.luko.learning.session.model.DrawingPageState
 import xyz.luko.learning.session.model.SessionScreenEvent
 import xyz.luko.learning.session.model.SessionScreenEvent.Finish
@@ -35,19 +31,17 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 internal class SessionViewModel(
     private val params: AppRoute.Learning.StartSession,
-    private val repository: DictionaryRepository,
-    private val sessionRepository: SessionRepository,
-    private val userRepository: UserRepository,
-    private val coordinator: EndOfSessionCoordinator,
+    private val repository: SessionRepository,
     private val appConfig: AppConfig,
-    private val recognizer: CharacterRecognizedUseCase
+    private val recognizer: CharacterRecognizedUseCase,
+    private val endOfSessionUseCase: EndOfSessionUseCase,
 ) : ViewModel() {
 
     val drawHint get() = params.settings.difficultyLevel == DifficultyLevel.EASY
     val drawReference get() = params.settings.difficultyLevel != DifficultyLevel.HARD
 
     // No need to pass this to the view: out of state
-    private val responses = mutableListOf<SessionResponse>()
+    private val responses = mutableListOf<TemporaryResponse>()
 
     private val trackingSessionID = Uuid.random().toString()
 
@@ -74,16 +68,15 @@ internal class SessionViewModel(
         val state = (state.value as SessionState.Success)
         state.drawingPageState.forEach { (key, value) ->
             responses.add(
-                SessionResponse(
+                TemporaryResponse(
                     code = key,
-                    pinyin = state.questions.first { it.code == key }.pinyin.firstOrNull()
+                    pinyin = state.questions.first { it.code == key }.pinyin
+                        .firstOrNull()
                         .orEmpty(),
-
                     references = value.referenceStrokes,
                     strokes = value.referenceStrokes,
                     recognitionResult = RecognitionResult.SUCCESS.name,
                     difficultyLevel = params.settings.difficultyLevel,
-                    accuracy = 0f
                 )
             )
         }
@@ -152,33 +145,14 @@ internal class SessionViewModel(
 
         viewModelScope.launch {
 
-            val result = userRepository.reviewSession(responses).getOrNull()
-
-            val session = Session(
+            val session = TemporarySession(
                 date = endTime,
                 duration = duration,
                 difficulty = params.settings.difficultyLevel,
                 questionsCount = responses.count(),
-                accuracy = result?.strokeComparison?.map { it.overallAccuracy }?.average() ?: 0.0
             )
 
-            val updatedResponse = result?.let {
-                responses.mapIndexed { index, response ->
-                    response.copy(accuracy = result.strokeComparison[index].overallAccuracy)
-                }
-            } ?: responses
-
-            sessionRepository.save(session = session, responses = updatedResponse)
-
-            sessionRepository.setLastSessionConfiguration(
-                configuration = SessionSettings(
-                    difficultyLevel = params.settings.difficultyLevel,
-                    count = params.settings.count,
-                    frequencyLevel = params.settings.frequencyLevel,
-                )
-            )
-
-            coordinator.prepareAndStart(result, session)
+            endOfSessionUseCase.prepare(session, responses, params.settings)
         }
     }
 
@@ -208,14 +182,13 @@ internal class SessionViewModel(
             )
 
             responses.add(
-                SessionResponse(
+                TemporaryResponse(
                     code = success.currentQuestion.code,
                     pinyin = success.pinyin,
                     references = medians,
                     strokes = drawnStrokes,
                     recognitionResult = result.name,
                     difficultyLevel = params.settings.difficultyLevel,
-                    accuracy = 0f // Set at completion (Backend calculate)
                 )
             )
         }

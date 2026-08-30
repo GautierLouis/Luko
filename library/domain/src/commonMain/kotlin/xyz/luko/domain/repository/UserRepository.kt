@@ -1,18 +1,19 @@
 package xyz.luko.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.json.Json
 import xyz.luko.apicontracts.dto.ReviewAttemptRequest
+import xyz.luko.apicontracts.dto.ReviewSessionRequestDto
 import xyz.luko.domain.mapper.toDomain
 import xyz.luko.domain.mapper.toDto
 import xyz.luko.domain.model.ReviewResult
-import xyz.luko.domain.model.SessionResponse
 import xyz.luko.domain.model.SettingTheme
+import xyz.luko.domain.model.TemporaryResponse
+import xyz.luko.domain.model.TemporarySession
 import xyz.luko.network.interfaces.UserService
 import xyz.luko.preferences.AppPreferences
 import kotlin.time.Clock
@@ -31,7 +32,8 @@ interface UserRepository {
     suspend fun getStreak(): Int?
 
     suspend fun reviewSession(
-        responses: List<SessionResponse>
+        session: TemporarySession,
+        responses: List<TemporaryResponse>
     ): Result<ReviewResult>
 
     suspend fun getMe(): Result<Unit>
@@ -63,7 +65,7 @@ internal class DefaultUserRepository(
     }
 
     override fun haveSeenOnboarding(): Flow<Boolean> {
-        return flowOf(false) //preferences.observeIsOnboardingActivated()
+        return preferences.observeIsOnboardingActivated()
     }
 
     override suspend fun setSeenOnboarding(enable: Boolean) {
@@ -79,24 +81,29 @@ internal class DefaultUserRepository(
     }
 
     override suspend fun reviewSession(
-        responses: List<SessionResponse>
+        session: TemporarySession,
+        responses: List<TemporaryResponse>
     ): Result<ReviewResult> {
+
         return userService.reviewSession(
             ReviewAttemptRequest(
-                doneAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                responses = responses.toDto()
+                doneAt = Clock.System.now().toString(),
+                session = ReviewSessionRequestDto(
+                    date = session.date.toLocalDateTime(TimeZone.UTC).toString(),
+                    offset = TimeZone.currentSystemDefault().offsetAt(session.date).toString(),
+                    duration = session.duration.inWholeSeconds,
+                    difficulty = session.difficulty.toString(),
+                    questionsCount = session.questionsCount,
+                    responses = responses.toDto()
+                )
             )
-        ).onSuccess {
-            preferences.updateStreak(it.newStreak)
-            preferences.updateLevels(Json.encodeToString(it.levels))
-        }.map { it.toDomain() }
+        ).map { review -> review.toDomain { code -> responses.first { it.code == code } } }
     }
 
     override suspend fun getMe(): Result<Unit> {
         return userService.me()
             .onSuccess {
                 preferences.updateStreak(it.currentStreak)
-                preferences.updateLevels(Json.encodeToString(it.levels))
             }.map { }
     }
 }

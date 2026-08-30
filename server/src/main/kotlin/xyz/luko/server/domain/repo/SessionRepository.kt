@@ -4,11 +4,11 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import xyz.luko.apicontracts.dto.DictionaryDto
 import xyz.luko.apicontracts.dto.ResponseSessionDto
 import xyz.luko.apicontracts.routing.Destination
-import xyz.luko.server.data.database.dao.DictionaryDao
 import xyz.luko.server.data.database.dao.SeedDao
-import xyz.luko.server.domain.mapper.ResultRowMapping.toDictionary
-import xyz.luko.server.domain.mapper.ResultRowMapping.toSeedDto
+import xyz.luko.server.data.database.dao.SessionDao
+import xyz.luko.server.domain.mapper.ResultRowMapping.toSessionResponseRow
 import xyz.luko.server.domain.model.SeedRow
+import xyz.luko.server.domain.model.SessionResponseRow
 import xyz.luko.server.error.missingParameter
 import kotlin.random.Random
 
@@ -23,21 +23,23 @@ interface SessionRepository {
         id: EntityID<Int>,
         params: Destination.Session.Replay
     ): ResponseSessionDto<DictionaryDto>
+
+    suspend fun getSessionResponse(sessionId: EntityID<Int>, code: Int): SessionResponseRow?
 }
 
 // --- Implementation ---
-
 internal class DefaultSessionRepository(
-    private val dictionaryDao: DictionaryDao,
-    private val seedDao: SeedDao
+    private val sessionDao: SessionDao,
+    private val seedDao: SeedDao,
+    private val buildSessionUseCase: BuildSessionUseCase
 ) : SessionRepository {
 
     override suspend fun createNewSession(
         id: EntityID<Int>,
         params: Destination.Session.New
     ): ResponseSessionDto<DictionaryDto> {
+        val levels = params.levels ?: throw missingParameter("levels")
 
-        val levels = params.levels?.map { it.value } ?: throw missingParameter("levels")
         val seed = Random.nextLong()
 
         seedDao.insertSeed(
@@ -48,31 +50,20 @@ internal class DefaultSessionRepository(
             )
         )
 
-        val result = dictionaryDao.createSession(
-            levels = levels,
-            limit = params.limit,
-            seed = seed,
-            id = id
-        )
-
-        return ResponseSessionDto(seed, result.map { it.toDictionary() })
+        return buildSessionUseCase.execute(id = id, seed = seed)
     }
 
     override suspend fun replaySession(
         id: EntityID<Int>,
         params: Destination.Session.Replay
     ): ResponseSessionDto<DictionaryDto> {
-        val seedRow = seedDao.getSeed(params.seed)
-            ?.toSeedDto()
-            ?: throw IllegalArgumentException("seed not found")
+        return buildSessionUseCase.execute(id = id, seed = params.seed)
+    }
 
-        val result = dictionaryDao.createSession(
-            levels = seedRow.levels.split(",").map { it.toInt() },
-            limit = seedRow.limit,
-            seed = seedRow.seed,
-            id = id
-        )
-        return ResponseSessionDto(params.seed, result.map { it.toDictionary() })
+    override suspend fun getSessionResponse(
+        sessionId: EntityID<Int>,
+        code: Int
+    ): SessionResponseRow? {
+        return sessionDao.getResponse(sessionId, code)?.toSessionResponseRow()
     }
 }
-

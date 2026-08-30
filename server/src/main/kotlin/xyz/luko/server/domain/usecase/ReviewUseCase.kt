@@ -22,12 +22,17 @@ class ReviewUseCase(
         attemptRequest: ReviewAttemptRequest,
     ): ReviewResultDto {
 
-        val signals = progressionRepository.getSignals(id, attemptRequest)
+        // build signals from response (in batch)
+        val signals = progressionRepository.getSignals(id, attemptRequest.session.responses)
 
+        //For each response, analyze result (stroke comparison, fsrs, grade), return a progression
         val progressions = signals.map {
+
             val analyseResult = analyseResultUseCase.analyse(it)
-            val levels =
-                levelUseCase.compute(analyseResult.fsrsResult.nextStability, it.fsrsState?.level)
+            val levels = levelUseCase.compute(
+                stability = analyseResult.fsrsResult.nextStability,
+                currentLevel = it.fsrsState?.level
+            )
 
             ProgressionRow(
                 code = it.characterCode,
@@ -35,43 +40,46 @@ class ReviewUseCase(
                 difficulty = analyseResult.fsrsResult.nextDifficulty,
                 level = levels.first,
                 levelUp = levels.second,
-                nextReviewDueAt = dueDateFromNow(analyseResult.fsrsResult.nextIntervalDays).epochSeconds
-            ) to analyseResult.strokeComparison
+                nextReviewDueAt = dueDateFromNow(analyseResult.fsrsResult.nextIntervalDays).epochSeconds,
+                strokeComparison = StrokeComparisonResultDto(
+                    overallAccuracy = analyseResult.strokeComparison.overallAccuracy,
+                    strokeAccuracies = analyseResult.strokeComparison.strokeAccuracies,
+                    orderAccuracy = analyseResult.strokeComparison.orderAccuracy,
+                    details = ComparisonDetailsDto(
+                        pathSimilarity = analyseResult.strokeComparison.details.pathSimilarity,
+                        startPointAccuracy = analyseResult.strokeComparison.details.startPointAccuracy,
+                        endPointAccuracy = analyseResult.strokeComparison.details.endPointAccuracy,
+                        directionAccuracy = analyseResult.strokeComparison.details.directionAccuracy,
+                    )
+                )
+            )
         }
 
+        // Calculate if streak should be increased, if yes, return the new streak
+        val streakUpdater = streakUseCase.updateStreak(id)
+
+        // Save user progression (streak, Fsrs, levels, session)
         progressionRepository.saveProgression(
             id = id,
-            progress = progressions.map { it.first },
-            doneAt = attemptRequest.doneAt
+            attemptRequest = attemptRequest,
+            progressions = progressions,
+            streakUpdater = streakUpdater
         )
 
-        val (isUpdated, newStreak) = streakUseCase.updateStreak(id)
-
-        val levelsMaps = progressions.map { it.first }
+        // Map that contains only character that leveled up during this session
+        val levelsMaps = progressions
             .filter { it.levelUp }
             .groupBy { it.level }
             .map { it.key to it.value.map { p -> p.code } }
             .toMap()
 
         return ReviewResultDto(
-            isStreakUpdated = isUpdated,
-            newStreak = newStreak,
-            hasLevelUp = progressions.map { it.first }.any { it.levelUp },
+            isStreakUpdated = streakUpdater.hasIncrease,
+            newStreak = streakUpdater.newStreak,
+            hasLevelUp = progressions.any { it.levelUp },
             levels = levelsMaps,
-            strokeComparison = progressions.map {
-                val sc = it.second
-                StrokeComparisonResultDto(
-                    overallAccuracy = sc.overallAccuracy,
-                    strokeAccuracies = sc.strokeAccuracies,
-                    orderAccuracy = sc.orderAccuracy,
-                    details = ComparisonDetailsDto(
-                        pathSimilarity = sc.details.pathSimilarity,
-                        startPointAccuracy = sc.details.startPointAccuracy,
-                        endPointAccuracy = sc.details.endPointAccuracy,
-                        directionAccuracy = sc.details.directionAccuracy,
-                    )
-                )
-            }
+            strokeComparison = progressions.associate { it.code to it.strokeComparison }
         )
     }
 }
+

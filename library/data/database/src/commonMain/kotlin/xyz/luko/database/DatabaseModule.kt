@@ -9,6 +9,8 @@ val databaseModule =
         single { DatabaseProvider(get()).getDatabase() }
         single { get<AppDatabase>().getSessionDao() }
         single { get<AppDatabase>().getSessionResponseDao() }
+        single { get<AppDatabase>().getSyncSession() }
+        single { get<AppDatabase>().getCharacterLevelDao() }
     }
 
 internal expect val databasePlatformModule: Module

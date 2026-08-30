@@ -2,12 +2,18 @@ package xyz.luko.server.domain.mapper
 
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import xyz.luko.apicontracts.dto.AuthRegistrationDto
+import xyz.luko.apicontracts.dto.ComparisonDetailsDto
 import xyz.luko.apicontracts.dto.FcmUpdateDto
 import xyz.luko.apicontracts.dto.IdeographicNodeDto
 import xyz.luko.apicontracts.dto.ResponseListDto
+import xyz.luko.apicontracts.dto.ReviewResponseRequestDto
+import xyz.luko.apicontracts.dto.ReviewSessionRequestDto
+import xyz.luko.apicontracts.dto.StrokeComparisonResultDto
 import xyz.luko.apicontracts.dto.StrokeDto
 import xyz.luko.server.domain.model.CharacterRow
+import xyz.luko.server.domain.model.ComparisonDetailsRow
 import xyz.luko.server.domain.model.DictionaryRow
 import xyz.luko.server.domain.model.GraphicRow
 import xyz.luko.server.domain.model.HanziRow
@@ -16,6 +22,9 @@ import xyz.luko.server.domain.model.HskFormRow
 import xyz.luko.server.domain.model.HskTranscriptionsRow
 import xyz.luko.server.domain.model.PaginatedRow
 import xyz.luko.server.domain.model.PrepopulateRow
+import xyz.luko.server.domain.model.SessionResponseRow
+import xyz.luko.server.domain.model.SessionRow
+import xyz.luko.server.domain.model.StrokeComparisonResultRow
 import xyz.luko.server.domain.model.UpdateUserRow
 import xyz.luko.server.domain.model.UserRow
 import xyz.luko.server.domain.model.source.CharacterSource
@@ -160,6 +169,49 @@ internal object DomainMapping {
         RARE(5, 9000),
         OBSOLETE(6, Int.MAX_VALUE);
     }
+
+    fun StrokeComparisonResultDto.toRow() = StrokeComparisonResultRow(
+        overallAccuracy = overallAccuracy,
+        strokeAccuracies = strokeAccuracies,
+        orderAccuracy = orderAccuracy,
+        details = details.toRow(),
+    )
+
+    fun ComparisonDetailsDto.toRow() = ComparisonDetailsRow(
+        pathSimilarity = pathSimilarity,
+        startPointAccuracy = startPointAccuracy,
+        endPointAccuracy = endPointAccuracy,
+        directionAccuracy = directionAccuracy,
+    )
+
+    fun ReviewSessionRequestDto.toRow(
+        userId: EntityID<Int>,
+        responses: List<SessionResponseRow>,
+    ): SessionRow {
+
+        return SessionRow(
+            userId = userId,
+            date = date,
+            offset = offset,
+            duration = duration,
+            difficulty = difficulty,
+            questionsCount = questionsCount,
+            accuracy = responses.map { it.comparisonResult.overallAccuracy }.average(),
+            responses = responses
+        )
+    }
+
+    fun ReviewResponseRequestDto.toRow(comparisonResult: StrokeComparisonResultRow) =
+        SessionResponseRow(
+            characterCode = characterCode,
+            strokes = Json.encodeToString(strokes),
+            recognitionResult = recognitionResult.name,
+            resetCount = resetCount,
+            durationMs = durationMs,
+            practiceMode = practiceMode.name,
+            comparisonResult = comparisonResult,
+        )
+
 }
 
 
