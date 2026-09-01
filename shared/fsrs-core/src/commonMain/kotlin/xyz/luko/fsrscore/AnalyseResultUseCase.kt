@@ -6,6 +6,7 @@ import xyz.luko.fsrscore.internal.GradeUseCase
 import xyz.luko.fsrscore.internal.StrokeComparisonUseCase
 import xyz.luko.fsrscore.model.AnalysisResult
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
 
 class AnalyseResultUseCase {
 
@@ -41,7 +42,7 @@ class AnalyseResultUseCase {
      * Calculate an elapsed number of that that passed between lastReviewMilli until now
      */
     private fun elapsedDaysUntilNow(from: Long): Double {
-        val now = Clock.System.now().toEpochMilliseconds()
-        return ((now - from).toDouble() / 86_400_000L).coerceAtLeast(0.0)
+        val now = Clock.System.now().epochSeconds
+        return ((now - from).toDouble() / 1.days.inWholeSeconds).coerceAtLeast(0.0)
     }
 }

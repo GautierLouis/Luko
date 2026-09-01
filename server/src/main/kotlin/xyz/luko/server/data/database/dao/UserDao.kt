@@ -67,18 +67,19 @@ internal class DefaultUserDao : UserDao {
                 .firstOrNull()
         }
 
+    /**
+     * Warning: This method should be called in a transaction.
+     */
     override suspend fun updateStreak(
         id: EntityID<Int>,
         streak: Int,
         streakUpdatedAt: Long,
     ) {
-        suspendTransaction {
-            UserTable.update(
-                where = { UserTable.id eq id }
-            ) {
-                it[UserTable.streak] = streak
-                it[UserTable.streakUpdatedAt] = streakUpdatedAt
-            }
+        UserTable.update(
+            where = { UserTable.id eq id }
+        ) {
+            it[UserTable.streak] = streak
+            it[UserTable.streakUpdatedAt] = streakUpdatedAt
         }
     }
 

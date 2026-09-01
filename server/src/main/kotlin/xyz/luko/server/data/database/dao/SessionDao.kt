@@ -19,26 +19,27 @@ interface SessionDao {
 }
 
 internal class DefaultSessionDao : SessionDao {
+    /**
+     * Warning: This method should be called in a transaction.
+     */
     override suspend fun insertSession(session: SessionRow) {
-        suspendTransaction {
-            val sessionId = SessionTable.insertAndGetId {
-                it[userId] = session.userId
-                it[date] = session.date
-                it[offset] = session.offset
-                it[duration] = session.duration
-                it[difficulty] = session.difficulty
-                it[questionsCount] = session.questionsCount
-                it[accuracy] = session.accuracy
-            }
+        val sessionId = SessionTable.insertAndGetId {
+            it[userId] = session.userId
+            it[date] = session.date
+            it[offset] = session.offset
+            it[duration] = session.duration
+            it[difficulty] = session.difficulty
+            it[questionsCount] = session.questionsCount
+            it[accuracy] = session.accuracy
+        }
 
-            if (session.responses.isNotEmpty()) {
-                SessionResponseTable.batchInsert(session.responses) { response ->
-                    this[SessionResponseTable.sessionId] = sessionId
-                    this[SessionResponseTable.code] = response.characterCode
-                    this[SessionResponseTable.overallAccuracy] =
-                        response.comparisonResult.overallAccuracy
-                    this[SessionResponseTable.response] = Json.encodeToString(response)
-                }
+        if (session.responses.isNotEmpty()) {
+            SessionResponseTable.batchInsert(session.responses) { response ->
+                this[SessionResponseTable.sessionId] = sessionId
+                this[SessionResponseTable.code] = response.characterCode
+                this[SessionResponseTable.overallAccuracy] =
+                    response.comparisonResult.overallAccuracy
+                this[SessionResponseTable.response] = Json.encodeToString(response)
             }
         }
     }

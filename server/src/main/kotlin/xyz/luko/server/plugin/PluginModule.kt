@@ -10,5 +10,6 @@ val pluginModule = module {
     singleOf(::MetricsPlugin)
     singleOf(::ErrorPlugin)
     singleOf(::HeaderValidatorPlugin)
+    singleOf(::AdminAccessPlugin)
     single { RouterPlugin(getAll()) }
 }

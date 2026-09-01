@@ -1,6 +1,7 @@
 package xyz.luko.server
 
 import io.ktor.server.application.Application
+import xyz.luko.server.plugin.AdminAccessPlugin
 import xyz.luko.server.plugin.AuthenticationPlugin
 import xyz.luko.server.plugin.BasePlugin
 import xyz.luko.server.plugin.ErrorPlugin
@@ -13,6 +14,7 @@ class ServerRegistry(
     private val basePlugin: BasePlugin,
     private val metricsPlugin: MetricsPlugin,
     private val headerValidatorPlugin: HeaderValidatorPlugin,
+    private val adminAccessPlugin: AdminAccessPlugin,
     private val routerPlugin: RouterPlugin,
     private val errorPlugin: ErrorPlugin,
     private val firebasePlugin: FirebasePlugin,
@@ -24,6 +26,7 @@ class ServerRegistry(
         with(basePlugin) { register() }
         with(firebasePlugin) { register() }
         with(authenticationPlugin) { register() }
+        with(adminAccessPlugin) { register() }
         with(headerValidatorPlugin) { register() }
         with(metricsPlugin) { register() }
         with(routerPlugin) { register() }

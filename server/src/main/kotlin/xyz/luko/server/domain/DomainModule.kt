@@ -7,6 +7,7 @@ import org.koin.dsl.module
 import xyz.luko.fsrscore.AnalyseResultUseCase
 import xyz.luko.server.domain.auth.DefaultTokenVerifier
 import xyz.luko.server.domain.auth.TokenVerifier
+import xyz.luko.server.domain.repo.BuildSessionUseCase
 import xyz.luko.server.domain.repo.DefaultDictionaryRepository
 import xyz.luko.server.domain.repo.DefaultProgressionRepository
 import xyz.luko.server.domain.repo.DefaultSessionRepository
@@ -38,6 +39,7 @@ val domainModule = module {
     factoryOf(::ReviewUseCase)
     factoryOf(::LevelUseCase)
     factoryOf(::StreakUseCase)
+    factoryOf(::BuildSessionUseCase)
 
     factoryOf(::AnalyseResultUseCase)
 }

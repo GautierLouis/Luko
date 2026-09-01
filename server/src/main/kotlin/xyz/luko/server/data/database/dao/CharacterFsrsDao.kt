@@ -37,28 +37,29 @@ internal class DefaultCharacterFsrsDao : CharacterFsrsDao {
         }
     }
 
+    /**
+     * Warning: This method should be called in a transaction.
+     */
     override suspend fun batchedInsertOrUpdate(
         id: EntityID<Int>,
         progression: List<ProgressionRow>,
         lastReviewedAt: Long,
     ) {
-        suspendTransaction {
-            CharacterFsrsStateTable.batchUpsert(
-                data = progression,
-                keys = arrayOf(
-                    CharacterFsrsStateTable.userId,
-                    CharacterFsrsStateTable.characterCode
-                )
-            ) { row ->
-                this[CharacterFsrsStateTable.userId] = id
-                this[CharacterFsrsStateTable.characterCode] = row.code
-                this[CharacterFsrsStateTable.difficulty] = row.difficulty
-                this[CharacterFsrsStateTable.stability] = row.stability
-                this[CharacterFsrsStateTable.lastReviewedAt] = lastReviewedAt
-                this[CharacterFsrsStateTable.nextReviewDueAt] = row.nextReviewDueAt
-                this[CharacterFsrsStateTable.level] = row.level
-                this[CharacterFsrsStateTable.updatedAt] = Clock.System.now().toEpochMilliseconds()
-            }
+        CharacterFsrsStateTable.batchUpsert(
+            data = progression,
+            keys = arrayOf(
+                CharacterFsrsStateTable.userId,
+                CharacterFsrsStateTable.characterCode
+            )
+        ) { row ->
+            this[CharacterFsrsStateTable.userId] = id
+            this[CharacterFsrsStateTable.characterCode] = row.code
+            this[CharacterFsrsStateTable.difficulty] = row.difficulty
+            this[CharacterFsrsStateTable.stability] = row.stability
+            this[CharacterFsrsStateTable.lastReviewedAt] = lastReviewedAt
+            this[CharacterFsrsStateTable.nextReviewDueAt] = row.nextReviewDueAt
+            this[CharacterFsrsStateTable.level] = row.level
+            this[CharacterFsrsStateTable.updatedAt] = Clock.System.now().epochSeconds
         }
     }
 

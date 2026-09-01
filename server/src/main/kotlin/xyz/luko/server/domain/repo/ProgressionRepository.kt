@@ -2,6 +2,7 @@ package xyz.luko.server.domain.repo
 
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import xyz.luko.apicontracts.dto.AttemptSignal
 import xyz.luko.apicontracts.dto.FsrsState
 import xyz.luko.apicontracts.dto.ReviewAttemptRequest
@@ -87,20 +88,23 @@ internal class DefaultProgressionRepository(
 
         val sessionRow = attemptRequest.session.toRow(id, responses)
 
-        characterFsrsDao.batchedInsertOrUpdate(
-            id = id,
-            progression = progressions,
-            lastReviewedAt = epochSecond,
-        )
-
-        sessionDao.insertSession(sessionRow)
-
-        if (streakUpdater.shouldUpdate) {
-            userRepository.updateStreak(
-                id,
-                streakUpdater.newStreak,
-                epochSecond
+        //TODO remove transaction on repository level
+        suspendTransaction {
+            characterFsrsDao.batchedInsertOrUpdate(
+                id = id,
+                progression = progressions,
+                lastReviewedAt = epochSecond,
             )
+
+            sessionDao.insertSession(sessionRow)
+
+            if (streakUpdater.shouldUpdate) {
+                userRepository.updateStreak(
+                    id,
+                    streakUpdater.newStreak,
+                    epochSecond
+                )
+            }
         }
     }
 
