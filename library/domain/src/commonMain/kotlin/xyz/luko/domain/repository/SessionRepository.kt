@@ -38,7 +38,8 @@ interface SessionRepository {
         responses: List<TemporaryResponse>,
     ): Long
 
-    fun getLastSessions(limit: Int = Int.MAX_VALUE): Flow<List<Session>>
+    suspend fun getLastSessions(limit: Int = Int.MAX_VALUE): List<Session>
+    fun observeSessions(limit: Int = Int.MAX_VALUE): Flow<List<Session>>
 
     suspend fun getSession(id: Long): Session
 
@@ -88,7 +89,10 @@ internal class DefaultSessionRepository(
         return sessionDao.insertSessionWithResponses(sessionEntity, responseEntity)
     }
 
-    override fun getLastSessions(limit: Int): Flow<List<Session>> =
+    override suspend fun getLastSessions(limit: Int): List<Session> =
+        sessionDao.getLastSessions(limit).map { it.toDto() }
+
+    override fun observeSessions(limit: Int): Flow<List<Session>> =
         sessionDao.getLast(limit).map { list -> list.map { it.toDto() } }
 
     override suspend fun getSession(id: Long): Session =

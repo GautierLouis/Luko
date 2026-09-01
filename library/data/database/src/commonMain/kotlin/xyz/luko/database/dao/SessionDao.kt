@@ -42,8 +42,8 @@ interface SessionDao {
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT :limit")
     fun getLast(limit: Int): Flow<List<SessionEntity>>
 
-    @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT 1")
-    suspend fun getLastSession(): SessionEntity?
+    @Query("SELECT * FROM SessionEntity ORDER BY date DESC LIMIT :limit")
+    suspend fun getLastSessions(limit: Int): List<SessionEntity>
 
     @Query("SELECT * FROM SessionEntity ORDER BY date DESC")
     fun getAllPaged(): PagingSource<Int, SessionEntity>

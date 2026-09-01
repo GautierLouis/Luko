@@ -64,7 +64,7 @@ internal class HomeViewModel(
         }
 
         combine(
-            sessionRepository.getLastSessions(5),
+            sessionRepository.observeSessions(5),
             userRepository.observeStreak(),
             userRepository.haveSeenOnboarding(),
             synchronizationRepository.state,
