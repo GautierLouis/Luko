@@ -15,6 +15,6 @@ class AndroidAppDatabaseBuilder(
         return Room.databaseBuilder<AppDatabase>(
             context = appContext,
             name = dbFile.absolutePath,
-        )
+        ).fallbackToDestructiveMigration(dropAllTables = true)
     }
 }
