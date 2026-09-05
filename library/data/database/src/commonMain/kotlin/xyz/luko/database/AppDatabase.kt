@@ -19,7 +19,7 @@ import xyz.luko.database.entity.SessionResponseEntity
         SessionResponseEntity::class,
         CharacterLevelEntity::class,
     ],
-    version = 1,
+    version = 2,
 )
 @TypeConverters(RoomTypeConverters::class)
 @ConstructedBy(AppDatabaseConstructor::class)
