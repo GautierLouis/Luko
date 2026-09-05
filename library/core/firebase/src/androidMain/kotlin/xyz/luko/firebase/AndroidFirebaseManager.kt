@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.messaging.FirebaseMessaging
@@ -13,6 +12,11 @@ import com.google.firebase.messaging.messaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import xyz.luko.firebase.remoteconfig.FeatureFlagKey
 import xyz.luko.tracking.TrackingEvent
@@ -27,42 +31,47 @@ class AndroidFirebaseManager(
     private lateinit var messaging: FirebaseMessaging
     private lateinit var auth: FirebaseAuth
 
+    private val managerScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val initialized = CompletableDeferred<Unit>()
+
     override fun initialize() {
         FirebaseApp.initializeApp(context)
 
         auth = Firebase.auth
-        analytics = Firebase.analytics
         messaging = Firebase.messaging
-
-        remoteConfig =
-            Firebase.remoteConfig.apply {
-                val configSettings =
-                    remoteConfigSettings {
-                        minimumFetchIntervalInSeconds = 0
-                    }
-                setConfigSettingsAsync(configSettings)
-            }
+        remoteConfig = Firebase.remoteConfig.apply {
+            val configSettings =
+                remoteConfigSettings {
+                    minimumFetchIntervalInSeconds = 0
+                }
+            setConfigSettingsAsync(configSettings)
+        }
 
         fetchRemoteConfig()
+        initialized.complete(Unit)
     }
 
     override suspend fun getFCMToken(): Result<String> = runCatching {
+        initialized.await()
         messaging.token.await() ?: throw IllegalStateException("Token is null")
     }
 
     override suspend fun registerAnonymously(): Result<String> = runCatching {
-        Firebase.auth.signInAnonymously().await()?.user?.uid
+        initialized.await()
+        auth.signInAnonymously().await()?.user?.uid
             ?: throw IllegalStateException("User is null")
     }
 
     override suspend fun getIdToken(forceRefresh: Boolean): Result<String> = runCatching {
-        Firebase.auth.currentUser?.getIdToken(forceRefresh)?.await()?.token
+        initialized.await()
+        auth.currentUser?.getIdToken(forceRefresh)?.await()?.token
             ?: throw IllegalStateException("Unable to get token")
     }
 
     override fun logEvent(event: TrackingEvent) {
-        val bundle =
-            Bundle().apply {
+        managerScope.launch {
+            initialized.await()
+            val bundle = Bundle().apply {
                 event.params.forEach {
                     when (it.value) {
                         is String -> putString(it.key, it.value as String)
@@ -73,19 +82,22 @@ class AndroidFirebaseManager(
                     }
                 }
             }
-
-        analytics.logEvent(event.key, bundle)
+            analytics.logEvent(event.key, bundle)
+        }
     }
 
     override fun setUserId(userId: String) {
-        analytics.setUserId(userId)
+        managerScope.launch {
+            initialized.await()
+            analytics.setUserId(userId)
+        }
     }
 
-    override fun setUserProperty(
-        name: String,
-        value: String,
-    ) {
-        analytics.setUserProperty(name, value)
+    override fun setUserProperty(name: String, value: String) {
+        managerScope.launch {
+            initialized.await()
+            analytics.setUserProperty(name, value)
+        }
     }
 
     override fun fetchRemoteConfig() {
