@@ -17,16 +17,10 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
-import io.kotzilla.generated.monitoring
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.core.module.Module
-import org.koin.dsl.koinConfiguration
 import xyz.luko.app.debug.DebugMenuScreen
-import xyz.luko.app.libraryModule
 import xyz.luko.app.main.MainScaffold
 import xyz.luko.dictionary.navigation.BottomSheetSceneStrategy
 import xyz.luko.dictionary.navigation.dictionaryRoutes
@@ -43,21 +37,6 @@ import xyz.luko.ui.navigation.AppNavigation
 import xyz.luko.ui.navigation.AppRoute
 import xyz.luko.ui.navigation.NavigationCommand
 import xyz.luko.ui.navigation.savedStateConfiguration
-
-@OptIn(KoinExperimentalAPI::class)
-@Composable
-fun KoinApp(
-    platformModules: List<Module> = emptyList(),
-    content: @Composable () -> Unit = {}
-) {
-    KoinMultiplatformApplication(
-        config = koinConfiguration {
-            modules(libraryModule, *platformModules.toTypedArray())
-            monitoring()
-        },
-        content = content
-    )
-}
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -83,22 +62,22 @@ fun App() {
                     is NavigationCommand.Navigate -> {
                         Tracker.track(TrackingEvent.NavigateTo(event.route.toString()))
 
-                        if (!event.clearBackStack) {
-                            backStack.removeAll { it::class == event.route::class }
-                        }
-
                         if (event.clearBackStack) {
                             backStack.clear()
                             backStack += AppRoute.Home.Main
+                        } else {
+                            backStack.removeAll { it::class == event.route::class }
                         }
 
-                        if (event.route !is AppRoute.Home.Main) {
+                        if (event.route !is AppRoute.Home.Main || backStack.isEmpty()) {
                             backStack += event.route
                         }
                     }
 
                     is NavigationCommand.NavigateUp -> {
-                        backStack.removeLast()
+                        if (backStack.size > 1) {
+                            backStack.removeLast()
+                        }
                     }
                 }
             }

@@ -13,7 +13,6 @@ import org.koin.android.ext.android.inject
 import org.koin.core.annotation.KoinExperimentalAPI
 import xyz.luko.app.ActivityObserver
 import xyz.luko.app.app.App
-import xyz.luko.app.app.KoinApp
 
 class MainActivity : FragmentActivity() {
 
@@ -41,11 +40,9 @@ class MainActivity : FragmentActivity() {
         }
 
         setContent {
-            KoinApp(platformModules = listOf(androidModule)) {
-                activityObserver.setIntentLauncher(activityResultLauncher)
-                activityObserver.setPermissionLauncher(permissionLauncher)
-                App()
-            }
+            activityObserver.setIntentLauncher(activityResultLauncher)
+            activityObserver.setPermissionLauncher(permissionLauncher)
+            App()
         }
     }
 }

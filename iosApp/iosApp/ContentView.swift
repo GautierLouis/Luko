@@ -11,6 +11,9 @@ struct ComposeView: UIViewControllerRepresentable {
 }
 
 struct ContentView: View {
+    init() {
+        InitKoinKt.initKoinIos()
+    }
     var body: some View {
         ComposeView()
             .ignoresSafeArea()
